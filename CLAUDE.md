@@ -21,12 +21,16 @@ player-facing text (src/rooms/*/texts.ru.js).
 6. Keep files small: about 300 lines max. Split before you grow past it.
 7. No build step. Plain ES modules. A-Frame is vendored in vendor/ (pinned).
 8. Before saying "done": run `npm test` and report what ran and the result.
-   No test run = say "not verified".
+   No test run = say "not verified". Never run Playwright/Chromium locally
+   (the owner's laptop must stay free): the smoke test runs in GitHub Actions.
+   To look at the game locally use `npm run serve` and the browser pane.
 9. Do exactly what was asked. Ideas go at the end of the answer, not into code.
 10. Big change (new room, new engine module, new dependency): write a 3-line
     entry in docs/decisions.md first.
 
 ## Commands
-- `npm test` — unit tests (node) + smoke test (headless Chromium).
-- `npx serve .` — local preview at http://localhost:3000
+- `npm test` — pure unit tests (node, under a second). Safe to run locally.
+- `npm run test:smoke` — headless Chromium; CI only (see docs/testing.md).
+- `npm run serve` — local preview at http://localhost:3000, no dependencies.
 - Deploy: push to main, GitHub Pages serves the repo root.
+- Never `git push` and never commit unless the owner says so.
