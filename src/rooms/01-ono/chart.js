@@ -1,11 +1,12 @@
 // The "aha" screen: each round as a time line with the player's lever pulls
 // (one lane per lever, colour and shape) and the points (gold bars). It shows
 // with the player's own data that points came regardless of the pulls.
-const LEVER_COLORS = ['#d23b32', '#2f9e55', '#2f6fd2'];
+import { FONT } from '../../engine/panel.js';
+import { LEVER_COLORS } from './levers.js';
+
 const POINT = '#f0c96a'; // gold: must not look like the green lever
 const INK = '#f2efe8';
 const MUTED = '#9a968d';
-const FONT = '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 
 function mark(ctx, shape, x, y, r) {
   ctx.beginPath();
@@ -31,8 +32,6 @@ export function drawChart(panel, log, t2, roundSecs, texts) {
 
   const left = 260, right = W - 90, width = right - left;
   const starts = [0, t2];
-  const t1 = (log.find(e => e.k === 'point') || { t: 0 }).t; // first event time is ~0
-  void t1;
   [1, 2].forEach((round, r) => {
     const top = 190 + r * 330;
     const from = starts[r];

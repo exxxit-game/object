@@ -5,7 +5,8 @@ import { eventLog } from '../../engine/log.js';
 
 // The three levers of the Ono booth. They are connected to nothing: a pull only
 // moves the lever, lights its lamp, sounds, vibrates and is logged.
-const COLORS = ['#d23b32', '#2f9e55', '#2f6fd2'];
+export const LEVER_COLORS = ['#d23b32', '#2f9e55', '#2f6fd2'];
+const COLORS = LEVER_COLORS;
 // Each lever also has its own knob shape, so it is never told apart by colour alone
 // (red and green look alike to many colour-blind players).
 const KNOBS = [

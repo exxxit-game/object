@@ -83,6 +83,8 @@ function drawRunScreen() {
   screen().write(blocks);
 }
 function experimenterNote(text) {
+  // a late praise must never paint over the question or the reveal
+  if (state !== 'run') return;
   note = text;
   drawRunScreen();
   speak(text);
@@ -120,8 +122,13 @@ function point() {
   if (p >= 0) timeline.later(() => experimenterNote(T.praise[p]), 900);
   schedule();
 }
-// Variable-time schedule: every 2.5–8 s.
-function schedule() { timeline.later(point, 2500 + Math.random() * 5500); }
+// Variable-time schedule: every 2–8 s. Only one point timer may exist at a time,
+// otherwise a timer left from round 1 would start a second chain in round 2.
+let pointTimer = null;
+function schedule() {
+  clearTimeout(pointTimer);
+  pointTimer = timeline.later(point, 2000 + Math.random() * 6000);
+}
 
 /* ---------- prods when the player stops acting ---------- */
 let idleTimer = null;
@@ -130,8 +137,12 @@ let prodCount = 0;
 let roundStartT = 0;
 function watchIdle() {
   clearInterval(idleTimer);
+  let wasPaused = false;
   idleTimer = setInterval(() => {
-    if (state !== 'run' || paused()) return;
+    if (state !== 'run') return;
+    // after a pause the player gets the full idle time again before a prod
+    if (paused()) { wasPaused = true; return; }
+    if (wasPaused) { wasPaused = false; lastProd = now(); return; }
     const pulls = eventLog.entries.filter(e => e.k === 'pull');
     const lastPull = pulls.length ? pulls[pulls.length - 1].t : -Infinity;
     if (now() - Math.max(lastPull, roundStartT, lastProd) < IDLE_PROD_SECS) return;
@@ -185,6 +196,8 @@ function startRound(n) {
 }
 
 function endRound() {
+  clearTimeout(pointTimer);
+  eventLog.add('end', round);
   clearInterval(idleTimer);
   stopLamps();
   if (round === 1) askQuestion(); else finish();
@@ -282,7 +295,7 @@ export function mount() {
   drawPainting = initPainting($('#painting'));
   $('#startHit').addEventListener('click', start);
   $('#againHit').addEventListener('click', start);
-  window.addEventListener('keydown', (e) => { if (e.code === 'Space' && state === 'idle') start(); });
+  window.addEventListener('keydown', (e) => { if (e.code === 'Space') start(); });
   scene.addEventListener('enter-vr', () => {
     const session = scene.xrSession;
     if (session) session.addEventListener('visibilitychange', () => { xrVisible = session.visibilityState === 'visible'; });

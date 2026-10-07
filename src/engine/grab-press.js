@@ -11,6 +11,8 @@ AFRAME.registerComponent('grab-press', {
     this.p = new THREE.Vector3();
     this.q = new THREE.Vector3();
     this.near = null;
+    this.targets = [];
+    this.frame = 0;
     const press = () => { if (this.near) this.near.emit('click', { cursorEl: this.el }); };
     this.el.addEventListener('triggerdown', press);
     this.el.addEventListener('gripdown', press);
@@ -20,7 +22,9 @@ AFRAME.registerComponent('grab-press', {
     this.el.object3D.getWorldPosition(this.p);
     let best = null;
     let bestDist = this.data.radius;
-    for (const t of this.el.sceneEl.querySelectorAll('.grabbable')) {
+    // the target list is refreshed about once a second, not searched every frame
+    if (this.frame++ % 72 === 0) this.targets = [...this.el.sceneEl.querySelectorAll('.grabbable')];
+    for (const t of this.targets) {
       t.object3D.getWorldPosition(this.q);
       const d = this.p.distanceTo(this.q);
       if (d < bestDist) { bestDist = d; best = t; }

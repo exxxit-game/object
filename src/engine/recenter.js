@@ -31,6 +31,14 @@ AFRAME.registerComponent('recenter', {
     });
   },
 
+  // A seated player who stands up would end up lifted; re-check about once a second.
+  tick(t) {
+    if (!this.lifted || t - (this.checked || 0) < 1000) return;
+    this.checked = t;
+    const y = this.el.sceneEl.camera.el.object3D.position.y;
+    if (y > this.data.seatedBelow + 0.15) this.apply();
+  },
+
   apply() {
     const sc = this.el.sceneEl;
     if (!sc.renderer.xr.isPresenting) return;
@@ -44,6 +52,7 @@ AFRAME.registerComponent('recenter', {
     rig.position.z = t.z;
     const lift = seatedLift(head.position.y, this.data.eye, this.data.seatedBelow);
     rig.position.y = lift;
+    this.lifted = lift > 0;
     this.el.emit('recentered', { seated: lift > 0 });
   }
 });

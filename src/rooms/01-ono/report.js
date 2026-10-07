@@ -50,12 +50,15 @@ function countRepeats(seq, pattern) {
 }
 
 // A session: round 1, the question ('answer', v = choice index), round 2 starting
-// at the 'round' event with v = 2. `repeats` = how often round 2 contains the
-// round-1 "system" pull sequence.
+// at the 'round' event with v = 2. An 'end' event (v = round) closes a round.
+// `repeats` = how often round 2 contains the round-1 "system" pull sequence.
 export function analyseSession(log) {
   const split = log.find(e => e.k === 'round' && e.v === 2);
   const t2 = split ? split.t : Infinity;
-  const r1 = analyse(log.filter(e => e.t < t2));
+  // pulls during the question and the pause before round 2 belong to neither round
+  const end1 = log.find(e => e.k === 'end' && e.v === 1);
+  const t1End = end1 ? end1.t : t2;
+  const r1 = analyse(log.filter(e => e.t < t1End));
   const r2 = split ? analyse(log.filter(e => e.t >= t2)) : null;
   const answer = log.filter(e => e.k === 'answer').pop();
   const round2Pulls = log.filter(e => e.k === 'pull' && e.t >= t2).map(e => e.v);

@@ -91,3 +91,18 @@ import { analyseSession } from '../src/rooms/01-ono/report.js';
   assert.equal(s.answer, null);
 }
 console.log('session tests: ok');
+
+// pulls between the end of round 1 and the start of round 2 count in neither round
+{
+  const s = analyseSession([
+    pull(1, 0), point(2),
+    { t: 10, k: 'end', v: 1 },
+    pull(11, 1), pull(12, 2), { t: 13, k: 'answer', v: 3 },
+    { t: 15, k: 'round', v: 2 },
+    pull(16, 0), point(17)
+  ]);
+  assert.equal(s.r1.pulls, 1);
+  assert.equal(s.r2.pulls, 1);
+  assert.equal(s.answer, 3);
+}
+console.log('round split tests: ok');
