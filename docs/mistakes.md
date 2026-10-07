@@ -24,3 +24,4 @@ when a better guard appears.
 | A research summary overstated an effect and it was recommended as the first room before the paper was read (pseudo-haptic weight: 4 of 8 noticed unprompted) | `.claude/skills/new-room/SKILL.md` step 1: no recommendation before the full paper is read |
 | A ranked list of experiments was built from search summaries without reading the papers | `tools/check-cards.mjs`: every fact in `docs/cards/README.md` cards must quote the full text |
 | Paper titles were written from memory into a list (one was wrong) | `docs/papers-needed.md`: every title and DOI looked up in Crossref before writing |
+| The quote checker dropped Japanese, Chinese and Korean characters, so any quote in those languages passed | `tools/check-cards.mjs` keeps letters of every script and refuses quotes under 8 characters |
