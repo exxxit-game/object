@@ -8,15 +8,14 @@ import { eventLog } from '../../engine/log.js';
 import { createTimeline } from '../../engine/timeline.js';
 import { unlock, tone } from '../../engine/audio.js';
 import { loadVoice, speak } from '../../engine/voice.js';
-import { pulse } from '../../engine/haptics.js';
 import { sceneHTML } from './scene.js';
 import { analyseSession } from './report.js';
 import { buildAnswers, showAnswers, hideAnswers } from './question.js';
+import { buildLevers } from './levers.js';
 import { initPainting } from './painting.js';
 import { T } from './texts.ru.js';
 import { GOAL, VOICE_LINES } from './voice-lines.js';
 
-const COLORS = ['#d23b32', '#2f9e55', '#2f6fd2'];
 const GREY = '#7d7a73';
 const SOFT = '#c4c0b7';
 const HEAD = '#9a968d';
@@ -41,7 +40,6 @@ function setState(s) {
 }
 
 /* ---------- sound ---------- */
-const clunk = () => { tone(110, 0.12, 'square', 0.08, 60); tone(70, 0.18, 'sine', 0.2, 40); };
 const buzz = () => { tone(880, 0.35, 'square', 0.06); tone(1320, 0.35, 'sine', 0.05); };
 
 /* ---------- experimenter ---------- */
@@ -60,41 +58,6 @@ let lastPraise = null;
 function drawRunScreen() {
   if (lastPraise) screen().write(experimenterBlocks(lastPraise).concat({ t: T.progress(score, GOAL), size: 44, color: GREY, weight: 500 }));
   else screen().write([{ t: T.progress(score, GOAL), size: 52, color: GREY, weight: 500 }]);
-}
-
-/* ---------- levers ---------- */
-function el(tag, attrs, parent) {
-  const e = document.createElement(tag);
-  for (const k in attrs) e.setAttribute(k, attrs[k]);
-  (parent || scene).appendChild(e);
-  return e;
-}
-
-function buildLevers() {
-  [-0.28, 0, 0.28].forEach((x, i) => {
-    const root = el('a-entity', { position: `${x} 0.86 -0.62` }, $('#room'));
-    el('a-box', { width: 0.14, height: 0.05, depth: 0.18, color: '#2b2b2f', roughness: 0.6 }, root);
-    el('a-box', { width: 0.03, height: 0.012, depth: 0.14, position: '0 0.026 0', color: '#111' }, root);
-    const lamp = el('a-sphere', { radius: 0.018, position: '0 0.035 0.075', material: `color:#222; emissive:${COLORS[i]}; emissiveIntensity:0` }, root);
-    const pivot = el('a-entity', { swing: '' }, root);
-    el('a-cylinder', { radius: 0.011, height: 0.24, position: '0 0.12 0', color: '#9a9a9a', metalness: 0.7, roughness: 0.3 }, pivot);
-    el('a-sphere', { radius: 0.038, position: '0 0.25 0', color: COLORS[i], roughness: 0.35 }, pivot);
-    const hit = el('a-box', { class: 'clickable', width: 0.16, height: 0.36, depth: 0.22, position: '0 0.16 0', material: 'opacity:0; transparent:true; depthWrite:false' }, root);
-    const lever = { i, pivot, lamp, busy: false };
-    hit.addEventListener('click', (e) => pull(lever, e.detail && e.detail.cursorEl));
-  });
-}
-
-function pull(lever, controllerEl) {
-  if (lever.busy) return;
-  lever.busy = true;
-  unlock();
-  clunk();
-  pulse(controllerEl);
-  lever.pivot.components.swing.go();
-  lever.lamp.setAttribute('material', 'emissiveIntensity', 2.5);
-  setTimeout(() => { lever.lamp.setAttribute('material', 'emissiveIntensity', 0); lever.busy = false; }, 480);
-  eventLog.add('pull', lever.i);
 }
 
 /* ---------- counter and signal lamp ---------- */
@@ -283,7 +246,7 @@ export function mount() {
   loadVoice(VOICE_LINES, import.meta.url);
   document.body.insertAdjacentHTML('beforeend', sceneHTML);
   scene = $('a-scene');
-  buildLevers();
+  buildLevers($('#room'));
   drawPainting = initPainting($('#painting'));
   $('#startHit').addEventListener('click', start);
   $('#againHit').addEventListener('click', start);

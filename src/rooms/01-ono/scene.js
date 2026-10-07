@@ -46,7 +46,12 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-box position="-2.68 0.82 -0.3" width="0.18" height="0.12" depth="0.28" color="#2d2f33"></a-box>
   <a-entity id="timerLabel" panel="w: 0.24; h: 0.09; px: 512" rotation="0 90 0" position="-2.588 0.82 -0.3"></a-entity>
   <a-sphere id="timerLed" radius="0.012" position="-2.62 0.89 -0.38" material="color: #300; emissive: #ff2a1a; emissiveIntensity: 0.2"></a-sphere>
-  <a-cylinder radius="0.007" height="1.0" rotation="0 0 90" position="-2.1 0.77 -0.3" color="#111"></a-cylinder>
+  <!-- counter cable from the wall box to the timer: floor, up the desk edge, into the timer -->
+  <a-box position="-1.615 0.05 -0.95" width="0.03" height="0.08" depth="0.08" color="#2a2a2a"></a-box>
+  <a-cylinder radius="0.007" height="0.82" rotation="0 0 90" position="-2.04 0.008 -0.95" color="#111"></a-cylinder>
+  <a-cylinder radius="0.007" height="0.65" rotation="90 0 0" position="-2.45 0.008 -0.625" color="#111"></a-cylinder>
+  <a-cylinder radius="0.007" height="0.76" position="-2.445 0.38 -0.3" color="#111"></a-cylinder>
+  <a-cylinder radius="0.007" height="0.145" rotation="0 0 90" position="-2.5175 0.77 -0.3" color="#111"></a-cylinder>
   <!-- empty chair -->
   <a-box position="-3.0 0.45 -0.3" width="0.4" height="0.04" depth="0.4" color="#2e3238"></a-box>
   <a-box position="-3.19 0.72 -0.3" width="0.03" height="0.5" depth="0.4" color="#2e3238"></a-box>
@@ -76,16 +81,17 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
     <!-- counter cable: along the table top, down the back edge, along the floor to the wall -->
     <a-cylinder radius="0.007" height="0.04" rotation="90 0 0" position="0 0.847 -0.845" color="#111"></a-cylinder>
     <a-cylinder radius="0.007" height="0.84" position="0 0.42 -0.866" color="#111"></a-cylinder>
-    <a-cylinder radius="0.007" height="0.334" rotation="90 0 0" position="0 0.01 -1.033" color="#111"></a-cylinder>
-    <a-cylinder radius="0.007" height="1.6" rotation="0 0 90" position="-0.8 0.01 -1.2" color="#111"></a-cylinder>
-    <a-cylinder radius="0.007" height="0.9" rotation="90 0 0" position="-1.6 0.01 -0.75" color="#111"></a-cylinder>
+    <a-cylinder radius="0.007" height="0.084" rotation="90 0 0" position="0 0.008 -0.908" color="#111"></a-cylinder>
+    <a-cylinder radius="0.007" height="1.57" rotation="0 0 90" position="-0.785 0.008 -0.95" color="#111"></a-cylinder>
+    <!-- the cable enters the left wall through a box and continues to the timer next door -->
+    <a-box position="-1.585 0.05 -0.95" width="0.03" height="0.08" depth="0.08" color="#2a2a2a"></a-box>
     <!-- lever cables dangle, connected to nothing -->
-    <a-cylinder radius="0.006" height="0.78" position="-0.28 0.41 -0.56" rotation="0 0 4" color="#151515"></a-cylinder>
-    <a-cylinder radius="0.006" height="0.78" position="0 0.41 -0.56" rotation="0 0 -3" color="#151515"></a-cylinder>
-    <a-cylinder radius="0.006" height="0.78" position="0.28 0.41 -0.56" rotation="0 0 5" color="#151515"></a-cylinder>
-    <a-box position="-0.31 0.015 -0.5" width="0.03" height="0.03" depth="0.06" rotation="0 30 0" color="#c9b26a"></a-box>
-    <a-box position="0.02 0.015 -0.48" width="0.03" height="0.03" depth="0.06" rotation="0 -20 0" color="#c9b26a"></a-box>
-    <a-box position="0.3 0.015 -0.5" width="0.03" height="0.03" depth="0.06" rotation="0 50 0" color="#c9b26a"></a-box>
+    <a-cylinder radius="0.006" height="0.78" position="-0.30 0.41 -0.44" rotation="0 0 4" color="#151515"></a-cylinder>
+    <a-cylinder radius="0.006" height="0.78" position="-0.04 0.41 -0.44" rotation="0 0 -3" color="#151515"></a-cylinder>
+    <a-cylinder radius="0.006" height="0.78" position="0.22 0.41 -0.44" rotation="0 0 5" color="#151515"></a-cylinder>
+    <a-box position="-0.33 0.015 -0.38" width="0.03" height="0.03" depth="0.06" rotation="0 30 0" color="#c9b26a"></a-box>
+    <a-box position="-0.02 0.015 -0.36" width="0.03" height="0.03" depth="0.06" rotation="0 -20 0" color="#c9b26a"></a-box>
+    <a-box position="0.24 0.015 -0.38" width="0.03" height="0.03" depth="0.06" rotation="0 50 0" color="#c9b26a"></a-box>
     <!-- buttons -->
     <a-entity id="startBtn" position="0.4 0.84 -0.47">
       <a-cylinder id="startHit" class="clickable" radius="0.05" height="0.03" position="0 0.015 0" material="color: #eeeeea; emissive: #ffffff; emissiveIntensity: .15"></a-cylinder>
