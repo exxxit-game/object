@@ -15,7 +15,8 @@ import { T } from './texts.ru.js';
 const COLORS = ['#d23b32', '#2f9e55', '#2f6fd2'];
 const GOAL = 12;
 const GREY = '#7d7a73';
-const SOFT = '#b9b5ac';
+const SOFT = '#c4c0b7';
+const HEAD = '#9a968d';
 const GOLD = '#f0c96a';
 
 const timeline = createTimeline();
@@ -41,8 +42,8 @@ const buzz = () => { tone(880, 0.35, 'square', 0.06); tone(1320, 0.35, 'sine', 0
 
 /* ---------- experimenter ---------- */
 const experimenterBlocks = (text) => [
-  { t: T.experimenter, size: 26, color: GREY, weight: 600 },
-  { t: text, size: 50, color: '#ece9e2' }
+  { t: T.experimenter, size: 30, color: HEAD, weight: 700, spacing: 5 },
+  { t: text, size: 62, color: '#f2efe8', weight: 500 }
 ];
 
 function say(text, extra) {
@@ -54,8 +55,8 @@ function say(text, extra) {
 // the counter on the table. The last praise, if any, stays above the score.
 let lastPraise = null;
 function drawRunScreen() {
-  if (lastPraise) screen().write(experimenterBlocks(lastPraise).concat({ t: T.progress(score, GOAL), size: 34, color: GREY }));
-  else screen().write([{ t: T.progress(score, GOAL), size: 34, color: '#55524c' }]);
+  if (lastPraise) screen().write(experimenterBlocks(lastPraise).concat({ t: T.progress(score, GOAL), size: 44, color: GREY, weight: 500 }));
+  else screen().write([{ t: T.progress(score, GOAL), size: 52, color: GREY, weight: 500 }]);
 }
 
 /* ---------- levers ---------- */
@@ -149,30 +150,38 @@ function start() {
   }, 9500);
 }
 
-function reportBlocks(r) {
+// The report is split into two screens so the text stays large enough to read
+// in a headset even when every line is present.
+function reportLevers(r) {
   const R = T.report;
-  const blocks = [{ t: R.header, size: 30, color: GREY, weight: 600 }];
-  blocks.push({ t: r.pulls ? R.pulls(r.pulls, r.per) : R.noPulls, size: 40 });
+  const blocks = [{ t: R.header, size: 34, color: HEAD, weight: 700, spacing: 6 }];
+  blocks.push({ t: r.pulls ? R.pulls(r.pulls, r.per) : R.noPulls, size: 50, weight: 500 });
   if (r.best && r.best.count > 1) {
     const names = r.best.seq.map(i => T.leverNames[i]);
-    blocks.push({ t: R.system(names, r.best.count, r.pts), size: 40 });
+    blocks.push({ t: R.system(names, r.best.count, r.pts), size: 50, weight: 500 });
   }
-  if (r.pulls) blocks.push({ t: R.idle(r.idle), size: 40 });
-  if (r.looks) blocks.push({ t: R.looks(r.looks), size: 34, color: SOFT });
-  if (r.reaches) blocks.push({ t: R.reaches(r.reaches), size: 34, color: SOFT });
-  blocks.push({ t: R.verdict, size: 44, color: GOLD, weight: 600, gap: 34 });
+  if (r.pulls) blocks.push({ t: R.idle(r.idle), size: 50, weight: 500 });
+  return blocks;
+}
+
+function reportVerdict(r) {
+  const R = T.report;
+  const blocks = [{ t: R.header, size: 34, color: HEAD, weight: 700, spacing: 6 }];
+  if (r.looks) blocks.push({ t: R.looks(r.looks), size: 50, color: SOFT, weight: 500 });
+  if (r.reaches) blocks.push({ t: R.reaches(r.reaches), size: 50, color: SOFT, weight: 500 });
+  blocks.push({ t: R.verdict, size: 56, color: GOLD, weight: 700, gap: 44 });
   return blocks;
 }
 
 function originalBlocks(r) {
   const O = T.original;
   const prev = runs.length > 1 ? runs[runs.length - 2] : null;
-  const extra = prev ? [{ t: O.previousRun(prev.pulls, r.pulls), size: 36, color: GOLD, gap: 30 }] : [];
+  const extra = prev ? [{ t: O.previousRun(prev.pulls, r.pulls), size: 44, color: GOLD, weight: 600, gap: 36 }] : [];
   return [
-    { t: O.header, size: 30, color: GREY, weight: 600 },
-    { t: O.study, size: 40 },
-    { t: O.result, size: 40 },
-    { t: O.difference, size: 36, color: SOFT }
+    { t: O.header, size: 34, color: HEAD, weight: 700, spacing: 6 },
+    { t: O.study, size: 46, weight: 500 },
+    { t: O.result, size: 46, weight: 500 },
+    { t: O.difference, size: 44, color: SOFT, weight: 500 }
   ].concat(extra);
 }
 
@@ -182,15 +191,17 @@ function finish() {
   const r = analyse(eventLog.entries);
   runs.push(r);
   say(T.sessionOver);
+  const page = { pad: 2048 * 0.07 };
+  timeline.later(() => screen().write(reportLevers(r), page), 2600);
   timeline.later(() => {
-    screen().write(reportBlocks(r));
+    screen().write(reportVerdict(r), page);
     darkGlass(false);
-  }, 2600);
+  }, 11000);
   timeline.later(() => {
-    screen().write(originalBlocks(r));
+    screen().write(originalBlocks(r), page);
     $('#againBtn').setAttribute('visible', true);
     $('#againHit').classList.add('clickable');
-  }, 17000);
+  }, 22000);
 }
 
 function darkGlass(dark) {
@@ -203,9 +214,9 @@ function boot() {
   drawCounter(false);
   drawPainting();
   screen().write([
-    { t: T.boot.kicker, size: 30, color: GREY, weight: 600 },
-    { t: T.boot.title, size: 90, weight: 700 },
-    { t: T.boot.prompt, size: 38, color: SOFT }
+    { t: T.boot.kicker, size: 34, color: HEAD, weight: 700, spacing: 8 },
+    { t: T.boot.title, size: 120, weight: 700 },
+    { t: T.boot.prompt, size: 50, color: SOFT, weight: 500 }
   ]);
   $('#startLabel').components.panel.write([{ t: T.startLabel, size: 64, weight: 700, color: '#1a1a1a' }]);
   $('#againLabel').components.panel.write([{ t: T.againLabel, size: 64, weight: 700, color: '#1a1a1a' }]);

@@ -58,7 +58,7 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
 
   <!-- experimenter screen -->
   <a-box position="0 1.86 -1.585" width="2.12" height="1.12" depth="0.03" color="#1b1c1e"></a-box>
-  <a-entity id="screen" panel="w: 2.0; h: 1.0; px: 1300; bg: #0e0f11" position="0 1.86 -1.565"></a-entity>
+  <a-entity id="screen" panel="w: 2.0; h: 1.0; px: 2048; ref: 1300; bg: #0e0f11" position="0 1.86 -1.565"></a-entity>
 
   <a-entity id="room">
     <!-- table -->
