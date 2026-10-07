@@ -8,6 +8,7 @@ import { eventLog } from '../../engine/log.js';
 import { createTimeline } from '../../engine/timeline.js';
 import { unlock, tone } from '../../engine/audio.js';
 import { loadVoice, speak } from '../../engine/voice.js';
+import { pulse } from '../../engine/haptics.js';
 import { sceneHTML } from './scene.js';
 import { analyse } from './report.js';
 import { initPainting } from './painting.js';
@@ -78,15 +79,16 @@ function buildLevers() {
     el('a-sphere', { radius: 0.038, position: '0 0.25 0', color: COLORS[i], roughness: 0.35 }, pivot);
     const hit = el('a-box', { class: 'clickable', width: 0.16, height: 0.36, depth: 0.22, position: '0 0.16 0', material: 'opacity:0; transparent:true; depthWrite:false' }, root);
     const lever = { i, pivot, lamp, busy: false };
-    hit.addEventListener('click', () => pull(lever));
+    hit.addEventListener('click', (e) => pull(lever, e.detail && e.detail.cursorEl));
   });
 }
 
-function pull(lever) {
+function pull(lever, controllerEl) {
   if (lever.busy) return;
   lever.busy = true;
   unlock();
   clunk();
+  pulse(controllerEl);
   lever.pivot.components.swing.go();
   lever.lamp.setAttribute('material', 'emissiveIntensity', 2.5);
   setTimeout(() => { lever.lamp.setAttribute('material', 'emissiveIntensity', 0); lever.busy = false; }, 480);
@@ -101,8 +103,15 @@ function drawCounter(flash) {
   );
 }
 
+// The timer must not give points while the player cannot act: headset system
+// menu open (XR session not visible) or the browser tab hidden. Otherwise the
+// reveal would wrongly say "a point came while you did nothing".
+let xrVisible = true;
+const paused = () => document.hidden || !xrVisible;
+
 function point() {
   if (state !== 'run') return;
+  if (paused()) { schedule(); return; }
   score++;
   eventLog.add('point');
   drawCounter(true);
@@ -251,6 +260,11 @@ export function mount() {
   $('#startHit').addEventListener('click', start);
   $('#againHit').addEventListener('click', start);
   window.addEventListener('keydown', (e) => { if (e.code === 'Space' && state === 'idle') start(); });
+  scene.addEventListener('enter-vr', () => {
+    const session = scene.xrSession;
+    if (session) session.addEventListener('visibilitychange', () => { xrVisible = session.visibilityState === 'visible'; });
+  });
+  scene.addEventListener('exit-vr', () => { xrVisible = true; });
   setState('idle');
   if (scene.hasLoaded) boot(); else scene.addEventListener('loaded', boot);
 }
