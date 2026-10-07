@@ -1,4 +1,4 @@
-import { rigTransform } from './recenter-math.js';
+import { rigTransform, seatedLift } from './recenter-math.js';
 
 // Puts the player at the designed spot, facing the designed direction, in VR.
 // A headset sets its origin where the player happened to stand and look when the
@@ -9,7 +9,9 @@ AFRAME.registerComponent('recenter', {
   schema: {
     x: { default: 0 },     // where the head should be (world metres)
     z: { default: 0.35 },
-    yaw: { default: 0 }    // which way the player should face (degrees, 0 = -Z)
+    yaw: { default: 0 },   // which way the player should face (degrees, 0 = -Z)
+    eye: { default: 1.6 }, // designed eye height; seated players are lifted to it
+    seatedBelow: { default: 1.35 }
   },
 
   init() {
@@ -40,6 +42,8 @@ AFRAME.registerComponent('recenter', {
     rig.rotation.y = t.yaw;
     rig.position.x = t.x;
     rig.position.z = t.z;
-    this.el.emit('recentered');
+    const lift = seatedLift(head.position.y, this.data.eye, this.data.seatedBelow);
+    rig.position.y = lift;
+    this.el.emit('recentered', { seated: lift > 0 });
   }
 });

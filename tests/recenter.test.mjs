@@ -25,3 +25,11 @@ for (const [px, pz, yaw] of cases) {
   assert.ok(near(wrap(w.yaw), 0), `head not facing the screen for ${px},${pz},${yaw}`);
 }
 console.log(`recenter tests: ok (${cases.length} poses)`);
+
+// Seated players are lifted to standing eye height; standing players are not moved.
+import { seatedLift } from '../src/engine/recenter-math.js';
+assert.equal(seatedLift(1.7), 0);
+assert.equal(seatedLift(1.36), 0);
+assert.ok(Math.abs(seatedLift(1.15) - 0.45) < 1e-9);
+assert.ok(Math.abs(1.0 + seatedLift(1.0) - 1.6) < 1e-9);
+console.log('seated tests: ok');

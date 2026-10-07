@@ -10,7 +10,8 @@ import { unlock, tone } from '../../engine/audio.js';
 import { loadVoice, speak } from '../../engine/voice.js';
 import { pulse } from '../../engine/haptics.js';
 import { sceneHTML } from './scene.js';
-import { analyse } from './report.js';
+import { analyseSession } from './report.js';
+import { buildAnswers, showAnswers, hideAnswers } from './question.js';
 import { initPainting } from './painting.js';
 import { T } from './texts.ru.js';
 import { GOAL, VOICE_LINES } from './voice-lines.js';
@@ -29,8 +30,9 @@ let scene;
 let score = 0;
 let drawPainting;
 let runs = [];
+let round = 1;
 
-// idle -> intro -> run -> done -> intro ...
+// idle -> intro -> run (round 1) -> question -> run (round 2) -> done -> intro ...
 // Mirrored on <html data-room-state> so tests can observe the flow.
 let state = 'idle';
 function setState(s) {
@@ -126,7 +128,7 @@ function point() {
   const praise = T.praise[score];
   drawRunScreen();
   if (praise) timeline.later(() => { lastPraise = praise; drawRunScreen(); speak(praise); }, 900);
-  if (score >= GOAL) { timeline.later(finish, 1400); return; }
+  if (score >= GOAL) { timeline.later(round === 1 ? askQuestion : finish, 1400); return; }
   schedule();
 }
 
@@ -135,7 +137,7 @@ function schedule() { timeline.later(point, 2500 + Math.random() * 5500); }
 
 /* ---------- flow ---------- */
 function start() {
-  if (state === 'run' || state === 'intro') return;
+  if (state !== 'idle' && state !== 'done') return;
   unlock();
   timeline.clearAll();
   setState('intro');
@@ -150,32 +152,56 @@ function start() {
   say(T.intro[0]);
   timeline.later(() => say(T.intro[1]), 3300);
   timeline.later(() => say(T.intro[2](GOAL)), 7000);
-  timeline.later(() => {
-    setState('run');
-    eventLog.begin();
-    lastPraise = null;
-    drawRunScreen();
-    schedule();
-  }, 9500);
+  timeline.later(() => startRound(1), 9500);
+}
+
+function startRound(n) {
+  round = n;
+  if (n === 1) eventLog.begin(); else eventLog.add('round', 2);
+  setState('run');
+  score = 0;
+  lastPraise = null;
+  drawCounter(false);
+  drawRunScreen();
+  schedule();
+}
+
+// Between the rounds the player says what they think the points depend on.
+function askQuestion() {
+  setState('question');
+  screen().write([{ t: T.question.ask, size: 56, color: '#f2efe8', weight: 500 }], { top: true });
+  speak(T.question.ask);
+  showAnswers((i) => {
+    eventLog.add('answer', i);
+    say(T.round2);
+    timeline.later(() => startRound(2), 4200);
+  });
 }
 
 // The report is split into two screens so the text stays large enough to read
 // in a headset even when every line is present.
-function reportLevers(r) {
+const totalPulls = (s) => s.r1.pulls + (s.r2 ? s.r2.pulls : 0);
+
+function reportLevers(s) {
   const R = T.report;
+  const r1 = s.r1, r2 = s.r2 || { pulls: 0, per: [0, 0, 0], idle: 0 };
+  const pulls = totalPulls(s);
+  const per = r1.per.map((n, i) => n + r2.per[i]);
   const blocks = [{ t: R.header, size: 34, color: HEAD, weight: 700, spacing: 6 }];
-  blocks.push({ t: r.pulls ? R.pulls(r.pulls, r.per) : R.noPulls, size: 50, weight: 500 });
-  if (r.best && r.best.count > 1) {
-    const names = r.best.seq.map(i => T.leverNames[i]);
-    blocks.push({ t: R.system(names, r.best.count, r.pts), size: 50, weight: 500 });
+  blocks.push({ t: pulls ? R.pulls(pulls, per) : R.noPulls, size: 50, weight: 500 });
+  if (r1.best && r1.best.count > 1) {
+    const names = r1.best.seq.map(i => T.leverNames[i]);
+    blocks.push({ t: R.system(names, r1.best.count, r1.pts), size: 50, weight: 500 });
+    if (s.r2) blocks.push({ t: R.repeats(s.repeats), size: 50, weight: 500 });
   }
-  if (r.pulls) blocks.push({ t: R.idle(r.idle), size: 50, weight: 500 });
+  if (pulls) blocks.push({ t: R.idle(r1.idle + r2.idle), size: 50, weight: 500 });
   return blocks;
 }
 
 function reportVerdict(r) {
   const R = T.report;
   const blocks = [{ t: R.header, size: 34, color: HEAD, weight: 700, spacing: 6 }];
+  if (r.answer !== null) blocks.push({ t: R.belief[r.answer], size: 50, weight: 500 });
   if (r.looks) blocks.push({ t: R.looks(r.looks), size: 50, color: SOFT, weight: 500 });
   if (r.reaches) blocks.push({ t: R.reaches(r.reaches), size: 50, color: SOFT, weight: 500 });
   blocks.push({ t: R.verdict, size: 56, color: GOLD, weight: 700, gap: 44 });
@@ -185,7 +211,7 @@ function reportVerdict(r) {
 function originalBlocks(r) {
   const O = T.original;
   const prev = runs.length > 1 ? runs[runs.length - 2] : null;
-  const extra = prev ? [{ t: O.previousRun(prev.pulls, r.pulls), size: 44, color: GOLD, weight: 600, gap: 36 }] : [];
+  const extra = prev ? [{ t: O.previousRun(totalPulls(prev), totalPulls(r)), size: 44, color: GOLD, weight: 600, gap: 36 }] : [];
   return [
     { t: O.header, size: 34, color: HEAD, weight: 700, spacing: 6 },
     { t: O.study, size: 46, weight: 500 },
@@ -197,7 +223,8 @@ function originalBlocks(r) {
 function finish() {
   setState('done');
   eventLog.end();
-  const r = analyse(eventLog.entries);
+  hideAnswers();
+  const r = analyseSession(eventLog.entries);
   runs.push(r);
   say(T.sessionOver);
   const page = { pad: 2048 * 0.07 };
@@ -220,6 +247,7 @@ function darkGlass(dark) {
 
 /* ---------- boot ---------- */
 function boot() {
+  buildAnswers(scene, T.question.answers);
   drawCounter(false);
   drawPainting();
   screen().write([
