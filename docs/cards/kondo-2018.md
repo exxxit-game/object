@@ -7,8 +7,8 @@
 ## Facts
 | What | Value | Quote (verbatim from the .txt) | Page |
 |---|---|---|---|
-| Participants | 20, 20 and 10 naive participants (Exp. 3 reused Exp. 1 people) | "(20, 20, and 10 na�ve participants for Experiment 1, 2, and 3, respectively)" | 2 |
-| Participants (Exp. 1) | All male students, mean age 21.9 | "Twenty na�ve volunteers (all male, mean 21.9 years old" | 5 |
+| Participants | 20, 20 and 10 naive participants (Exp. 3 reused Exp. 1 people) | "(20, 20, and 10 naïve participants for Experiment 1, 2, and 3, respectively)" | 2 |
+| Participants (Exp. 1) | All male students, mean age 21.9 | "Twenty naïve volunteers (all male, mean 21.9 years old" | 5 |
 | Equipment | Oculus Rift DK2; Kinect v2 for head position and body movement | "The optical motion sensor also captured the participants' body movements." | 5 |
 | Procedure | White gloves and socks shown 2 m in front, facing away, moving with the participant | "Participants observed visual motions of white gloves and socks 2m in front of and facing away from them in a virtual room" | 5 |
 | Procedure: control | Asynchronous condition replays another person's movements | "In the asynchronous condition, the stimuli were replayed from recordings of another person's actions." | 5 |

@@ -15,7 +15,7 @@
 | Procedure E1: repetitions | Each of 11 gains 10 times (110 turns) | "We tested each gain 10 times in randomized order." | 6 |
 | Procedure E2 (walking straight) | Walk 5 m in VR; real distance 3–7 m | "The physical distance subjects had to walk varied between 3 and 7 m" | 7 |
 | Procedure E3 (curved path) | 2 m straight, then 5 m on a bent real path, then answer left/right | "After subjects walked a total distance of 7 m in the virtual world, the screen turned white" | 8 |
-| Physical space | 10 × 7 m darkened lab, real walking | "We performed all experiments in a 10 m � 7 m darkened laboratory room." | 4 |
+| Physical space | 10 × 7 m darkened lab, real walking (the × sign is extracted as Â in the text file) | "We performed all experiments in a 10 m Â 7 m darkened laboratory room." | 4 |
 | Equipment | 3DVisor Z800 headset, 40° diagonal field of view, optical tracking, Wii remote | "40 degree diagonal field of view (FoV)" | 5 |
 | Duration | 3 hours per person, everything included | "The total time per subject including prequestionnaire, instructions, training, experiment, breaks, and debriefing took 3 hours." | 5 |
 | Main result: turning | Real turns 49% larger or 20% smaller than the seen turn go unnoticed | "users can be turned physically about 49 percent more or 20 percent less than the perceived virtual rotation" | 1 |
