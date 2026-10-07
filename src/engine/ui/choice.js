@@ -30,15 +30,19 @@ export function createChoice(scene, place) {
     els = [];
   }
 
-  // labels: strings. onPick(index) fires once.
-  function show(labels, onPick) {
+  // labels: strings. onPick(index) fires once. top (optional): the top edge of the
+  // first button, to start below a question of any length.
+  function show(labels, onPick, top) {
+    // long lists get lower buttons so they stay on the wall screen
+    const bh = labels.length > 4 ? h * 0.8 : h;
+    const y0 = top == null ? y : top - bh / 2;
     hide();
     let done = false;
     const size = commonSize(labels);
     els = labels.map((text, i) => {
       const el = document.createElement('a-entity');
-      el.setAttribute('panel', `w: ${w}; h: ${h}; px: ${PX}`);
-      el.setAttribute('position', `${x} ${(y - i * (h + gap)).toFixed(3)} ${z}`);
+      el.setAttribute('panel', `w: ${w}; h: ${bh}; px: ${PX}`);
+      el.setAttribute('position', `${x} ${(y0 - i * (bh + gap)).toFixed(3)} ${z}`);
       el.classList.add('clickable', 'answer');
       el.dataset.index = i;
       const paint = (bg) => el.components.panel && el.components.panel.write([{ t: text, size, weight: WEIGHT, color: TEXT }], { bg, pad: PAD });

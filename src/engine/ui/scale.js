@@ -13,7 +13,8 @@ const MARK = '#f0c96a';
 export function createScale(scene, place) {
   const { x = 0, y, z, w = 1.7 } = place;
   const h = 0.3;
-  const done = createChoice(scene, { x, y: y - 0.25, z, w: 0.5, h: 0.11 });
+  const DONE_BELOW = 0.25;
+  const done = createChoice(scene, { x, y: y - DONE_BELOW, z, w: 0.5, h: 0.11 });
   let bar = null;
 
   function draw(labels, step, value, unit) {
@@ -61,12 +62,14 @@ export function createScale(scene, place) {
 
   // opt: { labels: [left, middle, right], step, unit, doneLabel }. onDone(value) once.
   // Without onDone the scale is only shown, not answered (to explain it first).
-  function show(opt, onDone) {
+  // top (optional): the top edge of the bar, to start below a question.
+  function show(opt, onDone, top) {
     hide();
+    const yc = top == null ? y : top - h / 2;
     let value = null;
     bar = document.createElement('a-entity');
     bar.setAttribute('panel', `w: ${w}; h: ${h}; px: 2048`);
-    bar.setAttribute('position', `${x} ${y} ${z}`);
+    bar.setAttribute('position', `${x} ${yc} ${z}`);
     bar.addEventListener('loaded', () => draw(opt.labels, opt.step, value, opt.unit));
     scene.appendChild(bar);
     if (!onDone) return;
@@ -79,7 +82,7 @@ export function createScale(scene, place) {
       const frac = (local.x / w + 0.5 - 0.05) / 0.9;
       value = Math.max(0, Math.min(100, Math.round(frac * 100 / opt.step) * opt.step));
       draw(opt.labels, opt.step, value, opt.unit);
-      done.show([opt.doneLabel], () => { const v = value; hide(); onDone(v); });
+      done.show([opt.doneLabel], () => { const v = value; hide(); onDone(v); }, yc - DONE_BELOW + 0.055);
     });
   }
 

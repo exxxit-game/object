@@ -70,6 +70,7 @@ export function createTrials({ tapes, intervals, speed, paused }) {
   async function run() {
     for (let n = 1; n <= PROTOCOL.trials && !stopped; n++) {
       await untilVisible();
+      if (stopped) return;
       if (!(await windowOf(n))) {
         if (stopped) return;
         // the repeated trial must not start the moment the player is back

@@ -8,7 +8,7 @@ export const ORIGINAL = Object.freeze({
     '75-75': Object.freeze({ men: 30.3, women: 51.4 })
   }),
   perCell: 8,        // p. 458: 8 per sex × mood × problem cell
-  // p. 461: percent of non-depressed students who said "zero control" in 75-75 (1 of 16)
+  // p. 462: percent of non-depressed students who said "zero control" in 75-75 (1 of 16)
   zeroIn7575Pct: 6,
   participants: 64,  // p. 457
   // Dev, Moore, Johnson & Garrett 2022, Table 1: end-of-task control, zero contingency

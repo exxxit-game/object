@@ -55,6 +55,7 @@ AFRAME.registerComponent('panel', {
 
   // blocks: [{ t, size, color, weight, gap, spacing }]
   // opt: { bg, pad, top, align: 'center' | 'left' }
+  // Returns where the text ends, in metres below the panel's top edge.
   write(blocks, opt = {}) {
     const { ctx, c } = this;
     const W = c.width, H = c.height;
@@ -87,5 +88,6 @@ AFRAME.registerComponent('panel', {
     });
     ctx.letterSpacing = '0px';
     this.tex.needsUpdate = true;
+    return (y / H) * this.data.h;
   }
 });

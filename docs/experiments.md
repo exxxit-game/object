@@ -55,7 +55,7 @@ Robustness marked "?" was not checked against a source yet (rule 16 before desig
 
 | Room | Original | Robustness | VR fit / caveat |
 |---|---|---|---|
-| Illusion of control (booth) | Alloy & Abramson 1979, Exp. 2: 40 trials × 3 s, gaps 10–25 s (≈11 min); button, yellow and green lamps; 0–100 rating | Preregistered replication Dev et al. 2022 (n = 382): outcome-frequency effect holds; depression link does not | Near-verbatim; reuses the Ono booth (one button instead of levers). Trial sequences must be generated |
+| Illusion of control (booth) | Alloy & Abramson 1979, Exp. 2: 40 trials × 3 s, gaps 10–25 s (≈11 min); button, yellow and green lamps; 0–100 rating | Preregistered replication Dev et al. 2022 (242 people in zero-contingency conditions): overestimation of control holds; 75% > 25% only for trial-level predictions; depression link does not | Near-verbatim; reuses the Ono booth (one button instead of levers). Trial sequences must be generated |
 | Candle problem | Duncker 1935; Glucksberg 1962 | Box-full vs box-empty effect holds; the reward effect did not | Objects and physics; time to solve |
 | Choice blindness | Johansson & Hall 2005 (Science) | Replicated many times (Hall 2012: 69%) | Swap is perfect in VR; close, not literal |
 | Return to interrupted task | Ovsiankina 1928 | Meta-analysis 2025: ≈67% resume vs 50% chance | Resumed or not, after how long |

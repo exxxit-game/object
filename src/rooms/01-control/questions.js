@@ -32,18 +32,19 @@ function displayOrder(key, n, rand) {
   return [...order, last];
 }
 
-// ui: { ask(text) shows the question on the screen, scale, choice }
+// ui: { ask(text) shows the question and returns the top edge for the answers, scale, choice }
 export async function askAll(ui, rand = Math.random) {
   for (const [key, labels, unit] of SCALES) {
-    ui.ask(Q[key].ask);
+    const top = ui.ask(Q[key].ask);
     const value = await new Promise((resolve) =>
-      ui.scale.show({ labels, step: PROTOCOL.scaleStep, unit, doneLabel: APP_T.done }, resolve));
+      ui.scale.show({ labels, step: PROTOCOL.scaleStep, unit, doneLabel: APP_T.done }, resolve, top));
     eventLog.add('answer', { key, value });
   }
   for (const key of CHOICES) {
-    ui.ask(Q[key].ask);
+    const top = ui.ask(Q[key].ask);
     const order = displayOrder(key, Q[key].answers.length, rand);
-    const shown = await new Promise((resolve) => ui.choice.show(order.map(i => Q[key].answers[i]), resolve));
-    eventLog.add('answer', { key, value: order[shown] });
+    const shown = await new Promise((resolve) => ui.choice.show(order.map(i => Q[key].answers[i]), resolve, top));
+    // pos = where it was shown, so a position effect can be checked later
+    eventLog.add('answer', { key, value: order[shown], pos: shown });
   }
 }

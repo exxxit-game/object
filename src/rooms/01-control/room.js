@@ -35,6 +35,10 @@ const screen = () => $('#screen').components.panel;
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 // Behind the player, where the door would be.
 const DOOR = { x: 0.6, y: 1.0, z: 1.5 };
+// Top edge of the wall screen (centre 1.86 m, height 1.0 m) and the gap left
+// between a question and the buttons or scale under it.
+const SCREEN_TOP = 2.36;
+const UNDER_TEXT = 0.05;
 
 let scene, choice, lowChoice, scale, shownScale, session, trials = null;
 let seated = false;
@@ -62,9 +66,9 @@ async function say(text, top = false) {
   await delay(spoken ? 450 : 1500 + text.length * 55);
 }
 
-// Buttons low on the screen, under a text that fills it (consent, pages).
-function pick(labels) {
-  return new Promise((resolve) => lowChoice.show(labels, resolve));
+// Buttons under a text that fills the screen (pages, checks). top: from writeTop.
+function pick(labels, top) {
+  return new Promise((resolve) => lowChoice.show(labels, resolve, top));
 }
 
 function darkGlass(dark) {
@@ -73,10 +77,23 @@ function darkGlass(dark) {
   $('#observer').setAttribute('visible', !dark);
 }
 
+// Shows a question at the top of the screen and returns where the answers may
+// start (the top edge for the buttons or scale), below the last line of text.
+// The same height is written on the screen element for the smoke test.
+function ask(text) {
+  speak(text);
+  return writeTop([{ t: text, size: 54, color: INK, weight: 500 }]);
+}
+
+// Writes blocks from the top of the screen; returns the top edge for widgets below.
+function writeTop(blocks, opt = {}) {
+  const bottom = screen().write(blocks, { ...opt, top: true });
+  $('#screen').dataset.textBottom = (SCREEN_TOP - bottom).toFixed(3);
+  return SCREEN_TOP - bottom - UNDER_TEXT;
+}
+
 async function understood() {
-  show(T.repeatQuestion, true);
-  speak(T.repeatQuestion);
-  return (await pick([APP_T.understood, APP_T.repeat])) === 0;
+  return (await pick([APP_T.understood, APP_T.repeat], ask(T.repeatQuestion))) === 0;
 }
 
 /* ---------- flow ---------- */
@@ -116,13 +133,13 @@ async function runTrials() {
 }
 
 async function questions() {
+  setState('questions');
   playSound('door', DOOR, 0.8);
   await delay(1500 / SPEED);
   await say(T.back);
   // the experimenter rereads the part about control (p. 452)
   for (const line of T.concept.slice(1)) await say(line);
-  setState('questions');
-  await askAll({ ask: (text) => { show(text, true); speak(text); }, scale, choice });
+  await askAll({ ask, scale, choice });
 }
 
 async function reveal(condition) {
@@ -133,11 +150,11 @@ async function reveal(condition) {
   await say(T.thanks);
   darkGlass(false);
   const pages = revealPages(r, condition);
-  const page = { pad: 2048 * 0.07, top: true };
+  const page = { pad: 2048 * 0.07 };
   for (let i = 0; i < pages.length; i++) {
-    screen().write(pages[i], page);
+    const top = writeTop(pages[i], page);
     const last = i === pages.length - 1;
-    await pick([last ? APP_T.again : APP_T.next]);
+    await pick([last ? APP_T.again : APP_T.next], top);
   }
 }
 
@@ -171,7 +188,7 @@ async function boot() {
   const lc = $('#cam').components['look-controls'];
   if (lc && lc.pitchObject) lc.pitchObject.rotation.x = -0.28;
   $('#hint').classList.add('show');
-  const withRecording = await askConsent(screen(), lowChoice, { kicker: T.kicker, title: T.title });
+  const withRecording = await askConsent(screen(), lowChoice, { kicker: T.kicker, title: T.title, screenTop: SCREEN_TOP });
   unlock();
   playSound('room', null, 0.12, true);
   play(withRecording);

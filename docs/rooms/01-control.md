@@ -27,7 +27,7 @@ Every number here lives in code only in `src/rooms/01-control/protocol.js`, and
 Mean judged control (SD): non-depressed men 20.0 (26.7) in 25-25, 30.3 (12.8) in 75-75;
 non-depressed women 7.5 (14.5) and 51.4 (29.8); depressed men 13.8 (12.7) and 21.2 (28.5);
 depressed women 17.1 (23.7) and 13.1 (13.6). n = 8 per cell.
-Said "zero control": 25-25 — 50% of both groups; 75-75 — 50% depressed, 6% non-depressed (p. 461).
+Said "zero control": 25-25 — 50% of both groups; 75-75 — 50% depressed, 6% non-depressed (p. 462).
 Replication (Dev, Moore, Johnson & Garrett 2022, preregistered, Table 1): end-of-task control
 in zero contingency — 25%: 27.64 (MTurk, n = 83) and 18.15 (students, n = 40); 75%: 34.23 (n = 77)
 and 36.83 (n = 42); 242 people in these conditions (whole study: 246 + 136 in the text, 246 + 134 in
@@ -39,13 +39,13 @@ trial-level predictions, not for the end-of-task rating; the depression link did
 |---|---|---|---|
 | 1 | No depression screening (BDI/MAACL) | Health data; not needed for the main effect, and the depression link failed replication | Yes |
 | 2 | Money task removed | No real money; null result in Exp. 2 (p. 460) | Yes |
-| 3 | Instructions paraphrased in Russian; every element kept except the sentence that the knowledge will earn money later (the money task is removed). The authors link that rational framing to the sex difference (p. 462) | Copyright; no money task | Partly (money) |
-| 4 | Both "Any questions?" moments (after the instructions; after the control concept, shown with the empty scale) → buttons "Понятно" / "Повторить" | No live experimenter | No (docs) |
+| 3 | Instructions paraphrased in Russian; every element kept except the sentence that the knowledge will earn money later (the money task is removed). The authors attribute the sex difference to the strong emphasis on rational judgment in the instructions (p. 462); this sentence is part of that framing | Copyright; no money task | Partly (money) |
+| 4 | The paper asks "Any questions?" three times (twice in the instructions, once after the control concept, p. 451–452); we ask twice: after the instructions and after the concept (shown with the empty scale), buttons "Понятно" / "Повторить" | No live experimenter | No (docs) |
 | 5 | Experimenter is a recorded voice and a wall screen with the same text | VR; hearing access | No (docs) |
-| 6 | Open evidence question → choices from the participants' reasons (relative efficacy, p. 455; tried sequences, frequent green, intuition, patterns, p. 461; "other"). The "opposite conclusion" question and the content of hypotheses are dropped | Typing in a headset | Yes |
+| 6 | Open evidence question → choices from the participants' reasons (relative efficacy, p. 455; tried sequences, frequent green, intuition, patterns, p. 461; "other"). The "opposite conclusion" question and the content of hypotheses are dropped | Typing in a headset | Choices: yes; dropped questions: docs only |
 | 7 | Gender asked at the end, "prefer not to say" allowed | Main result differs by sex | — |
 | 8 | Prior knowledge asked at the end ("did you know this experiment?") | Standard for online replications | — |
-| 9 | Players are not Penn students of the 1970s (the work was done on 1976 fellowships, p. 441) | — | Yes |
+| 9 | Players are not Penn undergraduates of the 1970s, and they are not paid (the originals were paid volunteers, topped up to $2.50, pp. 457, 452) | — | Partly |
 
 ## Not in the paper: our choices (owner may change)
 | Item | Our value | Reason |
@@ -64,10 +64,11 @@ trial-level predictions, not for the end-of-task rating; the depression link did
 | Answer buttons | One common text size for all answers of a question | A smaller answer looks less important |
 
 ## Flow and states (`<html data-room-state>`)
-`idle` (consent) → `intro` (instructions, Понятно/Повторить) → `run` (40 trials, experimenter out)
-→ `questions` (control concept reread, 4 scales, certainty, evidence, hypotheses, gender, prior knowledge)
+`idle` (consent) → `intro` (instructions, check; concept with the empty scale, check) → `run` (40 trials, experimenter out)
+→ `questions` (experimenter back, concept reread, 4 scales, certainty, evidence, hypotheses, gender, prior knowledge)
 → `done` (reveal: what you did → the truth → original → replication → differences).
 
 ## Data sent (only with consent, only at full speed, only after the privacy page exists)
-condition, presses, greens per response, actual Δp, the 4 judgments, certainty, evidence choice,
-hypotheses, gender, prior knowledge, voided trials, seated, first/repeat. No log of raw times.
+The condition and the whole result of `src/rooms/01-control/report.js` (counts, percentages, actual
+control, heuristics, discrepancies, voided and stray presses, every answer with its shown position),
+plus seated, speed and first/repeat. No raw event times. The server whitelist must list these fields.

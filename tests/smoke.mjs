@@ -19,9 +19,22 @@ const state = () => page.evaluate(() => document.documentElement.dataset.roomSta
 const waitState = (s, timeout = 60000) =>
   page.waitForFunction((x) => document.documentElement.dataset.roomState === x, s, { timeout });
 const answers = () => page.evaluate(() => document.querySelectorAll('.answer').length);
+// No button or scale may cover the text on the screen: the top edge of every
+// widget must be below the last line (#screen data-text-bottom, metres).
+const overlaps = () => page.evaluate(() => {
+  const bottom = Number(document.querySelector('#screen').dataset.textBottom);
+  const p = new THREE.Vector3();
+  return [...document.querySelectorAll('.answer, .scale-bar')].map((el) => {
+    el.object3D.getWorldPosition(p);
+    const top = p.y + el.getAttribute('panel').h / 2;
+    return top > bottom + 0.001 ? `${el.className} top ${top.toFixed(3)} > text ${bottom}` : null;
+  }).filter(Boolean);
+});
+
 // clicks the answer button with this index, waiting until it exists
 const pick = async (i) => {
   await page.waitForFunction((n) => [...document.querySelectorAll('.answer')].some(e => +e.dataset.index === n), i, { timeout: 30000 });
+  assert.deepEqual(await overlaps(), [], 'a button covers the text');
   await page.evaluate((n) => [...document.querySelectorAll('.answer')].find(e => +e.dataset.index === n).emit('click'), i);
 };
 
