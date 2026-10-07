@@ -15,9 +15,10 @@
      give a web page. A session needs a real button press, so the owner presses the
      two buttons once in the headset; the result is kept in window.__probe and in the
      page, and is read over USB (CDP) afterwards. -->
-<p>Проверка шлема. Нажмите обе кнопки по очереди. Каждая проверка длится 5 секунд, потом шлем сам вернётся сюда.</p>
+<p>Проверка шлема. Нажмите все три кнопки по очереди. Проверки VR и MR длятся по 5 секунд, потом шлем сам вернётся сюда. Для микрофона разрешите доступ и скажите что-нибудь: ничего не записывается и не отправляется.</p>
 <button id="vr">Проверить VR</button>
 <button id="ar">Проверить MR</button>
+<button id="mic">Проверить микрофон</button>
 <pre id="out">Результатов пока нет.</pre>
 <script>
 const FEATURES = ['local-floor', 'bounded-floor', 'hand-tracking', 'plane-detection', 'mesh-detection',
@@ -68,6 +69,23 @@ async function probe(mode) {
 }
 document.getElementById('vr').onclick = () => probe('immersive-vr');
 document.getElementById('ar').onclick = () => probe('immersive-ar');
+// Microphone: permission and a one-second level reading; nothing is recorded or sent.
+document.getElementById('mic').onclick = async () => {
+  const r = window.__probe.mic = {};
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const ctx = new AudioContext();
+    const an = ctx.createAnalyser();
+    ctx.createMediaStreamSource(stream).connect(an);
+    const buf = new Uint8Array(an.fftSize);
+    let peak = 0;
+    const t0 = performance.now();
+    while (performance.now() - t0 < 1000) { an.getByteTimeDomainData(buf); for (const v of buf) peak = Math.max(peak, Math.abs(v - 128)); await new Promise(res => setTimeout(res, 50)); }
+    r.granted = true; r.peakLevel = peak;
+    stream.getTracks().forEach(t => t.stop()); ctx.close();
+  } catch (e) { r.error = e.name + ': ' + e.message; }
+  show();
+};
 </script>
 </body>
 </html>
