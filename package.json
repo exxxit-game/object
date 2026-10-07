@@ -1,0 +1,12 @@
+{
+  "name": "objekt",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/analyse.test.mjs && node tests/smoke.mjs",
+    "serve": "npx serve ."
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}
