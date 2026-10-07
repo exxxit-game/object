@@ -17,7 +17,7 @@
 | Measure: control rating | 0–10 rating of how much control the person thought they had | "Verbal reports were obtained using scales that ranged from 0 (no control) to 10 (total control)." | 5 |
 | Main result | The confederate's "ritual" passed down the chain | "Superstitious responding was transmitted because of the behavior of the confederate." | 1 |
 | Main result: control rating | People in chains rated their control higher than people alone | "The comparisons of the data indicated that estimates of control were higher in the Social Exposure condition than in the Individual Exposure condition." | 6 |
-| Main result: alone | Without a model the superstition faded | "For participants who were individually exposed to the conditions without social influence, superstitious behavior was transient or decreased." | 7–8 |
+| Main result: alone | Without a model the superstition faded | "For participants who were individually exposed to the conditions without social influence, superstitious behavior was transient or decreased." | 7 |
 | Background (Ono) | Superstition is expected to fade with continued exposure | "Superstitious behavior is expected to disappear when humans or nonhumans are continually exposed to noncontingent outcomes" | 2 |
 | Limits (authors) | Not a factorial design; timing differed between groups | "Nonetheless, several methodological features could be improved. For example, to systematically evaluate the effects of the different manipulations, a factorial design is required." | 8 |
 
