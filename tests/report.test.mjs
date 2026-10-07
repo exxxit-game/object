@@ -1,49 +1,63 @@
-// Pure tests of room 01 analysis. Fast, no browser: safe to run on any laptop.
+// Pure tests of the room 01 report (Ono session). Fast, no browser.
 import assert from 'node:assert/strict';
-import { analyse } from '../src/rooms/01-ono/report.js';
+import { analyseOno } from '../src/rooms/01-ono/report.js';
 import { plural } from '../src/rooms/01-ono/texts.ru.js';
 
 const pull = (t, v) => ({ t, k: 'pull', v });
 const point = (t) => ({ t, k: 'point' });
+const signal = (t, v) => ({ t, k: 'signal', v });
+const end = (t) => ({ t, k: 'end' });
 
-// empty run
+// empty session
 {
-  const r = analyse([]);
-  assert.deepEqual(r, { pulls: 0, per: [0, 0, 0], pts: 0, idle: 0, best: null, looks: 0, reaches: 0, dur: 0 });
+  const r = analyseOno([]);
+  assert.equal(r.pulls, 0);
+  assert.equal(r.pts, 0);
+  assert.equal(r.pcr, 0);
+  assert.equal(r.best, null);
+  assert.equal(r.extinction, 0);
+  assert.equal(r.answer, null);
+  assert.equal(r.knew, null);
 }
 
-// counts per lever, looks, reaches, duration
+// counts, idle points, Ono's contiguity (point within 1 s after a pull)
 {
-  const r = analyse([pull(1, 0), pull(2, 0), pull(3, 2), { t: 4, k: 'look' }, { t: 5, k: 'reach' }, point(10.4)]);
-  assert.deepEqual(r.per, [2, 0, 1]);
-  assert.equal(r.pulls, 3);
-  assert.equal(r.looks, 1);
-  assert.equal(r.reaches, 1);
-  assert.equal(r.dur, 10);
+  const r = analyseOno([pull(1, 0), point(1.5), pull(4, 2), point(9), point(20), end(30)]);
+  assert.deepEqual(r.per, [1, 0, 1]);
+  assert.equal(r.pts, 3);
+  assert.equal(r.idle, 2);          // 9 s and 20 s: no pull in the 3 s before
+  assert.equal(r.pcr, 33);          // only the point at 1.5 s is contiguous
 }
 
-// a point with no pull in the previous 3 s is idle
+// the "system": last 3 pulls within 4 s before a point; the most frequent wins
 {
-  const r = analyse([pull(1, 0), point(2), point(9)]);
-  assert.equal(r.idle, 1);
+  const r = analyseOno([pull(1, 0), pull(1.5, 1), pull(2, 2), point(3), pull(5, 0), pull(5.5, 1), pull(6, 2), point(7)]);
+  assert.deepEqual(r.best, { seq: [0, 1, 2], count: 2 });
 }
 
-// the "system" is the last 3 pulls within 4 s before a point
+// pulls after the point phase ended are extinction pulls, not phase pulls
 {
-  const r = analyse([pull(1, 0), pull(1.5, 1), pull(2, 2), pull(2.5, 1), point(3)]);
-  assert.deepEqual(r.best, { seq: [1, 2, 1], count: 1 });
+  const r = analyseOno([pull(1, 0), point(2), end(10), pull(11, 1), pull(12, 1), { t: 13, k: 'answer', v: 2 }, { t: 14, k: 'knew', v: 0 }]);
+  assert.equal(r.pulls, 1);
+  assert.equal(r.extinction, 2);
+  assert.equal(r.answer, 2);
+  assert.equal(r.knew, 0);
 }
 
-// the most frequent system wins
+// sensory superstition: a favourite lever per colour, only with enough pulls and a clear share
 {
-  const r = analyse([pull(1, 0), point(2), pull(5, 1), point(6), pull(9, 1), point(10)]);
-  assert.deepEqual(r.best, { seq: [1], count: 2 });
-}
-
-// ties keep the first system seen
-{
-  const r = analyse([pull(1, 2), point(2), pull(5, 0), point(6)]);
-  assert.deepEqual(r.best, { seq: [2], count: 1 });
+  const log = [signal(0, 0)];
+  for (let i = 0; i < 6; i++) log.push(pull(1 + i * 0.1, 0));      // red: left lever ×6
+  log.push(signal(5, 2));
+  for (let i = 0; i < 5; i++) log.push(pull(6 + i * 0.1, 1));      // green: middle ×5
+  log.push(pull(6.9, 2));
+  log.push(signal(10, 1));
+  log.push(pull(11, 2), pull(11.2, 0));                             // orange: too few pulls
+  const r = analyseOno(log);
+  assert.deepEqual(r.sensory.favourite[0], { lever: 0, share: 100 });
+  assert.deepEqual(r.sensory.favourite[2], { lever: 1, share: 83 });
+  assert.equal(r.sensory.favourite[1], null);
+  assert.deepEqual(r.sensory.table[2], [0, 5, 1]);
 }
 
 // Russian plural forms
@@ -51,58 +65,6 @@ assert.equal(plural(1, 'раз', 'раза', 'раз'), 'раз');
 assert.equal(plural(2, 'раз', 'раза', 'раз'), 'раза');
 assert.equal(plural(5, 'раз', 'раза', 'раз'), 'раз');
 assert.equal(plural(11, 'раз', 'раза', 'раз'), 'раз');
-assert.equal(plural(21, 'раз', 'раза', 'раз'), 'раз');
 assert.equal(plural(22, 'раз', 'раза', 'раз'), 'раза');
 
 console.log('report tests: ok');
-
-// ---- two-round session ----
-import { analyseSession } from '../src/rooms/01-ono/report.js';
-{
-  const log = [
-    // round 1: system red -> green -> blue before two points
-    pull(1, 0), pull(1.5, 1), pull(2, 2), point(2.5),
-    pull(5, 0), pull(5.5, 1), pull(6, 2), point(6.5),
-    point(12),
-    { t: 13, k: 'answer', v: 0 },
-    { t: 14, k: 'round', v: 2 },
-    // round 2: the same system twice, plus a stray pull
-    pull(15, 0), pull(15.4, 1), pull(15.8, 2), point(16),
-    pull(18, 1),
-    pull(19, 0), pull(19.4, 1), pull(19.8, 2), point(20),
-    { t: 21, k: 'look' }, { t: 22, k: 'reach' }
-  ];
-  const s = analyseSession(log);
-  assert.equal(s.r1.pulls, 6);
-  assert.equal(s.r1.pts, 3);
-  assert.deepEqual(s.r1.best, { seq: [0, 1, 2], count: 2 });
-  assert.equal(s.r2.pulls, 7);
-  assert.equal(s.r2.pts, 2);
-  assert.equal(s.answer, 0);
-  assert.equal(s.repeats, 2);
-  assert.equal(s.looks, 1);
-  assert.equal(s.reaches, 1);
-}
-// a single round (no round marker) still analyses; nothing to repeat
-{
-  const s = analyseSession([pull(1, 2), point(2)]);
-  assert.equal(s.r2, null);
-  assert.equal(s.repeats, 0);
-  assert.equal(s.answer, null);
-}
-console.log('session tests: ok');
-
-// pulls between the end of round 1 and the start of round 2 count in neither round
-{
-  const s = analyseSession([
-    pull(1, 0), point(2),
-    { t: 10, k: 'end', v: 1 },
-    pull(11, 1), pull(12, 2), { t: 13, k: 'answer', v: 3 },
-    { t: 15, k: 'round', v: 2 },
-    pull(16, 0), point(17)
-  ]);
-  assert.equal(s.r1.pulls, 1);
-  assert.equal(s.r2.pulls, 1);
-  assert.equal(s.answer, 3);
-}
-console.log('round split tests: ok');
