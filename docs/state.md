@@ -31,6 +31,16 @@
 - Formal address ("вы") everywhere; no music; batch releases only on the owner's word.
 - Name "Object": the human is the object of the experiment. Domain youaretheobject.com.
 
+## How errors are caught (the owner cannot read code)
+- A fact lives in one place and a test guards it (e.g. `protocol.js` + `tests/control-protocol.test.mjs`
+  with paper pages). A wrong number from memory turns the test red.
+- After each big step a fresh reviewer agent gets only the paper and the code and looks for
+  mismatches; it cannot inherit my mistakes.
+- Notes and files cannot grow: `tests/structure.test.mjs` caps this file (80 lines) and code
+  files (300), forbids engine→room imports and Russian text outside `texts.*.js`.
+- Every answer to the owner says what was run and what was seen; otherwise "not verified".
+- The owner's view is the CI light on GitHub (green / red), not the code.
+
 ## Lessons (do not repeat)
 - **Read the original paper in full before designing a room.** Abstracts are not
   enough: a true fact (S15 touching the ceiling) was once removed for that reason.

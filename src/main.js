@@ -1,6 +1,6 @@
-// Shell: pick a room from ?room=NN-name (default 01-ono) and mount it.
+// Shell: pick a room from ?room=NN-name (default 01-control) and mount it.
 // No top-level await: older headset browsers cannot parse it and fail silently.
-const DEFAULT_ROOM = '01-ono';
+const DEFAULT_ROOM = '01-control';
 const requested = new URLSearchParams(location.search).get('room');
 const id = /^[\w-]+$/.test(requested || '') ? requested : DEFAULT_ROOM;
 

@@ -2,11 +2,12 @@
 
 | Command | What | Where to run |
 |---|---|---|
-| `npm test` | `tests/report.test.mjs` (analysis, plural forms), `tests/voice.test.mjs` (every spoken line has a recording), `tests/names.test.mjs` (no file names that ad blockers block). Node only, under a second | Anywhere, locally too |
-| `npm run test:smoke` | `tests/smoke.mjs`: headless Chromium opens the page, builds the scene, presses Space, waits for `run`, fails on any console error | GitHub Actions (`.github/workflows/test.yml`). Heavy: needs Playwright and Chromium |
-| `node tests/static-server.mjs` | Local preview at http://localhost:3000, no dependencies | Locally |
+| `npm test` | Node only, about a second: structure rules (`tests/structure.test.mjs`), the room protocol pinned to the paper, schedule, report, reveal pages, every recording and sound present, file names safe from ad blockers, VR recenter math | Anywhere, locally too |
+| `npm run test:smoke` | `tests/smoke.mjs`: headless Chromium plays the default room at 20× speed from consent to the last reveal page; fails on any console error | GitHub Actions only (heavy) |
+| `node tools/check-voice.mjs <room>` | Speech-to-text of every recording compared with the script (wrong or skipped words) | Locally, costs ElevenLabs credits |
+| `node tools/quest-check.mjs` | Plays the room inside the Quest over USB | Locally, headset connected |
+| `node tests/static-server.mjs` | Local preview at http://localhost:3000 | Locally |
 
-Locally run only `npm test`. The smoke test runs on every push in CI.
+`?speed=N` (1–100) makes every timing N times faster; such runs are never sent.
 Before saying "done", report which of these ran and what they printed.
-
-A new `report.js` rule needs a test in `report.test.mjs` first (red), then the fix (green).
+A new rule in a pure module needs its test first (red), then the change (green).

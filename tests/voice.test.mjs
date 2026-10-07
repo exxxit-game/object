@@ -1,15 +1,20 @@
-// Every line the experimenter speaks must have its recording in the room folder.
+// Every line the experimenter speaks, in every room, must have its recording.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { VOICE_LINES } from '../src/rooms/01-ono/voice-lines.js';
 
-const dir = new URL('../src/rooms/01-ono/', import.meta.url);
-for (const line of VOICE_LINES) {
-  const file = new URL(line.file, dir);
-  assert.ok(fs.existsSync(file), `missing recording: ${line.file}`);
-  assert.ok(fs.statSync(file).size > 1000, `recording too small: ${line.file}`);
+const rooms = fs.readdirSync(new URL('../src/rooms/', import.meta.url));
+let total = 0;
+for (const room of rooms) {
+  const dir = new URL(`../src/rooms/${room}/`, import.meta.url);
+  const { VOICE_LINES } = await import(new URL('voice-lines.js', dir));
+  for (const line of VOICE_LINES) {
+    const file = new URL(line.file, dir);
+    assert.ok(fs.existsSync(file), `${room}: missing recording ${line.file}`);
+    assert.ok(fs.statSync(file).size > 1000, `${room}: recording too small ${line.file}`);
+  }
+  const texts = VOICE_LINES.map(l => l.text);
+  assert.equal(new Set(texts).size, texts.length, `${room}: two voice lines share the same text`);
+  assert.equal(new Set(VOICE_LINES.map(l => l.file)).size, VOICE_LINES.length, `${room}: two lines share a file`);
+  total += VOICE_LINES.length;
 }
-const texts = VOICE_LINES.map(l => l.text);
-assert.equal(new Set(texts).size, texts.length, 'two voice lines share the same text');
-
-console.log(`voice tests: ok (${VOICE_LINES.length} recordings)`);
+console.log(`voice tests: ok (${total} recordings in ${rooms.length} rooms)`);

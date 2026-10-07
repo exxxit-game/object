@@ -1,43 +1,50 @@
 # Architecture
 
 Browser VR game. Static files, GitHub Pages, no build step.
-Desktop: mouse. Headset: WebXR via A-Frame, laser pointers.
+Desktop: mouse and keyboard. Headset: WebXR via A-Frame, laser pointers and hands.
+Where every file ends up in the finished game: [docs/target-architecture.md](docs/target-architecture.md).
 
 ## Layers
 
 | Layer | Folder | Job | Details |
 |---|---|---|---|
-| Shell | `index.html`, `src/main.js` | Load A-Frame, pick room from `?room=` (default `01-ono`; no lobby yet) | — |
-| Engine | `src/engine/` | Reusable parts: text panels, sound, voice, timers, event log, gaze and reach tracking | [docs/engine.md](docs/engine.md) |
-| Rooms | `src/rooms/NN-name/` | One experiment each: scene, logic, analysis, texts | [docs/rooms.md](docs/rooms.md) |
+| Shell | `index.html`, `src/main.js` | Load A-Frame, pick room from `?room=` (default `01-control`; no lobby yet) | — |
+| App | `src/app/` | What every room shares: consent, session (first/repeat, sending, test speed), shared texts | below |
+| Engine | `src/engine/` | Reusable parts: text panels, answer buttons, rating scale, voice, sound, event log, VR recenter, hand press | [docs/engine.md](docs/engine.md) |
+| Rooms | `src/rooms/NN-name/` | One experiment each: protocol, scene, flow, report, reveal, texts, recordings | [docs/rooms.md](docs/rooms.md) |
 | Styles | `css/` | Page chrome only (hint). The 3D world has no CSS | — |
-| Content | `texts.ru.js`, `docs/sources.md` | Player text and the facts behind it | [docs/sources.md](docs/sources.md) |
-| Tests | `tests/` | Pure analysis tests + one headless run per room | [docs/testing.md](docs/testing.md) |
+| Server | `supabase/migrations/` | Anonymous results: insert-only function with a field whitelist | — |
+| Tests | `tests/` | Pure tests, structure rules, one headless run of the room in CI | [docs/testing.md](docs/testing.md) |
+
+Imports go one way: room → app → engine. `tests/structure.test.mjs` enforces it.
 
 ## Data flow in a room
 ```
-build scene → intro (experimenter speaks) → run (player acts, engine logs events)
-            → analyse(log) → reveal (what you did, how it worked, the original study)
+consent → instructions (voice + screen) → experiment (engine logs events)
+        → questions → analyse(log) → reveal (what you did, the truth, the original,
+          the replication, how this room differs) → result sent only with consent
 ```
-The event log is the single source of truth for the reveal. The reveal states
-only what the log can prove.
+The event log is the single source of truth for the reveal.
 
 ## Folder map
 ```
-index.html
-css/            base.css · hint.css
+index.html · css/ · vendor/aframe-1.7.1.min.js
 src/main.js
-src/engine/     panel.js · audio.js · voice.js · timeline.js · log.js
-                swing.js · look-watch.js · reach-watch.js
-src/rooms/01-ono/
-                room.js       flow
-                scene.js      A-Frame markup
-                report.js     log → report (pure, no DOM)
-                painting.js · room-bounds.js
-                texts.ru.js   every word the player sees
-vendor/aframe-1.7.1.min.js
-tests/          report.test.mjs · voice.test.mjs · names.test.mjs · smoke.mjs
-.github/workflows/test.yml   runs both tests on every push
-docs/           engine.md · rooms.md · testing.md · sources.md · decisions.md
-docs/rooms/     01-ono.md (one spec per room)
+src/app/        consent.js · session.js · texts.ru.js
+src/engine/     panel.js · audio.js · voice.js · sfx.js · log.js · results.js
+                recenter.js · recenter-math.js · grab-press.js · haptics.js
+                blob-shadow.js · room-bounds.js · ui/choice.js · ui/scale.js
+src/rooms/01-control/   illusion of control (Alloy & Abramson 1979)
+                protocol.js   every number of the procedure, with paper pages
+                original.js   results shown in the reveal, with pages
+                schedule.js   tapes and intervals (pure)
+                trials.js     the 40 trials at runtime
+                questions.js  measures after the trials
+                report.js     log → measures (pure)
+                reveal.js     reveal pages (pure)
+                scene.js · room.js · texts.ru.js · voice-lines.js · sound-list.js
+                voice/ · sound/
+tests/          *.test.mjs (npm test) · smoke.mjs (CI) · static-server.mjs
+tools/          make-voice.mjs · check-voice.mjs · make-sounds.mjs · quest-check.mjs
+docs/           state.md (read first) · rooms/01-control.md · sources.md · ...
 ```

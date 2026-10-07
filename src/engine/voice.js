@@ -17,22 +17,26 @@ export function loadVoice(lines, baseUrl) {
 }
 
 // Plays the recording for this exact text, stopping the previous one.
-// Silent when there is no recording or audio is not unlocked yet.
+// Resolves when the line has finished, or at once when there is no recording or
+// audio is not unlocked yet (the caller decides how long the text stays up).
 export function speak(text) {
   const ctx = getContext();
-  if (!ctx || !raw.has(text)) return;
+  if (!ctx || !raw.has(text)) return Promise.resolve(false);
   if (!decoded.has(text)) {
     decoded.set(text, raw.get(text)
       .then(buf => (buf ? ctx.decodeAudioData(buf.slice(0)) : null))
       .catch(() => null));
   }
-  decoded.get(text).then((buffer) => {
-    if (!buffer) return;
+  return decoded.get(text).then((buffer) => {
+    if (!buffer) return false;
     if (current) { try { current.stop(); } catch (e) { /* already stopped */ } }
     const src = ctx.createBufferSource();
     src.buffer = buffer;
     src.connect(ctx.destination);
-    src.start();
     current = src;
+    return new Promise((resolve) => {
+      src.onended = () => resolve(true);
+      src.start();
+    });
   });
 }

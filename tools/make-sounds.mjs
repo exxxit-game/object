@@ -1,5 +1,5 @@
 // Generates the sound effects of a room with ElevenLabs sound generation.
-// Usage: node tools/make-sounds.mjs 01-ono [--force]
+// Usage: node tools/make-sounds.mjs <room-id> [--force]
 // The API key is read from ~/.elevenlabs-key.txt and never printed or stored in the repo.
 import fs from 'node:fs';
 import os from 'node:os';

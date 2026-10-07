@@ -1,5 +1,5 @@
 // Generates the experimenter recordings of a room with ElevenLabs.
-// Usage: node tools/make-voice.mjs 01-ono [--force]
+// Usage: node tools/make-voice.mjs <room-id> [--force]
 // The API key is read from ~/.elevenlabs-key.txt and never printed or stored in the repo.
 // Existing files are kept unless --force is given, so re-running costs nothing.
 import fs from 'node:fs';
