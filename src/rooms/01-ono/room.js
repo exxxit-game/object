@@ -40,12 +40,22 @@ const clunk = () => { tone(110, 0.12, 'square', 0.08, 60); tone(70, 0.18, 'sine'
 const buzz = () => { tone(880, 0.35, 'square', 0.06); tone(1320, 0.35, 'sine', 0.05); };
 
 /* ---------- experimenter ---------- */
+const experimenterBlocks = (text) => [
+  { t: T.experimenter, size: 26, color: GREY, weight: 600 },
+  { t: text, size: 50, color: '#ece9e2' }
+];
+
 function say(text, extra) {
-  screen().write([
-    { t: T.experimenter, size: 26, color: GREY, weight: 600 },
-    { t: text, size: 50, color: '#ece9e2' }
-  ].concat(extra || []));
+  screen().write(experimenterBlocks(text).concat(extra || []));
   speak(text);
+}
+
+// During the run the screen shows the score on every point, so it always matches
+// the counter on the table. The last praise, if any, stays above the score.
+let lastPraise = null;
+function drawRunScreen() {
+  if (lastPraise) screen().write(experimenterBlocks(lastPraise).concat({ t: T.progress(score, GOAL), size: 34, color: GREY }));
+  else screen().write([{ t: T.progress(score, GOAL), size: 34, color: '#55524c' }]);
 }
 
 /* ---------- levers ---------- */
@@ -104,7 +114,8 @@ function point() {
     drawCounter(false);
   }, 600);
   const praise = T.praise[score];
-  if (praise) timeline.later(() => say(praise, [{ t: T.progress(score, GOAL), size: 34, color: GREY }]), 900);
+  drawRunScreen();
+  if (praise) timeline.later(() => { lastPraise = praise; drawRunScreen(); speak(praise); }, 900);
   if (score >= GOAL) { timeline.later(finish, 1400); return; }
   schedule();
 }
@@ -132,7 +143,8 @@ function start() {
   timeline.later(() => {
     setState('run');
     eventLog.begin();
-    screen().write([{ t: T.progress(0, GOAL), size: 34, color: '#55524c' }]);
+    lastPraise = null;
+    drawRunScreen();
     schedule();
   }, 9500);
 }
@@ -160,8 +172,7 @@ function originalBlocks(r) {
     { t: O.header, size: 30, color: GREY, weight: 600 },
     { t: O.study, size: 40 },
     { t: O.result, size: 40 },
-    { t: O.difference, size: 36, color: SOFT },
-    { t: O.refrain, size: 46, color: GOLD, weight: 600, gap: 34 }
+    { t: O.difference, size: 36, color: SOFT }
   ].concat(extra);
 }
 
