@@ -4,7 +4,7 @@ Objekt is a browser VR game (WebXR, A-Frame). The player is the subject of real
 psychology experiments, one room per experiment. Each room catches the player,
 then shows honestly how it was done and what the original study found.
 
-Read ARCHITECTURE.md before changing code. Owner speaks Russian; answer him in
+Read ARCHITECTURE.md before changing code. Current plan and phase: docs/roadmap.md. Owner speaks Russian; answer him in
 Russian, plain words, no jargon. Everything in the repo is English except
 player-facing text (src/rooms/*/texts.ru.js).
 
