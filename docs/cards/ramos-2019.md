@@ -10,7 +10,7 @@
 | Participants | 20 healthy adults (13 women, 7 men), each did all three conditions | "Twenty healthy subjects, 13 females of an average age of 25.9 (5.5) and 7 males of an average age of 28.3 (3.1)" | 4 |
 | Procedure: steps | Five steps per condition: pre-test, baseline, exposure, post-test, reset | "Step 1. Pre-test 2. Baseline (pre-exposure) 3. Exposure 4. Post-test (post-exposure) 5. Reset" | 4 |
 | Procedure: trials | 9 + 30 + 90 + 60 + 30 = 219 pointing trials per condition | "# of trials 9 30 90 60 30" | 4 |
-| Procedure: the shift | VR view shifted 10° to the left (two ways: skew or rotate the view) | "With the SKEW prism simulation, the near and far planes were both skewed to the left by 10 degrees" | 6 |
+| Procedure: the shift | VR view displaced 10° to imitate right-deviating prisms (two ways: skew or rotate the view frustum) | "With the SKEW prism simulation, the near and far planes were both skewed to the left by 10 degrees" | 6 |
 | Procedure: what is seen | Only a virtual fingertip; the arm is hidden in a virtual black box | "Only a graphic representation of a fingertip was visible to the subjects in the simulated environment" | 6 |
 | Equipment | HTC Vive headset and controller | "The HTC VIVE VR headset and controller were used in the study." | 5 |
 | Duration | Not stated; 219 trials per condition, at least 10 min break between the three conditions | "Subjects had a break of at least 10 minutes between each condition for adequate mental recovery." | 4 |

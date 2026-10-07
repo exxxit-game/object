@@ -32,6 +32,7 @@
 - Within-person reveal: the paper's result is a physiological difference (heart rate in the pit minus in the training room). Quest 3 has no heart-rate, skin-conductance or skin-temperature sensor. Without an external sensor the reveal cannot show "your heart sped up by X beats". Head height, walking speed near the edge and hesitation at the door can be logged, but they are not what the paper validated.
 - Works if the player expects tricks: yes. The height reaction does not depend on the player being fooled; it faded with repeats but never to zero.
 - Space tier: large 5.5 × 9.8 m (18 × 32 ft two-room space, walked physically).
+- VR or mixed reality: VR, as in the paper (the whole floor gives way to a pit). A pit cut into the player's real floor in mixed reality would be a different, untested stimulus.
 - Quest 3 feasibility: the scene itself is easy to build. The core measure is not available on the device. The passive-haptic ledge needs a real board placed by the player. Players at home walking near a virtual edge can lose balance (seen in the paper at low frame rate), next to real furniture.
 - Replication: three studies by one lab in this paper. The pit-room reaction held in all three. No independent replication in the paper.
 - Ethics: no deception. Fear of heights, risk of falling, and the paper's own exclusions (epilepsy, strong motion sickness) all apply. Players with acrophobia need a warning and a way out.
