@@ -32,6 +32,8 @@ export const T = {
   progress: (n, goal) => `${n} из ${goal}`,
   praise: { 3: 'Хорошо.', 6: 'Вы учитесь.', 9: 'Почти. Продолжайте делать то, что делаете.' },
   sessionOver: 'Сессия окончена. Спасибо.',
+  // What the voice reads where it differs from the screen (numbers as words).
+  spoken: { goal: 'Постарайтесь набрать двенадцать.' },
 
   report: {
     header: 'ЧТО ТЫ ДЕЛАЛ',

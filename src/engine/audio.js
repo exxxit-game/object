@@ -9,6 +9,9 @@ export function unlock() {
   if (ctx && ctx.state === 'suspended') ctx.resume();
 }
 
+// The shared audio context, or null before the first unlock().
+export function getContext() { return ctx; }
+
 export function tone(freq, dur, type = 'sine', vol = 0.15, slideTo = 0) {
   if (!ctx) return;
   const osc = ctx.createOscillator();

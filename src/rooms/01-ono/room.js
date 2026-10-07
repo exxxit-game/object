@@ -6,14 +6,14 @@ import './room-bounds.js';
 import { eventLog } from '../../engine/log.js';
 import { createTimeline } from '../../engine/timeline.js';
 import { unlock, tone } from '../../engine/audio.js';
-import { speak } from '../../engine/voice.js';
+import { loadVoice, speak } from '../../engine/voice.js';
 import { sceneHTML } from './scene.js';
 import { analyse } from './analyse.js';
 import { initPainting } from './painting.js';
 import { T } from './texts.ru.js';
+import { GOAL, VOICE_LINES } from './voice-lines.js';
 
 const COLORS = ['#d23b32', '#2f9e55', '#2f6fd2'];
-const GOAL = 12;
 const GREY = '#7d7a73';
 const SOFT = '#c4c0b7';
 const HEAD = '#9a968d';
@@ -243,6 +243,7 @@ function fillHint() {
 export function mount() {
   document.title = T.pageTitle;
   fillHint();
+  loadVoice(VOICE_LINES, import.meta.url);
   document.body.insertAdjacentHTML('beforeend', sceneHTML);
   scene = $('a-scene');
   buildLevers();
