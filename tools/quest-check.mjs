@@ -10,10 +10,12 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 
-const URL_TO_TEST = process.argv[2] || 'http://localhost:3000/';
-// 9 recordings; 12 plays: 3 intro, 3 praises x 2 rounds, question, round 2, session over.
-const EXPECTED_VOICE_FILES = 9;
-const EXPECTED_VOICE_PLAYS = 12;
+// Short rounds (20 s) so the whole room is checked in about two minutes.
+const URL_TO_TEST = process.argv[2] || 'http://localhost:3000/?roundsecs=20';
+// 11 recordings. Plays vary with praise and prods; at least: 3 intro, question,
+// round 2, time up.
+const EXPECTED_VOICE_FILES = 11;
+const MIN_VOICE_PLAYS = 6;
 const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8' });
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -94,7 +96,7 @@ await run(`(async () => {
 })()`);
 const fps = await run(`new Promise(r => { let n = 0; const t0 = performance.now(); const f = () => { n++; if (performance.now() - t0 < 3000) requestAnimationFrame(f); else r(Math.round(n / 3)); }; requestAnimationFrame(f); })`);
 await run(`new Promise(r => { const t = setInterval(() => { if (document.documentElement.dataset.roomState === 'done') { clearInterval(t); r(1); } }, 300); setTimeout(() => r(0), 120000); })`);
-await sleep(26000);
+await sleep(33000);
 const result = await run(`({ states: window.__states, played: window.__played, screens: window.__screens, drawCalls: document.querySelector('a-scene').renderer.info.render.calls })`);
 
 // Screenshot of what the headset shows, via the Quest capture service.
@@ -110,11 +112,11 @@ const checks = [
   ['tested build is the requested URL', page.url.startsWith(URL_TO_TEST.split('?')[0])],
   ['all voice recordings loaded', page.voiceFiles === EXPECTED_VOICE_FILES],
   ['room went idle -> intro -> run -> done', ['intro', 'run', 'done'].every(s => result.states.includes(s))],
-  [`voice played ${EXPECTED_VOICE_PLAYS} times`, result.played.length === EXPECTED_VOICE_PLAYS],
+  [`voice played at least ${MIN_VOICE_PLAYS} times`, result.played.length >= MIN_VOICE_PLAYS],
   ['question shown and answered', result.states.includes('question') && result.screens.some(s => s.includes('от чего зависят очки'))],
-  ['report screen 1 shown', result.screens.some(s => s.startsWith('ЧТО ТЫ ДЕЛАЛ') && !s.includes('Посмотри налево'))],
-  ['report screen 2 shown', result.screens.some(s => s.includes('Посмотри налево'))],
-  ['original screen shown', result.screens.some(s => s.startsWith('ОРИГИНАЛ'))],
+  ['report screen 1 shown', result.screens.some(s => s.startsWith('ЧТО ВЫ ДЕЛАЛИ') && !s.includes('Посмотрите налево'))],
+  ['report screen 2 shown', result.screens.some(s => s.includes('Посмотрите налево'))],
+  ['original screen shown with the share line', result.screens.some(s => s.startsWith('ОРИГИНАЛ') && s.includes('Не рассказывайте'))],
   ['no page errors', errors.length === 0],
   ['frame rate at least 60', fps >= 60]
 ];

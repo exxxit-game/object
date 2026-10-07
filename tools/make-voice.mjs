@@ -7,10 +7,12 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-// The experimenter voice chosen by the owner: "George" (ElevenLabs stock voice).
-const VOICE_ID = 'JBFqnCBsd6RMkjVDRZzb';
-const MODEL_ID = 'eleven_multilingual_v2';
-const SETTINGS = { stability: 0.6, similarity_boost: 0.75 };
+// The experimenter voice chosen by the owner: "Daniel" (ElevenLabs stock voice),
+// firm and confident: model v3 with a delivery tag in front of every line.
+const VOICE_ID = 'onwK4e9ZLuTAKqWW03F9';
+const MODEL_ID = 'eleven_v3';
+const SETTINGS = { stability: 0.5 };
+const DELIVERY = '[уверенно, твёрдо] ';
 
 const room = process.argv[2];
 const force = process.argv.includes('--force');
@@ -26,7 +28,7 @@ for (const line of VOICE_LINES) {
   const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}?output_format=mp3_44100_128`, {
     method: 'POST',
     headers: { 'xi-api-key': key, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text: line.spoken || line.text, model_id: MODEL_ID, voice_settings: SETTINGS })
+    body: JSON.stringify({ text: DELIVERY + (line.spoken || line.text), model_id: MODEL_ID, voice_settings: SETTINGS })
   });
   if (!res.ok) { console.error('error ', line.file, res.status, (await res.text()).slice(0, 200)); process.exitCode = 1; continue; }
   fs.mkdirSync(path.dirname(out), { recursive: true });

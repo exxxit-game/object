@@ -12,14 +12,26 @@ import { sceneHTML } from './scene.js';
 import { analyseSession } from './report.js';
 import { buildAnswers, showAnswers, hideAnswers } from './question.js';
 import { buildLevers } from './levers.js';
+import { buildLamps, startLamps, stopLamps } from './lamps.js';
+import { createClock, formatClock } from './clock.js';
+import { drawChart } from './chart.js';
+import { reportLevers, reportVerdict, originalBlocks } from './reveal.js';
 import { initPainting } from './painting.js';
 import { T } from './texts.ru.js';
-import { GOAL, VOICE_LINES } from './voice-lines.js';
+import { VOICE_LINES } from './voice-lines.js';
 
-const GREY = '#7d7a73';
+// Each round lasts two minutes; the player is asked for as many points as possible.
+// Tests may shorten it with ?roundsecs=N (5–120); players always get 120.
+const requestedSecs = Number(new URLSearchParams(location.search).get('roundsecs'));
+const ROUND_SECS = requestedSecs >= 5 && requestedSecs <= 120 ? requestedSecs : 120;
+// Points after which the experimenter praises (T.praise in order).
+const PRAISE_AT = [3, 8, 14];
+// Seconds without a lever pull before the experimenter prods.
+const IDLE_PROD_SECS = 8;
+
 const SOFT = '#c4c0b7';
 const HEAD = '#9a968d';
-const GOLD = '#f0c96a';
+const INK = '#f2efe8';
 
 const timeline = createTimeline();
 const $ = (s) => document.querySelector(s);
@@ -30,6 +42,8 @@ let score = 0;
 let drawPainting;
 let runs = [];
 let round = 1;
+let clock = null;
+let secsLeft = ROUND_SECS;
 
 // idle -> intro -> run (round 1) -> question -> run (round 2) -> done -> intro ...
 // Mirrored on <html data-room-state> so tests can observe the flow.
@@ -39,28 +53,28 @@ function setState(s) {
   document.documentElement.dataset.roomState = s;
 }
 
-/* ---------- sound ---------- */
 const buzz = () => { tone(880, 0.35, 'square', 0.06); tone(1320, 0.35, 'sine', 0.05); };
 
-/* ---------- experimenter ---------- */
-const experimenterBlocks = (text) => [
-  { t: text, size: 62, color: '#f2efe8', weight: 500 }
-];
-
-function say(text, extra) {
-  screen().write(experimenterBlocks(text).concat(extra || []));
+/* ---------- experimenter and screen ---------- */
+function say(text) {
+  screen().write([{ t: text, size: 62, color: INK, weight: 500 }]);
   speak(text);
 }
 
-// During the run the screen shows the score on every point, so it always matches
-// the counter on the table. The last praise, if any, stays above the score.
-let lastPraise = null;
+// During a round the screen shows the countdown, and above it the last thing the
+// experimenter said (praise or prod).
+let note = null;
 function drawRunScreen() {
-  if (lastPraise) screen().write(experimenterBlocks(lastPraise).concat({ t: T.progress(score, GOAL), size: 44, color: GREY, weight: 500 }));
-  else screen().write([{ t: T.progress(score, GOAL), size: 52, color: GREY, weight: 500 }]);
+  const blocks = note ? [{ t: note, size: 56, color: INK, weight: 500 }] : [];
+  blocks.push({ t: formatClock(secsLeft), size: 150, color: SOFT, weight: 700, gap: 30 });
+  screen().write(blocks);
+}
+function experimenterNote(text) {
+  note = text;
+  drawRunScreen();
+  speak(text);
 }
 
-/* ---------- counter and signal lamp ---------- */
 function drawCounter(flash) {
   $('#counter').components.panel.write(
     [{ t: String(score).padStart(2, '0'), size: 150, color: flash ? '#b6ff9a' : '#59d36a', weight: 700 }],
@@ -68,12 +82,13 @@ function drawCounter(flash) {
   );
 }
 
-// The timer must not give points while the player cannot act: headset system
-// menu open (XR session not visible) or the browser tab hidden. Otherwise the
-// reveal would wrongly say "a point came while you did nothing".
+// Timed events wait while the player cannot act: headset system menu open
+// (XR session not visible) or the browser tab hidden.
 let xrVisible = true;
 const paused = () => document.hidden || !xrVisible;
+const now = () => (performance.now() - eventLog.t0) / 1000;
 
+/* ---------- points: a timer, independent of the player ---------- */
 function point() {
   if (state !== 'run') return;
   if (paused()) { schedule(); return; }
@@ -88,15 +103,30 @@ function point() {
     $('#timerLed').setAttribute('material', 'emissiveIntensity', 0.2);
     drawCounter(false);
   }, 600);
-  const praise = T.praise[score];
-  drawRunScreen();
-  if (praise) timeline.later(() => { lastPraise = praise; drawRunScreen(); speak(praise); }, 900);
-  if (score >= GOAL) { timeline.later(round === 1 ? askQuestion : finish, 1400); return; }
+  const p = PRAISE_AT.indexOf(score);
+  if (p >= 0) timeline.later(() => experimenterNote(T.praise[p]), 900);
   schedule();
 }
-
-// Points come from a timer, independent of anything the player does (variable-time schedule).
+// Variable-time schedule: every 2.5–8 s.
 function schedule() { timeline.later(point, 2500 + Math.random() * 5500); }
+
+/* ---------- prods when the player stops acting ---------- */
+let idleTimer = null;
+let lastProd = 0;
+let prodCount = 0;
+let roundStartT = 0;
+function watchIdle() {
+  clearInterval(idleTimer);
+  idleTimer = setInterval(() => {
+    if (state !== 'run' || paused()) return;
+    const pulls = eventLog.entries.filter(e => e.k === 'pull');
+    const lastPull = pulls.length ? pulls[pulls.length - 1].t : -Infinity;
+    if (now() - Math.max(lastPull, roundStartT, lastProd) < IDLE_PROD_SECS) return;
+    lastProd = now();
+    eventLog.add('prod');
+    experimenterNote(T.prods[prodCount++ % T.prods.length]);
+  }, 1000);
+}
 
 /* ---------- flow ---------- */
 function start() {
@@ -112,10 +142,12 @@ function start() {
   $('#againBtn').setAttribute('visible', false);
   $('#againHit').classList.remove('clickable');
   darkGlass(true);
+  // Timed to the recorded lines (3.1 s, 4.5 s, 3.4 s): the round and the clock
+  // start right as "Время пошло" ends.
   say(T.intro[0]);
-  timeline.later(() => say(T.intro[1]), 3300);
-  timeline.later(() => say(T.intro[2](GOAL)), 7000);
-  timeline.later(() => startRound(1), 9500);
+  timeline.later(() => say(T.intro[1]), 3400);
+  timeline.later(() => say(T.intro[2]), 8200);
+  timeline.later(() => startRound(1), 11400);
 }
 
 function startRound(n) {
@@ -123,84 +155,58 @@ function startRound(n) {
   if (n === 1) eventLog.begin(); else eventLog.add('round', 2);
   setState('run');
   score = 0;
-  lastPraise = null;
+  note = null;
+  secsLeft = ROUND_SECS;
+  roundStartT = now();
+  lastProd = 0;
   drawCounter(false);
   drawRunScreen();
   schedule();
+  watchIdle();
+  startLamps(() => state === 'run' && !paused());
+  clock = createClock(ROUND_SECS * 1000, paused,
+    (secs) => { secsLeft = secs; if (state === 'run') drawRunScreen(); },
+    () => endRound());
+}
+
+function endRound() {
+  clearInterval(idleTimer);
+  stopLamps();
+  if (round === 1) askQuestion(); else finish();
 }
 
 // Between the rounds the player says what they think the points depend on.
 function askQuestion() {
   setState('question');
-  screen().write([{ t: T.question.ask, size: 56, color: '#f2efe8', weight: 500 }], { top: true });
+  screen().write([{ t: T.question.ask, size: 56, color: INK, weight: 500 }], { top: true });
   speak(T.question.ask);
   showAnswers((i) => {
     eventLog.add('answer', i);
     say(T.round2);
-    timeline.later(() => startRound(2), 4200);
+    timeline.later(() => startRound(2), 5500);
   });
-}
-
-// The report is split into two screens so the text stays large enough to read
-// in a headset even when every line is present.
-const totalPulls = (s) => s.r1.pulls + (s.r2 ? s.r2.pulls : 0);
-
-function reportLevers(s) {
-  const R = T.report;
-  const r1 = s.r1, r2 = s.r2 || { pulls: 0, per: [0, 0, 0], idle: 0 };
-  const pulls = totalPulls(s);
-  const per = r1.per.map((n, i) => n + r2.per[i]);
-  const blocks = [{ t: R.header, size: 34, color: HEAD, weight: 700, spacing: 6 }];
-  blocks.push({ t: pulls ? R.pulls(pulls, per) : R.noPulls, size: 50, weight: 500 });
-  if (r1.best && r1.best.count > 1) {
-    const names = r1.best.seq.map(i => T.leverNames[i]);
-    blocks.push({ t: R.system(names, r1.best.count, r1.pts), size: 50, weight: 500 });
-    if (s.r2) blocks.push({ t: R.repeats(s.repeats), size: 50, weight: 500 });
-  }
-  if (pulls) blocks.push({ t: R.idle(r1.idle + r2.idle), size: 50, weight: 500 });
-  return blocks;
-}
-
-function reportVerdict(r) {
-  const R = T.report;
-  const blocks = [{ t: R.header, size: 34, color: HEAD, weight: 700, spacing: 6 }];
-  if (r.answer !== null) blocks.push({ t: R.belief[r.answer], size: 50, weight: 500 });
-  if (r.looks) blocks.push({ t: R.looks(r.looks), size: 50, color: SOFT, weight: 500 });
-  if (r.reaches) blocks.push({ t: R.reaches(r.reaches), size: 50, color: SOFT, weight: 500 });
-  blocks.push({ t: R.verdict, size: 56, color: GOLD, weight: 700, gap: 44 });
-  return blocks;
-}
-
-function originalBlocks(r) {
-  const O = T.original;
-  const prev = runs.length > 1 ? runs[runs.length - 2] : null;
-  const extra = prev ? [{ t: O.previousRun(totalPulls(prev), totalPulls(r)), size: 44, color: GOLD, weight: 600, gap: 36 }] : [];
-  return [
-    { t: O.header, size: 34, color: HEAD, weight: 700, spacing: 6 },
-    { t: O.study, size: 46, weight: 500 },
-    { t: O.result, size: 46, weight: 500 },
-    { t: O.difference, size: 44, color: SOFT, weight: 500 }
-  ].concat(extra);
 }
 
 function finish() {
   setState('done');
   eventLog.end();
   hideAnswers();
-  const r = analyseSession(eventLog.entries);
-  runs.push(r);
-  say(T.sessionOver);
+  if (clock) clock.stop();
+  const entries = eventLog.entries;
+  const s = analyseSession(entries);
+  const prev = runs.length ? runs[runs.length - 1] : null;
+  runs.push(s);
+  say(T.timeUp);
+  const split = entries.find(e => e.k === 'round' && e.v === 2);
   const page = { pad: 2048 * 0.07 };
-  timeline.later(() => screen().write(reportLevers(r), page), 2600);
+  timeline.later(() => screen().write(reportLevers(s), page), 2600);
+  timeline.later(() => drawChart(screen(), entries, split ? split.t : Infinity, ROUND_SECS, T.chart), 11000);
+  timeline.later(() => { screen().write(reportVerdict(s), page); darkGlass(false); }, 21000);
   timeline.later(() => {
-    screen().write(reportVerdict(r), page);
-    darkGlass(false);
-  }, 11000);
-  timeline.later(() => {
-    screen().write(originalBlocks(r), page);
+    screen().write(originalBlocks(s, prev), page);
     $('#againBtn').setAttribute('visible', true);
     $('#againHit').classList.add('clickable');
-  }, 22000);
+  }, 31000);
 }
 
 function darkGlass(dark) {
@@ -211,13 +217,14 @@ function darkGlass(dark) {
 /* ---------- boot ---------- */
 function boot() {
   buildAnswers(scene, T.question.answers);
+  buildLamps(scene);
   drawCounter(false);
   drawPainting();
   screen().write([
     { t: T.boot.kicker, size: 34, color: HEAD, weight: 700, spacing: 8 },
     { t: T.boot.title, size: 96, weight: 700, gap: 18 },
     ...T.boot.consent.map((t, i) => ({ t, size: 40, color: SOFT, weight: 500, gap: i ? 14 : 30 })),
-    { t: T.boot.prompt, size: 46, color: '#f2efe8', weight: 600, gap: 34 }
+    { t: T.boot.prompt, size: 46, color: INK, weight: 600, gap: 34 }
   ]);
   $('#startLabel').components.panel.write([{ t: T.startLabel, size: 64, weight: 700, color: '#1a1a1a' }]);
   $('#againLabel').components.panel.write([{ t: T.againLabel, size: 64, weight: 700, color: '#1a1a1a' }]);

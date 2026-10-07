@@ -88,25 +88,22 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
     <a-cylinder radius="0.007" height="1.57" rotation="0 0 90" position="-0.785 0.008 -0.95" color="#111"></a-cylinder>
     <!-- the cable enters the left wall through a box and continues to the timer next door -->
     <a-box position="-1.585 0.05 -0.95" width="0.03" height="0.08" depth="0.08" color="#2a2a2a"></a-box>
-    <!-- lever cables dangle, connected to nothing -->
-    <a-cylinder radius="0.006" height="0.78" position="-0.30 0.41 -0.44" rotation="0 0 4" color="#151515"></a-cylinder>
-    <a-cylinder radius="0.006" height="0.78" position="-0.04 0.41 -0.44" rotation="0 0 -3" color="#151515"></a-cylinder>
-    <a-cylinder radius="0.006" height="0.78" position="0.22 0.41 -0.44" rotation="0 0 5" color="#151515"></a-cylinder>
-    <!-- their plugs lie on the floor, unplugged: a black housing with two brass pins -->
-    <a-entity position="-0.260 0.012 -0.418" rotation="0 30 0">
-      <a-box width="0.036" height="0.024" depth="0.05" color="#1a1a1a" roughness="0.5"></a-box>
-      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="-0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
-      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
+    <!-- lever cables run under the table to the floor cable and the wall box, so the
+         levers look connected; the truth is told only in the reveal -->
+    <a-entity position="-0.3 0 -0.44" rotation="0 180 0">
+      <a-cylinder radius="0.006" height="0.764" position="0 0.418 0" color="#151515"></a-cylinder>
+      <a-torus radius="0.03" radius-tubular="0.006" arc="90" rotation="0 -90 180" position="0 0.036 0.03" color="#151515"></a-torus>
+      <a-cylinder radius="0.006" height="0.48" rotation="90 0 0" position="0 0.006 0.27" color="#151515"></a-cylinder>
     </a-entity>
-    <a-entity position="-0.069 0.012 -0.417" rotation="0 -20 0">
-      <a-box width="0.036" height="0.024" depth="0.05" color="#1a1a1a" roughness="0.5"></a-box>
-      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="-0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
-      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
+    <a-entity position="-0.04 0 -0.44" rotation="0 180 0">
+      <a-cylinder radius="0.006" height="0.764" position="0 0.418 0" color="#151515"></a-cylinder>
+      <a-torus radius="0.03" radius-tubular="0.006" arc="90" rotation="0 -90 180" position="0 0.036 0.03" color="#151515"></a-torus>
+      <a-cylinder radius="0.006" height="0.48" rotation="90 0 0" position="0 0.006 0.27" color="#151515"></a-cylinder>
     </a-entity>
-    <a-entity position="0.273 0.012 -0.424" rotation="0 50 0">
-      <a-box width="0.036" height="0.024" depth="0.05" color="#1a1a1a" roughness="0.5"></a-box>
-      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="-0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
-      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
+    <a-entity position="0.22 0 -0.44" rotation="0 180 0">
+      <a-cylinder radius="0.006" height="0.764" position="0 0.418 0" color="#151515"></a-cylinder>
+      <a-torus radius="0.03" radius-tubular="0.006" arc="90" rotation="0 -90 180" position="0 0.036 0.03" color="#151515"></a-torus>
+      <a-cylinder radius="0.006" height="0.48" rotation="90 0 0" position="0 0.006 0.27" color="#151515"></a-cylinder>
     </a-entity>
     <!-- buttons -->
     <a-entity id="startBtn" position="0.4 0.84 -0.47">
