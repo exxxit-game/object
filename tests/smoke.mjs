@@ -9,8 +9,17 @@ const server = await startServer(0);
 const url = `http://localhost:${server.address().port}/`;
 let failed = false;
 
-async function run(name, type, args) {
-  const browser = await type.launch({ args });
+// Headless CI machines have no GPU: force software WebGL in Firefox.
+const FIREFOX_PREFS = {
+  'webgl.disabled': false,
+  'webgl.force-enabled': true,
+  'webgl.enable-webgl2': true,
+  'webgl.forbid-software': false,
+  'gfx.webrender.software': true
+};
+
+async function run(name, type, args, firefoxUserPrefs) {
+  const browser = await type.launch({ args, firefoxUserPrefs });
   const page = await browser.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -37,6 +46,6 @@ async function run(name, type, args) {
 }
 
 await run('chromium', chromium, ['--use-gl=swiftshader', '--enable-unsafe-swiftshader']);
-await run('firefox', firefox, []);
+await run('firefox', firefox, [], FIREFOX_PREFS);
 server.close();
 if (failed) process.exit(1);
