@@ -4,7 +4,8 @@ Object is a browser VR game (WebXR, A-Frame). The player is the subject of real
 psychology experiments, one room per experiment. Each room catches the player,
 then shows honestly how it was done and what the original study found.
 
-Read ARCHITECTURE.md before changing code. Current plan and phase: docs/roadmap.md. Owner speaks Russian; answer him in
+Read docs/state.md first (decisions, lessons, where things are), then ARCHITECTURE.md.
+Current plan and phase: docs/roadmap.md. Owner speaks Russian; answer him in
 Russian, plain words, no jargon. Everything in the repo is English except
 player-facing text (src/rooms/*/texts.ru.js).
 
@@ -33,6 +34,9 @@ player-facing text (src/rooms/*/texts.ru.js).
     visual change against it, not against memory.
 14. One branch = one session. Check `git status` before saying "done".
 15. When the owner is angry: act on the topic, do not promise to do better.
+16. Before designing any room: read the original paper in full (not the abstract)
+    and check it fits: original participant time about 10 minutes or less, and a
+    clear task or tension for the participant. If it does not fit, say so first.
 
 ## Commands
 - `npm test` — pure unit tests (node, under a second). Safe to run locally.
