@@ -15,8 +15,15 @@ Rules:
   (write the quote that says it, or the quote nearest to it and "not stated" as the
   value), Main result. Add rows for replication, measures, space, equipment.
 - The "Fit for Object" section is judgment, not facts. Be strict: Quest 3 at home
-  (often about 2 × 2 m, head and two controllers or hands, no eye tracking, no
-  force feedback), one player, 5–15 minutes, measured automatically, ethical.
+  (head and two controllers or hands, no eye tracking, no force feedback), one
+  player, 5–15 minutes, measured automatically, ethical.
+- Space is never a reason to reject. Record the space the ORIGINAL procedure needs as
+  one tier, from the paper's own numbers:
+  `seated` · `standing` (in place, Meta's stationary boundary 1 × 1 m) ·
+  `roomscale` (walking, Meta's minimum 2 × 2 m; our base design) ·
+  `large W × L m` (more than 2 × 2 m: the room is offered only to players whose
+  boundary is that big; it is never shrunk, because a shrunk version is a
+  different experiment).
 - Verdict: one of `first-room candidate`, `room`, `interlude`, `reject`, with one
   line why.
 
@@ -42,6 +49,7 @@ Template (`suma-2011.md` is a full example):
 - Task/tension:
 - Within-person reveal:
 - Works if the player expects tricks:
+- Space tier:
 - Quest 3 feasibility:
 - Replication:
 - Ethics:
