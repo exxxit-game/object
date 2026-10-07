@@ -35,6 +35,10 @@ const overlaps = () => page.evaluate(() => {
 const pick = async (i) => {
   await page.waitForFunction((n) => [...document.querySelectorAll('.answer')].some(e => +e.dataset.index === n), i, { timeout: 30000 });
   assert.deepEqual(await overlaps(), [], 'a button covers the text');
+  // all answers of a question share one readable text size
+  const sizes = await page.evaluate(() => [...new Set([...document.querySelectorAll('.answer')].map(e => Number(e.dataset.size)))]);
+  assert.equal(sizes.length, 1, `answer sizes differ: ${sizes}`);
+  assert.ok(sizes[0] >= 30, `answer text too small: ${sizes[0]}px`);
   await page.evaluate((n) => [...document.querySelectorAll('.answer')].find(e => +e.dataset.index === n).emit('click'), i);
 };
 

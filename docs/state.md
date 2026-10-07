@@ -31,7 +31,12 @@
 - Formal address ("вы") everywhere; no music; batch releases only on the owner's word.
 - Name "Object": the human is the object of the experiment. Domain youaretheobject.com.
 
+- Original papers (PDF + text, not in the repo for copyright):
+  `C:\Users\admin\Documents\objekt-papers\`. Headset screen on the laptop: `scrcpy`.
+
 ## How errors are caught (the owner cannot read code)
+- Rooms are built by the `new-room` skill; `paper-reviewer` agent checks each room
+  against its paper; `docs/mistakes.md` lists every past mistake with its guard.
 - A fact lives in one place and a test guards it (e.g. `protocol.js` + `tests/control-protocol.test.mjs`
   with paper pages). A wrong number from memory turns the test red.
 - After each big step a fresh reviewer agent gets only the paper and the code and looks for
@@ -55,7 +60,5 @@
 ## Next
 - Target layout of every file (now → final): `docs/target-architecture.md`.
   Any refactor follows it; a room never re-implements shared parts.
-- Room choice: smoke room (Latané & Darley 1968) is the candidate for room 01.
-- Repurpose the Ono booth (levers, counter, lamp, one-way mirror) for a short,
-  faithful experiment (candidate: illusion of control, Alloy & Abramson 1979).
+- Room 01 is the illusion of control (Alloy & Abramson 1979); Ono kept under tag `ono-room-final`.
 - Privacy page, diagnostics (errors/devices, with consent), "you vs others" read.

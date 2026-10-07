@@ -60,6 +60,12 @@ tests/NN-name.report.test.mjs; smoke runs every room in CI
 | — | `privacy.html`, `src/app/lobby/` | create |
 | `supabase/migrations/*` | `submit_run` with per-room validation; `room_stats(room, version)` aggregates | extend per room |
 
+**Status.** Done: `src/engine/ui/choice.js`, `src/engine/ui/scale.js`, `src/app/consent.js`,
+`src/app/session.js`, `src/engine/room-bounds.js`; the Ono room and its unused engine parts are
+removed (kept under git tag `ono-room-final`); room 01 is `src/rooms/01-control/`.
+Open: reveal pager in `src/app/`, chart widget, `issues.js` and `stats.js`, lobby, privacy page,
+`tools/new-room.mjs`, per-room server validation.
+
 ## Rules that follow from this
 - A room never re-implements consent, sending, reveal paging, choice panels or charts.
 - Every room ships: report tests, voice/sound file tests, a smoke run to the end,

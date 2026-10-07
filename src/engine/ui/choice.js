@@ -45,6 +45,7 @@ export function createChoice(scene, place) {
       el.setAttribute('position', `${x} ${(y0 - i * (bh + gap)).toFixed(3)} ${z}`);
       el.classList.add('clickable', 'answer');
       el.dataset.index = i;
+      el.dataset.size = size;
       const paint = (bg) => el.components.panel && el.components.panel.write([{ t: text, size, weight: WEIGHT, color: TEXT }], { bg, pad: PAD });
       el.addEventListener('loaded', () => paint(NORMAL));
       el.addEventListener('mouseenter', () => paint(HOVER));

@@ -1,0 +1,22 @@
+# Mistakes and their guards
+
+A mistake is written here only together with the guard that now catches it. A row
+without a working guard is not allowed (`tests/structure.test.mjs` checks that each
+row names an existing file, and caps this file at 60 lines). No diary: replace rows
+when a better guard appears.
+
+| Mistake (what happened) | Guard that catches it now |
+|---|---|
+| Designed a room without reading the paper; a 40-minute experiment was planned, then compressed into a different one | `.claude/skills/new-room/SKILL.md` step 1 |
+| A number told to the player belonged to another group or sample (380 vs 242 people; "men" meaning 8 non-depressed men) | `src/rooms/01-control/original.js` + `tests/control-protocol.test.mjs`; `.claude/agents/paper-reviewer.md` |
+| A sentence of the original instructions was dropped and not declared | `.claude/agents/paper-reviewer.md` |
+| A closed question lacked the valid answer, and options had unequal size and fixed order (bias) | `src/engine/ui/choice.js` (common size) + `tests/smoke.mjs` (size check); `.claude/agents/paper-reviewer.md` |
+| Button labels shrank to unreadable: margins ate the button height | `tests/smoke.mjs` (minimum answer text size) |
+| Answer buttons covered the question text | `src/engine/panel.js` (`write` returns the text end) + `tests/smoke.mjs` (overlap check) |
+| The voice misread an ending ("зелёное загорелось") | `tools/check-voice.mjs` |
+| Russian words slipped into code comments | `tests/structure.test.mjs` rule 3 |
+| Files and notes grew until nobody saw what was inside (Cosmogram index file) | `tests/structure.test.mjs` rules 1, 5 |
+| Unused modules and docs naming deleted files stayed around | `tests/structure.test.mjs` rules 6, 7 |
+| A shell heredoc silently changed backslashes in a written file | `tests/structure.test.mjs` rule 9 (syntax of every file) |
+| File names like analytics were blocked by ad blockers (dark screen) | `tests/names.test.mjs` |
+| "Done" said before checking in the browser and headset | `.claude/skills/new-room/SKILL.md` step 9; `tools/quest-check.mjs` |

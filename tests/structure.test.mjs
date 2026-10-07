@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true })
@@ -63,10 +64,26 @@ const docs = [path.join(ROOT, 'ARCHITECTURE.md'), path.join(ROOT, 'CLAUDE.md'),
   ...walk(path.join(ROOT, 'docs')).filter(f => f.endsWith('.md') && !/target-architecture|archive/.test(f))];
 const missing = [];
 for (const d of docs) {
-  for (const m of fs.readFileSync(d, 'utf8').matchAll(/`((?:src|tests|tools|docs)\/[\w./-]+?)`/g)) {
+  for (const m of fs.readFileSync(d, 'utf8').matchAll(/`((?:src|tests|tools|docs|\.claude)\/[\w./-]+?)`/g)) {
     if (!m[1].includes("NN-") && !fs.existsSync(path.join(ROOT, m[1]))) missing.push(`${rel(d)} → ${m[1]}`);
   }
 }
 assert.deepEqual(missing, [], `docs name files that do not exist: ${missing.join(', ')}`);
+
+// 8. The mistakes file: short, and every row names its guard (an existing file,
+// which rule 7 checks).
+const mistakes = fs.readFileSync(path.join(ROOT, 'docs/mistakes.md'), 'utf8').split('\n');
+assert.ok(mistakes.length <= 60, 'docs/mistakes.md over 60 lines: merge rows');
+for (const row of mistakes.filter(l => l.startsWith('| ') && !/^\| (Mistake|---)/.test(l))) {
+  assert.ok(/`(src|tests|tools|docs|\.claude)\/[^`]+`/.test(row.split('|')[2] || ''), `mistake without a guard: ${row.slice(0, 80)}`);
+}
+
+// 9. Every script parses (a shell heredoc once changed backslashes silently).
+const scripts = [...code, ...walk(path.join(ROOT, 'tests')), ...walk(path.join(ROOT, 'tools'))]
+  .filter(f => /\.m?js$/.test(f));
+for (const f of scripts) {
+  try { execFileSync(process.execPath, ['--check', f], { stdio: 'pipe' }); }
+  catch (e) { assert.fail(`syntax error in ${rel(f)}: ${String(e.stderr).split('\n').slice(0, 4).join(' ')}`); }
+}
 
 console.log('structure tests: ok');

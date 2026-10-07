@@ -37,6 +37,14 @@ player-facing text (src/rooms/*/texts.ru.js).
 16. Before designing any room: read the original paper in full (not the abstract)
     and check it fits: original participant time about 10 minutes or less, and a
     clear task or tension for the participant. If it does not fit, say so first.
+17. Building or changing a room: follow the `new-room` skill (`.claude/skills/new-room/SKILL.md`)
+    step by step; it ends with the `paper-reviewer` agent and the headset check.
+18. When a test, a tool or a reviewer contradicts you: stop. Re-read the source
+    (paper text in `C:\Users\admin\Documents\objekt-papers\`, the file, the live
+    page), find the cause, fix it. Never adjust the test to agree with you.
+19. Every mistake found gets a guard (test, tool or agent check) and a row in
+    `docs/mistakes.md`. A lesson without a guard is not written down.
+20. Numbers, quotes and page numbers come from the paper text file, never from memory.
 
 ## Commands
 - `npm test` — pure unit tests (node, under a second). Safe to run locally.
