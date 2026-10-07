@@ -1,4 +1,5 @@
-import { unlock, tone } from '../../engine/audio.js';
+import { unlock } from '../../engine/audio.js';
+import { playSound } from '../../engine/sfx.js';
 import { pulse } from '../../engine/haptics.js';
 import { eventLog } from '../../engine/log.js';
 
@@ -13,7 +14,6 @@ const KNOBS = [
   ['a-cylinder', { radius: 0.036, height: 0.07 }]
 ];
 
-const clunk = () => { tone(110, 0.12, 'square', 0.08, 60); tone(70, 0.18, 'sine', 0.2, 40); };
 function el(tag, attrs, parent) {
   const e = document.createElement(tag);
   for (const k in attrs) e.setAttribute(k, attrs[k]);
@@ -32,7 +32,7 @@ export function buildLevers(roomEl) {
     el('a-cylinder', { radius: 0.011, height: 0.24, position: '0 0.12 0', color: '#9a9a9a', metalness: 0.7, roughness: 0.3 }, pivot);
     el(KNOBS[i][0], { ...KNOBS[i][1], position: '0 0.25 0', color: COLORS[i], roughness: 0.35 }, pivot);
     const hit = el('a-box', { class: 'clickable', width: 0.16, height: 0.36, depth: 0.22, position: '0 0.16 0', material: 'opacity:0; transparent:true; depthWrite:false' }, root);
-    const lever = { i, pivot, lamp, busy: false };
+    const lever = { i, root, pivot, lamp, busy: false };
     hit.addEventListener('click', (e) => pull(lever, e.detail && e.detail.cursorEl));
   });
 }
@@ -41,7 +41,9 @@ function pull(lever, controllerEl) {
   if (lever.busy) return;
   lever.busy = true;
   unlock();
-  clunk();
+  // the clunk comes from where this lever stands
+  const p = lever.root.object3D.getWorldPosition(new THREE.Vector3());
+  playSound('lever', p, 0.9);
   pulse(controllerEl);
   lever.pivot.components.swing.go();
   lever.lamp.setAttribute('material', 'emissiveIntensity', 2.5);

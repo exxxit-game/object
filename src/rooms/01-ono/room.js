@@ -3,10 +3,12 @@ import '../../engine/swing.js';
 import '../../engine/look-watch.js';
 import '../../engine/reach-watch.js';
 import '../../engine/recenter.js';
+import '../../engine/sfx.js';
 import './room-bounds.js';
 import { eventLog } from '../../engine/log.js';
 import { createTimeline } from '../../engine/timeline.js';
-import { unlock, tone } from '../../engine/audio.js';
+import { unlock } from '../../engine/audio.js';
+import { loadSounds, playSound } from '../../engine/sfx.js';
 import { loadVoice, speak } from '../../engine/voice.js';
 import { sceneHTML } from './scene.js';
 import { analyseSession } from './report.js';
@@ -19,6 +21,8 @@ import { reportLevers, reportVerdict, originalBlocks } from './reveal.js';
 import { initPainting } from './painting.js';
 import { T } from './texts.ru.js';
 import { VOICE_LINES } from './voice-lines.js';
+import { SOUNDS } from './sound-list.js';
+import { startRoomTone, startObserverNoises, stopObserverNoises } from './ambience.js';
 import { sendResult, markPlayed } from '../../engine/results.js';
 
 // Bump when a change makes new results not comparable with older ones.
@@ -59,7 +63,8 @@ function setState(s) {
   document.documentElement.dataset.roomState = s;
 }
 
-const buzz = () => { tone(880, 0.35, 'square', 0.06); tone(1320, 0.35, 'sine', 0.05); };
+// The counter on the table: its click and buzzer come from there.
+const COUNTER = { x: 0, y: 1.24, z: -0.78 };
 
 /* ---------- experimenter and screen ---------- */
 function say(text) {
@@ -101,7 +106,7 @@ function point() {
   score++;
   eventLog.add('point');
   drawCounter(true);
-  buzz();
+  playSound('point', COUNTER, 0.8);
   $('#signal').setAttribute('material', 'emissiveIntensity', 3);
   $('#timerLed').setAttribute('material', 'emissiveIntensity', 3);
   setTimeout(() => {
@@ -138,6 +143,7 @@ function watchIdle() {
 function start() {
   if (state !== 'idle' && state !== 'done') return;
   unlock();
+  startRoomTone();
   timeline.clearAll();
   setState('intro');
   score = 0;
@@ -170,6 +176,7 @@ function startRound(n) {
   schedule();
   watchIdle();
   startLamps(() => state === 'run' && !paused());
+  startObserverNoises(() => (state === 'run' || state === 'question') && !paused());
   clock = createClock(ROUND_SECS * 1000, paused,
     (secs) => { secsLeft = secs; if (state === 'run') drawRunScreen(); },
     () => endRound());
@@ -197,6 +204,7 @@ function finish() {
   setState('done');
   eventLog.end();
   hideAnswers();
+  stopObserverNoises();
   if (clock) clock.stop();
   const entries = eventLog.entries;
   const s = analyseSession(entries);
@@ -263,8 +271,10 @@ export function mount() {
   document.title = T.pageTitle;
   fillHint();
   loadVoice(VOICE_LINES, import.meta.url);
+  loadSounds(SOUNDS, import.meta.url);
   document.body.insertAdjacentHTML('beforeend', sceneHTML);
   scene = $('a-scene');
+  scene.setAttribute('sound-listener', '');
   buildLevers($('#room'));
   drawPainting = initPainting($('#painting'));
   $('#startHit').addEventListener('click', start);
