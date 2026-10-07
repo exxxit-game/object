@@ -51,3 +51,10 @@ its players.
 ## Suggested order
 01 Superstition (built) → 02 Smoke room → Door swap → Anchoring (first room that
 uses statistics) → Repetition = truth → Conformity → False memory → others.
+
+## Notes for future rooms
+- **Repetition = truth / propaganda (Bernays).** Reference example the owner chose:
+  Dr Breen's "Instinct" broadcast in Half-Life 2 (Valve). Control is presented as
+  liberation, a natural urge is declared the enemy, and the question "by what
+  right?" is voiced and then soothed. Text: https://developer.valvesoftware.com/wiki/Dr._Wallace_Breen
+  (copyrighted game script: quote briefly at most, never reproduce).

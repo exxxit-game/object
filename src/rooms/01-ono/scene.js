@@ -92,9 +92,22 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
     <a-cylinder radius="0.006" height="0.78" position="-0.30 0.41 -0.44" rotation="0 0 4" color="#151515"></a-cylinder>
     <a-cylinder radius="0.006" height="0.78" position="-0.04 0.41 -0.44" rotation="0 0 -3" color="#151515"></a-cylinder>
     <a-cylinder radius="0.006" height="0.78" position="0.22 0.41 -0.44" rotation="0 0 5" color="#151515"></a-cylinder>
-    <a-box position="-0.33 0.015 -0.38" width="0.03" height="0.03" depth="0.06" rotation="0 30 0" color="#c9b26a"></a-box>
-    <a-box position="-0.02 0.015 -0.36" width="0.03" height="0.03" depth="0.06" rotation="0 -20 0" color="#c9b26a"></a-box>
-    <a-box position="0.24 0.015 -0.38" width="0.03" height="0.03" depth="0.06" rotation="0 50 0" color="#c9b26a"></a-box>
+    <!-- their plugs lie on the floor, unplugged: a black housing with two brass pins -->
+    <a-entity position="-0.260 0.012 -0.418" rotation="0 30 0">
+      <a-box width="0.036" height="0.024" depth="0.05" color="#1a1a1a" roughness="0.5"></a-box>
+      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="-0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
+      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
+    </a-entity>
+    <a-entity position="-0.069 0.012 -0.417" rotation="0 -20 0">
+      <a-box width="0.036" height="0.024" depth="0.05" color="#1a1a1a" roughness="0.5"></a-box>
+      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="-0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
+      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
+    </a-entity>
+    <a-entity position="0.273 0.012 -0.424" rotation="0 50 0">
+      <a-box width="0.036" height="0.024" depth="0.05" color="#1a1a1a" roughness="0.5"></a-box>
+      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="-0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
+      <a-cylinder radius="0.003" height="0.02" rotation="90 0 0" position="0.008 0 0.034" color="#c9a64a" metalness="0.8" roughness="0.3"></a-cylinder>
+    </a-entity>
     <!-- buttons -->
     <a-entity id="startBtn" position="0.4 0.84 -0.47">
       <a-cylinder id="startHit" class="clickable" radius="0.05" height="0.03" position="0 0.015 0" material="color: #eeeeea; emissive: #ffffff; emissiveIntensity: .15"></a-cylinder>

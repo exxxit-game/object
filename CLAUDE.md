@@ -27,10 +27,17 @@ player-facing text (src/rooms/*/texts.ru.js).
 9. Do exactly what was asked. Ideas go at the end of the answer, not into code.
 10. Big change (new room, new engine module, new dependency): write a 3-line
     entry in docs/decisions.md first.
+11. Names, numbers and thresholds never from memory: find them in the file or ask the owner.
+12. Two or three failed attempts at the same problem: stop, measure first, then fix.
+13. Each room has an owner-approved screenshot set (docs/rooms/NN-shots/). Compare every
+    visual change against it, not against memory.
+14. One branch = one session. Check `git status` before saying "done".
+15. When the owner is angry: act on the topic, do not promise to do better.
 
 ## Commands
 - `npm test` — pure unit tests (node, under a second). Safe to run locally.
 - `npm run test:smoke` — headless Chromium; CI only (see docs/testing.md).
 - `npm run serve` — local preview at http://localhost:3000, no dependencies.
 - Deploy: push to main, GitHub Pages serves the repo root.
-- Never `git push` and never commit unless the owner says so.
+- Work on a branch. The live site (main) changes only as a batch of finished,
+  verified work, and only on the owner's word.
