@@ -50,6 +50,7 @@ Template (`suma-2011.md` is a full example):
 - Within-person reveal:
 - Works if the player expects tricks:
 - Space tier:
+- VR or mixed reality: which suits the original better (see `docs/headset-capabilities.md`)
 - Quest 3 feasibility:
 - Replication:
 - Ethics:

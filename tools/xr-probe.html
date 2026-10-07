@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>XR probe</title>
+<style>
+  body { font: 22px/1.4 system-ui, sans-serif; background: #111; color: #eee; margin: 0; padding: 24px; }
+  button { font: inherit; padding: 18px 28px; margin: 0 16px 16px 0; border-radius: 10px; border: 0; background: #f0c96a; color: #111; }
+  pre { white-space: pre-wrap; background: #000; padding: 16px; border-radius: 8px; font-size: 18px; }
+</style>
+</head>
+<body>
+<!-- Headset capability probe: which WebXR features this headset and browser really
+     give a web page. A session needs a real button press, so the owner presses the
+     two buttons once in the headset; the result is kept in window.__probe and in the
+     page, and is read over USB (CDP) afterwards. -->
+<p>Проверка шлема. Нажмите обе кнопки по очереди. Каждая проверка длится 5 секунд, потом шлем сам вернётся сюда.</p>
+<button id="vr">Проверить VR</button>
+<button id="ar">Проверить MR</button>
+<pre id="out">Результатов пока нет.</pre>
+<script>
+const FEATURES = ['local-floor', 'bounded-floor', 'hand-tracking', 'plane-detection', 'mesh-detection',
+  'anchors', 'hit-test', 'depth-sensing', 'layers', 'light-estimation', 'dom-overlay', 'body-tracking'];
+window.__probe = {};
+const out = document.getElementById('out');
+const show = () => { out.textContent = JSON.stringify(window.__probe, null, 2); };
+
+async function probe(mode) {
+  const r = { mode, started: new Date().toISOString() };
+  window.__probe[mode] = r;
+  try {
+    const session = await navigator.xr.requestSession(mode, {
+      optionalFeatures: FEATURES,
+      depthSensing: { usagePreference: ['cpu-optimized', 'gpu-optimized'], dataFormatPreference: ['luminance-alpha', 'float32'] }
+    });
+    r.enabledFeatures = session.enabledFeatures ? [...session.enabledFeatures] : 'not reported';
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl2', { xrCompatible: true });
+    session.updateRenderState({ baseLayer: new XRWebGLLayer(session, gl) });
+    let bounded = null;
+    try { bounded = await session.requestReferenceSpace('bounded-floor'); r.boundedFloor = 'yes'; }
+    catch (e) { r.boundedFloor = 'no: ' + e.message; }
+    let frames = 0;
+    await new Promise((resolve) => {
+      const onFrame = (t, frame) => {
+        frames++;
+        if (bounded && bounded.boundsGeometry && bounded.boundsGeometry.length) {
+          const pts = [...bounded.boundsGeometry];
+          const xs = pts.map(p => p.x), zs = pts.map(p => p.z);
+          r.bounds = { points: pts.length, widthM: +(Math.max(...xs) - Math.min(...xs)).toFixed(2), depthM: +(Math.max(...zs) - Math.min(...zs)).toFixed(2) };
+        }
+        r.hands = [...session.inputSources].filter(s => s.hand).length;
+        r.controllers = [...session.inputSources].filter(s => s.gamepad).length;
+        if (frame.detectedPlanes) r.planes = [...frame.detectedPlanes].map(p => p.semanticLabel || p.orientation);
+        if (frame.detectedMeshes) r.meshes = [...frame.detectedMeshes].map(m => m.semanticLabel || 'mesh');
+        if (frames < 300) session.requestAnimationFrame(onFrame); else resolve();
+      };
+      session.requestAnimationFrame(onFrame);
+      setTimeout(resolve, 5000);
+    });
+    r.frames = frames;
+    await session.end();
+  } catch (e) {
+    r.error = e.name + ': ' + e.message;
+  }
+  show();
+}
+document.getElementById('vr').onclick = () => probe('immersive-vr');
+document.getElementById('ar').onclick = () => probe('immersive-ar');
+</script>
+</body>
+</html>
