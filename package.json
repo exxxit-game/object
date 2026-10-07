@@ -3,8 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/analyse.test.mjs && node tests/smoke.mjs",
-    "serve": "npx serve ."
+    "test": "node tests/analyse.test.mjs",
+    "test:smoke": "node tests/smoke.mjs",
+    "serve": "node tests/static-server.mjs"
   },
   "devDependencies": {
     "playwright": "^1.48.0"

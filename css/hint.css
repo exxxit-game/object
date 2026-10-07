@@ -1,0 +1,20 @@
+#hint {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  right: 96px;
+  max-width: 420px;
+  z-index: 10;
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  opacity: 0;
+  transition: opacity .6s;
+  pointer-events: none;
+}
+
+#hint.show { opacity: 1; }
+#hint b { font-weight: 600; }
+#hint span { color: var(--muted); }
