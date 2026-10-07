@@ -21,7 +21,7 @@ const norm = (s) => s.toLowerCase()
   .replace(/[^a-z0-9а-яё]/g, '');
 
 const ids = process.argv.slice(2);
-const files = fs.readdirSync(CARDS).filter(f => f.endsWith('.md') && (!ids.length || ids.includes(f.slice(0, -3))));
+const files = fs.readdirSync(CARDS).filter(f => f.endsWith('.md') && f !== 'README.md' && (!ids.length || ids.includes(f.slice(0, -3))));
 let failed = 0;
 const cache = new Map();
 
