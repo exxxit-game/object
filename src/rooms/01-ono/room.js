@@ -2,6 +2,7 @@ import '../../engine/panel.js';
 import '../../engine/swing.js';
 import '../../engine/look-watch.js';
 import '../../engine/reach-watch.js';
+import '../../engine/recenter.js';
 import './room-bounds.js';
 import { eventLog } from '../../engine/log.js';
 import { createTimeline } from '../../engine/timeline.js';
@@ -42,7 +43,6 @@ const buzz = () => { tone(880, 0.35, 'square', 0.06); tone(1320, 0.35, 'sine', 0
 
 /* ---------- experimenter ---------- */
 const experimenterBlocks = (text) => [
-  { t: T.experimenter, size: 30, color: HEAD, weight: 700, spacing: 5 },
   { t: text, size: 62, color: '#f2efe8', weight: 500 }
 ];
 

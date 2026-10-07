@@ -3,7 +3,7 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
          cursor="rayOrigin: mouse" raycaster="objects: .clickable; far: 8"
          vr-mode-ui="enabled: true" loading-screen="enabled: false" xr-mode-ui="enabled: true">
 
-  <a-entity id="rig" position="0 0 0.35">
+  <a-entity id="rig" position="0 0 0.35" recenter="x: 0; z: 0.35; yaw: 0">
     <a-entity id="cam" camera look-controls="pointerLockEnabled: false" wasd-controls="acceleration: 12" position="0 1.6 0" room-bounds></a-entity>
     <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" reach-watch></a-entity>
     <a-entity laser-controls="hand: right" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" reach-watch></a-entity>
@@ -68,14 +68,15 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
     <a-box position="-0.46 0.4 -0.38" width="0.04" height="0.8" depth="0.04" color="#2a2a2a"></a-box>
     <a-box position="0.46 0.4 -0.38" width="0.04" height="0.8" depth="0.04" color="#2a2a2a"></a-box>
     <!-- counter and lamp -->
-    <a-box position="0 1.24 -0.86" width="0.36" height="0.26" depth="0.07" color="#2d2f33"></a-box>
-    <a-box position="0 0.99 -0.86" width="0.05" height="0.3" depth="0.05" color="#2d2f33"></a-box>
-    <a-box position="0 0.85 -0.86" width="0.16" height="0.02" depth="0.1" color="#2d2f33"></a-box>
-    <a-entity id="counter" panel="w: 0.24; h: 0.13; px: 512" position="0 1.22 -0.823"></a-entity>
-    <a-sphere id="signal" radius="0.035" position="0 1.4 -0.86" material="color: #3a0806; emissive: #ff2a1a; emissiveIntensity: 0.05"></a-sphere>
-    <!-- counter cable runs into the wall -->
-    <a-cylinder radius="0.007" height="0.28" rotation="90 0 0" position="0 0.86 -1.06" color="#111"></a-cylinder>
-    <a-cylinder radius="0.007" height="0.86" position="0 0.43 -1.2" color="#111"></a-cylinder>
+    <a-box position="0 1.24 -0.78" width="0.36" height="0.26" depth="0.07" color="#2d2f33"></a-box>
+    <a-box position="0 0.99 -0.78" width="0.05" height="0.3" depth="0.05" color="#2d2f33"></a-box>
+    <a-box position="0 0.85 -0.78" width="0.16" height="0.02" depth="0.1" color="#2d2f33"></a-box>
+    <a-entity id="counter" panel="w: 0.24; h: 0.13; px: 512" position="0 1.22 -0.743"></a-entity>
+    <a-sphere id="signal" radius="0.035" position="0 1.4 -0.78" material="color: #3a0806; emissive: #ff2a1a; emissiveIntensity: 0.05"></a-sphere>
+    <!-- counter cable: along the table top, down the back edge, along the floor to the wall -->
+    <a-cylinder radius="0.007" height="0.04" rotation="90 0 0" position="0 0.847 -0.845" color="#111"></a-cylinder>
+    <a-cylinder radius="0.007" height="0.84" position="0 0.42 -0.866" color="#111"></a-cylinder>
+    <a-cylinder radius="0.007" height="0.334" rotation="90 0 0" position="0 0.01 -1.033" color="#111"></a-cylinder>
     <a-cylinder radius="0.007" height="1.6" rotation="0 0 90" position="-0.8 0.01 -1.2" color="#111"></a-cylinder>
     <a-cylinder radius="0.007" height="0.9" rotation="90 0 0" position="-1.6 0.01 -0.75" color="#111"></a-cylinder>
     <!-- lever cables dangle, connected to nothing -->
