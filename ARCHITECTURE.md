@@ -32,11 +32,11 @@ src/engine/     panel.js · audio.js · voice.js · timeline.js · log.js
 src/rooms/01-ono/
                 room.js       flow
                 scene.js      A-Frame markup
-                analyse.js    log → report (pure, no DOM)
+                report.js     log → report (pure, no DOM)
                 painting.js · room-bounds.js
                 texts.ru.js   every word the player sees
 vendor/aframe-1.7.1.min.js
-tests/          analyse.test.mjs · smoke.mjs · static-server.mjs
+tests/          report.test.mjs · voice.test.mjs · names.test.mjs · smoke.mjs
 .github/workflows/test.yml   runs both tests on every push
 docs/           engine.md · rooms.md · testing.md · sources.md · decisions.md
 docs/rooms/     01-ono.md (one spec per room)

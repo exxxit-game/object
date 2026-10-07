@@ -8,7 +8,7 @@ import { createTimeline } from '../../engine/timeline.js';
 import { unlock, tone } from '../../engine/audio.js';
 import { loadVoice, speak } from '../../engine/voice.js';
 import { sceneHTML } from './scene.js';
-import { analyse } from './analyse.js';
+import { analyse } from './report.js';
 import { initPainting } from './painting.js';
 import { T } from './texts.ru.js';
 import { GOAL, VOICE_LINES } from './voice-lines.js';

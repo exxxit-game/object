@@ -17,7 +17,7 @@ while you did nothing, looks at the painting, reaches), then the original
 study. On a repeat run it compares pulls with the previous run.
 
 **Files.** `src/rooms/01-ono/`: `room.js` flow, `scene.js` markup,
-`analyse.js` report, `painting.js` painting, `room-bounds.js` camera limits,
+`report.js` report, `painting.js` painting, `room-bounds.js` camera limits,
 `texts.ru.js` all player text.
 
 **Note.** The `reach` event (controller above 2.05 m) is game mechanics, not a claim about the original study.
