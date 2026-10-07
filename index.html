@@ -92,6 +92,24 @@
     }
   });
 
+  /* ---------- смотрит ли человек на этот предмет ---------- */
+  AFRAME.registerComponent('look-watch', {
+    init() { this.seen = false; this.cam = new THREE.Vector3(); this.dir = new THREE.Vector3(); this.to = new THREE.Vector3(); this.me = new THREE.Vector3(); },
+    tick() {
+      const sc = this.el.sceneEl, xr = sc.renderer && sc.renderer.xr;
+      const cam = xr && xr.isPresenting ? xr.getCamera() : sc.camera;
+      if (!cam) return;
+      cam.getWorldPosition(this.cam); cam.getWorldDirection(this.dir);
+      this.el.object3D.getWorldPosition(this.me);
+      this.to.subVectors(this.me, this.cam).normalize();
+      const now = this.dir.dot(this.to) > 0.85;
+      if (now !== this.seen) {
+        this.seen = now;
+        if (window.objPainting) now ? window.objPainting.seen() : window.objPainting.unseen();
+      }
+    }
+  });
+
   /* ---------- держим камеру в комнате ---------- */
   AFRAME.registerComponent('room-bounds', {
     tick() {
@@ -121,21 +139,24 @@
   <a-cylinder radius="0.006" height="0.24" position="0 2.38 -0.3" color="#111"></a-cylinder>
 
   <!-- стены -->
-  <a-plane data-touch="пол" rotation="-90 0 0" position="0 0 0" width="3.2" height="3.2" material="color: #3b3935; roughness: .95"></a-plane>
-  <a-plane data-touch="потолок" rotation="90 0 0" position="0 2.5 0" width="3.2" height="3.2" material="color: #8b8a84; roughness: 1"></a-plane>
-  <a-plane data-touch="стена" position="0 1.25 -1.6" width="3.2" height="2.5" material="color: #66705f; roughness: .95"></a-plane>
-  <a-plane data-touch="стена" rotation="0 180 0" position="0 1.25 1.6" width="3.2" height="2.5" material="color: #66705f; roughness: .95"></a-plane>
-  <a-plane data-touch="стена" rotation="0 -90 0" position="1.6 1.25 0" width="3.2" height="2.5" material="color: #616b5b; roughness: .95"></a-plane>
+  <a-plane rotation="-90 0 0" position="0 0 0" width="3.2" height="3.2" material="color: #3b3935; roughness: .95"></a-plane>
+  <a-plane rotation="90 0 0" position="0 2.5 0" width="3.2" height="3.2" material="color: #8b8a84; roughness: 1"></a-plane>
+  <a-plane position="0 1.25 -1.6" width="3.2" height="2.5" material="color: #66705f; roughness: .95"></a-plane>
+  <a-plane rotation="0 180 0" position="0 1.25 1.6" width="3.2" height="2.5" material="color: #66705f; roughness: .95"></a-plane>
+  <a-plane rotation="0 -90 0" position="1.6 1.25 0" width="3.2" height="2.5" material="color: #616b5b; roughness: .95"></a-plane>
   <!-- левая стена с окном наблюдения -->
-  <a-plane data-touch="стена" rotation="0 90 0" position="-1.6 1.25 -1.25" width="0.7" height="2.5" material="color: #616b5b; roughness: .95"></a-plane>
-  <a-plane data-touch="стена" rotation="0 90 0" position="-1.6 1.25 0.95" width="1.3" height="2.5" material="color: #616b5b; roughness: .95"></a-plane>
-  <a-plane data-touch="стена" rotation="0 90 0" position="-1.6 0.5 -0.3" width="1.2" height="1.0" material="color: #616b5b; roughness: .95"></a-plane>
-  <a-plane data-touch="стена" rotation="0 90 0" position="-1.6 2.15 -0.3" width="1.2" height="0.7" material="color: #616b5b; roughness: .95"></a-plane>
-  <a-plane id="glass" data-touch="стекло" rotation="0 90 0" position="-1.595 1.4 -0.3" width="1.2" height="0.8"
+  <a-plane rotation="0 90 0" position="-1.6 1.25 -1.25" width="0.7" height="2.5" material="color: #616b5b; roughness: .95"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.6 1.25 0.95" width="1.3" height="2.5" material="color: #616b5b; roughness: .95"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.6 0.5 -0.3" width="1.2" height="1.0" material="color: #616b5b; roughness: .95"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.6 2.15 -0.3" width="1.2" height="0.7" material="color: #616b5b; roughness: .95"></a-plane>
+  <a-plane id="glass" rotation="0 90 0" position="-1.595 1.4 -0.3" width="1.2" height="0.8"
            material="color: #0b0d10; metalness: .9; roughness: .08; opacity: .94; transparent: true"></a-plane>
   <a-box position="-1.59 1.4 -0.3" width="0.02" height="0.86" depth="1.26" material="color: #222; opacity: 0; transparent: true"></a-box>
   <a-box position="-1.585 0.99 -0.3" width="0.05" height="0.03" depth="1.26" color="#2a2a2a"></a-box>
   <a-box position="-1.585 1.81 -0.3" width="0.05" height="0.03" depth="1.26" color="#2a2a2a"></a-box>
+  <!-- картина на задней стене -->
+  <a-box position="0 1.5 1.585" width="0.98" height="0.98" depth="0.04" color="#3a2a1c"></a-box>
+  <a-entity id="painting" panel="w: 0.86; h: 0.86; px: 768" rotation="0 180 0" position="0 1.5 1.562" look-watch></a-entity>
   <!-- плинтус -->
   <a-box position="0 0.04 -1.595" width="3.2" height="0.08" depth="0.01" color="#2b2d29"></a-box>
 
@@ -164,13 +185,13 @@
 
   <a-entity id="room">
     <!-- стол -->
-    <a-box data-touch="стол" position="0 0.82 -0.6" width="1.0" height="0.04" depth="0.52" material="color: #4b4a47; roughness: .7"></a-box>
+    <a-box position="0 0.82 -0.6" width="1.0" height="0.04" depth="0.52" material="color: #4b4a47; roughness: .7"></a-box>
     <a-box position="-0.46 0.4 -0.82" width="0.04" height="0.8" depth="0.04" color="#2a2a2a"></a-box>
     <a-box position="0.46 0.4 -0.82" width="0.04" height="0.8" depth="0.04" color="#2a2a2a"></a-box>
     <a-box position="-0.46 0.4 -0.38" width="0.04" height="0.8" depth="0.04" color="#2a2a2a"></a-box>
     <a-box position="0.46 0.4 -0.38" width="0.04" height="0.8" depth="0.04" color="#2a2a2a"></a-box>
     <!-- счётчик и лампа -->
-    <a-box data-touch="счётчик" position="0 1.24 -0.86" width="0.36" height="0.26" depth="0.07" color="#2d2f33"></a-box>
+    <a-box position="0 1.24 -0.86" width="0.36" height="0.26" depth="0.07" color="#2d2f33"></a-box>
     <a-box position="0 0.99 -0.86" width="0.05" height="0.3" depth="0.05" color="#2d2f33"></a-box>
     <a-box position="0 0.85 -0.86" width="0.16" height="0.02" depth="0.1" color="#2d2f33"></a-box>
     <a-entity id="counter" panel="w: 0.24; h: 0.13; px: 512" position="0 1.22 -0.823"></a-entity>
@@ -278,11 +299,25 @@
     log('pull', L.i);
   }
 
-  // всё, во что можно ткнуть (стены, пол, потолок, стол)
-  document.querySelectorAll('[data-touch]').forEach(e => {
-    e.classList.add('clickable');
-    e.addEventListener('click', () => log('touch', e.getAttribute('data-touch')));
-  });
+  /* ---------- картина на задней стене ---------- */
+  // круг с разрывом; разрыв поворачивается, только пока на картину не смотрят
+  let gap = -0.6;
+  function drawPainting() {
+    const P = $('#painting').components.panel, ctx = P.ctx, c = P.c, W = c.width, H = c.height;
+    ctx.fillStyle = '#d8cfbb'; ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < 900; i++) { ctx.fillStyle = `rgba(90,70,40,${Math.random() * 0.05})`; ctx.fillRect(Math.random() * W, Math.random() * H, 2 + Math.random() * 6, 2 + Math.random() * 6); }
+    ctx.strokeStyle = '#1e1b17'; ctx.lineCap = 'round';
+    const cx = W / 2, cy = H / 2, R = W * 0.3;
+    for (let k = 0; k < 3; k++) {
+      ctx.lineWidth = W * (0.07 - k * 0.018); ctx.globalAlpha = 0.55 + k * 0.2;
+      ctx.beginPath(); ctx.arc(cx + k * 2, cy - k, R - k * 3, gap + 0.35, gap + Math.PI * 2 - 0.35); ctx.stroke();
+    }
+    ctx.globalAlpha = 1; P.tex.needsUpdate = true;
+  }
+  window.objPainting = {
+    seen() { log('look'); },
+    unseen() { gap += 0.5 + Math.random() * 1.6; drawPainting(); }
+  };
 
   /* ---------- счётчик и лампа ---------- */
   function drawCounter(flash) {
@@ -333,7 +368,7 @@
     const best = Object.entries(seqs).sort((a, b) => b[1] - a[1])[0];
     return {
       pulls: pulls.length, per, pts: pts.length, idle, best,
-      touches: lg.filter(e => e.k === 'touch').length,
+      looks: lg.filter(e => e.k === 'look').length,
       reaches: lg.filter(e => e.k === 'reach').length,
       dur: pts.length ? Math.round(pts[pts.length - 1].t) : 0
     };
@@ -351,7 +386,7 @@
       else lines.push({ t: 'Ты вообще не трогал рычаги. Очки всё равно пришли.', size: 40 });
       if (r.best && r.best[1] > 1) lines.push({ t: `Твоя система: «${r.best[0]}» — так было перед ${r.best[1]} ${plural(r.best[1], 'очком', 'очками', 'очками')} из ${r.pts}.`, size: 40 });
       if (r.pulls) lines.push({ t: `${r.idle} ${plural(r.idle, 'очко пришло', 'очка пришли', 'очков пришли')}, когда ты ничего не трогал.`, size: 40 });
-      if (r.touches) lines.push({ t: `Ещё ты ${r.touches} ${plural(r.touches, 'раз', 'раза', 'раз')} ткнул в стены, стол или пол.`, size: 34, color: '#b9b5ac' });
+      if (r.looks) lines.push({ t: `Ты ${r.looks} ${plural(r.looks, 'раз', 'раза', 'раз')} оборачивался к картине. Круг на ней поворачивался, только когда ты не смотрел. К очкам он отношения не имел.`, size: 34, color: '#b9b5ac' });
       if (r.reaches) lines.push({ t: `И ${r.reaches} ${plural(r.reaches, 'раз', 'раза', 'раз')} тянулся к потолку.`, size: 34, color: '#b9b5ac' });
       lines.push({ t: 'Рычаги ни к чему не подключены. Очки давал таймер, раз в 2–8 секунд.\nПосмотри налево.', size: 44, color: '#f0c96a', weight: 600, gap: 34 });
       screen().write(lines);
@@ -382,6 +417,7 @@
 
   function boot() {
     drawCounter(false);
+    drawPainting();
     screen().write([
       { t: 'КОМНАТА 1', size: 30, color: '#7d7a73', weight: 600 },
       { t: 'Объект', size: 90, weight: 700 },
