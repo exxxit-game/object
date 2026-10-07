@@ -46,3 +46,21 @@ Full text (scanned pages): https://pmc.ncbi.nlm.nih.gov/articles/PMC1348309/
 
 Game design, not claims about the study: points every 2.5–8 s, praise and prods
 from the experimenter, two-minute rounds, the question between rounds.
+
+## Latané & Darley (1968), JPSP 10(3), 215–221 (full text read 07.10.2026)
+Archive copy: https://web.archive.org/web/2020id_/http://pdfs.semanticscholar.org/5248/f73d3cf3ce2696ccc241d89c9b2538fd1896.pdf
+- Male Columbia students invited to an "interview" on urban university life; sent to a small waiting room to fill in a preliminary form (p. 217). Room size not given; it had a window participants opened (p. 218); observer behind a one-way window covered by a sign.
+- Smoke (titanium dioxide) through a small wall vent after the participant finished two pages; by the end vision was obscured (p. 217, fn. 2).
+- Conditions: alone n = 24; two passive confederates n = 10 (glance, shrug, back to the form, "I dunno"); three naive participants, 8 groups (p. 217).
+- Stopped 6 min after the participant first noticed the smoke (p. 217); noticing judged by a slight start (p. 219).
+- Results: alone 75% reported (18/24), median within 2 min; 55% by 2 min, 75% by 4 min (pp. 217–218). Passive confederates 1/10 (10%). Naive triads: someone reported in 3/8 groups (38%) vs > 98% expected; 1 of 24 people within 4 min (p. 218). Noticing within 5 s: 63% alone vs 26% in groups (p. 219).
+- Debrief: non-reporters explained the smoke away (steam, air conditioning, "smog", "truth gas") and said they had not been influenced by the others (pp. 219–220).
+- VR replication Kinateder & Warren 2016, Front. Robot. AI 3:43 (alarm at minute 10, n = 150): left the room — alone 68% real / 36% VR; passive neighbour 12% / 24%; active neighbour 92% / 60%.
+
+## Alloy & Abramson (1979), JEP: General 108(4), 441–485 (full text read 07.10.2026)
+Archive copy: https://web.archive.org/web/2019id_/http://www.morilab.net/gakushuin/Alloy_&_Abramson_1979.pdf
+- Apparatus: black stand 23×23 cm with a yellow and a green lamp; black box 15.5×7.5×4 cm with a spring button (p. 450).
+- Trial: yellow lamp starts a 3 s window to press or not; then the green lamp comes on or not. 40 trials; gaps 10–25 s, mean 14 s (p. 451). Instruction text pp. 451–452; experimenter left the room. Rating 0–100 in steps of 5: No / Intermediate / Complete Control (p. 451).
+- Exp. 1 (n = 96): contingent tasks; everyone judged control accurately (p. 453).
+- Exp. 2 (n = 64): zero control, green 25% or 75% of trials. Non-depressed rated 75-75 higher (men 30.3, women 51.4) than 25-25 (20.0, 7.5); depressed did not (Table 5, p. 459).
+- Replication Dev, Moore, Johnson & Garrett 2022, Collabra 8(1):38529 (preregistered, n = 382): overestimated control under zero contingency and the outcome-frequency effect replicated; the depression link did not. Preprint https://osf.io/xq24r

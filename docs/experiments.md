@@ -24,11 +24,18 @@ Which experiments become rooms, and why. Every number here needs a source in
 | Power posing | Repeated failures | [Scientific American](https://www.scientificamerican.com/podcast/episode/power-poses-dont-stand-up) |
 | Money / flag priming | Did not replicate in Many Labs 1 | [Many Labs](https://www.bitss.org/education/mooc-parent-page/week-4-replication-and-open-data/approaches-to-the-replication-of-research/a-replication-example-the-many-labs-project/) |
 | Marshmallow test as predictor | Correlation mostly disappears with family controls | [Big Think](https://bigthink.com/neuropsych/marshmallow-test/) |
+| Zeigarnik (interrupted tasks remembered better) | Meta-analysis 2025: ratio 0.99, no effect | [Ghibellini & Meier 2025](https://ideas.repec.org/a/pal/palcom/v12y2025i1d10.1057_s41599-025-05000-w.html) |
+| Divers' context memory (Godden & Baddeley 1975) | Exact replication (Murre 2021) found nothing | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC8568063) |
+| Doorway forgetting (Radvansky) | Not replicated in VR or real rooms (McFadyen 2021) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC7938580) |
+| Digital chameleons (Bailenson & Yee 2005) | Preregistered test (Hale & Hamilton 2016) found no effect | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC5064448) |
+| Watching eyes increase generosity | Review of 27 studies (Northover 2017): no effect | [SPSP](https://spsp.org/news-center/character-context-blog/can-images-watching-eyes-increase-generosity) |
+| Illusion of control, Langer 1975 version | Did not replicate; use the Alloy & Abramson task instead | — |
+| Ono 1987 superstition as a room | 40 minutes of waiting; compressing it changes the experiment | `sources.md` |
 
 ## Candidates
 | # | Room | Original | Robustness | VR fit | Note |
 |---|---|---|---|---|---|
-| 01 | Superstition | Ono 1987 | Moderate: only 3 of 20 in the original | Good | Built. Reveal already says "3 of 20" honestly |
+| (01) | Superstition | Ono 1987 | Moderate: only 3 of 20 in the original | Good | Built, but unsuitable (40 min). Parked; booth reused |
 | 02 | Smoke room | Latané & Darley 1968: 75% alone, 38% with naive others, 10% with passive confederates | Bystander effect holds in meta-analysis (Fischer 2011, 105 effects), weaker when danger is clear | VR replication with passive virtual bystanders reduced evacuation (Kinateder) | **Chosen next** |
 | — | Door swap | Simons & Levin 1998: about half miss a person swap | Very robust | Native: swap the experimenter while an object passes between | Cheap scene, strong reveal |
 | — | Anchoring | Tversky & Kahneman 1974 | Replicated at nearly every Many Labs site | Spin a wheel, then estimate | Between players: needs statistics |
@@ -41,6 +48,50 @@ Which experiments become rooms, and why. Every number here needs a source in
 | — | Virtual hand | Rubber/virtual hand illusion; reaction to a threat to the virtual hand | Robust | Headset only (controllers) | Strong "on your skin" moment |
 | — | Obedience | Milgram 1963; Burger 2009: 70% went past 150 V; VR version Slater 2006 | Replicated in reduced form | Proven in VR | Ethically heaviest: later, with care |
 
+## Worldwide search, 07.10.2026
+Seven searches: English canon, Europe, Russia/USSR/Ukraine, Asia/Latin America/Africa,
+VR-native labs, behavioural economics and perception, original protocols.
+Robustness marked "?" was not checked against a source yet (rule 16 before design).
+
+| Room | Original | Robustness | VR fit / caveat |
+|---|---|---|---|
+| Illusion of control (booth) | Alloy & Abramson 1979, Exp. 2: 40 trials × 3 s, gaps 10–25 s (≈11 min); button, yellow and green lamps; 0–100 rating | Preregistered replication Dev et al. 2022 (n = 382): outcome-frequency effect holds; depression link does not | Near-verbatim; reuses the Ono booth (one button instead of levers). Trial sequences must be generated |
+| Candle problem | Duncker 1935; Glucksberg 1962 | Box-full vs box-empty effect holds; the reward effect did not | Objects and physics; time to solve |
+| Choice blindness | Johansson & Hall 2005 (Science) | Replicated many times (Hall 2012: 69%) | Swap is perfect in VR; close, not literal |
+| Return to interrupted task | Ovsiankina 1928 | Meta-analysis 2025: ≈67% resume vs 50% chance | Resumed or not, after how long |
+| Asch without confederates | Mori & Arai 2010: polarised glasses, each sees a different line | Asch robust (Bond & Smith 1996) | Native: each player sees their own line |
+| Rare-colour pen | Kim & Markus 1999 | Replication 2022 (n = 729): weaker | 1 minute; interlude between rooms |
+| Fish in the aquarium | Masuda & Nisbett 2001 | Eye-tracking replication (Chua 2005) | Gaze recorded by the headset |
+| Size–weight illusion | Charpentier 1891 | Robust; weaker in VR | Controller weight fixed, visible size changes |
+| Uznadze set illusion (visual) | Uznadze 1930s | Robust (verbal); grasping version mixed | Visual version, answers automatic |
+| Incidental memory | Zinchenko 1939 | Principle robust (levels of processing) | Sort objects by hand, surprise recall |
+| Tunnel fire, passive agent | Kinateder et al. 2014 ? | ? (text not read) | Path and time automatic |
+| Retrospective gambler's fallacy | Oppenheimer & Monin 2009 | Many Labs 1: replicated | Agent rolls dice |
+| Door-in-the-face | Cialdini 1975 | Genschow 2021: replicated | Agent asks; yes or no |
+| Autokinetic norm | Sherif 1935 | Old replications only | Dark room and a dot; illusion in a headset unverified |
+| Crowd looks up | Milgram, Bickman & Berkowitz 1969 | Gallup 2012: weaker | Agents; head direction |
+| Avatar perspective (dots) | Samson 2010 | Effect repeats, meaning disputed | Native |
+| Change blindness (flicker) | Rensink 1997 ? | ? | Response time automatic |
+| Binocular rivalry, attentional blink, Posner, Simon | classic ? | ? | Short perception rooms; need stable 90 Hz |
+| Ellsberg urns, delay discounting, default effect | Ellsberg 1961; Kirby 1999; Johnson & Goldstein 2003 | ? / ? / meta d = 0.68 | Short choice rooms |
+
+Caveats:
+- **The smoke room is weaker in VR.** Kinateder & Warren 2016 (an alarm, not smoke):
+  alone, 68% left the real room vs 36% in VR; with a passive neighbour, 12% vs 24%.
+  The original visit took about 15 min (two-page form, then up to 6 min after
+  noticing the smoke). The reveal must say this.
+- **Games with "partners"** (ultimatum, trust, public goods, dictator): economics
+  forbids deceiving participants, and people treat known bots differently. Only as
+  labelled variants.
+- **Shocking scenes** (VR Milgram, trolley, bar fight): later, with warning and debrief.
+- **Need extra hardware:** Ringelmann/Ingham rope pull (force sensor), rubber hand and
+  out-of-body (real touch), child body (full-body tracking).
+- **Disputed:** Allais paradox, loss aversion, line-in-frame. Only with a "disputed" label.
+
+**Count.** About 15–20 full rooms are realistic with plain WebXR and the current
+engine (replicated, ≤ ~10–15 min, automatic measurement), plus 5–10 short interludes
+(pen choice, perception tasks).
+
 ## Key insight: statistics make between-player experiments possible
 Anchoring, framing and leading words compare **groups**: one person cannot see the
 effect in themselves. With anonymous statistics each player gets a random
@@ -49,7 +100,7 @@ answered Y, you answered Z". The game then replicates the original live, across
 its players.
 
 ## Suggested order
-01 Superstition (built) → 02 Smoke room → Door swap → Anchoring (first room that
+Smoke room or illusion of control (existing booth) → Door swap → Anchoring (first room that
 uses statistics) → Repetition = truth → Conformity → False memory → others.
 
 ## Notes for future rooms
