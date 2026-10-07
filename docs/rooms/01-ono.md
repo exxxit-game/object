@@ -9,7 +9,8 @@ nothing is required; points may come. Goal shown: 12.
 of the player. The levers are connected to nothing. The painting on the back
 wall changes only while the player is not looking at it.
 
-**Logged events.** `pull` (lever 0–2), `point`, `look` (player turned to the
+**Logged events.** `pull` (lever 0–2), `point`, `answer` (question choice 0–3),
+`round` (2 = round 2 starts), `look` (player turned to the
 painting), `reach` (controller above 2.05 m).
 
 **Reveal.** What you did (pulls per lever, your "system", points that came

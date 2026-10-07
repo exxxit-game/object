@@ -215,8 +215,9 @@ function boot() {
   drawPainting();
   screen().write([
     { t: T.boot.kicker, size: 34, color: HEAD, weight: 700, spacing: 8 },
-    { t: T.boot.title, size: 120, weight: 700 },
-    { t: T.boot.prompt, size: 50, color: SOFT, weight: 500 }
+    { t: T.boot.title, size: 96, weight: 700, gap: 18 },
+    ...T.boot.consent.map((t, i) => ({ t, size: 40, color: SOFT, weight: 500, gap: i ? 14 : 30 })),
+    { t: T.boot.prompt, size: 46, color: '#f2efe8', weight: 600, gap: 34 }
   ]);
   $('#startLabel').components.panel.write([{ t: T.startLabel, size: 64, weight: 700, color: '#1a1a1a' }]);
   $('#againLabel').components.panel.write([{ t: T.againLabel, size: 64, weight: 700, color: '#1a1a1a' }]);

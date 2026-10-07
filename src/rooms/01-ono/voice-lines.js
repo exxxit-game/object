@@ -14,5 +14,7 @@ export const VOICE_LINES = [
   { file: 'voice/praise-3.mp3', text: T.praise[3] },
   { file: 'voice/praise-6.mp3', text: T.praise[6] },
   { file: 'voice/praise-9.mp3', text: T.praise[9] },
+  { file: 'voice/question.mp3', text: T.question.ask },
+  { file: 'voice/round-2.mp3', text: T.round2 },
   { file: 'voice/session-over.mp3', text: T.sessionOver }
 ];

@@ -11,7 +11,9 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 
 const URL_TO_TEST = process.argv[2] || 'http://localhost:3000/';
-const EXPECTED_VOICE_LINES = 7;
+// 9 recordings; 12 plays: 3 intro, 3 praises x 2 rounds, question, round 2, session over.
+const EXPECTED_VOICE_FILES = 9;
+const EXPECTED_VOICE_PLAYS = 12;
 const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8' });
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -84,14 +86,15 @@ await send('Input.dispatchKeyEvent', { type: 'keyUp', ...key });
 await run(`(async () => {
   const st = () => document.documentElement.dataset.roomState; const w = (ms) => new Promise(r => setTimeout(r, ms));
   for (let i = 0; i < 100 && st() !== 'run'; i++) await w(200);
+  // clickable order: 3 levers first (built before the answer buttons are shown)
   const lev = [...document.querySelectorAll('.clickable')].slice(0, 3); const p = document.querySelector('#painting');
   let i = 0;
-  (async () => { while (st() === 'run') { if (i % 7 < 4) lev[i % 3].emit('click'); if (i % 6 === 0) { p.emit('look-change', { seen: true }); p.emit('look-change', { seen: false }); } i++; await w(600); } })();
+  (async () => { while (st() !== 'done') { if (st() === 'question') { await w(1500); const a = document.querySelector('.answer'); if (a) a.emit('click'); } if (st() === 'run' && i % 7 < 4) lev[i % 3].emit('click'); if (i % 6 === 0) { p.emit('look-change', { seen: true }); p.emit('look-change', { seen: false }); } i++; await w(600); } })();
   return 1;
 })()`);
 const fps = await run(`new Promise(r => { let n = 0; const t0 = performance.now(); const f = () => { n++; if (performance.now() - t0 < 3000) requestAnimationFrame(f); else r(Math.round(n / 3)); }; requestAnimationFrame(f); })`);
 await run(`new Promise(r => { const t = setInterval(() => { if (document.documentElement.dataset.roomState === 'done') { clearInterval(t); r(1); } }, 300); setTimeout(() => r(0), 120000); })`);
-await sleep(24000);
+await sleep(26000);
 const result = await run(`({ states: window.__states, played: window.__played, screens: window.__screens, drawCalls: document.querySelector('a-scene').renderer.info.render.calls })`);
 
 // Screenshot of what the headset shows, via the Quest capture service.
@@ -105,9 +108,10 @@ try {
 
 const checks = [
   ['tested build is the requested URL', page.url.startsWith(URL_TO_TEST.split('?')[0])],
-  ['all voice recordings loaded', page.voiceFiles === EXPECTED_VOICE_LINES],
+  ['all voice recordings loaded', page.voiceFiles === EXPECTED_VOICE_FILES],
   ['room went idle -> intro -> run -> done', ['intro', 'run', 'done'].every(s => result.states.includes(s))],
-  [`voice played ${EXPECTED_VOICE_LINES} lines`, result.played.length === EXPECTED_VOICE_LINES],
+  [`voice played ${EXPECTED_VOICE_PLAYS} times`, result.played.length === EXPECTED_VOICE_PLAYS],
+  ['question shown and answered', result.states.includes('question') && result.screens.some(s => s.includes('от чего зависят очки'))],
   ['report screen 1 shown', result.screens.some(s => s.startsWith('ЧТО ТЫ ДЕЛАЛ') && !s.includes('Посмотри налево'))],
   ['report screen 2 shown', result.screens.some(s => s.includes('Посмотри налево'))],
   ['original screen shown', result.screens.some(s => s.startsWith('ОРИГИНАЛ'))],
