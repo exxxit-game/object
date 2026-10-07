@@ -43,6 +43,8 @@
 - Releases: batch, never many small releases per day.
 
 ## Next
+- Target layout of every file (now → final): `docs/target-architecture.md`.
+  Any refactor follows it; a room never re-implements shared parts.
 - Room choice: smoke room (Latané & Darley 1968) is the candidate for room 01.
 - Repurpose the Ono booth (levers, counter, lamp, one-way mirror) for a short,
   faithful experiment (candidate: illusion of control, Alloy & Abramson 1979).
