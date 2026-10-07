@@ -19,6 +19,11 @@ import { reportLevers, reportVerdict, originalBlocks } from './reveal.js';
 import { initPainting } from './painting.js';
 import { T } from './texts.ru.js';
 import { VOICE_LINES } from './voice-lines.js';
+import { sendResult, markPlayed } from '../../engine/results.js';
+
+// Bump when a change makes new results not comparable with older ones.
+const ROOM_ID = '01-ono';
+const ROOM_VERSION = 3;
 
 // Each round lasts two minutes; the player is asked for as many points as possible.
 // Tests may shorten it with ?roundsecs=N (5–120); players always get 120.
@@ -44,6 +49,7 @@ let runs = [];
 let round = 1;
 let clock = null;
 let secsLeft = ROUND_SECS;
+let seated = false;
 
 // idle -> intro -> run (round 1) -> question -> run (round 2) -> done -> intro ...
 // Mirrored on <html data-room-state> so tests can observe the flow.
@@ -197,6 +203,11 @@ function finish() {
   const prev = runs.length ? runs[runs.length - 1] : null;
   runs.push(s);
   say(T.timeUp);
+  // Real sessions only: shortened test rounds never reach the statistics.
+  if (ROUND_SECS === 120) {
+    const prods = entries.filter(e => e.k === 'prod').length;
+    sendResult(ROOM_ID, ROOM_VERSION, markPlayed(ROOM_ID), { ...s, seated, prods, roundSecs: ROUND_SECS });
+  }
   const split = entries.find(e => e.k === 'round' && e.v === 2);
   const page = { pad: 2048 * 0.07 };
   timeline.later(() => screen().write(reportLevers(s), page), 2600);
@@ -263,7 +274,8 @@ export function mount() {
     const session = scene.xrSession;
     if (session) session.addEventListener('visibilitychange', () => { xrVisible = session.visibilityState === 'visible'; });
   });
-  scene.addEventListener('exit-vr', () => { xrVisible = true; });
+  scene.addEventListener('exit-vr', () => { xrVisible = true; seated = false; });
+  $('#rig').addEventListener('recentered', (e) => { seated = !!(e.detail && e.detail.seated); });
   setState('idle');
   if (scene.hasLoaded) boot(); else scene.addEventListener('loaded', boot);
 }
