@@ -12,8 +12,8 @@ const MARK = '#f0c96a';
 // place: { x, y (bar centre), z, w }
 export function createScale(scene, place) {
   const { x = 0, y, z, w = 1.7 } = place;
-  const h = 0.22;
-  const done = createChoice(scene, { x, y: y - 0.21, z, w: 0.5, h: 0.11 });
+  const h = 0.3;
+  const done = createChoice(scene, { x, y: y - 0.25, z, w: 0.5, h: 0.11 });
   let bar = null;
 
   function draw(labels, step, value, unit) {
@@ -24,7 +24,7 @@ export function createScale(scene, place) {
     ctx.clearRect(0, 0, W, H);
     ctx.fillStyle = BAR_BG;
     ctx.fillRect(0, 0, W, H);
-    const left = W * 0.05, right = W * 0.95, lineY = H * 0.42;
+    const left = W * 0.05, right = W * 0.95, lineY = H * 0.4;
     const xOf = (v) => left + (right - left) * v / 100;
     ctx.strokeStyle = SOFT;
     ctx.lineWidth = 3;
@@ -35,10 +35,10 @@ export function createScale(scene, place) {
     for (let v = 0; v <= 100; v += step) {
       const big = v % 50 === 0;
       ctx.fillRect(xOf(v) - 1.5, lineY - (big ? 22 : 12), 3, big ? 44 : 24);
-      if (v % 10 === 0) { ctx.font = `500 26px ${FONT}`; ctx.fillText(String(v), xOf(v), lineY + 26); }
+      if (v % 10 === 0) { ctx.font = `500 44px ${FONT}`; ctx.fillText(String(v), xOf(v), lineY + 26); }
     }
     ctx.fillStyle = INK;
-    ctx.font = `600 30px ${FONT}`;
+    ctx.font = `600 54px ${FONT}`;
     [[0, 'left'], [50, 'center'], [100, 'right']].forEach(([v, align], i) => {
       if (!labels[i]) return;
       ctx.textAlign = align;
@@ -48,7 +48,7 @@ export function createScale(scene, place) {
       ctx.fillStyle = MARK;
       ctx.beginPath(); ctx.arc(xOf(value), lineY, 16, 0, Math.PI * 2); ctx.fill();
       ctx.textAlign = 'center';
-      ctx.font = `700 40px ${FONT}`;
+      ctx.font = `700 64px ${FONT}`;
       ctx.fillText(value + (unit || ''), xOf(value), H * 0.74);
     }
     panel.tex.needsUpdate = true;
@@ -60,14 +60,17 @@ export function createScale(scene, place) {
   }
 
   // opt: { labels: [left, middle, right], step, unit, doneLabel }. onDone(value) once.
+  // Without onDone the scale is only shown, not answered (to explain it first).
   function show(opt, onDone) {
     hide();
     let value = null;
     bar = document.createElement('a-entity');
     bar.setAttribute('panel', `w: ${w}; h: ${h}; px: 2048`);
     bar.setAttribute('position', `${x} ${y} ${z}`);
-    bar.classList.add('clickable', 'scale-bar');
     bar.addEventListener('loaded', () => draw(opt.labels, opt.step, value, opt.unit));
+    scene.appendChild(bar);
+    if (!onDone) return;
+    bar.classList.add('clickable', 'scale-bar');
     bar.addEventListener('click', (e) => {
       const point = e.detail && e.detail.intersection && e.detail.intersection.point;
       if (!point) return;
@@ -78,7 +81,6 @@ export function createScale(scene, place) {
       draw(opt.labels, opt.step, value, opt.unit);
       done.show([opt.doneLabel], () => { const v = value; hide(); onDone(v); });
     });
-    scene.appendChild(bar);
   }
 
   return { show, hide };

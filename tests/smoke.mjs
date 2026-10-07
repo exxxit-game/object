@@ -30,9 +30,13 @@ try {
   await page.waitForFunction(() => document.querySelector('a-scene')?.hasLoaded, null, { timeout: 30000 });
   assert.equal(await state(), 'idle');
   await pick(1);                       // start without recording
-  await page.waitForFunction(() => document.documentElement.dataset.roomState === 'intro' &&
-    document.querySelectorAll('.answer').length === 2, null, { timeout: 30000 });
-  await pick(0);                       // understood
+  // "understood" twice: after the instructions and after the control concept
+  for (let i = 0; i < 2; i++) {
+    await page.waitForFunction(() => document.documentElement.dataset.roomState === 'intro' &&
+      document.querySelectorAll('.answer').length === 2, null, { timeout: 30000 });
+    await pick(0);
+    await page.waitForFunction(() => document.querySelectorAll('.answer').length === 0, null, { timeout: 30000 });
+  }
   await waitState('run');
   // press during about every other yellow light
   await page.evaluate(() => {

@@ -53,7 +53,12 @@ export function createTrials({ tapes, intervals, speed, paused }) {
           win = null;
           eventLog.add('void', n);
           resolve(false);
-        } else if (performance.now() - win.t0 >= ms(PROTOCOL.windowSecs) || stopped) {
+        } else if (stopped) {
+          clearInterval(tick);
+          lamp('#yellow', false);
+          win = null;
+          resolve(false);
+        } else if (performance.now() - win.t0 >= ms(PROTOCOL.windowSecs)) {
           clearInterval(tick);
           lamp('#yellow', false);
           resolve(true);
@@ -65,7 +70,14 @@ export function createTrials({ tapes, intervals, speed, paused }) {
   async function run() {
     for (let n = 1; n <= PROTOCOL.trials && !stopped; n++) {
       await untilVisible();
-      if (!(await windowOf(n))) { n--; continue; }
+      if (!(await windowOf(n))) {
+        if (stopped) return;
+        // the repeated trial must not start the moment the player is back
+        await untilVisible();
+        await wait(PROTOCOL.intervalMinSecs);
+        n--;
+        continue;
+      }
       const press = win.pressed;
       const tape = press ? 'press' : 'noPress';
       const green = tapes[tape][pos[tape]++];
@@ -74,7 +86,7 @@ export function createTrials({ tapes, intervals, speed, paused }) {
       eventLog.add('trial', { n, press, green, rt });
       if (green) {
         lamp('#green', true);
-        setTimeout(() => lamp('#green', false), ms(PROTOCOL.greenSecs));
+        wait(PROTOCOL.greenSecs).then(() => lamp('#green', false));
       }
       if (n < PROTOCOL.trials) await wait(intervals[n - 1]);
       else await wait(PROTOCOL.greenSecs);
@@ -84,7 +96,7 @@ export function createTrials({ tapes, intervals, speed, paused }) {
   // Only the first press inside the window counts ("once and only once", p. 451).
   function press() {
     playSound('button', { x: 0, y: 0.88, z: -0.16 }, 0.7);
-    if (!win) { eventLog.add('stray'); return; }
+    if (!win || performance.now() - win.t0 > ms(PROTOCOL.windowSecs)) { eventLog.add('stray'); return; }
     if (win.pressed) { eventLog.add('extra', win.n); return; }
     win.pressed = true;
     win.rt = (performance.now() - win.t0) * speed;

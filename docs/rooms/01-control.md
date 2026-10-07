@@ -18,8 +18,8 @@ Every number here lives in code only in `src/rooms/01-control/protocol.js`, and
 | Conditions (Exp. 2) | 25-25 or 75-75: green on 25% or 75% of trials, whether or not you press. Random assignment | 457–458 |
 | Instructions | Learn how much control you have; 3 s rule; four possibilities; sample both responses; control concept explained | 451–452 |
 | Experimenter | Leaves during the 40 trials; returns and rereads the control concept | 452 |
-| Measures, in order | Judgment of Control 0–100 step 5 (No / Intermediate / Complete Control); Total reinforcement %; Reinforcement if press %; if not press % | 449–451 |
-| Post-questionnaire | Certainty of the control judgment; two open questions on evidence; complex hypotheses used? | 449–450 |
+| Measures | Judgment of Control 0–100 step 5 (No / Intermediate / Complete Control); Reinforcement if press %; if not press %; Total reinforcement %. Order conflict in the paper: p. 450 lists Total second, p. 454 says it was completed last — we follow p. 454 | 449–451, 454 |
+| Post-questionnaire | Certainty of the control judgment; evidence that convinced you; evidence that would have convinced you of the opposite; complex hypotheses used, and which | 450 |
 | Money task | 10 more trials, 25 cents per green light | 452 |
 | Debrief | Careful debriefing | 452 |
 
@@ -30,20 +30,22 @@ depressed women 17.1 (23.7) and 13.1 (13.6). n = 8 per cell.
 Said "zero control": 25-25 — 50% of both groups; 75-75 — 50% depressed, 6% non-depressed (p. 461).
 Replication (Dev, Moore, Johnson & Garrett 2022, preregistered, Table 1): end-of-task control
 in zero contingency — 25%: 27.64 (MTurk, n = 83) and 18.15 (students, n = 40); 75%: 34.23 (n = 77)
-and 36.83 (n = 42). Overestimation of control replicated; the depression link did **not**.
+and 36.83 (n = 42); 242 people in these conditions (whole study: 246 + 136 in the text, 246 + 134 in
+the abstract). Overestimation of control replicated; the 75% > 25% difference was significant only for
+trial-level predictions, not for the end-of-task rating; the depression link did **not** replicate.
 
 ## Our room: deviations (each is said in the reveal or in docs only, as marked)
 | # | Deviation | Why | Told to player |
 |---|---|---|---|
 | 1 | No depression screening (BDI/MAACL) | Health data; not needed for the main effect, and the depression link failed replication | Yes |
 | 2 | Money task removed | No real money; null result in Exp. 2 (p. 460) | Yes |
-| 3 | Instructions paraphrased in Russian, all elements kept | Copyright; translation | No (docs) |
-| 4 | "Any questions?" → buttons "Понятно" / "Повторить" | No live experimenter | No (docs) |
+| 3 | Instructions paraphrased in Russian; every element kept except the sentence that the knowledge will earn money later (the money task is removed). The authors link that rational framing to the sex difference (p. 462) | Copyright; no money task | Partly (money) |
+| 4 | Both "Any questions?" moments (after the instructions; after the control concept, shown with the empty scale) → buttons "Понятно" / "Повторить" | No live experimenter | No (docs) |
 | 5 | Experimenter is a recorded voice and a wall screen with the same text | VR; hearing access | No (docs) |
-| 6 | Open questions → choices taken from the participants' answers quoted on p. 461 | Typing in a headset | Yes |
+| 6 | Open evidence question → choices from the participants' reasons (relative efficacy, p. 455; tried sequences, frequent green, intuition, patterns, p. 461; "other"). The "opposite conclusion" question and the content of hypotheses are dropped | Typing in a headset | Yes |
 | 7 | Gender asked at the end, "prefer not to say" allowed | Main result differs by sex | — |
 | 8 | Prior knowledge asked at the end ("did you know this experiment?") | Standard for online replications | — |
-| 9 | Players are not Penn students in 1979 | — | Yes |
+| 9 | Players are not Penn students of the 1970s (the work was done on 1976 fellowships, p. 441) | — | Yes |
 
 ## Not in the paper: our choices (owner may change)
 | Item | Our value | Reason |
@@ -55,8 +57,11 @@ and 36.83 (n = 42). Overestimation of control replicated; the depression link di
 | Yellow light | On for the 3 s window, then off | Not given |
 | Press outside the window | Logged as "stray", no effect | Instruction: press once, right after yellow |
 | Second press in a window | Logged, no effect | "once and only once" |
-| Headset menu / tab hidden during a trial | Trial voided, tapes not moved, repeated after return | A trial the player could not see is not a trial |
+| Headset menu / tab hidden during a trial | Trial voided, tapes not moved, repeated after the player is back and a minimum interval (10 s) | A trial the player could not see is not a trial |
+| Press arriving after 3 s | Stray, even if the timer tick is late | The 3 s rule |
 | Certainty scale | 0–100 step 5 | Format not given |
+| Order of the reason choices | Random per player, "other" last; the log keeps the option, not its position | Avoids a first-position advantage |
+| Answer buttons | One common text size for all answers of a question | A smaller answer looks less important |
 
 ## Flow and states (`<html data-room-state>`)
 `idle` (consent) → `intro` (instructions, Понятно/Повторить) → `run` (40 trials, experimenter out)

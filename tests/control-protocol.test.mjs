@@ -27,7 +27,9 @@ assert.deepEqual(JSON.parse(JSON.stringify(ORIGINAL.nondepressed)), {
   '25-25': { men: 20.0, women: 7.5 },
   '75-75': { men: 30.3, women: 51.4 }
 });
-assert.equal(ORIGINAL.zeroIn7575, 6);
+assert.equal(ORIGINAL.zeroIn7575Pct, 6);
+assert.equal(ORIGINAL.perCell, 8);
+assert.equal(ORIGINAL.replication.people, 83 + 77 + 40 + 42);
 assert.equal(ORIGINAL.participants, 64);
 assert.deepEqual([...ORIGINAL.replication['25-25']], [18.15, 27.64]);
 assert.deepEqual([...ORIGINAL.replication['75-75']], [34.23, 36.83]);

@@ -1,5 +1,5 @@
-// End-to-end check of room 01 inside a Meta Quest connected by USB.
-// Plays the whole room in the headset browser (fast timer), then prints a report:
+// End-to-end check of the default room inside a Meta Quest connected by USB.
+// Plays the whole room in the headset browser at 10× speed, then prints a report:
 // screens shown, voice lines played, page errors, frame rate, and a screenshot.
 //
 // Usage: node tools/quest-check.mjs [url]
@@ -10,12 +10,14 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 
-// Short rounds (20 s) so the whole room is checked in about two minutes.
-const URL_TO_TEST = process.argv[2] || 'http://localhost:3000/?roundsecs=20';
-// 11 recordings. Plays vary with praise and prods; at least: 3 intro, question,
-// round 2, time up.
-const EXPECTED_VOICE_FILES = 11;
-const MIN_VOICE_PLAYS = 6;
+// 10× speed so the whole room (40 trials) is checked in about three minutes.
+const URL_TO_TEST = process.argv[2] || 'http://localhost:3000/?speed=10';
+const ROOM = '01-control';
+const { VOICE_LINES } = await import(new URL(`../src/rooms/${ROOM}/voice-lines.js`, import.meta.url));
+// Every line is played at least once except the repeat question's answer path;
+// instructions, concept twice, leave, back, 9 questions, thanks.
+const EXPECTED_VOICE_FILES = VOICE_LINES.length;
+const MIN_VOICE_PLAYS = 20;
 const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8' });
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -75,28 +77,44 @@ await run(`(() => {
   const panel = document.querySelector('#screen').components.panel; const write = panel.write.bind(panel);
   panel.write = (blocks, opt) => { window.__screens.push(blocks.map(b => b.t).join(' | ')); return write(blocks, opt); };
   new MutationObserver(() => window.__states.push(document.documentElement.dataset.roomState)).observe(document.documentElement, { attributes: true, attributeFilter: ['data-room-state'] });
-  Math.random = () => 0;
   return 1;
 })()`);
 
 const page = await run(`({ url: location.href, screenPx: document.querySelector('#screen').getAttribute('panel').px, voiceFiles: performance.getEntriesByType('resource').filter(e => e.name.includes('/voice/')).length })`);
 
-// Start like a player would (a trusted key press also unlocks audio), then act during the run.
-const key = { key: ' ', code: 'Space', windowsVirtualKeyCode: 32, nativeVirtualKeyCode: 32 };
+// A trusted key press gives the page user activation (audio may start), then the
+// room is played: consent without recording, understood, presses on some trials,
+// every question, every reveal page.
+const key = { key: 'a', code: 'KeyA', windowsVirtualKeyCode: 65, nativeVirtualKeyCode: 65 };
 await send('Input.dispatchKeyEvent', { type: 'keyDown', ...key });
 await send('Input.dispatchKeyEvent', { type: 'keyUp', ...key });
 await run(`(async () => {
   const st = () => document.documentElement.dataset.roomState; const w = (ms) => new Promise(r => setTimeout(r, ms));
-  for (let i = 0; i < 100 && st() !== 'run'; i++) await w(200);
-  // clickable order: 3 levers first (built before the answer buttons are shown)
-  const lev = [...document.querySelectorAll('.clickable')].slice(0, 3); const p = document.querySelector('#painting');
-  let i = 0;
-  (async () => { while (st() !== 'done') { if (st() === 'question') { await w(1500); const a = document.querySelector('.answer'); if (a) a.emit('click'); } if (st() === 'run' && i % 7 < 4) lev[i % 3].emit('click'); if (i % 6 === 0) { p.emit('look-change', { seen: true }); p.emit('look-change', { seen: false }); } i++; await w(600); } })();
+  const pick = async (i) => { for (;;) { const a = [...document.querySelectorAll('.answer')].find(e => +e.dataset.index === i); if (a) { a.emit('click'); return; } await w(150); } };
+  (async () => {
+    await pick(1);
+    for (let c = 0; c < 2; c++) {
+      while (!(st() === 'intro' && document.querySelectorAll('.answer').length === 2)) await w(150);
+      await pick(0);
+      while (document.querySelectorAll('.answer').length) await w(100);
+    }
+    while (st() !== 'run') await w(100);
+    let k = 0;
+    while (st() === 'run') { if (document.querySelector('#yellow').getAttribute('material').emissiveIntensity > 0 && k++ % 3 === 0) document.querySelector('#buttonCap').emit('click'); await w(60); }
+    for (let q = 0; q < 9; q++) {
+      await w(700);
+      const bar = document.querySelector('.scale-bar');
+      if (bar) { const p = new THREE.Vector3(); bar.object3D.getWorldPosition(p); bar.emit('click', { intersection: { point: p } }); await w(300); }
+      await pick(0);
+    }
+    while (st() !== 'done') await w(200);
+    for (let i = 0; i < 4; i++) { await w(2500); await pick(0); }
+  })();
   return 1;
 })()`);
 const fps = await run(`new Promise(r => { let n = 0; const t0 = performance.now(); const f = () => { n++; if (performance.now() - t0 < 3000) requestAnimationFrame(f); else r(Math.round(n / 3)); }; requestAnimationFrame(f); })`);
-await run(`new Promise(r => { const t = setInterval(() => { if (document.documentElement.dataset.roomState === 'done') { clearInterval(t); r(1); } }, 300); setTimeout(() => r(0), 120000); })`);
-await sleep(33000);
+await run(`new Promise(r => { const t = setInterval(() => { if (document.documentElement.dataset.roomState === 'done') { clearInterval(t); r(1); } }, 300); setTimeout(() => r(0), 300000); })`);
+await sleep(16000);
 const result = await run(`({ states: window.__states, played: window.__played, screens: window.__screens, drawCalls: document.querySelector('a-scene').renderer.info.render.calls })`);
 
 // Screenshot of what the headset shows, via the Quest capture service.
@@ -111,12 +129,13 @@ try {
 const checks = [
   ['tested build is the requested URL', page.url.startsWith(URL_TO_TEST.split('?')[0])],
   ['all voice recordings loaded', page.voiceFiles === EXPECTED_VOICE_FILES],
-  ['room went idle -> intro -> run -> done', ['intro', 'run', 'done'].every(s => result.states.includes(s))],
+  ['room went idle -> intro -> run -> questions -> done', ['intro', 'run', 'questions', 'done'].every(s => result.states.includes(s))],
   [`voice played at least ${MIN_VOICE_PLAYS} times`, result.played.length >= MIN_VOICE_PLAYS],
-  ['question shown and answered', result.states.includes('question') && result.screens.some(s => s.includes('от чего зависят очки'))],
-  ['report screen 1 shown', result.screens.some(s => s.startsWith('ЧТО ВЫ ДЕЛАЛИ') && !s.includes('Посмотрите налево'))],
-  ['report screen 2 shown', result.screens.some(s => s.includes('Посмотрите налево'))],
-  ['original screen shown with the share line', result.screens.some(s => s.startsWith('ОРИГИНАЛ') && s.includes('Не рассказывайте'))],
+  ['all questions shown', result.screens.some(s => s.includes('управляли зелёной лампой?')) && result.screens.some(s => s.includes('знали этот опыт'))],
+  ['reveal: what you did', result.screens.some(s => s.startsWith('ЧТО ВЫ ДЕЛАЛИ'))],
+  ['reveal: the truth', result.screens.some(s => s.startsWith('КАК БЫЛО НА САМОМ ДЕЛЕ'))],
+  ['reveal: original and replication', result.screens.some(s => s.startsWith('ОРИГИНАЛ')) && result.screens.some(s => s.startsWith('ПОВТОРЕНИЕ'))],
+  ['reveal: differences with the share line', result.screens.some(s => s.startsWith('ЧЕМ ЭТА КОМНАТА') && s.includes('Не рассказывайте'))],
   ['no page errors', errors.length === 0],
   ['frame rate at least 60', fps >= 60]
 ];

@@ -15,6 +15,7 @@ import { askConsent } from '../../app/consent.js';
 import { createSession, SPEED } from '../../app/session.js';
 import { APP_T } from '../../app/texts.ru.js';
 import { sceneHTML } from './scene.js';
+import { PROTOCOL } from './protocol.js';
 import { pickCondition, makeTapes, makeIntervals } from './schedule.js';
 import { createTrials } from './trials.js';
 import { askAll } from './questions.js';
@@ -35,7 +36,7 @@ const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 // Behind the player, where the door would be.
 const DOOR = { x: 0.6, y: 1.0, z: 1.5 };
 
-let scene, choice, lowChoice, scale, session, trials = null;
+let scene, choice, lowChoice, scale, shownScale, session, trials = null;
 let seated = false;
 let xrVisible = true;
 const paused = () => document.hidden || !xrVisible;
@@ -72,17 +73,26 @@ function darkGlass(dark) {
   $('#observer').setAttribute('visible', !dark);
 }
 
+async function understood() {
+  show(T.repeatQuestion, true);
+  speak(T.repeatQuestion);
+  return (await pick([APP_T.understood, APP_T.repeat])) === 0;
+}
+
 /* ---------- flow ---------- */
 async function intro() {
   setState('intro');
   darkGlass(true);
-  for (;;) {
+  // As in the paper (pp. 451–452): instructions, a chance to ask; then the control
+  // concept with the empty scale in view, and a chance to ask again.
+  do {
     for (const line of T.instructions) await say(line);
-    for (const line of T.concept) await say(line);
-    show(T.repeatQuestion, true);
-    speak(T.repeatQuestion);
-    if ((await pick([APP_T.understood, APP_T.repeat])) === 0) break;
-  }
+  } while (!(await understood()));
+  do {
+    shownScale.show({ labels: T.questions.control.labels, step: PROTOCOL.scaleStep });
+    for (const line of T.concept) await say(line, true);
+    shownScale.hide();
+  } while (!(await understood()));
   await say(T.leave);
   playSound('door', DOOR, 0.8);
   screen().write([]);
@@ -153,9 +163,10 @@ function pressButton(e) {
 /* ---------- boot ---------- */
 async function boot() {
   // answer buttons under a short question at the top of the screen
-  choice = createChoice(scene, { y: 2.02, z: -1.555, w: 1.2 });
+  choice = createChoice(scene, { y: 2.02, z: -1.555, w: 1.5 });
   lowChoice = createChoice(scene, { y: 1.48, z: -1.555, w: 0.9, h: 0.12 });
   scale = createScale(scene, { y: 1.78, z: -1.555 });
+  shownScale = createScale(scene, { y: 1.6, z: -1.555 });
   // On desktop the view starts tilted slightly down, toward the table.
   const lc = $('#cam').components['look-controls'];
   if (lc && lc.pitchObject) lc.pitchObject.rotation.x = -0.28;

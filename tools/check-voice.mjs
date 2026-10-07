@@ -5,6 +5,7 @@
 // Usage: node tools/check-voice.mjs 01-control
 // Numbers may come back as digits ("40" for "сорок"): such lines show as DIFF
 // with only the number missing, which is fine.
+import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';

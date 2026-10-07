@@ -34,8 +34,11 @@ export function analyse(log) {
     ifNoPress,
     // actual control in percentage points: P(green | press) − P(green | no press)
     actualControl: ifPress == null || ifNoPress == null ? null : Math.round((ifPress - ifNoPress) * 10) / 10,
-    // Ward & Jenkins heuristics used in the paper (p. 450)
+    // Ward & Jenkins heuristics used in the paper (p. 450). "Percentage of successes"
+    // is worded as green on press trials; p. 456 reads it closer to press-and-green
+    // over all trials, so both are kept.
     successes: ifPress,
+    successesOfAll: pct(greenIfPress, trials.length),
     confirming: greenIfPress + (notPressed.length - greenIfNoPress),
     voided: log.filter(e => e.k === 'void').length,
     strays: log.filter(e => e.k === 'stray').length,

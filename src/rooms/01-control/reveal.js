@@ -35,12 +35,12 @@ export function revealPages(r, condition) {
   const original = [
     head(R.originalHeader),
     body(R.original(ORIGINAL.participants), 30),
-    soft(R.originalResult(round(ORIGINAL.nondepressed['25-25']), round(ORIGINAL.nondepressed['75-75']), ORIGINAL.zeroIn7575), 26),
+    soft(R.originalResult(round(ORIGINAL.nondepressed['25-25']), round(ORIGINAL.nondepressed['75-75']), ORIGINAL.zeroIn7575Pct), 26),
     body(R.yourCondition(pct, control), 30)
   ];
   if (gender === 0 || gender === 1) {
     const mean = ORIGINAL.nondepressed[condition][gender === 0 ? 'men' : 'women'];
-    original.push(soft(R.sameGroup(R.who[gender], Math.round(mean))));
+    original.push(soft(R.sameGroup(R.who[gender], ORIGINAL.perCell, Math.round(mean))));
   }
   const replication = [head(R.replicationHeader), body(R.replication(repRounded), 30), soft(R.sadder, 30)];
   const diffs = [
