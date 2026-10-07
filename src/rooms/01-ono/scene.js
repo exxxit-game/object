@@ -3,7 +3,7 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
          cursor="rayOrigin: mouse" raycaster="objects: .clickable; far: 8"
          vr-mode-ui="enabled: true" loading-screen="enabled: false" xr-mode-ui="enabled: true">
 
-  <a-entity id="rig" position="0 0 0.35">
+  <a-entity id="rig" position="0 0 0.35" recenter="x: 0; z: 0.35; yaw: 0">
     <a-entity id="cam" camera look-controls="pointerLockEnabled: false" wasd-controls="acceleration: 12" position="0 1.6 0" room-bounds></a-entity>
     <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" reach-watch></a-entity>
     <a-entity laser-controls="hand: right" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" reach-watch></a-entity>
@@ -34,8 +34,11 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <!-- painting on the back wall -->
   <a-box position="0 1.5 1.585" width="0.98" height="0.98" depth="0.04" color="#3a2a1c"></a-box>
   <a-entity id="painting" panel="w: 0.86; h: 0.86; px: 768" rotation="0 180 0" position="0 1.5 1.562" look-watch></a-entity>
-  <!-- baseboard -->
+  <!-- baseboard on all four walls -->
   <a-box position="0 0.04 -1.595" width="3.2" height="0.08" depth="0.01" color="#2b2d29"></a-box>
+  <a-box position="0 0.04 1.595" width="3.2" height="0.08" depth="0.01" color="#2b2d29"></a-box>
+  <a-box position="1.595 0.04 0" width="0.01" height="0.08" depth="3.2" color="#2b2d29"></a-box>
+  <a-box position="-1.595 0.04 0" width="0.01" height="0.08" depth="3.2" color="#2b2d29"></a-box>
 
   <!-- observation room -->
   <a-box position="-2.4 1.25 -0.3" width="1.6" height="2.5" depth="2.4" material="color: #4a4d52; side: back; roughness: 1"></a-box>
@@ -46,7 +49,12 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-box position="-2.68 0.82 -0.3" width="0.18" height="0.12" depth="0.28" color="#2d2f33"></a-box>
   <a-entity id="timerLabel" panel="w: 0.24; h: 0.09; px: 512" rotation="0 90 0" position="-2.588 0.82 -0.3"></a-entity>
   <a-sphere id="timerLed" radius="0.012" position="-2.62 0.89 -0.38" material="color: #300; emissive: #ff2a1a; emissiveIntensity: 0.2"></a-sphere>
-  <a-cylinder radius="0.007" height="1.0" rotation="0 0 90" position="-2.1 0.77 -0.3" color="#111"></a-cylinder>
+  <!-- counter cable from the wall box to the timer: floor, up the desk edge, into the timer -->
+  <a-box position="-1.615 0.05 -0.95" width="0.03" height="0.08" depth="0.08" color="#2a2a2a"></a-box>
+  <a-cylinder radius="0.007" height="0.82" rotation="0 0 90" position="-2.04 0.008 -0.95" color="#111"></a-cylinder>
+  <a-cylinder radius="0.007" height="0.65" rotation="90 0 0" position="-2.45 0.008 -0.625" color="#111"></a-cylinder>
+  <a-cylinder radius="0.007" height="0.76" position="-2.445 0.38 -0.3" color="#111"></a-cylinder>
+  <a-cylinder radius="0.007" height="0.145" rotation="0 0 90" position="-2.5175 0.77 -0.3" color="#111"></a-cylinder>
   <!-- empty chair -->
   <a-box position="-3.0 0.45 -0.3" width="0.4" height="0.04" depth="0.4" color="#2e3238"></a-box>
   <a-box position="-3.19 0.72 -0.3" width="0.03" height="0.5" depth="0.4" color="#2e3238"></a-box>
@@ -58,7 +66,7 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
 
   <!-- experimenter screen -->
   <a-box position="0 1.86 -1.585" width="2.12" height="1.12" depth="0.03" color="#1b1c1e"></a-box>
-  <a-entity id="screen" panel="w: 2.0; h: 1.0; px: 1300; bg: #0e0f11" position="0 1.86 -1.565"></a-entity>
+  <a-entity id="screen" panel="w: 2.0; h: 1.0; px: 2048; ref: 1300; bg: #0e0f11" position="0 1.86 -1.565"></a-entity>
 
   <a-entity id="room">
     <!-- table -->
@@ -68,23 +76,25 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
     <a-box position="-0.46 0.4 -0.38" width="0.04" height="0.8" depth="0.04" color="#2a2a2a"></a-box>
     <a-box position="0.46 0.4 -0.38" width="0.04" height="0.8" depth="0.04" color="#2a2a2a"></a-box>
     <!-- counter and lamp -->
-    <a-box position="0 1.24 -0.86" width="0.36" height="0.26" depth="0.07" color="#2d2f33"></a-box>
-    <a-box position="0 0.99 -0.86" width="0.05" height="0.3" depth="0.05" color="#2d2f33"></a-box>
-    <a-box position="0 0.85 -0.86" width="0.16" height="0.02" depth="0.1" color="#2d2f33"></a-box>
-    <a-entity id="counter" panel="w: 0.24; h: 0.13; px: 512" position="0 1.22 -0.823"></a-entity>
-    <a-sphere id="signal" radius="0.035" position="0 1.4 -0.86" material="color: #3a0806; emissive: #ff2a1a; emissiveIntensity: 0.05"></a-sphere>
-    <!-- counter cable runs into the wall -->
-    <a-cylinder radius="0.007" height="0.28" rotation="90 0 0" position="0 0.86 -1.06" color="#111"></a-cylinder>
-    <a-cylinder radius="0.007" height="0.86" position="0 0.43 -1.2" color="#111"></a-cylinder>
-    <a-cylinder radius="0.007" height="1.6" rotation="0 0 90" position="-0.8 0.01 -1.2" color="#111"></a-cylinder>
-    <a-cylinder radius="0.007" height="0.9" rotation="90 0 0" position="-1.6 0.01 -0.75" color="#111"></a-cylinder>
+    <a-box position="0 1.24 -0.78" width="0.36" height="0.26" depth="0.07" color="#2d2f33"></a-box>
+    <a-box position="0 0.99 -0.78" width="0.05" height="0.3" depth="0.05" color="#2d2f33"></a-box>
+    <a-box position="0 0.85 -0.78" width="0.16" height="0.02" depth="0.1" color="#2d2f33"></a-box>
+    <a-entity id="counter" panel="w: 0.24; h: 0.13; px: 512" position="0 1.22 -0.743"></a-entity>
+    <a-sphere id="signal" radius="0.035" position="0 1.4 -0.78" material="color: #3a0806; emissive: #ff2a1a; emissiveIntensity: 0.05"></a-sphere>
+    <!-- counter cable: along the table top, down the back edge, along the floor to the wall -->
+    <a-cylinder radius="0.007" height="0.04" rotation="90 0 0" position="0 0.847 -0.845" color="#111"></a-cylinder>
+    <a-cylinder radius="0.007" height="0.84" position="0 0.42 -0.866" color="#111"></a-cylinder>
+    <a-cylinder radius="0.007" height="0.084" rotation="90 0 0" position="0 0.008 -0.908" color="#111"></a-cylinder>
+    <a-cylinder radius="0.007" height="1.57" rotation="0 0 90" position="-0.785 0.008 -0.95" color="#111"></a-cylinder>
+    <!-- the cable enters the left wall through a box and continues to the timer next door -->
+    <a-box position="-1.585 0.05 -0.95" width="0.03" height="0.08" depth="0.08" color="#2a2a2a"></a-box>
     <!-- lever cables dangle, connected to nothing -->
-    <a-cylinder radius="0.006" height="0.78" position="-0.28 0.41 -0.56" rotation="0 0 4" color="#151515"></a-cylinder>
-    <a-cylinder radius="0.006" height="0.78" position="0 0.41 -0.56" rotation="0 0 -3" color="#151515"></a-cylinder>
-    <a-cylinder radius="0.006" height="0.78" position="0.28 0.41 -0.56" rotation="0 0 5" color="#151515"></a-cylinder>
-    <a-box position="-0.31 0.015 -0.5" width="0.03" height="0.03" depth="0.06" rotation="0 30 0" color="#c9b26a"></a-box>
-    <a-box position="0.02 0.015 -0.48" width="0.03" height="0.03" depth="0.06" rotation="0 -20 0" color="#c9b26a"></a-box>
-    <a-box position="0.3 0.015 -0.5" width="0.03" height="0.03" depth="0.06" rotation="0 50 0" color="#c9b26a"></a-box>
+    <a-cylinder radius="0.006" height="0.78" position="-0.30 0.41 -0.44" rotation="0 0 4" color="#151515"></a-cylinder>
+    <a-cylinder radius="0.006" height="0.78" position="-0.04 0.41 -0.44" rotation="0 0 -3" color="#151515"></a-cylinder>
+    <a-cylinder radius="0.006" height="0.78" position="0.22 0.41 -0.44" rotation="0 0 5" color="#151515"></a-cylinder>
+    <a-box position="-0.33 0.015 -0.38" width="0.03" height="0.03" depth="0.06" rotation="0 30 0" color="#c9b26a"></a-box>
+    <a-box position="-0.02 0.015 -0.36" width="0.03" height="0.03" depth="0.06" rotation="0 -20 0" color="#c9b26a"></a-box>
+    <a-box position="0.24 0.015 -0.38" width="0.03" height="0.03" depth="0.06" rotation="0 50 0" color="#c9b26a"></a-box>
     <!-- buttons -->
     <a-entity id="startBtn" position="0.4 0.84 -0.47">
       <a-cylinder id="startHit" class="clickable" radius="0.05" height="0.03" position="0 0.015 0" material="color: #eeeeea; emissive: #ffffff; emissiveIntensity: .15"></a-cylinder>
