@@ -5,8 +5,8 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
 
   <a-entity id="rig" position="0 0 0.35" recenter="x: 0; z: 0.35; yaw: 0">
     <a-entity id="cam" camera look-controls="pointerLockEnabled: false" wasd-controls="acceleration: 12" position="0 1.6 0" room-bounds></a-entity>
-    <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" reach-watch></a-entity>
-    <a-entity laser-controls="hand: right" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" reach-watch></a-entity>
+    <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" reach-watch grab-press></a-entity>
+    <a-entity laser-controls="hand: right" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" reach-watch grab-press></a-entity>
   </a-entity>
 
   <!-- lights -->
@@ -55,7 +55,15 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-cylinder radius="0.007" height="0.65" rotation="90 0 0" position="-2.45 0.008 -0.625" color="#111"></a-cylinder>
   <a-cylinder radius="0.007" height="0.76" position="-2.445 0.38 -0.3" color="#111"></a-cylinder>
   <a-cylinder radius="0.007" height="0.145" rotation="0 0 90" position="-2.5175 0.77 -0.3" color="#111"></a-cylinder>
-  <!-- empty chair -->
+  <!-- the experimenter: hidden while the glass is dark, seen sitting there in the reveal -->
+  <a-entity id="observer" visible="false" position="-3.0 0 -0.3" rotation="0 -90 0">
+    <a-cylinder radius="0.16" height="0.56" position="0 0.78 0.02" color="#141416" roughness="1"></a-cylinder>
+    <a-box width="0.42" height="0.1" depth="0.2" position="0 1.02 0.02" color="#141416" roughness="1"></a-box>
+    <a-sphere radius="0.11" position="0 1.2 0.03" color="#141416" roughness="1"></a-sphere>
+    <a-box width="0.3" height="0.12" depth="0.42" position="0 0.53 -0.2" color="#141416" roughness="1"></a-box>
+    <a-box width="0.26" height="0.45" depth="0.1" position="0 0.23 -0.38" color="#141416" roughness="1"></a-box>
+  </a-entity>
+  <!-- chair -->
   <a-box position="-3.0 0.45 -0.3" width="0.4" height="0.04" depth="0.4" color="#2e3238"></a-box>
   <a-box position="-3.19 0.72 -0.3" width="0.03" height="0.5" depth="0.4" color="#2e3238"></a-box>
   <a-cylinder radius="0.015" height="0.45" position="-2.84 0.22 -0.14" color="#777"></a-cylinder>
@@ -69,6 +77,9 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-entity id="screen" panel="w: 2.0; h: 1.0; px: 2048; ref: 1300; bg: #0e0f11" position="0 1.86 -1.565"></a-entity>
 
   <a-entity id="room">
+    <!-- soft contact shadows: floor under the table, table under the counter -->
+    <a-entity blob-shadow="w: 1.3; h: 0.8; opacity: 0.5" position="0 0.003 -0.6"></a-entity>
+    <a-entity blob-shadow="w: 0.32; h: 0.22; opacity: 0.45" position="0 0.8425 -0.78"></a-entity>
     <!-- table -->
     <a-box position="0 0.82 -0.6" width="1.0" height="0.04" depth="0.52" material="color: #4b4a47; roughness: .7"></a-box>
     <a-box position="-0.46 0.4 -0.82" width="0.04" height="0.8" depth="0.04" color="#2a2a2a"></a-box>

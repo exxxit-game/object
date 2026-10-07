@@ -4,6 +4,8 @@ import '../../engine/look-watch.js';
 import '../../engine/reach-watch.js';
 import '../../engine/recenter.js';
 import '../../engine/sfx.js';
+import '../../engine/grab-press.js';
+import '../../engine/blob-shadow.js';
 import './room-bounds.js';
 import { eventLog } from '../../engine/log.js';
 import { createTimeline } from '../../engine/timeline.js';
@@ -231,6 +233,7 @@ function finish() {
 function darkGlass(dark) {
   $('#glass').setAttribute('material', 'opacity', dark ? 0.94 : 0.12);
   $('#obsLight').setAttribute('light', 'intensity', dark ? 0 : 6);
+  $('#observer').setAttribute('visible', !dark);
 }
 
 /* ---------- boot ---------- */

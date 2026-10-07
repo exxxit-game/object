@@ -1,6 +1,6 @@
 # Roadmap
 
-## What Objekt is
+## What Object is
 A living archive of classic psychology experiments that you go through yourself
 in VR. One short room per experiment. Every room follows the same arc:
 

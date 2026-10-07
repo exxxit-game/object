@@ -30,10 +30,13 @@ export function buildLevers(roomEl) {
     const lamp = el('a-sphere', { radius: 0.018, position: '0 0.035 0.075', material: `color:#222; emissive:${COLORS[i]}; emissiveIntensity:0` }, root);
     const pivot = el('a-entity', { swing: '' }, root);
     el('a-cylinder', { radius: 0.011, height: 0.24, position: '0 0.12 0', color: '#9a9a9a', metalness: 0.7, roughness: 0.3 }, pivot);
-    el(KNOBS[i][0], { ...KNOBS[i][1], position: '0 0.25 0', color: COLORS[i], roughness: 0.35 }, pivot);
+    // the knob can also be taken by hand (engine/grab-press.js)
+    const knob = el(KNOBS[i][0], { ...KNOBS[i][1], position: '0 0.25 0', color: COLORS[i], roughness: 0.35, class: 'grabbable' }, pivot);
+    el('a-entity', { 'blob-shadow': 'w: 0.2; h: 0.26; opacity: 0.4', position: '0 -0.0175 0' }, root);
     const hit = el('a-box', { class: 'clickable', width: 0.16, height: 0.36, depth: 0.22, position: '0 0.16 0', material: 'opacity:0; transparent:true; depthWrite:false' }, root);
     const lever = { i, root, pivot, lamp, busy: false };
     hit.addEventListener('click', (e) => pull(lever, e.detail && e.detail.cursorEl));
+    knob.addEventListener('click', (e) => pull(lever, e.detail && e.detail.cursorEl));
   });
 }
 

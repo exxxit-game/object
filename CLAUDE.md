@@ -1,6 +1,6 @@
-# CLAUDE.md — Objekt
+# CLAUDE.md — Object
 
-Objekt is a browser VR game (WebXR, A-Frame). The player is the subject of real
+Object is a browser VR game (WebXR, A-Frame). The player is the subject of real
 psychology experiments, one room per experiment. Each room catches the player,
 then shows honestly how it was done and what the original study found.
 

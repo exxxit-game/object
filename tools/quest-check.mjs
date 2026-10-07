@@ -28,7 +28,7 @@ if (!/mWakefulness=Awake/.test(adb('shell', 'dumpsys', 'power'))) {
 
 // Use the open game tab if there is one, else open the URL in the headset browser.
 let tabs = await (await fetch('http://127.0.0.1:9222/json/list')).json();
-let tab = tabs.find(t => t.type === 'page' && /objekt|localhost:3000/.test(t.url));
+let tab = tabs.find(t => t.type === 'page' && /object|localhost:3000/.test(t.url));
 if (!tab) {
   adb('shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', URL_TO_TEST, 'com.oculus.browser');
   await sleep(5000);

@@ -1,0 +1,29 @@
+// Soft contact shadow under an object: a flat, transparent plane with a radial
+// gradient. Real-time shadows are too expensive in a headset; this keeps objects
+// from looking like they float, at almost no cost.
+let texture = null;
+function gradientTexture() {
+  if (texture) return texture;
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(64, 64, 8, 64, 64, 64);
+  g.addColorStop(0, 'rgba(0,0,0,1)');
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 128, 128);
+  texture = new THREE.CanvasTexture(c);
+  return texture;
+}
+
+AFRAME.registerComponent('blob-shadow', {
+  schema: { w: { default: 0.5 }, h: { default: 0.5 }, opacity: { default: 0.45 } },
+  init() {
+    const mesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(this.data.w, this.data.h),
+      new THREE.MeshBasicMaterial({ map: gradientTexture(), transparent: true, opacity: this.data.opacity, depthWrite: false })
+    );
+    mesh.rotation.x = -Math.PI / 2;
+    this.el.setObject3D('mesh', mesh);
+  }
+});

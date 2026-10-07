@@ -22,7 +22,7 @@ export function sendResult(room, version, firstRun, report) {
 // Whether this browser has finished this room before (first vs repeat runs must
 // never be mixed in the statistics). Storage may be unavailable: then "first".
 export function markPlayed(room) {
-  const key = `objekt.played.${room}`;
+  const key = `object.played.${room}`;
   let before = false;
   try { before = localStorage.getItem(key) === '1'; localStorage.setItem(key, '1'); } catch (e) { /* private mode */ }
   return !before;
