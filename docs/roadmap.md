@@ -67,15 +67,10 @@ Structure, rules, docs, sources, unit + smoke tests, CI on every push.
 - Later, optional: Meta Horizon Store as a WebXR PWA.
 
 ## Room candidates
-| Room | Original | Status |
-|---|---|---|
-| 01 Superstition | Ono 1987 | built |
-| Conformity | Asch 1951 (VR replication exists) | candidate |
-| Smoke room | Latané & Darley 1968 (75% alone vs 10% with passive confederates) | candidate |
-| Door swap | Simons & Levin 1998 (change blindness) | candidate |
-| Leading words | Loftus & Palmer 1974 | candidate |
-| Obedience | Milgram 1963 / Slater 2006 in VR | candidate, ethically heaviest |
-| Bernays, Chase | propaganda and the power of words: not lab experiments, need a room format first | idea |
+Full selection, criteria, rejected effects and sources: [experiments.md](experiments.md).
+Decided: room 02 is the smoke room (Latané & Darley 1968).
+Order: 01 Superstition (built) → 02 Smoke room → Door swap → Anchoring →
+Repetition = truth (Bernays) → Conformity → False memory → others.
 
 ## Scope guard
 - New ideas go to "Room candidates" or a "Later" note, not into the current phase.
