@@ -62,3 +62,9 @@ Other sciences that experiment on people (the game is "you are the object of an 
 | Sport and movement science | reaction time, interception, quiet eye (no eye tracking) | open |
 | Music cognition | rhythm synchrony, tempo and pace, earworms | open |
 | Sociology and network experiments | norms spreading through groups, cooperation in networks | open |
+| Traffic and pedestrian safety | street crossing in VR, gap acceptance, distraction | open |
+| Architecture and urban design | ceiling height, wayfinding signs, spaciousness | open |
+| Political science and media | survey experiments, persuasion, misinformation sharing | open |
+| Human–computer interaction and games | presence, agency in interfaces, dark patterns | open |
+| Food perception (visual only) | portion size seen bigger, colour and taste expectations | open |
+| Criminology and rule-breaking | dishonesty under observation, deterrence cues | open |
