@@ -1,6 +1,6 @@
 // Pure tests of room 01 analysis. Fast, no browser: safe to run on any laptop.
 import assert from 'node:assert/strict';
-import { analyse } from '../src/rooms/01-ono/analyse.js';
+import { analyse } from '../src/rooms/01-ono/report.js';
 import { plural } from '../src/rooms/01-ono/texts.ru.js';
 
 const pull = (t, v) => ({ t, k: 'pull', v });
@@ -54,4 +54,4 @@ assert.equal(plural(11, 'раз', 'раза', 'раз'), 'раз');
 assert.equal(plural(21, 'раз', 'раза', 'раз'), 'раз');
 assert.equal(plural(22, 'раз', 'раза', 'раз'), 'раза');
 
-console.log('analyse tests: ok');
+console.log('report tests: ok');
