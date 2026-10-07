@@ -75,3 +75,21 @@ Repetition = truth (Bernays) → Conformity → False memory → others.
 ## Scope guard
 - New ideas go to "Room candidates" or a "Later" note, not into the current phase.
 - No feature without the owner's word. One phase at a time.
+
+## Decided with the owner
+- **Business model:** first room free; each next room about $1 (Meta Horizon Store,
+  WebXR PWA with in-app purchases). Also: licences for education (schools,
+  psychology courses, science museums) and partnerships with universities.
+  Never sell player data, never add ads or third-party trackers.
+- **First vs repeat play:** the game remembers whether this is the player's
+  first run of a room. Statistics never mix first and repeat runs: a repeat run
+  is a different experiment ("does knowing change behaviour?").
+- **Reveal wording:** "you did X", never a diagnosis ("you are superstitious").
+  The strength is the comparison: you, all players, the original study.
+- **Ethics approval:** needed before data counts as science. Most realistic path:
+  a university co-author whose ethics board reviews the study. Requirements to
+  expect: 18+, consent screen saying some details are revealed at the end, full
+  debrief, quit any time, data plan. Do not collect data "for science" before approval.
+- **Room 01 flow:** intro, round 1 (12 points), question (4 answers), round 2,
+  report (belief, repeated system), original study. Seated players are lifted to
+  standing eye height automatically.

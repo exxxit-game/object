@@ -34,8 +34,11 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <!-- painting on the back wall -->
   <a-box position="0 1.5 1.585" width="0.98" height="0.98" depth="0.04" color="#3a2a1c"></a-box>
   <a-entity id="painting" panel="w: 0.86; h: 0.86; px: 768" rotation="0 180 0" position="0 1.5 1.562" look-watch></a-entity>
-  <!-- baseboard -->
+  <!-- baseboard on all four walls -->
   <a-box position="0 0.04 -1.595" width="3.2" height="0.08" depth="0.01" color="#2b2d29"></a-box>
+  <a-box position="0 0.04 1.595" width="3.2" height="0.08" depth="0.01" color="#2b2d29"></a-box>
+  <a-box position="1.595 0.04 0" width="0.01" height="0.08" depth="3.2" color="#2b2d29"></a-box>
+  <a-box position="-1.595 0.04 0" width="0.01" height="0.08" depth="3.2" color="#2b2d29"></a-box>
 
   <!-- observation room -->
   <a-box position="-2.4 1.25 -0.3" width="1.6" height="2.5" depth="2.4" material="color: #4a4d52; side: back; roughness: 1"></a-box>
