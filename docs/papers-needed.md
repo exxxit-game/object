@@ -24,3 +24,7 @@ Sci-Hub or LibGen.
 | huang-2022 | Huang, Knierim, Chiossi, Chuang & Welsch (2022). Proxemics for human-agent interaction in augmented reality. CHI 2022, 1–13 | 10.1145/3491102.3517593 | Personal space with AR agents |
 | jones-2008 | Jones, Swan et al. (2008). The effects of virtual reality, augmented reality, and motion parallax on egocentric depth perception. APGV 2008 | 10.1145/1394281.1394283 | Distance in AR vs VR vs real |
 | wang-2023 | Wang, Cai & Sandor (2023). Perceptual thresholds of visual size discrimination in augmented and virtual reality. Computers & Graphics | 10.1016/j.cag.2023.10.001 (preprint: 10.2139/ssrn.4436125) | Size changes in mixed reality |
+| wiltermuth-heath-2009 | Wiltermuth & Heath (2009). Synchrony and cooperation. Psychological Science 20(1), 1–5 | 10.1111/j.1467-9280.2008.02253.x | Moving together raises cooperation (live players) |
+| sebanz-2003 | Sebanz, Knoblich & Prinz (2003). Representing others' actions: just like one's own? Cognition 88(3), B11–B21 | 10.1016/s0010-0277(03)00043-x | Joint Simon task (two live players) |
+| fehr-gachter-2002 | Fehr & Gächter (2002). Altruistic punishment in humans. Nature 415, 137–140 | 10.1038/415137a | Punishment in groups (live players) |
+| latane-1979 | Latané, Williams & Harkins (1979). Many hands make light the work. JPSP 37(6), 822–832 | 10.1037/0022-3514.37.6.822 | Social loafing (live players) |
