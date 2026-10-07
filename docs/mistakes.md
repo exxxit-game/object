@@ -20,3 +20,4 @@ when a better guard appears.
 | A shell heredoc silently changed backslashes in a written file | `tests/structure.test.mjs` rule 9 (syntax of every file) |
 | File names like analytics were blocked by ad blockers (dark screen) | `tests/names.test.mjs` |
 | "Done" said before checking in the browser and headset | `.claude/skills/new-room/SKILL.md` step 9; `tools/quest-check.mjs` |
+| The headset check started answering before the question was on screen after the flow changed | `tools/quest-check.mjs` waits for the scale or the answers, not for a state name |

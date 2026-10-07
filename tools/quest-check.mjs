@@ -102,7 +102,9 @@ await run(`(async () => {
     let k = 0;
     while (st() === 'run') { if (document.querySelector('#yellow').getAttribute('material').emissiveIntensity > 0 && k++ % 3 === 0) document.querySelector('#buttonCap').emit('click'); await w(60); }
     for (let q = 0; q < 9; q++) {
-      await w(700);
+      // the experimenter speaks first: wait until a scale or several answers are shown
+      while (!document.querySelector('.scale-bar') && document.querySelectorAll('.answer').length < 2) await w(150);
+      await w(300);
       const bar = document.querySelector('.scale-bar');
       if (bar) { const p = new THREE.Vector3(); bar.object3D.getWorldPosition(p); bar.emit('click', { intersection: { point: p } }); await w(300); }
       await pick(0);
