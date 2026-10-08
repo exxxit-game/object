@@ -86,4 +86,8 @@ for (const f of scripts) {
   catch (e) { assert.fail(`syntax error in ${rel(f)}: ${String(e.stderr).split('\n').slice(0, 4).join(' ')}`); }
 }
 
+// 10. The experiment catalog is generated from the cards and must be current.
+try { execFileSync(process.execPath, [path.join(ROOT, 'tools/build-catalog.mjs'), '--check'], { stdio: 'pipe' }); }
+catch (e) { assert.fail(String(e.stderr || e.stdout).trim()); }
+
 console.log('structure tests: ok');
