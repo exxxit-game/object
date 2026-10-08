@@ -3,9 +3,9 @@ import { sendResult, sendPlaytest, markPlayed } from '../engine/results.js';
 // One play of a room, from consent to result. Every room uses this, so consent,
 // first/repeat runs and sending work the same everywhere.
 
-// Results are sent only after the privacy page is published (owner decision:
-// no recording without it). Flip to true in the same change that adds the page.
-const SENDING_ENABLED = false;
+// Results are sent only with the privacy page published (privacy.html) and only
+// when the player chose "start with recording".
+const SENDING_ENABLED = true;
 
 // ?speed=N runs all timings N times faster for tests and headset checks; such
 // runs are never sent, so test data cannot reach the statistics.
