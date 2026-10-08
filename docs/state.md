@@ -59,10 +59,13 @@
 ## Open items (08.10). ONE step at a time, a short status after each. Every request: plan doc table.
 1. Queue step 4: CORRIDOR ACCEPTED by the owner 8.10 (approved shots: docs/rooms/corridor-shots/). NOW, his word:
    the clipboard: DONE board+clip from a photo (Wikimedia Clipboard.jpg), hangs by its loop on the peg; form head
-   "Участник ___"; consent page 1 = short consent form (agree, known, date, "Подпись ___"): FIX its overflow;
-   NEXT name + signature drawn with the controller (kept on the device only), then LIGHTING (owner: "свет
-   адекватный", research first, before/after pictures), then texts. Owner fixes done: light box on the wall,
-   extinguisher on a real hanger. Searches: one question, quick-research agent, stop at 5 min.
+   "Участник ___"; consent page 1 = short consent form (agree, known, date, "Подпись ___").
+   Detail pass done (front, side, top of every corridor thing; headset 72 fps): extinguisher hook = fork round
+   the neck, signs = plates on the doors, framed cork board, sheets and clipboard lie on the cork (tests guard).
+   NEXT name + signature drawn with the controller (kept on the device only), then pictures for the end walls
+   (what hung in 1970s psych corridors, pictures first), then LIGHTING (owner: "свет адекватный", research
+   first, before/after pictures), then texts. Waiting on him: the repo's new name + his yes (site on
+   youaretheobject.com and the test copy do not change). Searches: one question, quick-research agent, 5 min.
    Branch pushed ("Делай"), hidden GitHub address (rule 14). Style book https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH
    = THE whole picture. Built: plan B corridor 14.6 m (src/app/lobby/plan.js), numbers 101-109, NIU signs ON the
    doors (SIGN in src/app/brand.js), EXXXIT poster = leave, age asked, WS-900 extinguisher by the stairs, hint never in
