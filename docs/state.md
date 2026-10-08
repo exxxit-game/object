@@ -16,6 +16,7 @@
   coverage closed: `docs/search-coverage.md`; ideas: `docs/ideas/`; headset abilities:
   `docs/headset-capabilities.md`; owner page: https://claude.ai/artifact/Srhwjio7Ukp4FBDQAHpZB2
 - Plan to 1M players (Russian doc for the owner, 08.10): https://claude.ai/code/artifact/71113d16-57ad-42ce-9905-87ff87dfdbd7
+  Its table "Сверка всех твоих просьб" is THE list of every owner request and its state: add new ones there.
 - Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS, 72 fps, 08.10);
   `tools/xr-probe.html` (owner presses VR/MR/mic buttons); `scrcpy` installed.
   Untethered: `node tools/quest-wifi.mjs` once with the cable, then unplug (owner has a battery strap).
