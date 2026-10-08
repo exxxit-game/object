@@ -182,4 +182,24 @@ let author = '';
 try { author = execFileSync('git', ['config', 'user.email'], { cwd: ROOT, encoding: 'utf8' }).trim(); } catch { /* not set */ }
 assert.ok(!author || author.endsWith('@users.noreply.github.com'), `git commits would show the address ${author}: set the hidden GitHub address (git config user.email ID+NAME@users.noreply.github.com)`);
 
+// 20. ARCHITECTURE.md's folder map lists every file of each folder it names, and only real ones,
+// and names every folder of the code: a map that drifts from the code misleads every new session
+// that reads it first. Recordings (voice/, sound/) are listed as folders.
+{
+  const arch = fs.readFileSync(path.join(ROOT, 'ARCHITECTURE.md'), 'utf8');
+  const from = arch.indexOf('## Folder map'), to = arch.indexOf('\n## ', from + 5);
+  const rows = [...arch.slice(from, to < 0 ? undefined : to).matchAll(/^\| `([^`]+\/)` \| (.+) \|$/gm)];
+  assert.ok(rows.length >= 6, 'ARCHITECTURE.md: a folder map');
+  const mapped = new Set(rows.map((r) => r[1]));
+  for (const [, folder, cell] of rows) {
+    const listed = new Set(cell.replace(/\([^)]*\)/g, '').match(/[\w.-]+\.(?:m?js|html|css)\b|[\w-]+\//g) || []);
+    const real = new Set(fs.readdirSync(path.join(ROOT, folder), { withFileTypes: true }).map((e) => e.isDirectory() ? `${e.name}/` : e.name));
+    const missing = [...real].filter((f) => !listed.has(f)), extra = [...listed].filter((f) => !real.has(f));
+    assert.deepEqual([missing, extra], [[], []], `ARCHITECTURE.md, ${folder}: missing from the map ${missing.join(', ') || '-'}; not in the folder ${extra.join(', ') || '-'}`);
+  }
+  const folders = (dir) => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })
+    .filter((e) => e.isDirectory() && !['voice', 'sound'].includes(e.name)).flatMap((e) => [`${dir}${e.name}/`, ...folders(`${dir}${e.name}/`)]);
+  for (const f of ['src/', ...folders('src/'), 'css/', 'tests/', 'tools/']) assert.ok(mapped.has(f), `ARCHITECTURE.md: the folder ${f} is not in the map`);
+}
+
 console.log('structure tests: ok');
