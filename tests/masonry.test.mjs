@@ -3,7 +3,7 @@
 // are 0.4 × 0.2 m in running bond, the module 0.2 m. The same holds for the flat things fixed to a
 // wall (class "on-wall": the board, the sign box, the plaques, the switch): each edge lies on a
 // joint, or at least MIN_GAP from every joint, because a joint a few millimetres from an edge reads
-// as a cut stub (MIN_GAP is our choice; the owner pointed the stubs out).
+// as a cut stub (MIN_GAP is our choice).
 import assert from 'node:assert/strict';
 import { sceneHTML } from '../src/rooms/01-control/scene.js';
 import { corridorHTML } from '../src/app/lobby/scene.js';

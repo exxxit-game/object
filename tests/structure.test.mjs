@@ -119,6 +119,19 @@ for (const f of facing) {
   assert.ok(!/«Объект|Объект ·|в «Объекте»/.test(s), `${rel(f)} translates the game's name`);
 }
 
+// 16. No history in code comments (CLAUDE.md rule 1): no dates, and no note of who asked or chose
+// (a comment says why, never who or when). The pattern is built from parts so it does not match itself.
+const who = new RegExp(['owner', '\\s+(said|asked|heard|pointed|chose|wanted|liked)|chosen\\s+by\\s+the\\s+', 'owner'].join(''), 'i');
+const when = /\b20\d\d-\d\d-\d\d\b|\b[0-3]\d\.[01]\d\.(19|20)?\d\d\b/;
+const commented = [...code, ...fs.readdirSync(path.join(ROOT, 'tools')).filter(f => /\.(m?js|cjs)$/.test(f)).map(f => path.join(ROOT, 'tools', f)),
+  ...fs.readdirSync(path.join(ROOT, 'tests')).filter(f => /\.m?js$/.test(f)).map(f => path.join(ROOT, 'tests', f))];
+for (const f of new Set(commented)) {
+  for (const [i, line] of fs.readFileSync(f, 'utf8').split('\n').entries()) {
+    const comment = line.match(/\/\/(.*)$/)?.[1] || '';
+    assert.ok(!who.test(comment) && !when.test(comment), `${rel(f)}:${i + 1} a comment tells history (who or when): ${comment.trim().slice(0, 80)}`);
+  }
+}
+
 // 15. Every room marks its inside with class room-interior, which the corridor leaves undrawn
 // while the door is shut (src/app/lobby/lobby.js; Meta: fewer than 200 draw calls a frame on
 // Quest 3), and the door the corridor sees (#door1) is never part of it.

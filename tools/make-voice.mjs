@@ -10,13 +10,13 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-// The experimenter voice chosen by the owner: "Daniel" (ElevenLabs stock voice),
-// firm and confident: model v3 with a delivery tag in front of every line.
+// The experimenter voice: "Daniel" (ElevenLabs stock voice), firm and confident: model v3 with
+// a delivery tag in front of every line.
 const VOICE_ID = 'onwK4e9ZLuTAKqWW03F9';
 const MODEL_ID = 'eleven_v3';
 // v3's stability: 0 Creative, 0.5 Natural, 1 Robust, the most consistent (ElevenLabs, "Prompting
-// Eleven v3"). Lines recorded at 0.5 came out in different tempo and loudness, and the owner heard
-// the voice change from line to line.
+// Eleven v3"). Lines recorded at 0.5 came out in different tempo and loudness, and
+// the voice was heard to change from line to line.
 const SETTINGS = { stability: 1 };
 const DELIVERY = '[уверенно, твёрдо] ';
 // Every file is evened out the same way: one loudness (EBU R128 normalises programme loudness, true
