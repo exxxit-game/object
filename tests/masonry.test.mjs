@@ -49,6 +49,14 @@ for (const wall of WALLS) {
   }
 }
 
+// the door frames' heads: 51 mm deep across the top of each opening, 11.2 mm past its edges
+const heads = [];
+for (let i = 0; i + 1 < jambs.length; i++) {
+  const [a, b] = [jambs[i], jambs[i + 1]];
+  if (a.z === b.z && Math.abs(b.x - a.x - (1.0 - 2 * 0.0143)) < EPS) heads.push({ from: a.x - 0.0255, to: b.x + 0.0255, top: 2.2042 });
+}
+assert.equal(heads.length, DOORS.length, 'a head over every door');
+
 // flat things on a wall: no joint closer than MIN_GAP to an edge, unless the edge is on it
 const items = [...html.matchAll(/<a-[a-z]+[^>]*class="[^"]*\bon-wall\b[^"]*"[^>]*>/g)].map(m => m[0]);
 assert.ok(items.length >= 3, `${items.length} things on walls`);
@@ -62,13 +70,19 @@ for (const tag of items.filter(t => !/\bdoor-sign\b/.test(attr(t, 'class')))) {
   const across = wall === END ? z : x;
   const name = `${(attr(tag, 'id') || tag.slice(0, 40))} on the ${wall.name}`;
   const clear = (d) => d < EPS || d >= MIN_GAP - 1e-9;
+  // a thing standing on a door frame's head, flush with its ends (the light box over door 1): the
+  // head hides the joint under its foot, and its ends are the frame's own, 11 mm past the opening
+  const head = heads.find((hd) => Math.abs(y - h / 2 - hd.top) < EPS && across - w / 2 >= hd.from - EPS && across + w / 2 <= hd.to + EPS);
+  const flush = (edge) => head && (Math.abs(edge - head.from) < EPS || Math.abs(edge - head.to) < EPS);
   for (const edge of [y - h / 2, y + h / 2]) {
+    if (head && Math.abs(edge - head.top) < EPS) continue;
     assert.ok(clear(offGrid(edge, 0, COURSE)), `${name}: a bed joint ${(offGrid(edge, 0, COURSE) * 1000).toFixed(0)} mm from its edge at ${edge.toFixed(3)} m`);
   }
   // the vertical joints of each course it covers, courses counted up from the floor
   for (let k = Math.floor((y - h / 2) / COURSE + EPS); k < Math.ceil((y + h / 2) / COURSE - EPS); k++) {
     const origin = wall.origin + (courseShifted(k) ? BLOCK / 2 : 0);
     for (const edge of [across - w / 2, across + w / 2]) {
+      if (flush(edge)) continue;
       const d = offGrid(edge, origin, BLOCK);
       assert.ok(clear(d), `${name}: a joint ${(d * 1000).toFixed(0)} mm from its edge at ${edge.toFixed(3)} in course ${k}`);
     }
