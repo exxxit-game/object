@@ -25,6 +25,15 @@ export const LOBBY_T = {
     stay: 'Продолжить',
     done: 'Участие прекращено. Чтобы вернуться, обновите страницу.'
   },
+  // the extinguisher's label (extinguisher-label.js), the words of a 1972 water extinguisher's label:
+  // its agent, how to operate it ("hold upright, pull pin, squeeze lever"), what it is for
+  extinguisher: {
+    agent: 'ВОДА',
+    name: 'ОГНЕТУШИТЕЛЬ',
+    operate: 'КАК ПРИМЕНЯТЬ',
+    steps: ['ДЕРЖАТЬ ВЕРТИКАЛЬНО,', 'ВЫДЕРНУТЬ ЧЕКУ,', 'НАЖАТЬ НА РЫЧАГ'],
+    small: ['Для пожаров класса A: дерево,', 'бумага, ткань, мусор.', 'Не применять на электрооборудовании', 'под напряжением и на горючих', 'жидкостях.', 'Вместимость 9,5 л (2½ галлона).', 'После применения сразу', 'перезарядить.']
+  },
   // the flyer on the board (board.js): "подходите" is both "you qualify" and "you are coming closer"
   flyer: {
     title: 'ТРЕБУЮТСЯ\nИСПЫТУЕМЫЕ',

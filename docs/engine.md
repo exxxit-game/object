@@ -19,8 +19,9 @@ Reusable parts. The engine never imports from `src/app/` or `src/rooms/`.
 | `recenter.js`, `recenter-math.js` | Component `recenter`: puts the player at the table in VR, seated or standing |
 | `grab-press.js`, `haptics.js` | Press `.grabbable` things with the hand; controller vibration |
 | `blob-shadow.js` | Soft contact shadow under objects |
-| `door.js` | `doorHTML({ x, room, corridor, latch, leaf, clickable, inside })`: every doorway of the lab, one way (frame through the wall, stops, threshold, leaf, kick plate on the push side, round knobs; room-side hinges and closer when `inside`); either long wall (the room on the far side of `corridor`); `CHROME`: the one hardware finish |
+| `door.js` | `doorHTML({ x, room, corridor, latch, leaf, clickable, inside, sign })`: every doorway of the lab, one way (frame through the wall, stops, threshold, leaf, kick plate on the push side, round knobs; room-side hinges and closer when `inside`); either long wall (the room on the far side of `corridor`); `CHROME`: the one hardware finish |
 | `fader.js` | Component `fader` on the camera: `to(opacity)` fades the view to black and back (moving between places without a jump); a newer fade settles the older one's promise |
+| `reflect-env.js` | Component `reflect-env`: polished metal parts under it (metalness 0.5 or more) mirror the room round them: a small cube map taken from the object's middle a few times while the lights settle after load, then never again |
 | `merge-static.js` | Component `merge-static`: after load, the opaque static parts under it that share a look become one mesh (`data-dynamic` parts are left alone) |
 | `shapes.js` | Components `rounded-box` and `lathe`: shapes A-Frame lacks |
 | `cable.js` | Component `cable`: one smooth tube through a list of points |

@@ -8,12 +8,14 @@ import { createSheet } from '../../engine/ui/sheet.js';
 import { loadSounds } from '../../engine/sfx.js';
 import '../../engine/fader.js';
 import '../../engine/locomotion.js';
+import '../../engine/reflect-env.js';
 import { LOBBY_T } from './texts.ru.js';
 import { VOICE_LINES } from './voice-lines.js';
 import { SOUNDS } from './sound-list.js';
 import { signOn, signAnswer } from './opening.js';
 import { pinNotices } from './board.js';
 import { writeStairsSign } from './stairs-sign.js';
+import { paintExtinguisherLabel } from './extinguisher-label.js';
 import { showHint } from '../hint.js';
 import { leaveButton } from './exit.js';
 import { WALLS } from './scene.js';
@@ -127,6 +129,7 @@ export async function runLobby(room) {
   writeStairsSign($('#plaqueStairs').components.panel, LOBBY_T.stairs);
   for (const el of document.querySelectorAll('#plaqueStairs, .room-plaque')) el.getObject3D('mesh').material.color.setScalar(WALL_PRINT_LIGHT);
   pinNotices($('#notePoster').components.panel, $('#noteFlyer').components.panel, WALL_PRINT_LIGHT);
+  paintExtinguisherLabel($('#extLabel'));
   const cover = [{ t: LOBBY_T.kicker, role: 'kicker' }, { t: LOBBY_T.title, role: 'title', gap: 0.01 }];
   await sheet.hang(SHEET_HOME, cover, WALL_PRINT_LIGHT);
   const exitOff = leaveButton(scene, sheet);   // the studio's poster on the board
