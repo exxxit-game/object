@@ -57,20 +57,20 @@
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
 ## Open items (08.10). ONE step at a time, a short status after each. Every request: plan doc table.
-1. NOW (queue step 4): corridor until the owner says "коридор принят"; nothing beyond it before that.
+1. Queue step 4: CORRIDOR ACCEPTED by the owner 8.10 (approved shots: docs/rooms/corridor-shots/). NOW, his word:
+   the clipboard (1970s board and clip, consent form with name and signature drawn with the controller), then texts.
    Branch pushed (owner: "Делай"); commits use the hidden GitHub address (structure rule 14). The
    corridor is a 1979 US university lab: style book (Design System) https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH
    is THE whole picture: every element with rule, source, status; build only from it (memory whole-picture-first).
    Done 08.10: poster = leave ("Прекратить участие?"); age asked; voice evened; room hidden behind its shut door
-   and shared grid textures (draw calls 124 -> 27 a view); extinguisher = General WS-900 1972 (awaits his yes);
-   one door builder src/engine/door.js (round knobs); no-history-comments rule 16. Owner decided: EXXXIT stays,
+   and shared grid textures; one door builder src/engine/door.js (round knobs). Owner decided: EXXXIT stays,
    clipboard font = readability, corridor = PLAN B (docs/art/corridor-plan.svg), floor = 9 rooms = one pack,
    floor 1 free, packs = one-time purchases in the Horizon Store app (Digital Goods API; no web payments).
    Built: plan B (corridor 14.6 m from src/app/lobby/plan.js), door numbers from the plan drawing (101 faces
    the stairs), door signs ON THE DOORS = one real family (SIGN in src/app/brand.js: NIU 9 x 9 in, number
    2 in centred, stairs with the DOT/AIGA 1979 symbol), computer hint only where the player is and never in
-   VR. RULE 23 first line: WE RECREATE, never invent sizes or shapes. Headset: 72 fps, 90 draw calls.
-   After: floor directory by the stairs (1979 letter board), notices Letter + typewriter, clipboard, signature.
+   VR; extinguisher = 1972 General WS-900 from his photo, stays by the stairs. RULE 23: WE RECREATE. 72 fps, 78 calls.
+   After the clipboard: floor directory by the stairs (1979 letter board), notices Letter + typewriter.
    Ideas after acceptance (plan doc): board notes, the tilted room, a map test, a secret door, the swap of roles.
 2. Headset: `quest-look.mjs worn on` keeps it awake (`worn off` after); asleep = only his power button wakes it;
    frames render only while the VR session is visible. Visual designs go to him as pictures BEFORE the game.
