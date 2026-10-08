@@ -90,8 +90,13 @@ function extinguisher(x, wall) {
   const z = wall - 0.03 - 0.089;
   return `
     <a-entity class="extinguisher" data-dynamic merge-static reflect-env>
-      <a-box position="${x} 1.4 ${wall - 0.003}" width="0.04" height="0.1" depth="0.006" color="#2b2b2b"></a-box>
-      <a-box position="${x} 1.4 ${(wall + z) / 2}" width="0.03" height="0.012" depth="${(wall - z).toFixed(3)}" color="#2b2b2b"></a-box>
+      <!-- the wall hanger, as such brackets are made: a steel strap screwed to the wall top and
+           bottom, and a hook with a lip the neck rests in, so the extinguisher lifts off it -->
+      <a-box position="${x} 1.35 ${wall - 0.0015}" width="0.035" height="0.12" depth="0.003" color="#2b2b2b"></a-box>
+      <a-cylinder position="${x} 1.395 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" ${METAL}></a-cylinder>
+      <a-cylinder position="${x} 1.305 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" ${METAL}></a-cylinder>
+      <a-box position="${x} 1.402 ${(wall + z - 0.03) / 2}" width="0.03" height="0.006" depth="${(wall - z + 0.03).toFixed(3)}" color="#2b2b2b"></a-box>
+      <a-box position="${x} 1.415 ${z - 0.028}" width="0.03" height="0.02" depth="0.004" color="#2b2b2b"></a-box>
       <a-cylinder position="${x} 1.109 ${z}" radius="0.089" height="0.48" ${STEEL}></a-cylinder>
       <a-sphere position="${x} 1.349 ${z}" radius="0.089" scale="1 0.7 1" ${STEEL}></a-sphere>
       <a-cylinder position="${x} 0.861 ${z}" radius="0.0895" height="0.016" ${STEEL}></a-cylinder>
@@ -138,12 +143,12 @@ export const corridorHTML = `
     <a-sphere position="${r(B.x + 0.4736)} 1.5565 1.843" radius="0.006" color="#2a4a8b"></a-sphere>
     <!-- a 2.5 gal water extinguisher on its wall bracket, opposite the board (S22, S23) -->
     ${extinguisher(PLAN.extinguisher, PLAN.south)}
-    <!-- the light box over room 101's door (like the "in session" boxes over lab doors), standing
-         just in front of the frame head it rests on -->
-    <a-box class="on-wall" position="${PLAN.entrance} 2.3 1.86" width="1.0" height="0.2" depth="0.09" color="#2a2a2c"></a-box>
+    <!-- the light box over room 101's door (like the "in session" boxes over lab doors): surface
+         mounted, its back on the wall, its foot on the frame head and on a block joint -->
+    <a-box class="on-wall" position="${PLAN.entrance} 2.3 1.845" width="1.0" height="0.2" depth="0.09" color="#2a2a2c"></a-box>
   </a-entity>
   <a-entity id="signFace" panel="w: 0.94; h: 0.16; px: 1024; bg: #160f05" lightbox="light: #signLight; lightMax: 0.7"
-            position="${PLAN.entrance} 2.3 1.907"></a-entity>
+            position="${PLAN.entrance} 2.3 1.892"></a-entity>
   <!-- the sign's warm spill on the door and floor below it (not a hot spot on the ceiling) -->
   <a-entity id="signLight" light="type: point; color: #ffd9a0; intensity: 0; distance: 2.5; decay: 2" position="${PLAN.entrance} 1.95 2.25"></a-entity>
   <!-- the corridor's own light, dim while the player is here (lobby.js, CORRIDOR_LIGHT) -->

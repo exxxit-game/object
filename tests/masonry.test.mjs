@@ -75,6 +75,20 @@ for (const tag of items.filter(t => !/\bdoor-sign\b/.test(attr(t, 'class')))) {
   }
 }
 
+// nothing on a wall floats off it: a box rests its back on the wall face, a flat print or sign
+// stands at most 7 mm off it (the signs' 6 mm: closer faces flicker); the faces are the corridor's
+// long walls (z 1.8 and 3.6, from the plan) and the inside of room 01's back wall (z 1.6)
+for (const tag of items) {
+  const [, , z] = attr(tag, 'position').split(' ').map(Number);
+  const box = attr(tag, 'rounded-box');
+  const d = attr(tag, 'panel') ? 0 : box ? prop(box, 'depth') : Number(attr(tag, 'depth'));
+  const faces = [[PLAN.north, 1], [PLAN.south, -1], [1.6, -1]];   // [face z, the way off it]
+  const [face, off] = faces.reduce((a, b) => (Math.abs(z - b[0]) < Math.abs(z - a[0]) ? b : a));
+  const gap = (z - off * d / 2 - face) * off;
+  const name = attr(tag, 'id') || tag.slice(0, 50);
+  assert.ok(gap >= -0.0011 && gap <= (d ? 0.002 : 0.007) + 1e-9, `${name}: ${(gap * 1000).toFixed(1)} mm off its wall`);
+}
+
 // every door sign is the standard's 9 × 9 in, centred 60 in above the floor (NIU installation,
 // ADA 1991 4.30.6), its text between 48 and 60 in (docs/building-standards.md, S1 703.4.1); a
 // sign on a door rides on its leaf, whose group stands on the floor, so its y is its height
