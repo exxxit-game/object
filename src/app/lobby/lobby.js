@@ -13,6 +13,7 @@ import { VOICE_LINES } from './voice-lines.js';
 import { SOUNDS } from './sound-list.js';
 import { signOn, signAnswer } from './opening.js';
 import { pinNotices } from './board.js';
+import { showHint } from '../hint.js';
 import { leaveButton } from './exit.js';
 import { WALLS } from './scene.js';
 import { PLAN, BOUNDS as AREA } from './plan.js';
@@ -117,6 +118,8 @@ export async function runLobby(room) {
   const sheet = createSheet(scene, { inside: WALLS });
   const light = lightCorridor();
   placePlayer(SPOT, BOUNDS);
+  document.title = LOBBY_T.title;   // the corridor is no room yet; the room names the page once entered
+  showHint(LOBBY_T.hint);
   $('#rig').setAttribute('locomotion', `${BOUNDS}; ${comfort()}`);   // the corridor is walked with the thumbsticks too
   writePlaque($('#plaqueOut').components.panel, room.plaque);
   // every other plaque, in the same lettering as room 101's (brand.js)

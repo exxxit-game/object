@@ -25,6 +25,7 @@ import { askPlaytest } from '../../app/playtest.js';
 import { playtestReport } from '../../app/playtest-report.js';
 import { APP_T } from '../../app/texts.ru.js';
 import { writePlaque } from '../../app/brand.js';
+import { showHint } from '../../app/hint.js';
 import { sceneHTML } from './scene.js';
 import { placeChair } from './chair.js';
 import { PROTOCOL } from './protocol.js';
@@ -244,7 +245,6 @@ async function boot() {
   // On desktop the view starts tilted slightly down, toward the table.
   const lc = $('#cam').components['look-controls'];
   if (lc && lc.pitchObject) lc.pitchObject.rotation.x = -0.28;
-  $('#hint').classList.add('show');
   writePlaque($('#plaque').components.panel, { number: T.kicker });
   // The arrival: corridor, welcome, consent, the door; the player ends up at the table.
   const withRecording = await runLobby({
@@ -252,23 +252,14 @@ async function boot() {
     seat: { x: 0, z: 0.35, yaw: 0 }, bounds: ROOM_BOUNDS, extra: PLAYTEST ? [APP_T.playtest.consent] : []
   });
   unlock();
+  document.title = T.pageTitle;
+  showHint(T.hint);
   playSound('room', null, 0.12, true);
   play(withRecording);
 }
 
-function fillHint() {
-  const hint = $('#hint');
-  const title = document.createElement('b');
-  const body = document.createElement('span');
-  title.textContent = T.hint.title;
-  body.textContent = T.hint.body;
-  hint.replaceChildren(title, ' ', body);
-}
-
 // Room contract: mount() builds the scene and starts the flow. See docs/rooms.md.
 export function mount() {
-  document.title = T.pageTitle;
-  fillHint();
   session = createSession(ROOM_ID, ROOM_VERSION);
   session.watchIssues(() => ({ state, xr: !!(scene && scene.is && scene.is('vr-mode')) }));
   loadVoice(VOICE_LINES, import.meta.url);
