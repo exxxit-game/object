@@ -119,6 +119,14 @@ for (const f of facing) {
   assert.ok(!/«Объект|Объект ·|в «Объекте»/.test(s), `${rel(f)} translates the game's name`);
 }
 
+// 17. Player-facing words are written in full, never cut short ("Комн. 101"): a cut word in a
+// place meant to look finished reads as a slip. Where a word does not fit, its place is made to
+// fit it (the flyer's strips size their letters to the strip, board.js).
+for (const f of facing) {
+  const cut = fs.readFileSync(f, 'utf8').match(/(?<![А-Яа-яЁё])[А-Яа-яЁё]{1,5}\.\s?(\d|\$\{)/);
+  assert.ok(!cut, `${rel(f)} cuts a word short: ${cut?.[0]}`);
+}
+
 // 16. No history in code comments (CLAUDE.md rule 1): no dates, and no note of who asked or chose
 // (a comment says why, never who or when). The pattern is built from parts so it does not match itself.
 const who = new RegExp(['owner', '\\s+(said|asked|heard|pointed|chose|wanted|liked)|chosen\\s+by\\s+the\\s+', 'owner'].join(''), 'i');
@@ -130,6 +138,14 @@ for (const f of new Set(commented)) {
     const comment = line.match(/\/\/(.*)$/)?.[1] || '';
     assert.ok(!who.test(comment) && !when.test(comment), `${rel(f)}:${i + 1} a comment tells history (who or when): ${comment.trim().slice(0, 80)}`);
   }
+}
+
+// 18. No control characters in code: a shell heredoc turns a regex's \b into a backspace, and the
+// pattern then quietly matches nothing (in the docs it eats a letter).
+const written = [path.join(ROOT, 'CLAUDE.md'), ...fs.readdirSync(path.join(ROOT, 'docs')).filter(f => f.endsWith('.md')).map(f => path.join(ROOT, 'docs', f))];
+for (const f of new Set([...commented, ...written])) {
+  const at = fs.readFileSync(f, 'utf8').search(/[\x00-\x08\x0b\x0c\x0e-\x1f]/);
+  assert.ok(at < 0, `${rel(f)}: a control character at ${at} (a \\b lost to the shell?)`);
 }
 
 // 15. Every room marks its inside with class room-interior, which the corridor leaves undrawn

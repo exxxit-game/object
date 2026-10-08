@@ -15,7 +15,6 @@ export const LOBBY_T = {
   chooseDoor: 'Выберите дверь. Сейчас открыта первая комната.',
   // the computer player's line in the corridor (src/app/hint.js)
   hint: { title: 'You are the object.', body: 'Мышь: зажмите и тяните — оглядеться, щелчок — нажать. В шлеме: кнопка VR справа внизу.' },
-  soon: 'СКОРО',
   // the plaque by the stairs the player came up, in the middle of the corridor
   stairs: 'ЛЕСТНИЦА',
   // the studio's poster on the board ends the participation (exit.js), in the lab's words:
@@ -31,6 +30,7 @@ export const LOBBY_T = {
     title: 'ТРЕБУЮТСЯ\nИСПЫТУЕМЫЕ',
     body: 'Опыт не нужен.\nПодготовка не нужна.',
     punch: 'Вы подходите.',
-    tab: 'Дверь 1'
+    // the room's number comes from the plan
+    tab: (n) => `Комната ${n}`
   }
 };

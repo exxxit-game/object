@@ -19,6 +19,7 @@ import { createScale } from '../../engine/ui/scale.js';
 import { createAwayMeter } from '../../engine/away-meter.js';
 import { markStarted, markReached, watchExit } from '../../app/left-early.js';
 import { runLobby, corridorHTML } from '../../app/lobby/lobby.js';
+import { ROOM1_NUMBER } from '../../app/lobby/plan.js';
 import { createSession, SPEED, PLAYTEST } from '../../app/session.js';
 import { compareRoom } from '../../engine/results.js';
 import { askPlaytest } from '../../app/playtest.js';
@@ -245,10 +246,10 @@ async function boot() {
   // On desktop the view starts tilted slightly down, toward the table.
   const lc = $('#cam').components['look-controls'];
   if (lc && lc.pitchObject) lc.pitchObject.rotation.x = -0.28;
-  writePlaque($('#plaque').components.panel, { number: T.kicker });
+  writePlaque($('#plaque').components.panel, { number: ROOM1_NUMBER });   // the same number as outside
   // The arrival: corridor, welcome, consent, the door; the player ends up at the table.
   const withRecording = await runLobby({
-    id: ROOM_ID, real: REAL, debrief: T.earlyDebrief, plaque: { number: T.kicker },
+    id: ROOM_ID, real: REAL, debrief: T.earlyDebrief,
     seat: { x: 0, z: 0.35, yaw: 0 }, bounds: ROOM_BOUNDS, extra: PLAYTEST ? [APP_T.playtest.consent] : []
   });
   unlock();

@@ -7,6 +7,7 @@
 // Static parts are merged after load; the plaques and the sign change, so they stay apart.
 import { doorHTML, CHROME } from '../../engine/door.js';
 import { PLAN, DOORS, CENTRE, LENGTH, WIDTH, toEntrance, plaqueX, wallRuns } from './plan.js';
+import { SIGN } from '../brand.js';
 
 export { WALLS } from './plan.js';
 
@@ -59,13 +60,16 @@ function doors() {
   }).join('');
 }
 
-// every plaque, one size, at its door's latch side (room 101's plaque is written by the lobby)
+// every plaque at its door's latch side, sized by its kind (brand.js); a room's carries its number
+// (the lobby writes it)
 function plaques() {
   return DOORS.map((d) => {
     const { z, out } = FACE[d.wall];
     const id = d.kind === 'room1' ? 'id="plaqueOut" ' : d.kind === 'stairs' ? 'id="plaqueStairs" ' : '';
+    const room = d.number ? ` room-plaque" data-number="${d.number}` : '';
+    const w = d.kind === 'stairs' ? SIGN.stairs : SIGN.room;
     return `
-  <a-entity ${id}class="on-wall${d.kind === 'soon' ? ' soon' : ''}" panel="w: 0.2; h: 0.2; px: 512; bg: #15161a"${out < 0 ? ' rotation="0 180 0"' : ''} position="${plaqueX(d.x)} 1.5 ${r(z + out * 0.006)}"></a-entity>`;
+  <a-entity ${id}class="on-wall door-sign${room}" panel="w: ${w}; h: ${w}; px: ${Math.round(w * SIGN.px)}; bg: #15161a"${out < 0 ? ' rotation="0 180 0"' : ''} position="${plaqueX(d.x, SIGN.fromFrame)} ${SIGN.y} ${r(z + out * 0.006)}"></a-entity>`;
   }).join('');
 }
 

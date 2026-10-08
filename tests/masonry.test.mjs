@@ -1,14 +1,17 @@
 // Block walls are laid out on their module (NCMA TEK 05-12, Modular Layout of Concrete Masonry):
 // door openings start and end on it, so no block beside a door is cut into a sliver. Our blocks
 // are 0.4 × 0.2 m in running bond, the module 0.2 m. The same holds for the flat things fixed to a
-// wall (class "on-wall": the board, the sign box, the plaques, the switch): each edge lies on a
-// joint, or at least MIN_GAP from every joint, because a joint a few millimetres from an edge reads
-// as a cut stub (MIN_GAP is our choice).
+// wall (class "on-wall": the board, the sign box, the switch) that no standard places: each edge
+// lies on a joint, or at least MIN_GAP from every joint, because a joint a few millimetres from an
+// edge reads as a cut stub (MIN_GAP is our choice). Door signs (class "door-sign") hang where the
+// sign standard puts them (src/app/brand.js), and the joints fall where they fall, as on a real
+// block wall.
 import assert from 'node:assert/strict';
 import { sceneHTML } from '../src/rooms/01-control/scene.js';
 import { corridorHTML } from '../src/app/lobby/scene.js';
 import { bondOrigin, courseShifted } from '../src/engine/tile-math.js';
 import { PLAN, DOORS, CENTRE, LENGTH, WIDTH } from '../src/app/lobby/plan.js';
+import { SIGN } from '../src/app/brand.js';
 
 const BLOCK = 0.4, COURSE = 0.2, MODULE = 0.2, MIN_GAP = 0.04, EPS = 0.002;
 // the walls things sit on, by the z of their face: the corridor's long walls (from its plan) and
@@ -48,7 +51,7 @@ for (const wall of WALLS) {
 // flat things on a wall: no joint closer than MIN_GAP to an edge, unless the edge is on it
 const items = [...html.matchAll(/<a-[a-z]+[^>]*class="[^"]*\bon-wall\b[^"]*"[^>]*>/g)].map(m => m[0]);
 assert.ok(items.length >= 5, `${items.length} things on walls`);
-for (const tag of items) {
+for (const tag of items.filter(t => !/\bdoor-sign\b/.test(attr(t, 'class')))) {
   const [x, y, z] = attr(tag, 'position').split(' ').map(Number);
   const panel = attr(tag, 'panel'), box = attr(tag, 'rounded-box');
   const w = panel ? prop(panel, 'w') : box ? prop(box, 'width') : Number(attr(tag, 'width'));
@@ -71,11 +74,12 @@ for (const tag of items) {
   }
 }
 
-// a room sign: text between 48 and 60 in above the floor (docs/building-standards.md, S1 703.4.1);
-// the plaques carry one centred line, so their centre stands for the baseline
-for (const id of ['plaqueOut', 'plaque']) {
-  const tag = items.find(t => attr(t, 'id') === id);
+// every door sign centred 60 in above the floor (LSU 1.3.1.2, ADA 1991 4.30.6), its text between
+// 48 and 60 in (docs/building-standards.md, S1 703.4.1)
+const signs = items.filter(t => /\bdoor-sign\b/.test(attr(t, 'class')));
+assert.equal(signs.length, DOORS.length + 1, 'a sign at every corridor door and inside room 01');
+for (const tag of signs) {
   const y = Number(attr(tag, 'position').split(' ')[1]);
-  assert.ok(y >= 1.22 && y <= 1.525, `${id} centre at ${y} m`);
+  assert.ok(y === SIGN.y && y >= 1.22 && y <= 1.525, `${attr(tag, 'id') || attr(tag, 'data-number')} centre at ${y} m`);
 }
 console.log(`masonry tests: ok (${jambs.length / 2} doors, ${items.length} things on walls)`);

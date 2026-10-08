@@ -70,8 +70,12 @@ static page privacy.html).
        I ask him that waits for his answer goes into "Что нужно от тебя".
     i. Guard: after a long stretch of work, and before saying a step is done, run the
        `request-auditor` agent (owner messages vs the plan) and fix what it finds.
-23. Knowledge first, then thinking. Before building or changing anything (a scene part, a UI
-    element, a mechanic, a flow), find how it is normally done and read it: trade standards and
+23. We RECREATE (воссоздаём), we do not invent. Everything around the experiments (the building,
+    doors, signs, furniture, objects, their sizes and proportions) is carried over from a real
+    source as it is; invention goes only into the experiments we design and the words. A size or
+    shape without a source is a mistake, even when it looks fine. A choice a standard answers never
+    goes to the owner as taste. Knowledge first, then thinking: before building or changing anything
+    (a scene part, a UI element, a mechanic, a flow), find how it is normally done and read it: trade standards and
     measurements (doors, trim, tiling, furniture), Meta and W3C XR guidelines, research, and
     existing games or code that solved it. Write the source next to the decision (decisions.md,
     the plan doc or a WHY comment). Only then design the rest. Nothing is invented from scratch

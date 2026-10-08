@@ -1,6 +1,7 @@
 import { drawMark, drawWordmark, LOGO } from '../logo.js';
 import { FONT } from '../../engine/panel.js';
 import { LOBBY_T } from './texts.ru.js';
+import { ROOM1_NUMBER } from './plan.js';
 
 // The two A4 sheets pinned beside the clipboard on the experimenter's board (scene.js). The
 // hallways of psychology buildings are covered with flyers calling for participants, with
@@ -9,7 +10,7 @@ import { LOBBY_T } from './texts.ru.js';
 // dimmed to the corridor's print level (light, lobby.js).
 const PAPER = '#e9e2cf';  // the clipboard's paper (src/engine/ui/sheet.js)
 const INK = '#26241f';
-const TABS = { n: 7, h: 0.24, torn: [1, 4] };   // strips across the foot; two already taken
+const TABS = { n: 7, h: 0.28, torn: [1, 4] };   // strips across the foot, long enough for their words; two already taken
 
 export function pinNotices(poster, flyer, light) {
   drawPoster(poster);
@@ -31,7 +32,7 @@ export function drawPoster({ ctx, c }) {
 }
 
 // "Participants wanted", the joke in its last line ("you qualify" and "you are coming
-// closer": nobody reads a flyer from across the corridor), and strips pointing to door 1.
+// closer": nobody reads a flyer from across the corridor), and strips pointing to room 101.
 function drawFlyer(panel) {
   const { ctx, c } = panel;
   const W = c.width, H = c.height, f = LOBBY_T.flyer;
@@ -49,20 +50,30 @@ function drawFlyer(panel) {
   ctx.beginPath(); ctx.moveTo(0, tabsTop); ctx.lineTo(W, tabsTop); ctx.stroke();
   for (let i = 1; i < TABS.n; i++) { ctx.beginPath(); ctx.moveTo(i * tw, tabsTop); ctx.lineTo(i * tw, H); ctx.stroke(); }
   ctx.setLineDash([]);
-  ctx.font = `600 ${Math.round(tw * 0.42)}px ${FONT}`;
+  // the words in full along each strip, below the line a strip tears at (so a torn one leaves
+  // no piece of a letter); the letters shrink only if the words would not keep clear of the ends
+  const tear = tabsTop + H * 0.02 + 8;
+  const words = f.tab(ROOM1_NUMBER);
+  let px = Math.round(tw * 0.42);
+  ctx.font = `600 ${px}px ${FONT}`;
+  const along = (H - tear) * 0.88;
+  if (ctx.measureText(words).width > along) {
+    px = Math.floor(px * along / ctx.measureText(words).width);
+    ctx.font = `600 ${px}px ${FONT}`;
+  }
   ctx.fillStyle = INK;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   for (let i = 0; i < TABS.n; i++) {
     ctx.save();
-    ctx.translate((i + 0.5) * tw, (tabsTop + H) / 2);
+    ctx.translate((i + 0.5) * tw, (tear + H) / 2);
     ctx.rotate(Math.PI / 2);
-    ctx.fillText(f.tab, 0, 0);
+    ctx.fillText(words, 0, 0);
     ctx.restore();
   }
   for (const i of TABS.torn) {
     // torn off below a ragged edge just under the fold, showing the cork behind
-    const x0 = i * tw + 1, y0 = tabsTop + H * 0.02;
+    const x0 = i * tw + 1, y0 = tear - 8;
     ctx.save();
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();

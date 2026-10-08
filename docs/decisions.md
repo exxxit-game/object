@@ -34,7 +34,7 @@ Why: debriefing must be available to early leavers (BPS), but someone who left b
 Consequence: src/app/left-early.js; test runs (?speed=N) leave no mark.
 
 ## The arrival: a lab corridor whose doors are the menu
-The player starts in a 1979 lab corridor behind the room's door: the experimenter's welcome and the consent are there (once, before the door); each door with its plaque is a room ("soon" on the closed ones). Pointing at a door opens it, the screen fades, and the player is at the table, on the chair when seated. One page and one scene, so VR is never left between corridor and room.
+The player starts in a 1979 lab corridor behind the room's door: the experimenter's welcome and the consent are there (once, before the door); each door with its plaque is a room, the plaque showing its number from the corridor plan (src/app/lobby/plan.js) until the room is done. Pointing at a door opens it, the screen fades, and the player is at the table, on the chair when seated. One page and one scene, so VR is never left between corridor and room.
 Why: the owner wants an unbroken journey that begins like a real experiment and says the promise first ("take part in a real experiment and learn how YOU react"); a page change would end the VR session.
 Consequence: the room's flow starts after the corridor hands over the consent; the hook question (bias blind spot) is asked to a random half before the room and to the other half after it, recorded, once the paper is read in full.
 
@@ -83,3 +83,8 @@ Consequence: tests/standards.test.mjs checks every door the same depth in its wa
 src/app/lobby/plan.js holds the first floor to its end (plan B, docs/art/corridor-plan.svg): one corridor 14.6 × 1.8 m, the stairs in the middle of the south wall behind the arrival spot, room 101 facing them, a room every 3.2 m on both walls (9 rooms), plaques at each door's latch side toward the entrance; walls, openings, doors, plaques, rails, lights, the walking area and the tests all read it.
 Why: the corridor grew piece by piece and its parts stopped matching (doors, plaques); room numbering in university buildings runs from the entrance (Northwestern, Georgia Tech, Smithsonian guidelines), and a floor of 9 rooms is one pack: floor 1 free, floors above sold as one-time purchases in the Horizon Store app (Meta's Digital Goods API; web pages on Quest have no payments).
 Consequence: a new floor is a new plan; tests/masonry.test.mjs, standards.test.mjs and sheet.test.mjs take their doors, walls and area from the plan.
+
+## Door signs are one real sign family
+Every door sign is taken from one university standard, not drawn by us: LSU Interior & Exterior Room Signage Guidelines (rev. 07.2024): a room number on a 6 × 6 in plaque, the stairs on an 8 × 8 in one with the 1979 US DOT / AIGA stair symbol 4 in high over the word, letters 5/8 in, centred 60 in above the floor; 9 in from the frame (Iowa State Div 10). The number is the door's, from the corridor plan (101 faces the stairs); the experiment's name replaces it once the room is done.
+Why: the plaque's 0.2 m size and its 4 cm from the frame were our own and kept being redone; a standard answers them at once (CLAUDE.md rule 23, we recreate).
+Consequence: `SIGN` in src/app/brand.js holds the family; tests/masonry.test.mjs checks every door sign at 60 in, tests/plaque.test.mjs every number against the plan drawing.

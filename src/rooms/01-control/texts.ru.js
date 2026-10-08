@@ -5,12 +5,11 @@
 import { plural } from '../../app/texts.ru.js';
 
 export const T = {
-  pageTitle: 'You are the object · Комната 1',
+  pageTitle: 'You are the object · Комната 101',
   hint: {
-    title: 'You are the object. Комната 1.',
+    title: 'You are the object. Комната 101.',
     body: 'Мышь: зажмите и тяните — оглядеться, щелчок — нажать. Пробел — кнопка на столе. В шлеме: кнопка VR справа внизу; кнопку на столе можно нажать рукой или лучом.'
   },
-  kicker: 'КОМНАТА 1',
   title: 'You are the object',
 
   // Read aloud and shown on the wall screen, one line at a time.

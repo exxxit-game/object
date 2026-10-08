@@ -6,6 +6,8 @@
 // experimenter. Look: a university lab of 1979 (painted block walls, linoleum,
 // acoustic ceiling, bakelite and chrome). Sizes in metres.
 import { doorHTML } from '../../engine/door.js';
+import { SIGN } from '../../app/brand.js';
+import { plaqueX } from '../../app/lobby/plan.js';
 
 export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true" background="color: #0b0b0d"
          cursor="rayOrigin: mouse" raycaster="objects: .clickable; far: 8"
@@ -74,7 +76,7 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-box position="-1.585 1.4 -0.915" width="0.05" height="0.85" depth="0.03" color="#2a2a2a"></a-box>
   <a-box position="-1.585 1.4 0.315" width="0.05" height="0.85" depth="0.03" color="#2a2a2a"></a-box>
 
-  <a-entity id="plaque" class="on-wall" panel="w: 0.2; h: 0.2; px: 512; bg: #15161a" position="1.4 1.5 1.594" rotation="0 180 0"></a-entity>
+  <a-entity id="plaque" class="on-wall door-sign" panel="w: ${SIGN.room}; h: ${SIGN.room}; px: ${Math.round(SIGN.room * SIGN.px)}; bg: #15161a" position="${plaqueX(0.7, SIGN.fromFrame)} ${SIGN.y} 1.594" rotation="0 180 0"></a-entity>
   <a-entity rounded-box="width: 0.08; height: 0.12; depth: 0.012; radius: 0.006; color: #d8d2c2; roughness: 0.5"
             class="on-wall" position="1.4 1.1 1.592"></a-entity>
 

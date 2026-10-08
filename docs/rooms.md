@@ -30,7 +30,7 @@ test that pins those numbers to the paper.
    opens (Meta: fewer than 200 draw calls a frame on Quest 3). `tests/structure.test.mjs` checks it.
 2. Once the player is in the room, show its computer hint with `showHint({ title, body })`
    (src/app/hint.js): it goes at the first press or on entering VR.
-3. Start with the shared arrival `runLobby(room)` with room = `{ id, real, debrief, plaque: { number },
+3. Start with the shared arrival `runLobby(room)` with room = `{ id, real, debrief,
    seat: { x, z, yaw }, bounds, extra }` (the sign over the door, the clipboard taken from the
    board, welcome, left-early choice, consent, the door; it resolves with the consent once the
    player is at the table; the thumbsticks move the player in the corridor only) and use the shared session
@@ -43,7 +43,8 @@ Shared parts a room must not re-implement: arrival (corridor), consent, session,
 
 A door plaque shows the room's number only, outside and inside the room: the experiment's name
 would tell the player what is studied before they do it (demand characteristics); the name comes
-in the reveal (`tests/plaque.test.mjs`).
+in the reveal (`tests/plaque.test.mjs`). The number comes from the corridor plan
+(`src/app/lobby/plan.js`): the corridor writes its side, the room imports it for its own.
 
 Add a room: read the paper in full first (CLAUDE.md rule 16), write the spec, then
 `protocol.js` and its test, then the rest. File names must not look like tracking

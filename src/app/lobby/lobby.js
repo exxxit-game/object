@@ -1,6 +1,6 @@
 import { askConsent } from '../consent.js';
 import { askAfterLeaving, leftBefore } from '../left-early.js';
-import { writePlaque, BRAND } from '../brand.js';
+import { writePlaque } from '../brand.js';
 import { APP_T } from '../texts.ru.js';
 import { loadVoice, speak } from '../../engine/voice.js';
 import { unlock } from '../../engine/audio.js';
@@ -13,6 +13,7 @@ import { VOICE_LINES } from './voice-lines.js';
 import { SOUNDS } from './sound-list.js';
 import { signOn, signAnswer } from './opening.js';
 import { pinNotices } from './board.js';
+import { writeStairsSign } from './stairs-sign.js';
 import { showHint } from '../hint.js';
 import { leaveButton } from './exit.js';
 import { WALLS } from './scene.js';
@@ -111,7 +112,7 @@ function lightCorridor() {
   };
 }
 
-// room: { id, plaque: { number }, debrief, seat: { x, z, yaw }, bounds, extra, real }
+// room: { id, debrief, seat: { x, z, yaw }, bounds, extra, real }
 // Resolves with true when the player chose to start with recording, once inside the room.
 export async function runLobby(room) {
   const scene = $('a-scene');
@@ -121,12 +122,10 @@ export async function runLobby(room) {
   document.title = LOBBY_T.title;   // the corridor is no room yet; the room names the page once entered
   showHint(LOBBY_T.hint);
   $('#rig').setAttribute('locomotion', `${BOUNDS}; ${comfort()}`);   // the corridor is walked with the thumbsticks too
-  writePlaque($('#plaqueOut').components.panel, room.plaque);
-  // every other plaque, in the same lettering as room 101's (brand.js)
-  const plate = (el, t) => el.components.panel.write([{ t, size: 62, weight: 700, color: BRAND.accent, spacing: 6 }], { bg: BRAND.plate });
-  for (const el of document.querySelectorAll('.soon')) plate(el, LOBBY_T.soon);
-  plate($('#plaqueStairs'), LOBBY_T.stairs);
-  for (const el of document.querySelectorAll('#plaqueOut, #plaqueStairs, .soon')) el.getObject3D('mesh').material.color.setScalar(WALL_PRINT_LIGHT);
+  // every room's plaque shows its number from the plan; the stairs' sign its symbol and word
+  for (const el of document.querySelectorAll('.room-plaque')) writePlaque(el.components.panel, { number: el.dataset.number });
+  writeStairsSign($('#plaqueStairs').components.panel, LOBBY_T.stairs);
+  for (const el of document.querySelectorAll('#plaqueStairs, .room-plaque')) el.getObject3D('mesh').material.color.setScalar(WALL_PRINT_LIGHT);
   pinNotices($('#notePoster').components.panel, $('#noteFlyer').components.panel, WALL_PRINT_LIGHT);
   const cover = [{ t: LOBBY_T.kicker, role: 'kicker' }, { t: LOBBY_T.title, role: 'title', gap: 0.01 }];
   await sheet.hang(SHEET_HOME, cover, WALL_PRINT_LIGHT);
