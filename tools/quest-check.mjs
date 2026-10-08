@@ -16,7 +16,9 @@ const ROOM = '01-control';
 const { VOICE_LINES } = await import(new URL(`../src/rooms/${ROOM}/voice-lines.js`, import.meta.url));
 // Every line is played at least once except the repeat question's answer path;
 // instructions, concept twice, leave, back, 9 questions, thanks.
-const EXPECTED_VOICE_FILES = VOICE_LINES.length;
+// the room's lines plus the corridor's (src/app/lobby), which come first
+const { VOICE_LINES: LOBBY_LINES } = await import(new URL('../src/app/lobby/voice-lines.js', import.meta.url));
+const EXPECTED_VOICE_FILES = VOICE_LINES.length + LOBBY_LINES.length;
 const MIN_VOICE_PLAYS = 20;
 const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8' });
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));

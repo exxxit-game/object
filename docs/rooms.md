@@ -17,13 +17,16 @@ A room built from a paper also has `protocol.js` (every number, with pages) and 
 test that pins those numbers to the paper.
 
 `mount()` must:
-1. Put the scene into the page (`<a-scene>` appended to `<body>`).
+1. Put the scene into the page (`<a-scene>` appended to `<body>`) and, before it loads, the
+   corridor (`corridorHTML` from `src/app/lobby/lobby.js`) so both are merged and tiled together.
+   The room's door is `#door1` (pivot at its hinge, a `.clickable` leaf); the corridor stands behind it.
 2. Fill `#hint` and add class `show` when ready.
-3. Start with the shared consent (`src/app/consent.js`) and use the shared session
+3. Start with the shared arrival `runLobby()` (welcome, left-early choice, consent, the door;
+   it resolves with the consent once the player is at the table) and use the shared session
    (`src/app/session.js`) for first/repeat runs, test speed and sending.
 4. Mirror the flow on `<html data-room-state>` (`idle` = consent … `done` = reveal).
 
-Shared parts a room must not re-implement: consent, session, answer buttons
+Shared parts a room must not re-implement: arrival (corridor), consent, session, answer buttons
 (`src/engine/ui/choice.js`), rating scales (`src/engine/ui/scale.js`), voice, sound.
 
 Add a room: read the paper in full first (CLAUDE.md rule 16), write the spec, then

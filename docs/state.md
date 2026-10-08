@@ -57,10 +57,10 @@
    grid, chair under a seated player (no lift), merge-static (39 draw calls in the headset).
 2. NOW: headset frame rate. Probe in the headset: 72 fps at consent and at the reveal look;
    quest-check said 62 during its fast run: re-run quest-check to confirm.
-3. NEXT: the arrival (welcome, lobby/menu, door, sit on the chair; one unbroken journey). Core
-   promise (owner): "take part in a real experiment and learn how YOU react; compare yourself
-   with the original and other players". Hook: bias blind spot ("you are sure it does not
-   apply to you; see for yourself"; ask before the room, show after). Show the concept first.
+3. DONE arrival 08.10: corridor (src/app/lobby), welcome with the promise, consent before the
+   door, door opens, fade, at the table; headset check 11/11 through it. Approved: corridor
+   with doors, consent there, hook half before / half after. TODO: hook question after reading
+   Pronin, Lin & Ross 2002 (PSPB 28:369) in full; walking the journey diagram in the plan.
 4. Then: owner-approved screenshot set (re-shoot all); plan doc sections: add-ons, device combos.
 5. Headset without the owner: quest-wifi keeps it awake ("worn" mode); tools/xr-probe-run.mjs
    presses probe buttons as a user gesture (CDP userGesture). Mic works; VR started once, then
