@@ -2,7 +2,7 @@
 
 Generated from `docs/cards/` by `node tools/build-catalog.mjs`. Do not edit by hand.
 Every row links to a card written from the paper's full text with checked quotes.
-Space: seated · standing · roomscale (2 × 2 m) · large (more than 2 × 2 m, offered only
+Space: seated · standing · roomscale (1.8 × 1.8 m) · large (more than 1.8 × 1.8 m, offered only
 to players with that space). Reality: VR, MR (mixed reality fits the original better),
 any, or "not judged" (card written before that line was required). Live: real players
 needed at the same time.

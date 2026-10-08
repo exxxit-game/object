@@ -20,8 +20,8 @@ Rules:
 - Space is never a reason to reject. Record the space the ORIGINAL procedure needs as
   one tier, from the paper's own numbers:
   `seated` · `standing` (in place, Meta's stationary boundary 1 × 1 m) ·
-  `roomscale` (walking, Meta's minimum 2 × 2 m; our base design) ·
-  `large W × L m` (more than 2 × 2 m: the room is offered only to players whose
+  `roomscale` (walking within 1.8 × 1.8 m; our base design, see `docs/decisions.md`) ·
+  `large W × L m` (more than 1.8 × 1.8 m: the room is offered only to players whose
   boundary is that big; it is never shrunk, because a shrunk version is a
   different experiment).
 - Verdict: one of `first-room candidate`, `room`, `interlude`, `reject`, with one

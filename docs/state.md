@@ -22,7 +22,7 @@
 
 ## Decisions with the owner
 - Rooms are faithful re-creations of published experiments; no invented mechanics.
-- Space tiers: seated, standing, roomscale 2×2 m (base), large (offered only, never shrunk).
+- Space tiers: seated, standing, roomscale 1.8×1.8 m (base; owner's area), large (offered only, never shrunk).
 - Live players replace scripted people only where the original had real participants or
   a design like Mori & Arai; mixed reality where the original was a real room.
 - Business: first room free, later paid (decide with data); education licences; university

@@ -45,6 +45,9 @@ player-facing text (src/rooms/*/texts.ru.js).
 19. Every mistake found gets a guard (test, tool or agent check) and a row in
     `docs/mistakes.md`. A lesson without a guard is not written down.
 20. Numbers, quotes and page numbers come from the paper text file, never from memory.
+21. Before every change, think first and say it in the answer: what exactly we are doing,
+    why (what it gives the player or the science), what else it touches, and which
+    checked facts it rests on. If the why is unclear, ask instead of doing.
 
 ## Commands
 - `npm test` — pure unit tests (node, under a second). Safe to run locally.
