@@ -9,7 +9,7 @@ searches Gallica). Legal ways, cheapest first: "Scholar" may show a free [PDF] o
 write to the corresponding author (address on the DOI page) or "Request full-text" on
 ResearchGate; a library; buying the article. Never Sci-Hub or LibGen.
 
-Received from the owner (cards being written): chandler-2015, duncker-1945, easton-shor-1975,
+Received from the owner (cards written): chandler-2015, duncker-1945, easton-shor-1975,
 fehr-gachter-2002, held-2011, huang-2022, jones-2008, kinateder-2014, latane-1979,
 sebanz-2003, wang-2023, weijers-2014, wiltermuth-heath-2009, and a library of 21
 evacuation papers (`objekt-papers\evacuation-library`).

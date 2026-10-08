@@ -3,7 +3,8 @@
 ## Where things are
 - Repo `exxxit-game/object` (folder `C:\Users\admin\Documents\GitHub\objekt`). Site:
   https://youaretheobject.com (GitHub Pages from `main`; `main` is an OLD package).
-  `room-polish` = all current work, pushed, CI green. Release = owner's word only.
+  `room-polish` = all current work. I never push: check `git status -sb` for commits CI has not
+  seen (08.10: 6 not pushed; last green CI at 240df9e). Release = owner's word only.
 - Room 01 = illusion of control (Alloy & Abramson 1979, Exp. 2), `src/rooms/01-control/`;
   Ono kept under git tag `ono-room-final`. Playtest mode: `?playtest=1`. Test speed `?speed=N`.
 - Supabase `objekt` (`rkvdwzlymmewsxjysgma`, eu-west-1 Ireland), private schema `app`:
@@ -17,6 +18,7 @@
   `docs/headset-capabilities.md`; owner page: https://claude.ai/artifact/Srhwjio7Ukp4FBDQAHpZB2
 - Plan to 1M players (Russian doc for the owner, 08.10): https://claude.ai/code/artifact/71113d16-57ad-42ce-9905-87ff87dfdbd7
   Its table "Сверка всех твоих просьб" is THE list of every owner request and its state: add new ones there.
+  Its section "Как идём дальше" is THE queue: work only on its top step, one at a time.
 - Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS, 72 fps, 08.10);
   `tools/xr-probe.html` (owner presses VR/MR/mic buttons); `scrcpy` installed.
   Untethered: `node tools/quest-wifi.mjs` once with the cable, then unplug (owner has a battery strap).
@@ -45,6 +47,7 @@
 
 ## Lessons (do not repeat)
 - Read the full paper before recommending or designing (summaries overstated effects twice).
+- A session opened from another folder loads that folder's rules: open Object sessions from objekt.
 - Paper titles and DOIs from Crossref, never from memory. Shell heredocs eat backslashes:
   edit regex code with the Edit tool. Never send the owner's email to services.
 - Faithful ≠ interesting: lead with short, within-person, suspicion-proof rooms;
@@ -55,12 +58,11 @@
 1. DONE: catalog, coverage, diagnostics, "you vs others", probes, plan doc, early-exit choice, age
    + "saw someone play" (server 0008), cable, era look (door, plaque, mirror, chair), one tile
    grid, chair under a seated player (no lift), merge-static (39 draw calls in the headset).
-2. NOW: headset frame rate. Probe in the headset: 72 fps at consent and at the reveal look;
-   quest-check said 62 during its fast run: re-run quest-check to confirm.
+2. DONE frame rate: probe 72 fps, quest-check 11/11 (fps ≥ 60). Real VR fps: while the owner plays.
 3. DONE arrival 08.10: corridor (src/app/lobby), welcome with the promise, consent before the
-   door, door opens, fade, at the table; headset check 11/11 through it. Approved: corridor
-   with doors, consent there, hook half before / half after. TODO: hook question after reading
-   Pronin, Lin & Ross 2002 (PSPB 28:369) in full; walking the journey diagram in the plan.
+   door, door opens, fade, at the table; headset check 11/11 through it. Hook question (half
+   before / half after): Pronin, Lin & Ross 2002 read in full (objekt-papers/pronin-2002.pdf +
+   .txt); queue step 3. Journey by stages: plan doc section "Как идём дальше".
 4. Then: owner-approved screenshot set (re-shoot all); plan doc sections: add-ons, device combos.
 5. Headset without the owner: quest-wifi keeps it awake ("worn" mode); tools/xr-probe-run.mjs
    presses probe buttons as a user gesture (CDP userGesture). Mic works; VR started once, then
@@ -70,7 +72,8 @@
    circle needs fuel (new rooms, fresh tricks); offer: owner's wording in the circle diagram.
 8. Later: first-room candidates + prototypes; Plato's cave; influence (Bernays) rooms; packs not
    $1; statistics plan; target-architecture.md update; share card, desktop, Quest new tab.
-9. Waiting on owner: play room 01 at real speed; lab letter; plugins; release word.
+9. Waiting on owner: play room 01 (queue step 1); lab letter; release word; push. Suggested plugins
+   NOT installed (Data, Research Desk, Customer Research Kit, Legal, Scientific-Coding).
 Facts: body-tracking legs are AI-generated; labs have Ouvrai and VERA; Meta stopped education
 sales 20.02.2026; store sales need a store PWA (30%); Steam Sep 2026 Quest 3 26.9%, Quest 2
 25.8%, 3S 11.1%, English 34.2%. Rules: science studies free; gate 0 = 7 of 10 finish + mean 7.

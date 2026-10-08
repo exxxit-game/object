@@ -48,9 +48,17 @@ player-facing text (src/rooms/*/texts.ru.js).
 21. Before every change, think first and say it in the answer: what exactly we are doing,
     why (what it gives the player or the science), what else it touches, and which
     checked facts it rests on. If the why is unclear, ask instead of doing.
-22. A message that arrives during work (the owner often dictates from the phone) adds
-    to the current task, it never replaces it: answer it in a line, write it into the
-    open list in docs/state.md, finish the current step, then do it.
+22. My order of work (the owner often dictates many things at once from the phone; requests
+    used to pile up in the dialogue and vanish after compaction):
+    a. The queue is the plan doc section "Как идём дальше" (link in docs/state.md). Work only
+       on its top step; the order changes only on the owner's word.
+    b. Every owner message that asks for something: in the same turn add it as a row to the
+       plan doc table "Сверка всех твоих просьб" (or update its row) and answer it in one line.
+       It does not switch the current work unless the owner says it goes first.
+    c. After each step: a short status (done, how checked, next step); update that table and
+       docs/state.md.
+    d. After a compaction, before anything else: read docs/state.md and the plan doc queue and
+       table. The summary is not the list.
 
 ## Commands
 - `npm test` — pure unit tests (node, under a second). Safe to run locally.
