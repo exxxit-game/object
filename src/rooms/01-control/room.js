@@ -17,8 +17,8 @@ import { pulse } from '../../engine/haptics.js';
 import { createChoice } from '../../engine/ui/choice.js';
 import { createScale } from '../../engine/ui/scale.js';
 import { createAwayMeter } from '../../engine/away-meter.js';
-import { askConsent } from '../../app/consent.js';
-import { markStarted, markReached, leftBefore, askAfterLeaving, watchExit } from '../../app/left-early.js';
+import { markStarted, markReached, watchExit } from '../../app/left-early.js';
+import { runLobby, corridorHTML } from '../../app/lobby/lobby.js';
 import { createSession, SPEED, PLAYTEST } from '../../app/session.js';
 import { compareRoom } from '../../engine/results.js';
 import { askPlaytest } from '../../app/playtest.js';
@@ -26,6 +26,7 @@ import { playtestReport } from '../../app/playtest-report.js';
 import { APP_T } from '../../app/texts.ru.js';
 import { writePlaque } from '../../app/brand.js';
 import { sceneHTML } from './scene.js';
+import { placeChair } from './chair.js';
 import { PROTOCOL } from './protocol.js';
 import { pickCondition, makeTapes, makeIntervals } from './schedule.js';
 import { createTrials } from './trials.js';
@@ -54,18 +55,12 @@ const STAND = { x: 0, y: 1.02, z: -0.45 };
 const SCREEN_TOP = 2.36;
 // Answer buttons stay above the screen's lower edge (with a small margin).
 const SCREEN_LOW = SCREEN_TOP - 1.0 + 0.02;
+// Where the desktop camera may move inside the room, world metres (the corridor sets its own).
+const ROOM_BOUNDS = 'minX: -1.4; maxX: 1.4; minZ: 0.3; maxZ: 1.55';
 const UNDER_TEXT = 0.05;
 
 let scene, choice, lowChoice, scale, shownScale, session, trials = null;
 let seated = false;
-// The chair: under a seated player (the head is above the back half of the seat), pushed
-// back behind a standing one, as if they had stood up from the table.
-const CHAIR = { seated: ['0 0 0.43', '0 0 0'], away: ['0.1 0 0.95', '0 -8 0'] };
-function placeChair(underPlayer) {
-  const [position, rotation] = underPlayer ? CHAIR.seated : CHAIR.away;
-  $('#chair').setAttribute('position', position);
-  $('#chair').setAttribute('rotation', rotation);
-}
 let xrVisible = true;
 let held = false; // the "you left before the end" box is open
 const paused = () => document.hidden || !xrVisible || held;
@@ -251,11 +246,10 @@ async function boot() {
   if (lc && lc.pitchObject) lc.pitchObject.rotation.x = -0.28;
   $('#hint').classList.add('show');
   writePlaque($('#plaque').components.panel, { number: T.kicker, ...T.plaque });
-  if (REAL && leftBefore(ROOM_ID)) {
-    await askAfterLeaving(screen(), lowChoice, { room: ROOM_ID, debrief: T.earlyDebrief, screenTop: SCREEN_TOP });
-  }
-  const withRecording = await askConsent(screen(), lowChoice, {
-    kicker: T.kicker, title: T.title, screenTop: SCREEN_TOP, extra: PLAYTEST ? [APP_T.playtest.consent] : []
+  // The arrival: corridor, welcome, consent, the door; the player ends up at the table.
+  const withRecording = await runLobby({
+    id: ROOM_ID, real: REAL, debrief: T.earlyDebrief, plaque: { number: T.kicker, ...T.plaque },
+    seat: { x: 0, z: 0.35, yaw: 0 }, bounds: ROOM_BOUNDS, extra: PLAYTEST ? [APP_T.playtest.consent] : []
   });
   unlock();
   playSound('room', null, 0.12, true);
@@ -281,6 +275,7 @@ export function mount() {
   loadSounds(SOUNDS, import.meta.url);
   document.body.insertAdjacentHTML('beforeend', sceneHTML);
   scene = $('a-scene');
+  scene.insertAdjacentHTML('beforeend', corridorHTML); // before load: merged and tiled with the room
   scene.setAttribute('sound-listener', '');
   $('#buttonCap').addEventListener('click', pressButton);
   window.addEventListener('keydown', (e) => { if (e.code === 'Space') pressButton(); });

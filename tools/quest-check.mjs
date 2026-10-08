@@ -92,7 +92,10 @@ await run(`(async () => {
   const st = () => document.documentElement.dataset.roomState; const w = (ms) => new Promise(r => setTimeout(r, ms));
   const pick = async (i) => { for (;;) { const a = [...document.querySelectorAll('.answer')].find(e => +e.dataset.index === i); if (a) { a.emit('click'); return; } await w(150); } };
   (async () => {
-    await pick(1);
+    await pick(0); // corridor: "next" after the welcome
+    await pick(1); // start without recording
+    while (document.documentElement.dataset.lobby !== 'door') await w(150);
+    document.querySelector('#door1 .clickable').emit('click');
     for (let c = 0; c < 2; c++) {
       while (!(st() === 'intro' && document.querySelectorAll('.answer').length === 2)) await w(150);
       await pick(0);

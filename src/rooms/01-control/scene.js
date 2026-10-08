@@ -10,7 +10,7 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
          vr-mode-ui="enabled: true" loading-screen="enabled: false" xr-mode-ui="enabled: true">
 
   <a-entity id="rig" position="0 0 0.35" recenter="x: 0; z: 0.35; yaw: 0">
-    <a-entity id="cam" camera look-controls="pointerLockEnabled: false" wasd-controls="acceleration: 12" position="0 1.6 0"
+    <a-entity id="cam" camera fader look-controls="pointerLockEnabled: false" wasd-controls="acceleration: 12" position="0 1.6 0"
               room-bounds="minX: -1.4; maxX: 1.4; minZ: 0.1; maxZ: 1.2"></a-entity>
     <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" grab-press></a-entity>
     <a-entity laser-controls="hand: right" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" grab-press></a-entity>
@@ -68,14 +68,20 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-box position="0.12 1.055 1.58" width="0.06" height="2.11" depth="0.04" color="#3d3a34"></a-box>
   <a-box position="1.08 1.055 1.58" width="0.06" height="2.11" depth="0.04" color="#3d3a34"></a-box>
   <a-box position="0.6 2.08 1.58" width="1.02" height="0.06" depth="0.04" color="#3d3a34"></a-box>
-  <a-entity rounded-box="width: 0.88; height: 2.03; depth: 0.04; radius: 0.006; color: #6a5641; roughness: 0.55"
-            position="0.6 1.02 1.578"></a-entity>
-  <a-box position="0.6 0.13 1.556" width="0.84" height="0.2" depth="0.003" material="color: #b9bcbe; metalness: .7; roughness: .3"></a-box>
-  <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="0.24 1.0 1.553" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
-  <a-box position="0.3 1.0 1.543" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
-  <a-box position="1.04 0.4 1.556" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
-  <a-box position="1.04 1.05 1.556" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
-  <a-box position="1.04 1.7 1.556" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
+  <!-- the door leaf turns on its hinges (pivot at x 1.035): it opens when the player comes in
+       from the corridor; handles on both sides; the leaf is what the player points at -->
+  <a-entity id="door1" data-dynamic position="1.035 0 1.578">
+    <a-entity class="clickable" rounded-box="width: 0.88; height: 2.03; depth: 0.04; radius: 0.006; color: #6a5641; roughness: 0.55"
+              position="-0.435 1.02 0"></a-entity>
+    <a-box position="-0.435 0.13 -0.022" width="0.84" height="0.2" depth="0.003" material="color: #b9bcbe; metalness: .7; roughness: .3"></a-box>
+    <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="-0.795 1.0 -0.025" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
+    <a-box position="-0.735 1.0 -0.035" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
+    <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="-0.795 1.0 0.025" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
+    <a-box position="-0.735 1.0 0.035" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
+    <a-box position="0.005 0.4 -0.022" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
+    <a-box position="0.005 1.05 -0.022" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
+    <a-box position="0.005 1.7 -0.022" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
+  </a-entity>
   <a-entity id="plaque" panel="w: 0.32; h: 0.16; px: 640; bg: #15161a" position="1.36 1.55 1.594" rotation="0 180 0"></a-entity>
   <a-entity rounded-box="width: 0.08; height: 0.12; depth: 0.012; radius: 0.006; color: #d8d2c2; roughness: 0.5"
             position="1.36 1.15 1.592"></a-entity>
