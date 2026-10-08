@@ -23,7 +23,7 @@ const PAPER_BG = '#e9e2cf';       // cream, not white: a large white page glares
 const HARDBOARD = '#3b2a1e';      // dark brown pressed hardboard, as the clipboard in the photo
 const HARDBOARD_HOVER = '#6e5038'; // the hanging clipboard brightens under the laser or mouse
 // the clip: nickel-plated steel with a soft sheen, mirroring the room round it (reflect-env)
-const METAL = 'color: #e6e8ea; metalness: 0.5; roughness: 0.32';
+const METAL = 'color: #d4d7d9; metalness: 0.5; roughness: 0.45';
 // Text roles: letter height in metres at 1 m (at least 21 mm, about 1.2 degrees) and ink.
 const ROLES = {
   kicker: { m: 0.022, color: '#6b6457', weight: 700, spacing: 6 },
@@ -39,7 +39,7 @@ export function createSheet(scene, { inside = null } = {}) {
   el.classList.add('sheet');
   el.setAttribute('visible', false);
   el.setAttribute('glide', '');
-  el.setAttribute('reflect-env', '');
+  el.setAttribute('reflect-env', 'strength: 0.4');
   el.innerHTML = `
     <a-entity class="board" plate="width: ${BOARD.w}; height: ${BOARD.top + BOARD.bottom}; depth: ${BOARD.d}; corner: ${BOARD.corner}; color: ${HARDBOARD}; roughness: 0.55"
               position="0 ${(BOARD.top - BOARD.bottom) / 2} ${-BOARD.d / 2 - 0.004}"></a-entity>

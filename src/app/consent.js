@@ -10,9 +10,13 @@ import { APP_T } from './texts.ru.js';
 // recording, false otherwise. sheet: an engine/ui/sheet instance.
 export async function askConsent(sheet, { kicker, extra = [] }) {
   const C = APP_T.consent;
-  const [first, ...rest] = C.pages;
-  const pages = [first, ...extra.map((t) => [t]), ...rest];
+  const pages = [...extra.map((t) => [t]), ...C.pages];
   const page = (lines) => [{ t: kicker, role: 'kicker' }, ...lines.map((t, i) => ({ t, role: 'body', gap: i ? 0.012 : 0.025 }))];
+  // the form: who agrees, what they know, today's date, the line to sign
+  const F = C.form;
+  const today = new Intl.DateTimeFormat(C.locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+  await sheet.choose([{ t: kicker, role: 'kicker' }, { t: F.title, role: 'title', gap: 0.01 }, { t: F.agree, role: 'body', gap: 0.018 },
+    { t: F.known, role: 'soft', gap: 0.014 }, { t: `${F.date} ${today}`, role: 'body', gap: 0.018 }, { t: F.sign, role: 'body', gap: 0.012 }], [APP_T.next]);
   for (const lines of pages.slice(0, -1)) await sheet.choose(page(lines), [APP_T.next]);
   if (await sheet.choose(page([C.age.ask]), [C.age.yes, C.age.no]) === 1) {
     await sheet.choose(page([C.minor]), [C.start]);

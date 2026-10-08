@@ -6,7 +6,8 @@
 // three.js it would be blurred in the middle of drawing an eye, which in a headset spoils a frame.
 // <a-entity reflect-env> ... polished parts ... </a-entity>
 AFRAME.registerComponent('reflect-env', {
-  schema: { size: { default: 128 }, times: { default: 6 }, every: { default: 2500 } },
+  // strength: how much of the picture the metal shows (a small satin part near a bright sign glares at 1)
+  schema: { size: { default: 128 }, times: { default: 6 }, every: { default: 2500 }, strength: { default: 1 } },
 
   init() {
     const THREE = AFRAME.THREE;
@@ -41,6 +42,7 @@ AFRAME.registerComponent('reflect-env', {
     o.traverse((m) => {
       if (m.material && m.material.metalness >= 0.5 && m.material.envMap !== map) {
         m.material.envMap = map;
+        m.material.envMapIntensity = this.data.strength;
         m.material.needsUpdate = true;
       }
     });
