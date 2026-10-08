@@ -86,17 +86,24 @@ const STEEL = 'material="color: #eef0f2; metalness: 1; roughness: .12"';
 // squeeze lever on one pin, to the right as seen from the corridor; the gauge with its red rim in
 // front; the grey hose down the left side to its nozzle at the foot; the label round the front
 // (extinguisher-label.js). Every part touches the one it is fixed to (tests/standards.test.mjs).
+// The hanger's fork, in metres from the shell's axis: its top at the valve's underside (y), its
+// prongs from just behind the neck (back) to just past the valve's front (front), outer edges at
+// out, each prong wide, inner edges clear of the neck (radius 0.022) by 1 mm.
+const FORK = { t: 0.006, y: 1.437, back: 0.024, front: 0.026, out: 0.031, prong: 0.008 };
 function extinguisher(x, wall) {
   const z = wall - 0.03 - 0.089;
   return `
     <a-entity class="extinguisher" data-dynamic merge-static reflect-env>
-      <!-- the wall hanger, as such brackets are made: a steel strap screwed to the wall top and
-           bottom, and a hook with a lip the neck rests in, so the extinguisher lifts off it -->
-      <a-box position="${x} 1.35 ${wall - 0.0015}" width="0.035" height="0.12" depth="0.003" color="#2b2b2b"></a-box>
-      <a-cylinder position="${x} 1.395 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" ${METAL}></a-cylinder>
-      <a-cylinder position="${x} 1.305 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" ${METAL}></a-cylinder>
-      <a-box position="${x} 1.402 ${(wall + z - 0.03) / 2}" width="0.03" height="0.006" depth="${(wall - z + 0.03).toFixed(3)}" color="#2b2b2b"></a-box>
-      <a-box position="${x} 1.415 ${z - 0.028}" width="0.03" height="0.02" depth="0.004" color="#2b2b2b"></a-box>
+      <!-- the wall hanger, as such brackets are made: a steel strap screwed to the wall, its top bent
+           out into a fork that takes the neck between its prongs above the round top; the valve
+           rests on the prongs and their turned-up tips keep it from sliding off, so the
+           extinguisher lifts straight off it -->
+      <a-box class="hanger" position="${x} 1.37 ${wall - 0.0015}" width="0.035" height="0.14" depth="0.003" color="#2b2b2b"></a-box>
+      <a-cylinder position="${x} 1.42 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" ${METAL}></a-cylinder>
+      <a-cylinder position="${x} 1.315 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" ${METAL}></a-cylinder>
+      <a-box class="hanger" position="${x} ${FORK.y} ${((wall + z + FORK.back) / 2).toFixed(4)}" width="${2 * FORK.out}" height="${FORK.t}" depth="${(wall - z - FORK.back).toFixed(4)}" color="#2b2b2b"></a-box>
+      ${[-1, 1].map((s) => `<a-box class="hanger" position="${(x + s * (FORK.out - FORK.prong / 2)).toFixed(4)} ${FORK.y} ${(z + (FORK.back - FORK.front) / 2).toFixed(4)}" width="${FORK.prong}" height="${FORK.t}" depth="${FORK.back + FORK.front}" color="#2b2b2b"></a-box>
+      <a-box class="hanger" position="${(x + s * (FORK.out - FORK.prong / 2)).toFixed(4)} ${FORK.y + FORK.t / 2 + 0.004} ${(z - FORK.front - 0.002).toFixed(4)}" width="${FORK.prong}" height="0.008" depth="0.004" color="#2b2b2b"></a-box>`).join('')}
       <a-cylinder position="${x} 1.109 ${z}" radius="0.089" height="0.48" ${STEEL}></a-cylinder>
       <a-sphere position="${x} 1.349 ${z}" radius="0.089" scale="1 0.7 1" ${STEEL}></a-sphere>
       <a-cylinder position="${x} 0.861 ${z}" radius="0.0895" height="0.016" ${STEEL}></a-cylinder>

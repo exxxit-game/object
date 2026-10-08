@@ -88,7 +88,8 @@ const bound = (t) => {
   }
   return [[x - half[0], x + half[0]], [y - half[1], y + half[1]], [z - half[2], z + half[2]]];
 };
-const parts = [...ext.matchAll(/<a-(box|cylinder|sphere|entity cable)[^>]*>/g)].map((m) => bound(m[0]));
+const tagsOf = [...ext.matchAll(/<a-(box|cylinder|sphere|entity cable)[^>]*>/g)].map((m) => m[0]);
+const parts = tagsOf.map(bound);
 assert.ok(parts.length > 5, 'an extinguisher in the corridor');
 const extTop = Math.max(...parts.map((b) => b[1][1])), extBottom = Math.min(...parts.map((b) => b[1][0]));
 assert.ok(extTop <= 1.524 && extBottom >= 0.102, `extinguisher from ${extBottom.toFixed(3)} to ${extTop.toFixed(3)} m`);
@@ -101,4 +102,16 @@ for (let grew = true; grew;) {
   parts.forEach((b, i) => { if (!held.has(i) && [...held].some((j) => touch(b, parts[j]))) { held.add(i); grew = true; } });
 }
 assert.equal(held.size, parts.length, `extinguisher parts hanging in the air: ${parts.map((_, i) => i).filter((i) => !held.has(i)).join(', ')}`);
+// the wall hanger holds the extinguisher from outside: no bar of it runs through the shell, the
+// neck or the valve (their boxes meet, overlapping by 1 mm at most; the hose's box is only its
+// path's bounds, so it is left out)
+const hanger = tagsOf.map((t, i) => /class="hanger"/.test(t) ? i : -1).filter((i) => i >= 0);
+const pierce = (a, b) => [0, 1, 2].every((i) => Math.min(a[i][1], b[i][1]) - Math.max(a[i][0], b[i][0]) > 0.001);
+assert.ok(hanger.length >= 3, 'the wall hanger is marked class="hanger"');
+for (const h of hanger) {
+  tagsOf.forEach((t, i) => {
+    if (hanger.includes(i) || /cable="/.test(t)) return;
+    assert.ok(!pierce(parts[h], parts[i]), `the hanger's part ${h} runs through the extinguisher's part ${i}`);
+  });
+}
 console.log(`standards tests: ok (${leaves.length} doors, ${bases.length} base runs, extinguisher ${extBottom.toFixed(2)}–${extTop.toFixed(2)} m)`);
