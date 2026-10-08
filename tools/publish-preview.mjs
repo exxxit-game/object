@@ -4,7 +4,7 @@
 // the page needs goes there (the PUBLIC list of tests/static-server.mjs): no notes, tests
 // or history. Games on the test copy never send results (src/app/session.js, PREVIEW).
 // The live site (main of exxxit-game/youaretheobject) is not touched: it changes on the owner's word.
-// Usage: node tools/publish-preview.mjs
+// Usage: node tools/publish-preview.mjs [--anyway]
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -21,6 +21,19 @@ const email = git(ROOT, 'config', 'user.email');
 if (!email.endsWith('@users.noreply.github.com')) {
   console.log(`not published: the commit would show the address ${email}; set the hidden GitHub address first`);
   process.exit(1);
+}
+// A failing check on GitHub must not wait unseen while the owner tries the copy: the last
+// finished run of this branch's tests (.github/workflows/test.yml) has to have passed (needs the
+// GitHub CLI, signed in); --anyway publishes all the same, saying so.
+try {
+  const branch = git(ROOT, 'rev-parse', '--abbrev-ref', 'HEAD');
+  const [run] = JSON.parse(execFileSync('gh', ['run', 'list', '--branch', branch, '--status', 'completed', '--limit', '1', '--json', 'headSha,conclusion,url'], { cwd: ROOT, encoding: 'utf8' }));
+  if (run && run.conclusion !== 'success') {
+    console.log(`the tests on GitHub ${run.conclusion} for ${run.headSha.slice(0, 7)}: ${run.url}`);
+    if (!process.argv.includes('--anyway')) { console.log('not published: fix that first (or publish with --anyway)'); process.exit(1); }
+  }
+} catch (e) {
+  console.log(`could not read the tests on GitHub: ${e.message.split('\n')[0]}`);
 }
 const sha = git(ROOT, 'rev-parse', '--short', 'HEAD');
 const dirty = git(ROOT, 'status', '--porcelain', '--', ...PUBLIC.map(p => p.replace(/\/$/, '')));
