@@ -1,7 +1,7 @@
 // The clipboard sheet appears where research puts comfortable reading: 1 m from the
 // eyes, a little below them, straight ahead, facing the player (sources in docs/decisions.md).
 import assert from 'node:assert/strict';
-import { frontPose, readingPose, letterDeg, READ_DIST, DROP_DEG, GLIDE, glidePath, curvePoint, easeInOut } from '../src/engine/ui/sheet-math.js';
+import { frontPose, readingPose, letterDeg, READ_DIST, DROP_DEG, GLIDE, glidePath, curvePoint, easeInOut, tripPose, boardCorners, within, EDGE_CLEAR, BOARD_REACH } from '../src/engine/ui/sheet-math.js';
 import { corridorHTML, WALLS } from '../src/app/lobby/scene.js';
 import { BOUNDS, PLAN } from '../src/app/lobby/plan.js';
 
@@ -50,27 +50,34 @@ for (const head of [[0.7, 1.6, 3.05], [-1.0, 1.6, 2.9], [2.5, 1.2, 3.3], [-3.0, 
   }
 }
 // Anywhere the player can stand in the corridor, facing anywhere, the sheet is read inside its
-// walls: a question asked near the exit door must not land in the end wall (docs/mistakes.md).
-// Facing door 1 from the arrival spot it stays straight ahead.
+// walls, and on its trip from the hook and back no corner of the board, tilted and turned as it
+// goes, comes nearer a wall than EDGE_CLEAR (docs/mistakes.md). Facing door 1 from the arrival
+// spot it stays straight ahead.
 const SPACE = corridorHTML.match(/space: ([-\d.]+) ([-\d.]+) ([-\d.]+) ([-\d.]+)/).slice(1).map(Number);
 assert.deepEqual([(WALLS.minX + WALLS.maxX) / 2, (WALLS.minZ + WALLS.maxZ) / 2, WALLS.maxX - WALLS.minX, WALLS.maxZ - WALLS.minZ].map(v => +v.toFixed(3)), SPACE, 'WALLS is the corridor drawn by scene.js');
-const HALF_W = 0.3;
-let spots = 0;
+let spots = 0, legs = 0;
+const hook = { pos: home, pitch: 0, yaw: 0 };
+const clear = (p) => boardCorners(p, BOARD_REACH).every((c) => within(WALLS, c, EDGE_CLEAR - 1e-9));
 for (let x = BOUNDS.minX; x <= BOUNDS.maxX + 1e-9; x += 0.29) {
   for (const z of [BOUNDS.minZ, (BOUNDS.minZ + BOUNDS.maxZ) / 2, BOUNDS.maxZ]) {
     for (let deg = 0; deg < 360; deg += 30) {
-      const p = readingPose([x, 1.6, z], deg * Math.PI / 180, wall, WALLS, HALF_W);
-      const rx = Math.cos(p.yaw) * HALF_W, rz = -Math.sin(p.yaw) * HALF_W;
-      for (const [px, pz] of [[p.pos[0] + rx, p.pos[2] + rz], [p.pos[0] - rx, p.pos[2] - rz]]) {
-        assert.ok(px >= WALLS.minX && px <= WALLS.maxX && pz >= WALLS.minZ && pz <= WALLS.maxZ,
-          `head (${x.toFixed(2)}, ${z}) facing ${deg}°: the sheet's edge at (${px.toFixed(2)}, ${pz.toFixed(2)}) is in a wall`);
+      const head = [x, 1.6, z], p = readingPose(head, deg * Math.PI / 180, wall, WALLS, BOARD_REACH);
+      const where = `head (${x.toFixed(2)}, ${z}) facing ${deg}°`;
+      assert.ok(clear(p), `${where}: a corner of the read sheet is in a wall`);
+      for (const [a, b] of [[hook, p], [p, hook]]) {
+        const room = { from: { pitch: a.pitch, yaw: a.yaw }, to: { pitch: b.pitch, yaw: b.yaw }, board: BOARD_REACH, inside: WALLS };
+        const { ctrl } = glidePath(a.pos, b.pos, away, head, room);
+        for (let i = 0; i <= 40; i++) {
+          assert.ok(clear(tripPose(a, ctrl, b, easeInOut(i / 40))), `${where}: on the trip a corner of the sheet goes into a wall`);
+        }
+        legs++;
       }
       spots++;
     }
   }
 }
-assert.equal(readingPose([0.7, 1.6, 3.05], 0, wall, WALLS, HALF_W).yaw, 0, 'facing door 1: straight ahead');
+assert.equal(readingPose([0.7, 1.6, 3.05], 0, wall, WALLS, BOARD_REACH).yaw, 0, 'facing door 1: straight ahead');
 
 assert.ok(easeInOut(0) === 0 && easeInOut(1) === 1 && near(easeInOut(0.5), 0.5), 'eases from start to end');
 assert.ok(easeInOut(0.1) < 0.1 && easeInOut(0.9) > 0.9, 'slow start and slow stop');
-console.log(`sheet tests: ok (${poses.length} poses, ${trips} trips, ${spots} corridor spots)`);
+console.log(`sheet tests: ok (${poses.length} poses, ${trips} trips, ${spots} corridor spots, ${legs} trips there and back clear of the walls)`);

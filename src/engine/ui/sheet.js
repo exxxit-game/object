@@ -1,4 +1,4 @@
-import { readingPose, glidePath } from './sheet-math.js';
+import { readingPose, glidePath, BOARD, BOARD_REACH } from './sheet-math.js';
 import { createChoice } from './choice.js';
 import '../glide.js';
 
@@ -12,7 +12,6 @@ import '../glide.js';
 // Text never shrinks to fit: a page that does not fit sets data-overflow, which the
 // smoke test treats as an error (split the text into pages instead).
 const PAPER = { w: 0.56, h: 0.72 };
-const BOARD = { w: 0.6, h: 0.78, d: 0.006 };
 const MARGIN = 0.04;
 const DENSITY = 2 * 1024 / 1.5;   // canvas px per metre: sharp when read from 1 m (choice.js)
 const BUTTON_H = 0.07;            // about 4 degrees at 1 m (Meta: targets at least 2.5)
@@ -71,7 +70,7 @@ export function createSheet(scene, { inside = null } = {}) {
     cam.getWorldPosition(head);
     cam.getWorldQuaternion(q);
     const yaw = new THREE.Euler().setFromQuaternion(q, 'YXZ').y;
-    return readingPose(head.toArray(), yaw, home, inside, BOARD.w / 2);
+    return readingPose(head.toArray(), yaw, home, inside, BOARD_REACH);
   }
 
   function eyes() {
@@ -96,7 +95,11 @@ export function createSheet(scene, { inside = null } = {}) {
   scene.addEventListener('player-moved', follow);
 
   function glideTo(pos, rotation, step) {
-    const { ctrl, ms } = glidePath(el.object3D.position.toArray(), pos, home.away, eyes());
+    const o = el.object3D;
+    o.rotation.reorder('YXZ');
+    // every corner of the board stays off the walls all the way (inside: the space's walls)
+    const room = inside && { from: { pitch: o.rotation.x, yaw: o.rotation.y }, to: { pitch: rotation[0], yaw: rotation[1] }, board: BOARD_REACH, inside };
+    const { ctrl, ms } = glidePath(o.position.toArray(), pos, home.away, eyes(), room);
     return el.components.glide.go({ to: pos, ctrl, rotation, ms, step });
   }
 

@@ -75,8 +75,8 @@ function troffer(x) {
 const TROFFERS = [-4.572, -1.524, 1.524, 4.572].map((d) => r(CENTRE.x + d));
 
 // polished stainless, as on the 1972 General WS-900 (a seller's photo of one), mirroring the
-// corridor round it (reflect-env, src/engine/reflect-env.js); left out of the merge (data-dynamic),
-// as the picture it mirrors comes after load
+// corridor round it (reflect-env, src/engine/reflect-env.js); left out of the corridor's merge
+// (data-dynamic) and merged on its own, so its steel parts are one mesh with the mirrored picture
 const STEEL = 'material="color: #eef0f2; metalness: 1; roughness: .12"';
 // A 2.5 gal stored-pressure water extinguisher as made in the 1970s, shaped after the 1972 General
 // WS-900 (a seller's photo of one; docs/research/vr/07-corridor-1979.md): a polished stainless
@@ -89,7 +89,7 @@ const STEEL = 'material="color: #eef0f2; metalness: 1; roughness: .12"';
 function extinguisher(x, wall) {
   const z = wall - 0.03 - 0.089;
   return `
-    <a-entity class="extinguisher" data-dynamic reflect-env>
+    <a-entity class="extinguisher" data-dynamic merge-static reflect-env>
       <a-box position="${x} 1.4 ${wall - 0.003}" width="0.04" height="0.1" depth="0.006" color="#2b2b2b"></a-box>
       <a-box position="${x} 1.4 ${(wall + z) / 2}" width="0.03" height="0.012" depth="${(wall - z).toFixed(3)}" color="#2b2b2b"></a-box>
       <a-cylinder position="${x} 1.109 ${z}" radius="0.089" height="0.48" ${STEEL}></a-cylinder>
