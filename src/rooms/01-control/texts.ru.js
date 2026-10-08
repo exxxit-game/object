@@ -5,9 +5,10 @@
 import { plural } from '../../app/texts.ru.js';
 
 export const T = {
-  pageTitle: 'You are the object · Комната 101',
+  // the room's number comes from the corridor plan (src/app/lobby/plan.js)
+  pageTitle: (n) => `You are the object · Комната ${n}`,
   hint: {
-    title: 'You are the object. Комната 101.',
+    title: (n) => `You are the object. Комната ${n}.`,
     body: 'Мышь: зажмите и тяните — оглядеться, щелчок — нажать. Пробел — кнопка на столе. В шлеме: кнопка VR справа внизу; кнопку на столе можно нажать рукой или лучом.'
   },
   title: 'You are the object',

@@ -3,9 +3,9 @@
 // 1.8 m wide; the stairs the player came up are in the middle of its south wall, room 101 (door 1)
 // faces them; a room every 3.2 m (a bay: the width of room 01) along both walls, so every door has
 // the same wall around it. Rooms are numbered from the entrance (university room numbering:
-// Northwestern, Georgia Tech, Smithsonian guidelines), and every plaque hangs at its door's latch
-// side, the side toward the entrance (a sign beside the latch: ADA 1991 4.30.6; its size and
-// distance from the frame: brand.js). Floors above hold more rooms. Pure: no A-Frame, so tests read it in node.
+// Northwestern, Georgia Tech, Smithsonian guidelines); every door's latch is on the side toward
+// the entrance, and its sign is on the leaf (brand.js). Floors above hold more rooms. Pure: no
+// A-Frame, so tests read it in node.
 export const PLAN = {
   from: -6.6, to: 8.0,          // the end walls' faces (x), a whole number of 0.2 m blocks
   north: 1.8, south: 3.6,       // the long walls' corridor faces (z); each wall 0.2 m thick
@@ -43,10 +43,10 @@ export const DOORS = doors.map((d) => {
 // the number of the door whose room is built: the room writes it on its own side of the wall too
 export const ROOM1_NUMBER = DOORS.find((d) => d.kind === 'room1').number;
 
-// along x, the way a door's plaque hangs from it: toward the entrance (east for the middle doors)
+// along x, toward the entrance: the side of a door's latch (east for the middle doors)
 export const toEntrance = (x) => (x < PLAN.entrance - 1e-6 ? 1 : x > PLAN.entrance + 1e-6 ? -1 : 1);
-// a plaque's centre: half the opening, the frame's 11 mm beyond it, then the sign's distance
-// from the frame (brand.js)
+// a wall sign's centre beside a door's latch: half the opening, the frame's 11 mm beyond it, then
+// the distance from the frame to the sign's centre
 export const plaqueX = (x, fromFrame) => round(x + toEntrance(x) * (PLAN.opening / 2 + 0.0112 + fromFrame));
 
 // the corridor's wall faces (for what must stay inside them) and its floor space for the grids

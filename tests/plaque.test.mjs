@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { writePlaque } from '../src/app/brand.js';
 import { DOORS, ROOM1_NUMBER } from '../src/app/lobby/plan.js';
 import { corridorHTML } from '../src/app/lobby/scene.js';
+import { sceneHTML } from '../src/rooms/01-control/scene.js';
 
 let written = null;
 writePlaque({ write: (blocks) => { written = blocks; } }, { number: '101', name: 'X', year: '1979' });
@@ -34,7 +35,7 @@ const fromPlan = (wall) => DOORS.filter(d => d.wall === wall).sort((p, q) => p.x
 assert.deepEqual(fromPlan('north'), fromDrawing('0'), 'north wall numbers as drawn');
 assert.deepEqual(fromPlan('south'), fromDrawing('176'), 'south wall numbers as drawn');
 assert.equal(ROOM1_NUMBER, '101', 'the room facing the stairs is 101');
-// the corridor's plaques carry them, one per room door
-const plates = [...corridorHTML.matchAll(/data-number="(\d+)"/g)].map(m => m[1]).sort();
+// the doors' signs carry them, one per room door (room 101's door is room 01's)
+const plates = [...(corridorHTML + sceneHTML).matchAll(/data-number="(\d+)"/g)].map(m => m[1]).sort();
 assert.deepEqual(plates, DOORS.filter(d => d.number).map(d => d.number).sort(), 'a numbered plaque at every room door');
 console.log('plaque tests: ok');

@@ -9,7 +9,8 @@
 // x: centre of the 1.0 m masonry opening; room, corridor: z of the wall's two faces (a door on
 // either long wall: the room on the far side); latch: +1 right or -1 left, seen from the corridor; leaf: attributes of the
 // leaf's group (its hinge edge is its origin, so it can swing); clickable: the leaf answers the
-// laser; inside: the room-side hardware too, for a door whose room the player enters.
+// laser; inside: the room-side hardware too, for a door whose room the player enters; sign: { attrs,
+// y } a flat sign centred on the leaf's corridor face at height y, moving with the leaf.
 // doorHTML({ x: 0.7, latch: 1, leaf: 'id="door1" data-dynamic', clickable: true, inside: true })
 const FRAME = 'color="#3d3a34"';
 // satin chrome for all hardware (our choice of look): matte enough to read in a dim corridor,
@@ -24,7 +25,7 @@ const KNOB = 'points: 0.0325 0, 0.0325 0.004, 0.03 0.008, 0.012 0.009, 0.011 0.0
 
 const f = (v) => +v.toFixed(4);
 
-export function doorHTML({ x, room = 1.6, corridor = 1.8, latch = 1, leaf = '', clickable = false, inside = false }) {
+export function doorHTML({ x, room = 1.6, corridor = 1.8, latch = 1, leaf = '', clickable = false, inside = false, sign = null }) {
   const s = Math.sign(corridor - room);      // +1: the room at smaller z (north wall), -1: at larger z
   const mid = f((room + corridor) / 2), depth = f(Math.abs(corridor - room) + 0.02);
   const jamb = OPENING / 2 - 0.0143;          // a jamb's centre, 14.3 mm inside the opening's edge
@@ -53,6 +54,7 @@ export function doorHTML({ x, room = 1.6, corridor = 1.8, latch = 1, leaf = '', 
       <a-entity ${clickable ? 'class="clickable" ' : ''}rounded-box="width: ${LEAF.w}; height: ${LEAF.h}; depth: ${LEAF.t}; radius: 0.004; color: #6a5641; roughness: 0.55"
                 position="${lx(LEAF.w / 2)} 1.083 ${lz(LEAF.t / 2)}"></a-entity>
       <a-box position="${lx(LEAF.w / 2)} 0.143 ${lz(0.0458)}" width="0.864" height="0.254" depth="0.0015" ${PLATE}></a-box>
-      ${knob(LEAF.t, true)}${roomSide}
+      ${knob(LEAF.t, true)}${roomSide}${sign ? `
+      <a-entity ${sign.attrs}${s < 0 ? ' rotation="0 180 0"' : ''} position="${lx(LEAF.w / 2)} ${sign.y} ${lz(LEAF.t + 0.002)}"></a-entity>` : ''}
     </a-entity>`;
 }

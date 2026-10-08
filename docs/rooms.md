@@ -21,7 +21,8 @@ test that pins those numbers to the paper.
    corridor (`corridorHTML` from `src/app/lobby/scene.js`) so both are merged and tiled together.
    The room's door is `#door1` (pivot at its hinge, a `.clickable` leaf); the corridor stands behind it.
    Its masonry opening and every flat thing on its walls (class `on-wall`) sit on the block
-   module, so no cut sliver of block shows (`tests/masonry.test.mjs`).
+   module, so no cut sliver of block shows (`tests/masonry.test.mjs`); door signs (class
+   `door-sign`) are placed by the sign standard instead (`SIGN` in `src/app/brand.js`).
    Every light of the room that is on in its markup carries class `room-light`: lights pass
    through walls, so the corridor keeps them off until the door opens (corridors are much
    dimmer than rooms: docs/building-standards.md). `tests/structure.test.mjs` checks it.
@@ -41,10 +42,11 @@ Shared parts a room must not re-implement: arrival (corridor), consent, session,
 (`src/engine/ui/sheet.js`), answer buttons (`src/engine/ui/choice.js`), rating scales
 (`src/engine/ui/scale.js`), voice, sound, door plaques (`writePlaque` in `src/app/brand.js`).
 
-A door plaque shows the room's number only, outside and inside the room: the experiment's name
-would tell the player what is studied before they do it (demand characteristics); the name comes
-in the reveal (`tests/plaque.test.mjs`). The number comes from the corridor plan
-(`src/app/lobby/plan.js`): the corridor writes its side, the room imports it for its own.
+A door sign shows the room's number only, on the door's corridor face (`doorHTML({ sign })`) and on
+the wall inside: the experiment's name would tell the player what is studied before they do it
+(demand characteristics); the name comes in the reveal, and on the door once the room is done
+(`tests/plaque.test.mjs`). The number comes from the corridor plan (`src/app/lobby/plan.js`):
+the room imports it for its texts and its own sign, the lobby writes every sign.
 
 Add a room: read the paper in full first (CLAUDE.md rule 16), write the spec, then
 `protocol.js` and its test, then the rest. File names must not look like tracking

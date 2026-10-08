@@ -4,10 +4,10 @@
 // builder (src/engine/door.js) as every other. Built to the trade standards in
 // docs/building-standards.md: 4 in vinyl base and the rail stop at door frames, 12 in floor tiles
 // and a 24 in ceiling grid laid out from the corridor's centre, 2 × 4 ft troffers in the grid.
-// Static parts are merged after load; the plaques and the sign change, so they stay apart.
+// Static parts are merged after load; the door signs and the light box change, so they stay apart.
 import { doorHTML, CHROME } from '../../engine/door.js';
-import { PLAN, DOORS, CENTRE, LENGTH, WIDTH, toEntrance, plaqueX, wallRuns } from './plan.js';
-import { SIGN } from '../brand.js';
+import { PLAN, DOORS, CENTRE, LENGTH, WIDTH, toEntrance, wallRuns } from './plan.js';
+import { SIGN, SIGN_PANEL } from '../brand.js';
 
 export { WALLS } from './plan.js';
 
@@ -56,22 +56,12 @@ function endWall(x, facing) {
 function doors() {
   return DOORS.filter((d) => d.kind !== 'room1').map((d) => {
     const { z, out } = FACE[d.wall];
-    return doorHTML({ x: d.x, room: r(z - out * PLAN.thick), corridor: z, latch: toEntrance(d.x) * out });
+    // its sign on the leaf (brand.js): a room's number, written by the lobby, or the stairs'
+    const attrs = d.kind === 'stairs' ? `id="plaqueStairs" class="door-sign" ${SIGN_PANEL}` : `class="door-sign room-plaque" data-number="${d.number}" ${SIGN_PANEL}`;
+    return doorHTML({ x: d.x, room: r(z - out * PLAN.thick), corridor: z, latch: toEntrance(d.x) * out, sign: { attrs, y: SIGN.y } });
   }).join('');
 }
 
-// every plaque at its door's latch side, sized by its kind (brand.js); a room's carries its number
-// (the lobby writes it)
-function plaques() {
-  return DOORS.map((d) => {
-    const { z, out } = FACE[d.wall];
-    const id = d.kind === 'room1' ? 'id="plaqueOut" ' : d.kind === 'stairs' ? 'id="plaqueStairs" ' : '';
-    const room = d.number ? ` room-plaque" data-number="${d.number}` : '';
-    const w = d.kind === 'stairs' ? SIGN.stairs : SIGN.room;
-    return `
-  <a-entity ${id}class="on-wall door-sign${room}" panel="w: ${w}; h: ${w}; px: ${Math.round(w * SIGN.px)}; bg: #15161a"${out < 0 ? ' rotation="0 180 0"' : ''} position="${plaqueX(d.x, SIGN.fromFrame)} ${SIGN.y} ${r(z + out * 0.006)}"></a-entity>`;
-  }).join('');
-}
 
 // A 2 × 4 ft troffer centred at x in the corridor's grid: a 25 mm painted frame around a lens
 // that glows with its two lamps behind it.
@@ -156,8 +146,6 @@ export const corridorHTML = `
   <a-entity id="corridorAmbient" light="type: ambient; color: #c9cfd6; intensity: 0"></a-entity>
   <a-entity id="corridorLamp" light="type: point; color: #eef2ff; intensity: 1.6; distance: 0; decay: 0.8" position="-0.2 2.3 ${CENTRE.z}"></a-entity>
   <a-plane position="${B.x} ${B.y} 1.835" width="1.512" height="0.912" surface="kind: cork; repeat: 3.024 1.824"></a-plane>
-  <!-- plaques, all one size, each at its door's latch side toward the entrance (plan.js) -->
-  ${plaques()}
   <!-- A4 sheets (ISO 216) pinned beside the clipboard: the studio's poster and a flyer (board.js) -->
   <a-entity id="notePoster" class="clickable" panel="w: 0.21; h: 0.297; px: 640" position="${r(B.x - 0.47)} 1.6 1.84" rotation="0 0 2"></a-entity>
   <a-entity id="noteFlyer" panel="w: 0.21; h: 0.297; px: 640" position="${r(B.x + 0.47)} 1.42 1.84" rotation="0 0 -1.5"></a-entity>

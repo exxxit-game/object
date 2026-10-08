@@ -3,9 +3,9 @@
 // are 0.4 × 0.2 m in running bond, the module 0.2 m. The same holds for the flat things fixed to a
 // wall (class "on-wall": the board, the sign box, the switch) that no standard places: each edge
 // lies on a joint, or at least MIN_GAP from every joint, because a joint a few millimetres from an
-// edge reads as a cut stub (MIN_GAP is our choice). Door signs (class "door-sign") hang where the
-// sign standard puts them (src/app/brand.js), and the joints fall where they fall, as on a real
-// block wall.
+// edge reads as a cut stub (MIN_GAP is our choice). Door signs (class "door-sign": on the doors,
+// and room 01's inside its door) hang where the sign standard puts them (src/app/brand.js), and the
+// joints fall where they fall, as on a real block wall.
 import assert from 'node:assert/strict';
 import { sceneHTML } from '../src/rooms/01-control/scene.js';
 import { corridorHTML } from '../src/app/lobby/scene.js';
@@ -50,7 +50,7 @@ for (const wall of WALLS) {
 
 // flat things on a wall: no joint closer than MIN_GAP to an edge, unless the edge is on it
 const items = [...html.matchAll(/<a-[a-z]+[^>]*class="[^"]*\bon-wall\b[^"]*"[^>]*>/g)].map(m => m[0]);
-assert.ok(items.length >= 5, `${items.length} things on walls`);
+assert.ok(items.length >= 3, `${items.length} things on walls`);
 for (const tag of items.filter(t => !/\bdoor-sign\b/.test(attr(t, 'class')))) {
   const [x, y, z] = attr(tag, 'position').split(' ').map(Number);
   const panel = attr(tag, 'panel'), box = attr(tag, 'rounded-box');
@@ -74,12 +74,16 @@ for (const tag of items.filter(t => !/\bdoor-sign\b/.test(attr(t, 'class')))) {
   }
 }
 
-// every door sign centred 60 in above the floor (LSU 1.3.1.2, ADA 1991 4.30.6), its text between
-// 48 and 60 in (docs/building-standards.md, S1 703.4.1)
-const signs = items.filter(t => /\bdoor-sign\b/.test(attr(t, 'class')));
-assert.equal(signs.length, DOORS.length + 1, 'a sign at every corridor door and inside room 01');
+// every door sign is the standard's 9 × 9 in, centred 60 in above the floor (NIU installation,
+// ADA 1991 4.30.6), its text between 48 and 60 in (docs/building-standards.md, S1 703.4.1); a
+// sign on a door rides on its leaf, whose group stands on the floor, so its y is its height
+const signs = [...html.matchAll(/<a-entity[^>]*class="[^"]*\bdoor-sign\b[^"]*"[^>]*>/g)].map(m => m[0]);
+assert.equal(signs.length, DOORS.length + 1, 'a sign at every door and inside room 01');
+assert.ok(SIGN.w === 0.2286 && SIGN.y === 1.524 && SIGN.fromFrame === 0.1016, 'the sign family in inches: 9 in square, 60 in up, 4 in from the frame');
 for (const tag of signs) {
   const y = Number(attr(tag, 'position').split(' ')[1]);
-  assert.ok(y === SIGN.y && y >= 1.22 && y <= 1.525, `${attr(tag, 'id') || attr(tag, 'data-number')} centre at ${y} m`);
+  const name = attr(tag, 'id') || attr(tag, 'data-number');
+  assert.ok(y === SIGN.y && y >= 1.22 && y <= 1.525, `${name} centre at ${y} m`);
+  assert.ok(prop(attr(tag, 'panel'), 'w') === SIGN.w && prop(attr(tag, 'panel'), 'h') === SIGN.w, `${name}: not the 9 in sign`);
 }
 console.log(`masonry tests: ok (${jambs.length / 2} doors, ${items.length} things on walls)`);

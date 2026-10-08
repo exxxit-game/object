@@ -23,7 +23,7 @@ marked "ours" is the game's rounding, with the reason.
 | Tackboard | 1/4 in (6 mm) cork on hardboard; extruded aluminium trim about 1-3/4 in (44 mm) face [S21] | the experimenter's board in the corridor, same; 1.6 × 1.0 m (ours: its edges on the block joints, `tests/masonry.test.mjs`) |
 | Notices | A4 paper, 210 × 297 mm (ISO 216); psychology hallways carry flyers calling for participants, with tear-off strips (Indiana University, Psychological and Brain Sciences) | two A4 sheets on the board: a flyer and the studio's poster (`src/app/lobby/board.js`) |
 | Fire extinguisher | top at most 5 ft (1.524 m) above the floor for units up to 40 lb, bottom at least 4 in (102 mm) [S22]; 2.5 gal pressurized water (Class A) about 7 in (0.18 m) across, 24.5 in (0.62 m) tall, about 30 lb [S23] | one in the corridor, on the wall opposite the doors |
-| Room sign | on the wall at the latch side; lowest letter baseline at least 48 in (1.22 m), highest at most 60 in (1.525 m) [S1, 703.4.1] | one sign family [S25]: a room's number on a 6 × 6 in plaque (Type A1), the stairs on an 8 × 8 in one with a 4 in stair symbol [S27] over the word (Type E); a room number 1 in, the stairs' word 5/8 in [S28] (ADA 2010 703.2.5: 5/8 to 2 in); centre 60 in above the floor [S25 1.3.1.2] and 9 in from the frame [S26]; the joints fall where they fall (`SIGN` in `src/app/brand.js`, `tests/masonry.test.mjs`) |
+| Room sign | on the wall at the latch side; lowest letter baseline at least 48 in (1.22 m), highest at most 60 in (1.525 m) [S1, 703.4.1]; allowed on the push side of a door with a closer [S1, 703.4.2]; characters 5/8 to 2 in [S1, 703.2.5] | one sign family [S25]: 9 × 9 in, centred 60 in up, on the leaf's corridor (push) face; a room's number centred, 2 in; the stairs' symbol [S26] 4 1/2 in over the word 3/4 in; a wall sign (inside room 01) 4 in from the frame (`SIGN` in `src/app/brand.js`, `tests/masonry.test.mjs`) |
 | Light box over a door | (ours) as wide as the masonry opening, 1.0 × 0.2 m, on the joints | the sign over door 1 |
 | Switch, outlet | switch 42 in (1.067 m), outlet 18 in (0.457 m) to centre; reach 15–48 in [S1, S15]; in a block wall the box is set as the courses are laid, notched into the block [S24] | switch at 1.1 m (ours: inside one course, so no joint runs beside the plate; within reach) |
 | Corridor | at least 44 in (1.118 m) in a university building [S16, S17] | 1.8 m |
@@ -53,7 +53,5 @@ S21 VA master spec 10 11 23 tackboards (wbdg.org); Univ. of Houston master spec 
 S22 NFPA 10, 6.1.3.8 (quoted by San Diego Fire-Rescue, sandiego.gov; same values in the 1994 edition) ·
 S23 Kidde Pro 2.5 W-1 (466403) and Amerex 240 product listings ·
 S24 Hubbell RACO masonry boxes: the mason builds to the device height and notches the block round the box (hubbell.com) ·
-S25 Louisiana State University, Interior & Exterior Room Signage Guidelines, rev. 07.2024 (search.lsu.edu/pdc) ·
-S26 Iowa State University, Facilities Design Manual, Div 10 Interior Signage Standards (fpm.iastate.edu) ·
-S27 US DOT / AIGA Symbol Signs, "Stairs" (1979 set, public domain; Wikimedia Commons "Aiga stairs.svg") ·
-S28 University of Maryland, Design Criteria / Facility Standards Manual, 10 14 00 Signage, 2023 (facilities.umd.edu) ·
+S25 Northern Illinois University, Campus Interior Signage Program: planning and purchasing guide, sign types A and E, installation (via cdb.illinois.gov) ·
+S26 US DOT / AIGA Symbol Signs, "Stairs" (1979 set, public domain; Wikimedia Commons "Aiga stairs.svg") ·

@@ -67,9 +67,10 @@
    clipboard font = readability, corridor = PLAN B (docs/art/corridor-plan.svg), floor = 9 rooms = one pack,
    floor 1 free, packs = one-time purchases in the Horizon Store app (Digital Goods API; no web payments).
    Built: plan B (corridor 14.6 m from src/app/lobby/plan.js), door numbers from the plan drawing (101 faces
-   the stairs), door signs = one real family (SIGN in src/app/brand.js: LSU 2024, Iowa State, DOT/AIGA 1979),
-   computer hint only where the player is. RULE 23 first line: WE RECREATE, never invent sizes or shapes.
-   NOW: headset perf + frames of plan B (headset was offline), pictures to the owner.
+   the stairs), door signs ON THE DOORS = one real family (SIGN in src/app/brand.js: NIU 9 x 9 in, number
+   2 in centred, stairs with the DOT/AIGA 1979 symbol), computer hint only where the player is and never in
+   VR. RULE 23 first line: WE RECREATE, never invent sizes or shapes. Headset: 72 fps, 90 draw calls.
+   Owner answered for now: extinguisher stays by the stairs unless he says the end wall.
    After: floor directory by the stairs (1979 letter board), notices Letter + typewriter, clipboard, signature.
    Ideas after acceptance (plan doc): board notes, doors named once done, the tilted room, a map test.
 2. Headset: `quest-look.mjs worn on` keeps it awake (`worn off` after); asleep = only his power button wakes it;

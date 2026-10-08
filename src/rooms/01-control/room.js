@@ -253,8 +253,8 @@ async function boot() {
     seat: { x: 0, z: 0.35, yaw: 0 }, bounds: ROOM_BOUNDS, extra: PLAYTEST ? [APP_T.playtest.consent] : []
   });
   unlock();
-  document.title = T.pageTitle;
-  showHint(T.hint);
+  document.title = T.pageTitle(ROOM1_NUMBER);
+  showHint({ title: T.hint.title(ROOM1_NUMBER), body: T.hint.body });
   playSound('room', null, 0.12, true);
   play(withRecording);
 }
