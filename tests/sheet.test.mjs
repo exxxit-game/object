@@ -1,9 +1,9 @@
 // The clipboard sheet appears where research puts comfortable reading: 1 m from the
 // eyes, a little below them, straight ahead, facing the player (sources in docs/decisions.md).
 import assert from 'node:assert/strict';
-import { frontPose, readingPose, letterDeg, READ_DIST, DROP_DEG, GLIDE, glidePath, curvePoint, easeInOut, tripPose, boardCorners, within, EDGE_CLEAR, BOARD_REACH } from '../src/engine/ui/sheet-math.js';
+import { frontPose, readingPose, letterDeg, READ_DIST, DROP_DEG, GLIDE, glidePath, curvePoint, easeInOut, tripPose, boardCorners, within, EDGE_CLEAR, BOARD_REACH, CLIP } from '../src/engine/ui/sheet-math.js';
 import { corridorHTML, WALLS } from '../src/app/lobby/scene.js';
-import { BOUNDS, PLAN } from '../src/app/lobby/plan.js';
+import { BOUNDS, PLAN, SHEET_HOME } from '../src/app/lobby/plan.js';
 
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 const near = (a, b, e = 1e-9) => Math.abs(a - b) < e;
@@ -28,7 +28,7 @@ assert.ok(near(letterDeg(0.021, 1), 1.2, 0.01), '21 mm at 1 m is about 1.2 degre
 // The clipboard's trip from its hook to the reading spot and back (docs/mistakes.md):
 // slow enough, eased, swinging out from the wall and down, never nearer than
 // GLIDE.nearest to the eyes, and the same arc back.
-const home = [PLAN.board.x, 1.5, 1.855], away = [0, 0, 1], wall = { pos: home, away };
+const home = SHEET_HOME.pos, away = SHEET_HOME.away, wall = { pos: home, away };
 let trips = 0;
 // from the arrival spot, across the corridor, and pressed against the board (people walk
 // up to a thing they are told to take); the corridor keeps the eyes at z 2.1 or more
@@ -78,6 +78,14 @@ for (let x = BOUNDS.minX; x <= BOUNDS.maxX + 1e-9; x += 0.29) {
 }
 assert.equal(readingPose([0.7, 1.6, 3.05], 0, wall, WALLS, BOARD_REACH).yaw, 0, 'facing door 1: straight ahead');
 
+// on its hook the clipboard hangs by its ring: the peg touches the inside top of the ring, and
+// the ring stands where the peg is (along its length)
+{
+  const ringTop = SHEET_HOME.pos[1] + CLIP.ring.y + CLIP.ring.r - CLIP.ring.tube;
+  assert.ok(near(ringTop, PLAN.board.hook + PLAN.board.peg, 1e-4), `the ring rests on the peg (${ringTop.toFixed(4)} vs ${(PLAN.board.hook + PLAN.board.peg).toFixed(4)})`);
+  const ringZ = SHEET_HOME.pos[2] + CLIP.ring.z;
+  assert.ok(ringZ > 1.835 && ringZ < 1.835 + 0.045, 'the ring is on the peg, not past its end');
+}
 assert.ok(easeInOut(0) === 0 && easeInOut(1) === 1 && near(easeInOut(0.5), 0.5), 'eases from start to end');
 assert.ok(easeInOut(0.1) < 0.1 && easeInOut(0.9) > 0.9, 'slow start and slow stop');
 console.log(`sheet tests: ok (${poses.length} poses, ${trips} trips, ${spots} corridor spots, ${legs} trips there and back clear of the walls)`);

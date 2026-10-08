@@ -1,6 +1,8 @@
-import { readingPose, glidePath, BOARD, BOARD_REACH } from './sheet-math.js';
+import { readingPose, glidePath, BOARD, CLIP, BOARD_REACH } from './sheet-math.js';
+import '../reflect-env.js';
 import { createChoice } from './choice.js';
 import '../glide.js';
+import '../shapes.js';
 
 // The clipboard sheet: everything the player reads or answers, one thought per page.
 // It is read 1 m in front of the player, a little below the eyes, and stays still
@@ -18,8 +20,10 @@ const BUTTON_H = 0.07;            // about 4 degrees at 1 m (Meta: targets at le
 const GAP = 0.025;
 const UNDER_TEXT = 0.03;
 const PAPER_BG = '#e9e2cf';       // cream, not white: a large white page glares in a headset
-const WOOD = '#7a5c3e';
-const WOOD_HOVER = '#a07a52';     // the hanging clipboard brightens under the laser or mouse
+const HARDBOARD = '#3b2a1e';      // dark brown pressed hardboard, as the clipboard in the photo
+const HARDBOARD_HOVER = '#6e5038'; // the hanging clipboard brightens under the laser or mouse
+// the clip: nickel-plated steel with a soft sheen, mirroring the room round it (reflect-env)
+const METAL = 'color: #e6e8ea; metalness: 0.5; roughness: 0.32';
 // Text roles: letter height in metres at 1 m (at least 21 mm, about 1.2 degrees) and ink.
 const ROLES = {
   kicker: { m: 0.022, color: '#6b6457', weight: 700, spacing: 6 },
@@ -35,10 +39,16 @@ export function createSheet(scene, { inside = null } = {}) {
   el.classList.add('sheet');
   el.setAttribute('visible', false);
   el.setAttribute('glide', '');
+  el.setAttribute('reflect-env', '');
   el.innerHTML = `
-    <a-box class="board" width="${BOARD.w}" height="${BOARD.h}" depth="${BOARD.d}" position="0 0 ${-BOARD.d / 2 - 0.004}" material="color: ${WOOD}; roughness: 0.8"></a-box>
+    <a-entity class="board" plate="width: ${BOARD.w}; height: ${BOARD.top + BOARD.bottom}; depth: ${BOARD.d}; corner: ${BOARD.corner}; color: ${HARDBOARD}; roughness: 0.55"
+              position="0 ${(BOARD.top - BOARD.bottom) / 2} ${-BOARD.d / 2 - 0.004}"></a-entity>
     <a-entity class="paper" panel="w: ${PAPER.w}; h: ${PAPER.h}; px: ${Math.round(PAPER.w * DENSITY)}; bg: ${PAPER_BG}"></a-entity>
-    <a-box width="0.16" height="0.05" depth="0.02" position="0 ${PAPER.h / 2} 0.01" material="color: #c9ccce; metalness: 0.8; roughness: 0.3"></a-box>`;
+    <a-entity plate="width: ${CLIP.jaw.w}; height: ${CLIP.jaw.h}; depth: ${CLIP.jaw.d}; corner: 0.004; ${METAL}" position="0 ${CLIP.jaw.y} ${CLIP.jaw.d / 2 + 0.001}"></a-entity>
+    <a-entity rounded-box="width: ${CLIP.hump.w}; height: ${CLIP.hump.h}; depth: ${CLIP.hump.d}; radius: 0.008; ${METAL}" position="0 ${CLIP.hump.y} ${CLIP.hump.d / 2}"></a-entity>
+    <a-cylinder radius="0.005" height="0.003" rotation="90 0 0" position="${-0.3 * CLIP.hump.w} ${CLIP.hump.y - 0.012} ${CLIP.hump.d + 0.0015}" material="${METAL}"></a-cylinder>
+    <a-cylinder radius="0.005" height="0.003" rotation="90 0 0" position="${0.3 * CLIP.hump.w} ${CLIP.hump.y - 0.012} ${CLIP.hump.d + 0.0015}" material="${METAL}"></a-cylinder>
+    <a-entity loop="outer: ${CLIP.ring.r + CLIP.ring.tube}; hole: ${CLIP.ring.r - CLIP.ring.tube}; depth: 0.003; ${METAL}" position="0 ${CLIP.ring.y} ${CLIP.ring.z}"></a-entity>`;
   scene.appendChild(el);
   const choice = createChoice(el, {
     x: 0, y: 0, z: 0.005, w: PAPER.w - 2 * MARGIN, h: BUTTON_H, gap: GAP,
@@ -152,7 +162,7 @@ export function createSheet(scene, { inside = null } = {}) {
     if (blocks) setPage({ blocks });
     if (!busy()) clickable(true);   // else resume() makes it so, once the question is gone
     waitingTake = true;
-    const hover = (on) => board.setAttribute('material', 'color', on ? WOOD_HOVER : WOOD);
+    const hover = (on) => board.setAttribute('plate', 'color', on ? HARDBOARD_HOVER : HARDBOARD);
     const enter = () => { if (!busy()) hover(true); }, leave = () => hover(false);
     el.addEventListener('mouseenter', enter);
     el.addEventListener('mouseleave', leave);

@@ -3,10 +3,27 @@
 // comfortable from 0.8 m), a little below the eyes, world-fixed once shown; letters at
 // least the game's readable minimum, answer targets at least 2.5 degrees (Meta).
 export const READ_DIST = 1.0;
-// The clipboard's board, and how far the whole thing reaches behind the paper (the board, 4 mm
-// behind it) and in front of it (the clip): sheet.js draws it so, the wall checks use it.
-export const BOARD = { w: 0.6, h: 0.78, d: 0.006 };
-export const BOARD_REACH = { w: BOARD.w, h: BOARD.h, back: BOARD.d + 0.004, front: 0.02 };
+// The clipboard, as a hardboard clipboard for US Letter paper is made (9 × 12-1/2 in, 1/8 in
+// hardboard: school and office catalogs; the clip after a photo of one, Wikimedia Commons
+// "Clipboard.jpg"), scaled so its Letter-shaped paper (0.56 × 0.72 m, sheet.js) reads at 1 m: the
+// board 1/4 in wider than the paper each side, 1-1/4 in above it for the clip and 1/4 in below;
+// the clip's jaw 0.6 of the board's width over the paper's top edge, a raised middle with two
+// rivets, and the ring it hangs by standing above the board. y up from the paper's centre, z out
+// of the paper (metres).
+const IN = 0.56 / 8.5;   // metres an inch at this scale
+export const BOARD = { w: 9 * IN, top: 0.36 + 1.25 * IN, bottom: 0.36 + 0.25 * IN, d: 0.125 * IN, corner: 0.375 * IN };
+export const CLIP = {
+  jaw: { w: 0.6 * BOARD.w, h: 0.7 * IN, y: 0.36, d: 0.005 },
+  hump: { w: 0.27 * BOARD.w, h: 1.1 * IN, y: 0.36 + 0.75 * IN, d: 0.02 },
+  ring: { r: 0.4 * IN, tube: 0.1 * IN, y: 0.36 + 1.5 * IN, z: 0.01 }
+};
+// how far the whole clipboard reaches: up to the ring's top, down to the board's foot, behind the
+// paper to the board's back (4 mm behind the paper), in front of it to the clip's hump; the wall
+// checks use it
+export const BOARD_REACH = { w: BOARD.w, top: CLIP.ring.y + CLIP.ring.r + CLIP.ring.tube, bottom: BOARD.bottom, back: BOARD.d + 0.004, front: CLIP.hump.d };
+// The height of the sheet's centre when it hangs by its ring on a peg of radius pegR at hookY: the
+// peg sits at the top inside of the ring.
+export const hangY = (hookY, pegR) => hookY - (CLIP.ring.r - CLIP.ring.tube - pegR) - CLIP.ring.y;
 export const DROP_DEG = 12;
 export const MIN_LETTER_DEG = 1.2;
 export const MIN_TARGET_DEG = 2.5;
@@ -73,10 +90,10 @@ export function within(inside, [x, , z], m) {
 
 // The eight corners of the board at pose { pos, pitch, yaw } (three.js order YXZ: pitch about its
 // own x, then yaw about the vertical).
-export function boardCorners({ pos, pitch, yaw }, { w, h, back = 0, front = 0 }) {
+export function boardCorners({ pos, pitch, yaw }, { w, h = 0, top = h / 2, bottom = h / 2, back = 0, front = 0 }) {
   const cx = Math.cos(pitch), sx = Math.sin(pitch), cy = Math.cos(yaw), sy = Math.sin(yaw);
   const out = [];
-  for (const x of [-w / 2, w / 2]) for (const y of [-h / 2, h / 2]) for (const z of [-back, front]) {
+  for (const x of [-w / 2, w / 2]) for (const y of [-bottom, top]) for (const z of [-back, front]) {
     const y1 = y * cx - z * sx, z1 = y * sx + z * cx;
     out.push([pos[0] + x * cy + z1 * sy, pos[1] + y1, pos[2] - x * sy + z1 * cy]);
   }

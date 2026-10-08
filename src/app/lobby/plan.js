@@ -6,6 +6,8 @@
 // Northwestern, Georgia Tech, Smithsonian guidelines); every door's latch is on the side toward
 // the entrance, and its sign is on the leaf (brand.js). Floors above hold more rooms. Pure: no
 // A-Frame, so tests read it in node.
+import { hangY } from '../../engine/ui/sheet-math.js';
+
 export const PLAN = {
   from: -6.6, to: 8.0,          // the end walls' faces (x), a whole number of 0.2 m blocks
   north: 1.8, south: 3.6,       // the long walls' corridor faces (z); each wall 0.2 m thick
@@ -17,11 +19,16 @@ export const PLAN = {
   floor: 1,                     // the hundreds of every room number on this floor
   // the experimenter's board left of room 101 (its edges on the block joints), and the
   // extinguisher opposite it
-  board: { x: -0.8, y: 1.5, w: 1.6, h: 1.0 },
+  // the clipboard hangs by its ring on a peg (hook: its height, peg: its radius), placed so the
+  // clipboard lies on the cork with its ring below the frame
+  board: { x: -0.8, y: 1.5, w: 1.6, h: 1.0, hook: 1.92, peg: 0.005 },
   extinguisher: -0.8
 };
 
 const round = (v) => Math.round(v * 1e4) / 1e4;
+
+// the clipboard's home: hanging by its ring on the board's peg, its paper 2 cm off the cork
+export const SHEET_HOME = { pos: [PLAN.board.x, round(hangY(PLAN.board.hook, PLAN.board.peg)), 1.855], yaw: 0, away: [0, 0, 1] };
 // the doors: north wall rooms in every bay; south wall rooms, with the stairs in the middle bay
 const doors = [
   ...PLAN.bays.map((k) => ({ x: round(PLAN.entrance + k * PLAN.bay), k, wall: 'north', kind: k === 0 ? 'room1' : 'soon' })),

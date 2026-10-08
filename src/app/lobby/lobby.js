@@ -19,7 +19,7 @@ import { paintExtinguisherLabel } from './extinguisher-label.js';
 import { showHint } from '../hint.js';
 import { leaveButton } from './exit.js';
 import { WALLS } from './scene.js';
-import { PLAN, BOUNDS as AREA } from './plan.js';
+import { BOUNDS as AREA, SHEET_HOME } from './plan.js';
 
 export { corridorHTML } from './scene.js';
 
@@ -35,7 +35,6 @@ const BOUNDS = `minX: ${AREA.minX}; maxX: ${AREA.maxX}; minZ: ${AREA.minZ}; maxZ
 // The clipboard hangs on the experimenter's board left of door 1, its back 1 cm off the cork
 // (faces at least 5 mm apart, or they flicker) and the peg (scene.js) through its clip, facing
 // the corridor: the only stretch of wall wide enough for it.
-const SHEET_HOME = { pos: [PLAN.board.x, 1.5, 1.855], yaw: 0, away: [0, 0, 1] };
 // Print on the corridor walls (the clipboard's paper on its hook, the plaques and notices) is
 // drawn unlit for legibility; dimmed to this so it does not glow in the dim corridor (chosen
 // by eye in rendered frames; the clipboard brightens for reading on its way to the player).

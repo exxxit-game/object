@@ -136,7 +136,7 @@ export const corridorHTML = `
     <!-- the experimenter's board: cork in an aluminium frame (S21); the hook the clipboard
          hangs on (src/app/lobby/lobby.js) -->
     <a-box class="on-wall" position="${B.x} ${B.y} 1.815" width="${B.w}" height="${B.h}" depth="0.03" material="color: #b9bcbf; metalness: .6; roughness: .35"></a-box>
-    <a-cylinder position="${B.x} 1.875 1.8575" radius="0.005" height="0.045" rotation="90 0 0" ${METAL}></a-cylinder>
+    <a-cylinder position="${B.x} ${B.hook} 1.8575" radius="${B.peg}" height="0.045" rotation="90 0 0" ${METAL}></a-cylinder>
     <!-- the pins of the two sheets beside the clipboard (#notePoster, #noteFlyer below), at the
          top middle of each tilted sheet -->
     <a-sphere position="${r(B.x - 0.4748)} 1.7364 1.843" radius="0.006" color="#9b2a22"></a-sphere>

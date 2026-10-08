@@ -28,12 +28,13 @@ AFRAME.registerComponent('reflect-env', {
     const renderer = this.el.sceneEl.renderer, o = this.el.object3D;
     // from the middle of the object itself (its parts may sit far from the entity's origin)
     new AFRAME.THREE.Box3().setFromObject(o).getCenter(this.cam.position);
+    const shown = o.visible;
     o.visible = false;   // the object must not mirror itself
     const xr = renderer.xr.enabled;
     renderer.xr.enabled = false;
     this.cam.update(renderer, this.el.sceneEl.object3D);
     renderer.xr.enabled = xr;
-    o.visible = true;
+    o.visible = shown;   // a hidden object stays hidden
     this.pmrem = this.pmrem || new AFRAME.THREE.PMREMGenerator(renderer);
     this.blurred = this.pmrem.fromCubemap(this.target.texture, this.blurred);
     const map = this.blurred.texture;
