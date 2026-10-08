@@ -106,8 +106,14 @@ assert.equal(held.size, parts.length, `extinguisher parts hanging in the air: ${
 // neck or the valve (their boxes meet, overlapping by 1 mm at most; the hose's box is only its
 // path's bounds, so it is left out)
 const hanger = tagsOf.map((t, i) => /class="hanger"/.test(t) ? i : -1).filter((i) => i >= 0);
-const pierce = (a, b) => [0, 1, 2].every((i) => Math.min(a[i][1], b[i][1]) - Math.max(a[i][0], b[i][0]) > 0.001);
+const overlap = (a, b) => [0, 1, 2].map((i) => Math.min(a[i][1], b[i][1]) - Math.max(a[i][0], b[i][0]));
+const pierce = (a, b) => overlap(a, b).every((o) => o > 0.001);
 assert.ok(hanger.length >= 3, 'the wall hanger is marked class="hanger"');
+// its bars are bent from one strap: each meets another face to face (more than 1 mm across in two
+// directions), never along an edge only, which shows as a step instead of a bend
+for (const h of hanger) {
+  assert.ok(hanger.some((g) => g !== h && touch(parts[h], parts[g]) && overlap(parts[h], parts[g]).filter((o) => o > 0.001).length >= 2), `the hanger's part ${h} meets the rest only along an edge`);
+}
 for (const h of hanger) {
   tagsOf.forEach((t, i) => {
     if (hanger.includes(i) || /cable="/.test(t)) return;
@@ -128,8 +134,11 @@ const bodyFace = pos(body)[2] + B.body / 2;
 assert.ok(near(pos(body)[2] - B.body / 2, PLAN.north), 'the body of the board on the wall');
 for (const l of lips) {
   assert.ok(near(pos(l)[2] - B.lip / 2, bodyFace), 'the lip on the face of the body');
-  assert.ok(corkZ > bodyFace && corkZ < pos(l)[2] + B.lip / 2, 'the cork below the face of the lip, off the body');
+  assert.ok(corkZ < pos(l)[2] + B.lip / 2, 'the cork below the face of the lip');
 }
+// the cork 1/4 in thick on the body (S21), which also keeps its face 5 mm or more off the body's
+// face behind it (closer faces flicker in a headset)
+assert.ok(near(corkZ - bodyFace, 0.00635, 0.0005) && corkZ - bodyFace >= 0.005, `the cork ${((corkZ - bodyFace) * 1000).toFixed(1)} mm thick`);
 const [cw, ch] = [Number(attr(cork, "width")), Number(attr(cork, "height"))];
 assert.ok(near(cw, B.w - 2 * B.border) && near(ch, B.h - 2 * B.border), 'the cork fills the lip');
 const sheets = tags('a-entity').filter((t) => /id="note/.test(t));

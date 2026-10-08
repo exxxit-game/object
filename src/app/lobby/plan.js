@@ -22,8 +22,8 @@ export const PLAN = {
   // the clipboard hangs by its ring on a peg (hook: its height, peg: its radius), placed so the
   // clipboard lies on the cork with its ring below the frame; in depth, as framed cork boards are
   // made: an aluminium body on the wall (body), a lip round its front (border wide, lip deep), the
-  // cork inside the lip, standing cork proud of the body and below the lip's face
-  board: { x: -0.8, y: 1.5, w: 1.6, h: 1.0, hook: 1.92, peg: 0.005, body: 0.03, border: 0.044, lip: 0.006, cork: 0.002 },
+  // cork inside the lip, 1/4 in thick (S21) on the body and 3 mm below the lip's face
+  board: { x: -0.8, y: 1.5, w: 1.6, h: 1.0, hook: 1.92, peg: 0.005, body: 0.03, border: 0.044, lip: 0.009, cork: 0.00635 },
   extinguisher: -0.8
 };
 
