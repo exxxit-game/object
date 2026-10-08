@@ -48,6 +48,9 @@ player-facing text (src/rooms/*/texts.ru.js).
 21. Before every change, think first and say it in the answer: what exactly we are doing,
     why (what it gives the player or the science), what else it touches, and which
     checked facts it rests on. If the why is unclear, ask instead of doing.
+22. A message that arrives during work (the owner often dictates from the phone) adds
+    to the current task, it never replaces it: answer it in a line, write it into the
+    open list in docs/state.md, finish the current step, then do it.
 
 ## Commands
 - `npm test` — pure unit tests (node, under a second). Safe to run locally.

@@ -15,6 +15,7 @@
   `node tools/check-cards.mjs`; catalog generated: `docs/catalog.md` (`node tools/build-catalog.mjs`);
   coverage closed: `docs/search-coverage.md`; ideas: `docs/ideas/`; headset abilities:
   `docs/headset-capabilities.md`; owner page: https://claude.ai/artifact/Srhwjio7Ukp4FBDQAHpZB2
+- Plan to 1M players (Russian doc for the owner, 08.10): https://claude.ai/code/artifact/71113d16-57ad-42ce-9905-87ff87dfdbd7
 - Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS, 72 fps, 08.10);
   `tools/xr-probe.html` (owner presses VR/MR/mic buttons); `scrcpy` installed.
 - Voice: ElevenLabs key `C:\Users\admin\.elevenlabs-key.txt`; Daniel, eleven_v3;
@@ -58,3 +59,7 @@
 7. Engagement: share card without spoilers, desktop version, Quest new-tab submission.
 8. Waiting on owner: play room 01 in headset at real speed; plugins; lab letter.
    DONE 08.10: xr-probe (all features in VR and MR, area 1.88 x 2.10 m), audio delay 4 + 24 ms.
+9. Plan doc (link above): fill science, measurements, money, stages; then measure the headset
+   (battery, Hz, timing, audio loopback, jitter, hands, body, MR accuracy, boundary repeat).
+   No published Quest play-area data exists: collect it ourselves (testers' probe, then consent).
+   Steam survey Sep 2026: Quest 3 26.9%, Quest 2 25.8%, 3S 11.1%; English only 34.2% of users.
