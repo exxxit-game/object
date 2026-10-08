@@ -75,7 +75,7 @@ assert.deepEqual(missing, [], `docs name files that do not exist: ${missing.join
 const mistakes = fs.readFileSync(path.join(ROOT, 'docs/mistakes.md'), 'utf8').split('\n');
 assert.ok(mistakes.length <= 60, 'docs/mistakes.md over 60 lines: merge rows');
 for (const row of mistakes.filter(l => l.startsWith('| ') && !/^\| (Mistake|---)/.test(l))) {
-  assert.ok(/`(src|tests|tools|docs|\.claude)\/[^`]+`/.test(row.split('|')[2] || ''), `mistake without a guard: ${row.slice(0, 80)}`);
+  assert.ok(/`(src|tests|tools|docs|\.claude|\.github)\/[^`]+`/.test(row.split('|')[2] || ''), `mistake without a guard: ${row.slice(0, 80)}`);
 }
 
 // 9. Every script parses: a shell heredoc can change backslashes silently.

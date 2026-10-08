@@ -70,9 +70,8 @@
    the stairs), door signs ON THE DOORS = one real family (SIGN in src/app/brand.js: NIU 9 x 9 in, number
    2 in centred, stairs with the DOT/AIGA 1979 symbol), computer hint only where the player is and never in
    VR. RULE 23 first line: WE RECREATE, never invent sizes or shapes. Headset: 72 fps, 90 draw calls.
-   Owner answered for now: extinguisher stays by the stairs unless he says the end wall.
    After: floor directory by the stairs (1979 letter board), notices Letter + typewriter, clipboard, signature.
-   Ideas after acceptance (plan doc): board notes, doors named once done, the tilted room, a map test.
+   Ideas after acceptance (plan doc): board notes, the tilted room, a map test, a secret door, the swap of roles.
 2. Headset: `quest-look.mjs worn on` keeps it awake (`worn off` after); asleep = only his power button wakes it;
    frames render only while the VR session is visible. Visual designs go to him as pictures BEFORE the game.
 3. Then first room: read in full Fernández-Ruiz 1999, Hirschhorn 2024, Kohnstamm 1915; 5-minute
