@@ -11,7 +11,7 @@ const server = await startServer(0);
 const base = `http://localhost:${server.address().port}/?speed=20`;
 const browser = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
 
-async function playRoom(url, playtest) {
+async function playRoom(url, playtest, { leave = false } = {}) {
   const page = await browser.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -53,6 +53,29 @@ async function playRoom(url, playtest) {
     if (answers.length <= 4 && new Set(answers.map(a => a.object3D.position.x.toFixed(3))).size > 1) out.push('answers in two columns');
     return out;
   });
+  // Light falling on a level white card at a point (a light meter): the card is drawn alone
+  // from just above, and its linear brightness is read.
+  const lightAt = (p) => page.evaluate(([x, y, z]) => {
+    const sc = document.querySelector('a-scene'), r = sc.renderer;
+    const rt = new THREE.WebGLRenderTarget(8, 8);
+    const card = new THREE.Mesh(new THREE.PlaneGeometry(0.2, 0.2), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, metalness: 0 }));
+    card.rotation.x = -Math.PI / 2;
+    card.position.set(x, y, z);
+    sc.object3D.add(card);
+    const cam = new THREE.PerspectiveCamera(10, 1, 0.01, 2);
+    cam.position.set(x, y + 0.3, z);
+    cam.lookAt(x, y, z);
+    sc.object3D.updateMatrixWorld(true);
+    r.setRenderTarget(rt);
+    r.render(sc.object3D, cam);
+    const px = new Uint8Array(4 * 64);
+    r.readRenderTargetPixels(rt, 0, 0, 8, 8, px);
+    r.setRenderTarget(null);
+    sc.object3D.remove(card);
+    let sum = 0;
+    for (let i = 0; i < 64; i++) sum += (0.2126 * px[i * 4] + 0.7152 * px[i * 4 + 1] + 0.0722 * px[i * 4 + 2]) / 255;
+    return sum / 64;
+  }, p);
   // clicks the answer button with this index, waiting until it exists
   const pick = async (i) => {
     // buttons accept a click once they are ready (choice.js ignores the first 0.3 s)
@@ -65,6 +88,25 @@ async function playRoom(url, playtest) {
     const onWall = await page.evaluate(() => !document.querySelector('.answer').closest('.sheet'));
     if (onWall) assert.ok(sizes[0] >= 30, `answer text too small: ${sizes[0]}px`);
     await page.evaluate((n) => [...document.querySelectorAll('.answer')].find(e => +e.dataset.index === n).emit('click'), i);
+  };
+  // The exit sign cuts in with "leave?" on the clipboard (src/app/lobby/exit.js); "stay" gives
+  // back the page that was there, with its answers, on its hook or in front (sheet.js resume).
+  const sheetState = () => page.evaluate(() => {
+    const s = document.querySelector('.sheet');
+    return { take: !!s.dataset.take, open: !!s.dataset.open, answers: s.querySelectorAll('.answer').length, text: s.dataset.textBottom };
+  });
+  const askLeave = async () => {
+    await page.evaluate(() => document.querySelector('#exitSign').emit('click'));
+    await page.waitForFunction(() => document.querySelector('.sheet[data-open]') && document.querySelectorAll('.sheet .answer').length === 2, null, { timeout: 30000 });
+  };
+  const exitThenStay = async () => {
+    const before = await sheetState();
+    await askLeave();
+    await pick(1);
+    await page.waitForFunction((b) => {
+      const s = document.querySelector('.sheet');
+      return !!s.dataset.take === b.take && !!s.dataset.open === b.open && s.querySelectorAll('.answer').length === b.answers && s.dataset.textBottom === b.text;
+    }, before, { timeout: 30000 });
   };
   // answers one question: a scale (click its middle, then "done") or a choice
   const answer = async () => {
@@ -85,13 +127,58 @@ async function playRoom(url, playtest) {
     await page.goto(url);
     await page.waitForFunction(() => document.querySelector('a-scene')?.hasLoaded, null, { timeout: 30000 });
     assert.equal(await page.evaluate(() => document.documentElement.dataset.roomState), 'idle');
-    await pick(0);                       // corridor: "next" after the welcome
+    // the exit sign pressed while the sign still plays: the clipboard's "take me" page comes
+    // while the question is open and waits behind it; "stay" puts it on its hook, ready
+    await page.waitForFunction(() => document.querySelector('.sheet')?.getAttribute('visible'), null, { timeout: 30000 });
+    if (!playtest && !leave) {
+      await askLeave();
+      await page.waitForFunction(() => document.querySelector('.sheet[data-take]'), null, { timeout: 60000 });
+      assert.equal(await page.evaluate(() => document.querySelectorAll('.sheet .answer').length), 2, 'the leave question was drawn over');
+      await pick(1);
+      await page.waitForFunction(() => {
+        const s = document.querySelector('.sheet');
+        return s.dataset.take && !s.dataset.open && !s.querySelector('.answer') && s.querySelector('.paper').classList.contains('clickable');
+      }, null, { timeout: 30000 });
+    }
+    // corridor: the sign plays, then the clipboard is taken from the board and welcomes
+    await page.waitForFunction(() => document.querySelector('.sheet[data-take]'), null, { timeout: 60000 });
+    const corridorLight = await lightAt([0.6, 0.01, 2.7]);   // the corridor floor, door shut
+    if (leave) {
+      // "leave" fades out, ends the game and says how to come back
+      await askLeave();
+      await pick(0);
+      await page.waitForFunction(() => document.documentElement.dataset.left === '1' && document.querySelector('#hint.show'), null, { timeout: 30000 });
+      assert.deepEqual(errors, [], `page errors: ${errors.join(' | ')}`);
+      return;
+    }
+    if (!playtest) await exitThenStay();   // the clipboard waits on its hook to be taken
+    await page.evaluate(() => document.querySelector('.sheet[data-take]').emit('click'));
+    // ending b leaves only "you" lit; taking the clipboard brings the whole name back
+    if (url.includes('sign=b')) {
+      await page.waitForFunction(() => document.querySelector('#signFace').components.lightbox.levels.slice(0, 4).every(l => l >= 0.9), null, { timeout: 10000 });
+    }
+    if (!playtest) {                     // the welcome page, in front of the player
+      await page.waitForFunction(() => document.querySelectorAll('.sheet .answer').length === 1, null, { timeout: 30000 });
+      await exitThenStay();
+    }
+    await pick(0);                       // "next" after the welcome
     await pick(0);                       // consent page 1 (what this is, leaving, 18+): "next"
     if (playtest) await pick(0);         // the playtest note, a page of its own
     await pick(1);                       // last consent page: start without recording
     // the door to room 1 opens when pointed at
     await page.waitForFunction(() => document.documentElement.dataset.lobby === 'door', null, { timeout: 30000 });
+    if (!playtest) {
+      // under the leave question door 1 stays shut; after "stay" it opens
+      await askLeave();
+      await page.evaluate(() => document.querySelector('#door1 .clickable').emit('click'));
+      await page.waitForTimeout(500);
+      assert.equal(await page.evaluate(() => document.documentElement.dataset.lobby), 'door', 'door 1 opened under the leave question');
+      await pick(1);
+      await page.waitForFunction(() => !document.querySelector('.sheet[data-open]'), null, { timeout: 30000 });
+    }
     await page.evaluate(() => document.querySelector('#door1 .clickable').emit('click'));
+    // through the door the exit sign stops answering (the lasers reach it through the walls)
+    assert.equal(await page.evaluate(() => document.querySelector('#exitSign').classList.contains('clickable')), false, 'the exit sign answers from the room');
     // "understood" twice: after the instructions and after the control concept
     for (let i = 0; i < 2; i++) {
       await page.waitForFunction(() => document.documentElement.dataset.roomState === 'intro' &&
@@ -100,6 +187,11 @@ async function playRoom(url, playtest) {
       await page.waitForFunction(() => document.querySelectorAll('.answer').length === 0, null, { timeout: 30000 });
     }
     await waitState('run');
+    // Corridors under 10 fc, desks 50 fc (docs/building-standards.md, S13): the corridor
+    // floor gets at most a fifth of the light on the room's desk, and is not left dark (the
+    // 0.1 floor is our choice, so the corridor stays visible).
+    const ratio = corridorLight / await lightAt([0.4, 0.846, -0.3]);
+    assert.ok(ratio <= 0.2 && ratio >= 0.1, `corridor floor / room desk light = ${ratio.toFixed(3)} (0.1–0.2)`);
     // press during about every other yellow light
     await page.evaluate(() => {
       window.__presser = setInterval(() => {
@@ -126,8 +218,10 @@ async function playRoom(url, playtest) {
 try {
   await playRoom(base, false);
   console.log('smoke test: ok (normal)');
-  await playRoom(`${base}&playtest=1`, true);
+  await playRoom(`${base}&playtest=1&sign=b`, true);
   console.log('smoke test: ok (playtest)');
+  await playRoom(base, false, { leave: true });
+  console.log('smoke test: ok (leave from the corridor)');
 } finally {
   await browser.close();
   server.close();

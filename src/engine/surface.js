@@ -1,12 +1,13 @@
-import { jointOrigin, bondOrigin } from './tile-math.js';
+import { jointOrigin, bondOrigin, courseShifted } from './tile-math.js';
 
 // Surfaces drawn once on a canvas (no image files to load): painted block wall,
-// linoleum tiles, acoustic ceiling tiles, wood. Each kind is drawn once and shared.
+// linoleum tiles, acoustic ceiling tiles, cork, a lamp's lens, wood. Each kind is drawn once
+// and shared.
 // Tiles and blocks follow ONE grid per space (a room, the corridor), laid out from that
 // space's centre in world metres by the tile trade's rule (tile-math.js), so a wall cut
 // into pieces, the band below the rail and the next wall all line up, and the edges of
 // the space get equal cuts, never less than half a tile.
-// Wood (no grid) only repeats.
+// Cork, lens and wood (no grid) only repeat.
 // <a-plane surface="kind: linoleum"></a-plane>  <a-entity surface="kind: wood; repeat: 1 1">
 const SIZE = 512;
 const cache = {};
@@ -36,7 +37,9 @@ const KINDS = {
     for (let row = 0; row < 8; row++) {
       const y = row * bh;
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(SIZE, y); ctx.stroke();
-      const shift = row % 2 ? bw / 2 : 0;
+      // rows run down the canvas, which is laid upside up on the wall: the last row is the
+      // course at the floor (course 0 of each 1.6 m)
+      const shift = courseShifted(7 - row) ? bw / 2 : 0;
       for (let x = shift; x < SIZE + 1; x += bw) {
         ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + bh); ctx.stroke();
       }
@@ -63,6 +66,25 @@ const KINDS = {
     ctx.strokeStyle = '#9d9a92';
     ctx.lineWidth = 10;
     ctx.strokeRect(0, 0, SIZE, SIZE);
+  },
+  // cork tackboard: tan granules of several shades (docs/building-standards.md, S21)
+  cork(ctx, rand) {
+    ctx.fillStyle = '#a5815a';
+    ctx.fillRect(0, 0, SIZE, SIZE);
+    speckle(ctx, rand, 26000, 3, ['rgba(90,60,30,.22)', 'rgba(200,165,115,.2)', 'rgba(60,40,20,.15)', 'rgba(170,130,85,.25)']);
+  },
+  // prismatic acrylic troffer lens (S20) over two lamps, which show as soft bands along it; the
+  // prism grid is faint on purpose: a fine high-contrast pattern shimmers in a headset
+  lens(ctx) {
+    const g = ctx.createLinearGradient(0, 0, 0, SIZE);
+    for (const [at, c] of [[0, '#c9ced3'], [0.33, '#ffffff'], [0.5, '#e4e8ec'], [0.67, '#ffffff'], [1, '#c9ced3']]) g.addColorStop(at, c);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, SIZE, SIZE);
+    ctx.strokeStyle = 'rgba(0,0,0,.035)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= SIZE; i += 8) {
+      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, SIZE); ctx.moveTo(0, i); ctx.lineTo(SIZE, i); ctx.stroke();
+    }
   },
   // light wood with long grain (table top)
   wood(ctx, rand) {
@@ -128,8 +150,9 @@ function texture(kind) {
 AFRAME.registerComponent('surface', {
   schema: {
     kind: { default: 'block', oneOf: Object.keys(KINDS) },
-    repeat: { type: 'vec2', default: { x: 1, y: 1 } }, // wood only; tiled kinds use the room grid
+    repeat: { type: 'vec2', default: { x: 1, y: 1 } }, // kinds without a grid; tiled kinds use the room grid
     tint: { default: '#ffffff' }, // multiplies the drawn colours (darker paint band, etc.)
+    glow: { default: false },     // a lit surface (a lamp's lens): the drawing also shapes its glow
     // the space whose tiles this surface shares: centre x, centre z, length along x, along z
     // (default: room 01, 3.2 × 3.2 m around the origin)
     space: { type: 'vec4', default: { x: 0, y: 0, z: 3.2, w: 3.2 } }
@@ -149,6 +172,7 @@ AFRAME.registerComponent('surface', {
     if (!grid) map.repeat.set(this.data.repeat.x, this.data.repeat.y);
     map.needsUpdate = true;
     mesh.material.map = map;
+    if (this.data.glow) mesh.material.emissiveMap = map;
     mesh.material.color.set(this.data.tint);
     mesh.material.needsUpdate = true;
   }

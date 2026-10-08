@@ -16,4 +16,8 @@ for (const room of rooms) {
   assert.equal(new Set(SOUNDS.map(s => s.name)).size, SOUNDS.length, `${room}: two sounds share a name`);
   total += SOUNDS.length;
 }
+// the corridor plays its sounds at measured gains: a sound without one would play at full
+// volume and escape the headset check (tools/quest-look.mjs, levels)
+const lobby = await import(new URL('../src/app/lobby/sound-list.js', import.meta.url));
+assert.deepEqual(Object.keys(lobby.SOUND_GAIN).sort(), lobby.SOUNDS.map(s => s.name).sort(), 'every corridor sound has a gain');
 console.log(`sound tests: ok (${total} sounds in ${rooms.length} rooms)`);

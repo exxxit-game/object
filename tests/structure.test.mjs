@@ -78,7 +78,7 @@ for (const row of mistakes.filter(l => l.startsWith('| ') && !/^\| (Mistake|---)
   assert.ok(/`(src|tests|tools|docs|\.claude)\/[^`]+`/.test(row.split('|')[2] || ''), `mistake without a guard: ${row.slice(0, 80)}`);
 }
 
-// 9. Every script parses (a shell heredoc once changed backslashes silently).
+// 9. Every script parses: a shell heredoc can change backslashes silently.
 const scripts = [...code, ...walk(path.join(ROOT, 'tests')), ...walk(path.join(ROOT, 'tools'))]
   .filter(f => /\.m?js$/.test(f));
 for (const f of scripts) {
@@ -91,12 +91,39 @@ try { execFileSync(process.execPath, [path.join(ROOT, 'tools/build-catalog.mjs')
 catch (e) { assert.fail(String(e.stderr || e.stdout).trim()); }
 
 // 11. A component never gives its own method the name play() or pause() with arguments:
-// A-Frame calls those itself when an entity starts and stops, so a sign told to "play"
-// its start-up lit nothing.
+// A-Frame calls those itself when an entity starts and stops, so such a method runs at the
+// wrong time and without its arguments.
 const hijacked = code.filter(f => {
   const s = fs.readFileSync(f, 'utf8');
-  return /registerComponent/.test(s) && /^\s{2}(play|pause)\s*\(\s*\w/m.test(s);
+  return /registerComponent/.test(s) && /^\s+(play|pause)\s*\(\s*\w/m.test(s);
 }).map(rel);
 assert.deepEqual(hijacked, [], `component methods named play/pause: ${hijacked.join(', ')}`);
+
+// 12. Every light a room switches on in its markup carries class room-light: lights pass
+// through walls, and the corridor keeps them off until the room's door opens (docs/rooms.md).
+for (const dir of fs.readdirSync(path.join(ROOT, 'src/rooms'))) {
+  const file = path.join(ROOT, 'src/rooms', dir, 'scene.js');
+  if (!fs.existsSync(file)) continue;
+  for (const tag of fs.readFileSync(file, 'utf8').match(/<a-entity[^>]*\blight="[^"]*"[^>]*>/g) || []) {
+    const on = Number((tag.match(/intensity:\s*([\d.]+)/) || [])[1] ?? 1) > 0;
+    if (on) assert.ok(/class="[^"]*\broom-light\b/.test(tag), `room light without class room-light in ${rel(file)}: ${tag.slice(0, 90)}`);
+  }
+}
+
+// 13. The game's name stays "You are the object" in every language: no player-facing text calls
+// it «Объект» (the word "объект" itself may appear in a sentence).
+const facing = [path.join(ROOT, 'privacy.html'), path.join(ROOT, 'index.html'),
+  ...code.filter(f => /texts\.ru\.js$/.test(f))];
+for (const f of facing) {
+  const s = fs.readFileSync(f, 'utf8');
+  assert.ok(!/«Объект|Объект ·|в «Объекте»/.test(s), `${rel(f)} translates the game's name`);
+}
+
+// 14. Commits name the account's hidden GitHub address, never a personal one: the repository and
+// the test copy are public, and every commit shows its author's address to anyone. Where no
+// address is set (CI does not commit), there is nothing to check.
+let author = '';
+try { author = execFileSync('git', ['config', 'user.email'], { cwd: ROOT, encoding: 'utf8' }).trim(); } catch { /* not set */ }
+assert.ok(!author || author.endsWith('@users.noreply.github.com'), `git commits would show the address ${author}: set the hidden GitHub address (git config user.email ID+NAME@users.noreply.github.com)`);
 
 console.log('structure tests: ok');

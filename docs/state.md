@@ -23,15 +23,12 @@
   `tools/xr-probe.html` (owner presses VR/MR/mic buttons); `scrcpy` installed.
   Owner plays the test copy https://exxxit-game.github.io/object-preview/ (bookmark in the headset; no
   laptop or cable): `node tools/publish-preview.mjs` before he looks; it never sends data. Never make
-  him plug cables; adb over Wi-Fi (`tools/quest-wifi.mjs`) only for my own checks.
+  him plug cables; adb over Wi-Fi (`tools/quest-wifi.mjs`) only for my own checks. I check in the
+  headset myself, without him: `tools/quest-look.mjs` (open, reload past caches, enter VR, read the
+  game's own frames, run JS); opening 08.10 measured there: sign at +10 s, 90 fps, clipboard trip 1 s.
 - Voice: ElevenLabs key `C:\Users\admin\.elevenlabs-key.txt`; Daniel, eleven_v3;
   `tools/make-voice.mjs`, `tools/check-voice.mjs` (speech-to-text check), `tools/make-sounds.mjs`.
 
-## Decisions with the owner
-- Rooms are faithful re-creations of published experiments; no invented mechanics.
-- Space tiers: seated, standing, roomscale 1.8×1.8 m (base; owner's area), large (offered only, never shrunk).
-- Live players replace scripted people only where the original had real participants or
-  a design like Mori & Arai; mixed reality where the original was a real room.
 ## Decisions with the owner
 - Rooms are faithful re-creations of published experiments; no invented mechanics.
 - Space tiers: seated, standing, roomscale 1.8×1.8 m (base; owner's area), large (offered only, never shrunk).
@@ -60,17 +57,23 @@
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
 ## Open items (08.10). ONE step at a time, a short status after each. Every request: plan doc table.
-1. NOW: corridor until the owner says "коридор принят" in the headset; nothing beyond it before that.
-   Done: tiles by trade rules (src/engine/tile-math.js), door fills its opening + threshold, spawn facing
-   door 1 at standing height, re-place when the headset is put back on (check in headset), clipboard
-   sheet 1 m ahead for all text (src/engine/ui/sheet.js; research in decisions.md). Open: building
-   standards audit (handles, hinges, light; helper research), quest-check run (headset was offline).
-2. Then first room: read in full Fernández-Ruiz 1999, Hirschhorn 2024, Kohnstamm 1915; 5-minute
-   prototypes; owner picks. Criteria: wow fast, replay your moment, share, visible on stream.
-3. Strategy section in the plan doc (free rooms, streamers, cadence): helper researching, then write it.
-4. Waiting on owner: headset on charge and on; merge + push word; domain Verify.
-Rules learned 08.10: CLAUDE.md rule 23 (standards first); decide myself, ask only what only he knows;
-in the headset he cannot read the laptop (memory: headset-sessions).
-Facts: body-tracking legs are AI-generated; labs have Ouvrai and VERA; Meta stopped education
-sales 20.02.2026; store sales need a store PWA (30%); Steam Sep 2026 Quest 3 26.9%, Quest 2
-25.8%, 3S 11.1%, English 34.2%. Rules: science studies free; gate 0 = 7 of 10 finish + mean 7.
+1. NOW (queue step 4): corridor until the owner says "коридор принят"; nothing beyond it before that.
+   All UNCOMMITTED (commit/push only on his word). Built: sign with the name and endings A/B/C by
+   visit (?sign=a|b|c); clipboard on the board's hook, taken by a click, its instruction on it too;
+   dim corridor (S13); sounds at measured gains (sound-list.js SOUND_GAIN, `tools/quest-look.mjs`
+   levels); board: flyer "ТРЕБУЮТСЯ ИСПЫТУЕМЫЕ … Вы подходите." + EXXXIT poster (official ISO 7010
+   figure, green, doorway black: his choice; may change over time); thumbstick teleport, 45° snap
+   turn, back step (locomotion.js); plaques show the room number only (name in the reveal);
+   doors and flat wall things on the block module (tests/masonry.test.mjs; door 1 now at x 0.7).
+   Exit sign = the "leave" button (exit.js, sheet interrupt/resume); reviewer's 5 findings fixed, all
+   flows pass in the browser pane (hidden pane: drive frames with scene.tick); "leave" in VR NOT yet in
+   the headset (asleep). Smooth moving by link (?move=smooth, ?turn=smooth). NEXT: VR/MR research
+   (6 agents, scratchpad vr-research/ → one reference doc in docs/), then comfort settings as pictures.
+   Ideas after acceptance (plan doc): board notes, doors named once done, the tilted room, a map test.
+2. Headset: `tools/quest-look.mjs worn on` keeps it awake while I check (`worn off` after); an asleep
+   headset cannot be woken over Wi-Fi (needs his power button); frames render only while the VR
+   session is visible, else laptop frames (render-to-target in the browser pane). Visual designs go
+   to him as pictures BEFORE they go into the game.
+3. Then first room: read in full Fernández-Ruiz 1999, Hirschhorn 2024, Kohnstamm 1915; 5-minute
+   prototypes; owner picks (wow fast, replay your moment, share). Gate 0: 7 of 10 finish, mean 7.
+4. Waiting on owner: commit + push word; domain Verify; his decisions in plan «Что нужно от тебя».

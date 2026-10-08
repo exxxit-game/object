@@ -8,9 +8,9 @@ Where every file ends up in the finished game: [docs/target-architecture.md](doc
 
 | Layer | Folder | Job | Details |
 |---|---|---|---|
-| Shell | `index.html`, `src/main.js` | Load A-Frame, pick room from `?room=` (default `01-control`; no lobby yet) | — |
-| App | `src/app/` | What every room shares: consent, session (first/repeat, sending, test speed), shared texts | below |
-| Engine | `src/engine/` | Reusable parts: text panels, answer buttons, rating scale, voice, sound, event log, VR recenter, hand press | [docs/engine.md](docs/engine.md) |
+| Shell | `index.html`, `src/main.js` | Load A-Frame, pick room from `?room=` (default `01-control`) | — |
+| App | `src/app/` | What every room shares: the arrival corridor (`lobby/`: sign, clipboard, board, door), consent, session (first/repeat, sending, test speed), the studio's mark, shared texts | below |
+| Engine | `src/engine/` | Reusable parts: text panels, the clipboard sheet, answer buttons, rating scale, voice, sound, event log, VR recenter, thumbstick moving, surfaces, the sign's light box | [docs/engine.md](docs/engine.md) |
 | Rooms | `src/rooms/NN-name/` | One experiment each: protocol, scene, flow, report, reveal, texts, recordings | [docs/rooms.md](docs/rooms.md) |
 | Styles | `css/` | Page chrome only (hint). The 3D world has no CSS | — |
 | Server | `supabase/migrations/` | Anonymous results: insert-only function with a field whitelist | — |
@@ -30,10 +30,17 @@ The event log is the single source of truth for the reveal.
 ```
 index.html · css/ · vendor/aframe-1.7.1.min.js
 src/main.js
-src/app/        consent.js · session.js · texts.ru.js
-src/engine/     panel.js · audio.js · voice.js · sfx.js · log.js · results.js
-                recenter.js · recenter-math.js · grab-press.js · haptics.js
-                blob-shadow.js · room-bounds.js · ui/choice.js · ui/scale.js
+src/app/        consent.js · session.js · left-early.js · brand.js · logo.js · texts.ru.js
+                playtest.js · playtest-report.js · issue-report.js
+src/app/lobby/  the arrival corridor: lobby.js (the flow) · scene.js · opening.js · sign.js
+                board.js · exit.js (the exit sign: leave the game) · texts.ru.js
+                voice-lines.js · sound-list.js · voice/ · sound/
+src/engine/     panel.js · audio.js · voice.js · sfx.js · log.js · results.js · fader.js
+                recenter.js · recenter-math.js · locomotion.js · locomotion-math.js · vignette.js
+                grab-press.js · haptics.js · blob-shadow.js · room-bounds.js · away-meter.js
+                surface.js · tile-math.js · lightbox.js · glide.js · merge-static.js
+                shapes.js · cable.js · mirror.js
+                ui/choice.js · ui/scale.js · ui/sheet.js · ui/sheet-math.js
 src/rooms/01-control/   illusion of control (Alloy & Abramson 1979)
                 protocol.js   every number of the procedure, with paper pages
                 original.js   results shown in the reveal, with pages
@@ -46,5 +53,7 @@ src/rooms/01-control/   illusion of control (Alloy & Abramson 1979)
                 voice/ · sound/
 tests/          *.test.mjs (npm test) · smoke.mjs (CI) · static-server.mjs
 tools/          make-voice.mjs · check-voice.mjs · make-sounds.mjs · quest-check.mjs
+                quest-look.mjs (look and measure in the headset) · quest-wifi.mjs
+                publish-preview.mjs (the test copy for the headset)
 docs/           state.md (read first) · rooms/01-control.md · sources.md · ...
 ```

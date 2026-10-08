@@ -24,6 +24,13 @@ export function endCut(edge, origin, tile, dir) {
   return piece(dir * (origin - edge), tile);
 }
 
+// Running bond: counted up from the floor, the floor course is laid from the origin and every
+// other course above it is shifted by half a unit. surface.js draws by this rule and
+// tests/masonry.test.mjs checks walls by it.
+export function courseShifted(k) {
+  return k % 2 === 1;
+}
+
 // Running bond (blocks): every other course is shifted by half a unit, so the rule is
 // the mason's: in BOTH courses no end piece under half a unit (walls are laid out in
 // half units). Among such layouts the most symmetric wins, then the one whose bottom

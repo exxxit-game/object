@@ -46,7 +46,7 @@ const $ = (s) => document.querySelector(s);
 const screen = () => $('#screen').components.panel;
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 // Behind the player, where the door would be.
-const DOOR = { x: 0.6, y: 1.0, z: 1.5 };
+const DOOR = { x: 0.7, y: 1.0, z: 1.5 };
 // The stand with the two lights: looking far away from it during the trials is
 // counted for the playtest (where attention drifts).
 const STAND = { x: 0, y: 1.02, z: -0.45 };
@@ -245,10 +245,10 @@ async function boot() {
   const lc = $('#cam').components['look-controls'];
   if (lc && lc.pitchObject) lc.pitchObject.rotation.x = -0.28;
   $('#hint').classList.add('show');
-  writePlaque($('#plaque').components.panel, { number: T.kicker, ...T.plaque });
+  writePlaque($('#plaque').components.panel, { number: T.kicker });
   // The arrival: corridor, welcome, consent, the door; the player ends up at the table.
   const withRecording = await runLobby({
-    id: ROOM_ID, real: REAL, debrief: T.earlyDebrief, plaque: { number: T.kicker, ...T.plaque },
+    id: ROOM_ID, real: REAL, debrief: T.earlyDebrief, plaque: { number: T.kicker },
     seat: { x: 0, z: 0.35, yaw: 0 }, bounds: ROOM_BOUNDS, extra: PLAYTEST ? [APP_T.playtest.consent] : []
   });
   unlock();

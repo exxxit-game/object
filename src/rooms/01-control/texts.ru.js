@@ -11,8 +11,6 @@ export const T = {
     body: 'Мышь: зажмите и тяните — оглядеться, щелчок — нажать. Пробел — кнопка на столе. В шлеме: кнопка VR справа внизу; кнопку на столе можно нажать рукой или лучом.'
   },
   kicker: 'КОМНАТА 1',
-  // the plaque by the door (src/app/brand.js)
-  plaque: { name: 'ИЛЛЮЗИЯ КОНТРОЛЯ', year: '1979' },
   title: 'You are the object',
 
   // Read aloud and shown on the wall screen, one line at a time.

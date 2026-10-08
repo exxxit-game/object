@@ -14,8 +14,10 @@ AFRAME.registerComponent('fader', {
     this.target = 0;
     this.done = null;
   },
-  // to: 1 = black, 0 = clear. Resolves when the fade has finished.
+  // to: 1 = black, 0 = clear. Resolves when the fade has finished, or when a newer fade takes
+  // over (a waiting caller must not hang forever).
   to(target) {
+    if (this.done) this.done();
     this.target = target;
     this.mesh.visible = true;
     return new Promise((resolve) => { this.done = resolve; });

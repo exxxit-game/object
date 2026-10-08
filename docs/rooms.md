@@ -18,16 +18,28 @@ test that pins those numbers to the paper.
 
 `mount()` must:
 1. Put the scene into the page (`<a-scene>` appended to `<body>`) and, before it loads, the
-   corridor (`corridorHTML` from `src/app/lobby/lobby.js`) so both are merged and tiled together.
+   corridor (`corridorHTML` from `src/app/lobby/scene.js`) so both are merged and tiled together.
    The room's door is `#door1` (pivot at its hinge, a `.clickable` leaf); the corridor stands behind it.
+   Its masonry opening and every flat thing on its walls (class `on-wall`) sit on the block
+   module, so no cut sliver of block shows (`tests/masonry.test.mjs`).
+   Every light of the room that is on in its markup carries class `room-light`: lights pass
+   through walls, so the corridor keeps them off until the door opens (corridors are much
+   dimmer than rooms: docs/building-standards.md). `tests/structure.test.mjs` checks it.
 2. Fill `#hint` and add class `show` when ready.
-3. Start with the shared arrival `runLobby()` (welcome, left-early choice, consent, the door;
-   it resolves with the consent once the player is at the table) and use the shared session
+3. Start with the shared arrival `runLobby(room)` with room = `{ id, real, debrief, plaque: { number },
+   seat: { x, z, yaw }, bounds, extra }` (the sign over the door, the clipboard taken from the
+   board, welcome, left-early choice, consent, the door; it resolves with the consent once the
+   player is at the table; the thumbsticks move the player in the corridor only) and use the shared session
    (`src/app/session.js`) for first/repeat runs, test speed and sending.
 4. Mirror the flow on `<html data-room-state>` (`idle` = consent … `done` = reveal).
 
-Shared parts a room must not re-implement: arrival (corridor), consent, session, answer buttons
-(`src/engine/ui/choice.js`), rating scales (`src/engine/ui/scale.js`), voice, sound.
+Shared parts a room must not re-implement: arrival (corridor), consent, session, the clipboard
+(`src/engine/ui/sheet.js`), answer buttons (`src/engine/ui/choice.js`), rating scales
+(`src/engine/ui/scale.js`), voice, sound, door plaques (`writePlaque` in `src/app/brand.js`).
+
+A door plaque shows the room's number only, outside and inside the room: the experiment's name
+would tell the player what is studied before they do it (demand characteristics); the name comes
+in the reveal (`tests/plaque.test.mjs`).
 
 Add a room: read the paper in full first (CLAUDE.md rule 16), write the spec, then
 `protocol.js` and its test, then the rest. File names must not look like tracking

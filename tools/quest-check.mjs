@@ -74,8 +74,7 @@ errors.length = 0;
 // Hooks: count voice playback, record what the experimenter screen shows, fast timer.
 await run(`(() => {
   window.__played = []; window.__screens = []; window.__states = [];
-  const start = AudioBufferSourceNode.prototype.start;
-  AudioBufferSourceNode.prototype.start = function (...a) { window.__played.push(Math.round(this.buffer.duration * 10) / 10); return start.apply(this, a); };
+  window.addEventListener('voice-line', (e) => window.__played.push(e.detail));
   const panel = document.querySelector('#screen').components.panel; const write = panel.write.bind(panel);
   panel.write = (blocks, opt) => { window.__screens.push(blocks.map(b => b.t).join(' | ')); return write(blocks, opt); };
   new MutationObserver(() => window.__states.push(document.documentElement.dataset.roomState)).observe(document.documentElement, { attributes: true, attributeFilter: ['data-room-state'] });
@@ -94,7 +93,9 @@ await run(`(async () => {
   const st = () => document.documentElement.dataset.roomState; const w = (ms) => new Promise(r => setTimeout(r, ms));
   const pick = async (i) => { for (;;) { const a = [...document.querySelectorAll('.answer')].find(e => +e.dataset.index === i && e.dataset.ready); if (a) { a.emit('click'); return; } await w(150); } };
   (async () => {
-    await pick(0); // corridor: "next" after the welcome
+    while (!document.querySelector('.sheet[data-take]')) await w(150);
+    document.querySelector('.sheet[data-take]').emit('click'); // corridor: take the clipboard from the board
+    await pick(0); // "next" after the welcome
     await pick(0); // consent page 1 (what this is, leaving, 18+): "next"
     await pick(1); // last consent page: start without recording
     while (document.documentElement.dataset.lobby !== 'door') await w(150);

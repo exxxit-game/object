@@ -34,6 +34,8 @@ export function speak(text) {
     src.buffer = buffer;
     src.connect(ctx.destination);
     current = src;
+    // announced for checks that count spoken lines (tools/quest-check.mjs)
+    window.dispatchEvent(new CustomEvent('voice-line', { detail: text }));
     return new Promise((resolve) => {
       src.onended = () => resolve(true);
       src.start();

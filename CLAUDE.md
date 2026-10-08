@@ -1,13 +1,14 @@
 # CLAUDE.md — Object
 
-Object is a browser VR game (WebXR, A-Frame). The player is the subject of real
+Object (the game "You are the object"; the name is never translated) is a browser VR game (WebXR, A-Frame). The player is the subject of real
 psychology experiments, one room per experiment. Each room catches the player,
 then shows honestly how it was done and what the original study found.
 
 Read docs/state.md first (decisions, lessons, where things are), then ARCHITECTURE.md.
-Current plan and phase: docs/roadmap.md. Owner speaks Russian; answer him in
+Current plan and its queue: the plan doc linked in docs/state.md (docs/roadmap.md is the long view). Owner speaks Russian; answer him in
 Russian, plain words, no jargon. Everything in the repo is English except
-player-facing text (src/rooms/*/texts.ru.js).
+player-facing text (the texts.ru.js files in src/app, src/app/lobby and src/rooms/*, and the
+static page privacy.html).
 
 ## Rules
 1. No history in code. Comments explain WHY, never WHEN or WHO asked.
@@ -16,7 +17,8 @@ player-facing text (src/rooms/*/texts.ru.js).
    from rooms. Rooms talk to the engine only through the room contract
    (docs/rooms.md).
 3. Styles live only in css/. No inline <style>, no style="" attributes.
-4. Player-facing text lives only in texts.ru.js files. No Russian strings in logic.
+4. Player-facing text lives only in texts.ru.js files (the static page privacy.html aside).
+   No Russian strings in logic.
 5. Any fact shown to the player needs a source in docs/sources.md
    (author, year, journal). If you cannot verify it, do not show it.
 6. Keep files small: about 300 lines max. Split before you grow past it.
@@ -59,12 +61,28 @@ player-facing text (src/rooms/*/texts.ru.js).
        docs/state.md.
     d. After a compaction, before anything else: read docs/state.md and the plan doc queue and
        table. The summary is not the list.
+    e. A row keeps the owner's own words (a short quote), not my retelling: a retold request
+       lost the sign he described and the room was rebuilt.
+    f. "In the queue" is written only with the number of a real step in "Как идём дальше".
+    g. When work changes a fact, search the whole plan for it and update every place that
+       states it (rows, sections, the queue, "Что нужно от тебя", "Где мы сейчас").
+    h. Short questions, bug reports and remarks about the vision are requests too. A question
+       I ask him that waits for his answer goes into "Что нужно от тебя".
+    i. Guard: after a long stretch of work, and before saying a step is done, run the
+       `request-auditor` agent (owner messages vs the plan) and fix what it finds.
 23. Knowledge first, then thinking. Before building or changing anything (a scene part, a UI
     element, a mechanic, a flow), find how it is normally done and read it: trade standards and
     measurements (doors, trim, tiling, furniture), Meta and W3C XR guidelines, research, and
     existing games or code that solved it. Write the source next to the decision (decisions.md,
     the plan doc or a WHY comment). Only then design the rest. Nothing is invented from scratch
-    when a standard exists; the owner's taste is input, research decides.
+    when a standard exists; the owner's taste is input, research decides. Shapes, pictures and
+    numbers come from real sources; only the words (texts, jokes) are our own. A new look goes to
+    the owner as pictures before it goes into the game.
+24. Every piece goes: research (rule 23) → build → my own check in the browser and in the
+    headset (`tools/quest-look.mjs`: enter VR, read the game's frames, time each step, measure
+    the frame rate) → an independent reviewer agent on the diff → fix → only then show the
+    owner, with a frame from the headset. I never stop at "not checked in the headset" while
+    the headset is linked; the owner judges only feel and taste, never what a tool can measure.
 
 ## Commands
 - `npm test` — pure unit tests (node, under a second). Safe to run locally.

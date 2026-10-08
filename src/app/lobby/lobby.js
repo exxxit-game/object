@@ -5,25 +5,48 @@ import { APP_T } from '../texts.ru.js';
 import { loadVoice, speak } from '../../engine/voice.js';
 import { unlock } from '../../engine/audio.js';
 import { createSheet } from '../../engine/ui/sheet.js';
-import { loadSounds, playSound } from '../../engine/sfx.js';
+import { loadSounds } from '../../engine/sfx.js';
 import '../../engine/fader.js';
-import '../../engine/glow.js';
+import '../../engine/locomotion.js';
 import { LOBBY_T } from './texts.ru.js';
 import { VOICE_LINES } from './voice-lines.js';
 import { SOUNDS } from './sound-list.js';
-import { SIGN_START, SIGN_AT } from './sign.js';
+import { signOn, signAnswer } from './opening.js';
+import { pinNotices } from './board.js';
+import { exitSign } from './exit.js';
+import { WALLS } from './scene.js';
 
 export { corridorHTML } from './scene.js';
 
 // The arrival before the first room: the player stands in the lab corridor facing door 1;
-// the sign over it comes on, the clipboard sheet welcomes them and asks the consent, and
-// the player points at door 1. The door opens, the view fades, and the player is at the
+// the sign over it comes on and plays (opening.js), the player takes the clipboard from
+// the board, it welcomes them and asks the consent, and the player points at door 1. The door opens, the view fades, and the player is at the
 // table (on the chair when seated). See docs/decisions.md, "The arrival".
 // The player arrives facing door 1, the thing to do first. The corridor is a place to
 // stand and walk: a seated player sees it from standing eye height (lift); a room whose
 // original was seated puts its chair under them instead.
-const SPOT = { x: 0.6, z: 3.05, yaw: 0, lift: true };
+export const SPOT = { x: 0.7, z: 3.05, yaw: 0, lift: true };
 const BOUNDS = 'minX: -3.1; maxX: 2.7; minZ: 2.1; maxZ: 3.35';
+// The clipboard hangs on the experimenter's board left of door 1, its back 1 cm off the cork
+// (faces at least 5 mm apart, or they flicker) and the peg (scene.js) through its clip, facing
+// the corridor: the only stretch of wall wide enough for it.
+const SHEET_HOME = { pos: [-1.0, 1.5, 1.855], yaw: 0, away: [0, 0, 1] };
+// Print on the corridor walls (the clipboard's paper on its hook, the plaques and notices) is
+// drawn unlit for legibility; dimmed to this so it does not glow in the dim corridor (chosen
+// by eye in rendered frames; the clipboard brightens for reading on its way to the player).
+const WALL_PRINT_LIGHT = 0.45;
+// Light as in the trade reference (docs/building-standards.md, S13: under 10 fc in corridors,
+// 50 fc at desks): the corridor floor gets at most a fifth of the light on the room's desk
+// (tests/smoke.mjs measures it). The engine's lights pass through walls, so the room's own
+// lights (class room-light) stay off while its door is shut and come up as it opens; the
+// corridor's lights then go to their in-room values, which keep the room's approved look.
+// Intensity in the corridor, then in the room.
+const CORRIDOR_LIGHT = { '#corridorAmbient': [0.26, 0], '#corridorLamp': [0.4, 1.6] };
+const DOOR_MS = 700;
+// How much of the room's light shows while its door opens (our choice, to be checked in the
+// headset): enough to see a lit room through the opening, little enough that the corridor
+// only brightens about one and a half times before the fade to black.
+const DOOR_PEEK = 0.25;
 const $ = (s) => document.querySelector(s);
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -44,6 +67,13 @@ function placePlayer({ x, z, yaw, lift = false }, bounds) {
   cam.object3D.position.set(x, cam.object3D.position.y, z);
 }
 
+// How the player moves: teleport and snap turn by default (Meta's comfort defaults);
+// ?move=smooth and ?turn=smooth switch to the other choices for checks.
+function comfort() {
+  const q = new URLSearchParams(location.search);
+  return `move: ${q.get('move') === 'smooth' ? 'smooth' : 'teleport'}; turn: ${q.get('turn') === 'smooth' ? 'smooth' : 'snap'}`;
+}
+
 // Audio may only start after the player's first gesture (a click, a key, entering VR).
 function onFirstGesture(fn) {
   let done = false;
@@ -53,45 +83,57 @@ function onFirstGesture(fn) {
   $('a-scene').addEventListener('enter-vr', go, { once: true });
 }
 
-// The light box over door 1 comes on first, before any text (src/app/lobby/sign.js says
-// why): in a headset once the player is in VR and placed facing the door, on a computer
-// at once. Its starter clicks and then its hum come from the sign.
-function signOn(gesture) {
-  const face = $('#signFace');
-  face.components.panel.write([{ t: LOBBY_T.sign, size: 72, weight: 800, color: '#ffe7b0', spacing: 6 }], { bg: '#160f05', pad: 40 });
-  face.addEventListener('glow-rise', () => playSound('sign-click', SIGN_AT, 0.6));
-  const when = AFRAME.utils.device.checkHeadsetConnected() ? gesture.then(() => delay(400)) : Promise.resolve();
-  return when
-    .then(() => face.components.glow.run(SIGN_START))
-    .then(() => { playSound('sign-hum', SIGN_AT, 0.08, true); });
+// The corridor's light while the player is in it. Returns { peek(ms), full() }: peek brings
+// the room's lights up to DOOR_PEEK of their own while the door opens (the room shows through
+// the opening, and the corridor brightens only a little, as from light out of a door); full,
+// called under the fade to black, sets every light to its in-room value at once.
+function lightCorridor() {
+  const room = [...document.querySelectorAll('.room-light')].map((el) => [el, el.getAttribute('light').intensity]);
+  const set = (el, v) => el.setAttribute('light', 'intensity', v);
+  for (const [el] of room) set(el, 0);
+  for (const [sel, [here]] of Object.entries(CORRIDOR_LIGHT)) set($(sel), here);
+  return {
+    peek: (ms) => {
+      for (const [el, v] of room) el.setAttribute('animation__light', { property: 'light.intensity', to: v * DOOR_PEEK, dur: ms, easing: 'easeInOutQuad' });
+    },
+    full: () => {
+      for (const [el, v] of room) { el.removeAttribute('animation__light'); set(el, v); }
+      for (const [sel, [, inRoom]] of Object.entries(CORRIDOR_LIGHT)) set($(sel), inRoom);
+    }
+  };
 }
 
-// room: { id, plaque: { number, name, year }, debrief, seat: { x, z, yaw }, bounds, extra, real }
+// room: { id, plaque: { number }, debrief, seat: { x, z, yaw }, bounds, extra, real }
 // Resolves with true when the player chose to start with recording, once inside the room.
 export async function runLobby(room) {
   const scene = $('a-scene');
-  const board = $('#lobbyBoard').components.panel;
-  const sheet = createSheet(scene);
+  const sheet = createSheet(scene, { inside: WALLS });
+  const light = lightCorridor();
   placePlayer(SPOT, BOUNDS);
+  $('#rig').setAttribute('locomotion', `${BOUNDS}; ${comfort()}`);   // the corridor is walked with the thumbsticks too
   writePlaque($('#plaqueOut').components.panel, room.plaque);
   for (const id of ['#soon1', '#soon2']) {
     $(id).components.panel.write([{ t: LOBBY_T.soon, size: 62, weight: 700, color: BRAND.accent, spacing: 6 }], { bg: BRAND.plate });
   }
-  board.write([]);
+  for (const id of ['#plaqueOut', '#soon1', '#soon2']) $(id).getObject3D('mesh').material.color.setScalar(WALL_PRINT_LIGHT);
+  pinNotices($('#notePoster').components.panel, $('#noteFlyer').components.panel, WALL_PRINT_LIGHT);
+  const cover = [{ t: LOBBY_T.kicker, role: 'kicker' }, { t: LOBBY_T.title, role: 'title', gap: 0.01 }];
+  await sheet.hang(SHEET_HOME, cover, WALL_PRINT_LIGHT);
+  const exitOff = exitSign(scene, sheet);
+  onFirstGesture(() => {});
 
-  // 0. the sign comes on; 1. welcome on the sheet: the promise first; the voice reads it
-  // once the sign is lit and the player has made a gesture (audio needs one)
-  let spoken = Promise.resolve();
-  const gesture = new Promise((resolve) => onFirstGesture(resolve));
-  const lit = signOn(gesture);
-  gesture.then(() => { spoken = (async () => { await lit; for (const line of LOBBY_T.welcome) await speak(line); })(); });
-  await lit;
+  // 0. the sign comes on and plays; 1. the voice points to the clipboard on the board, the
+  // player takes it, and it welcomes them: the promise first, read aloud
+  await signOn(scene);
+  speak(LOBBY_T.takeSheet);
+  sheet.el.addEventListener('taken', signAnswer, { once: true });
+  await sheet.take([...cover, { t: LOBBY_T.takeSheet, role: 'body', gap: 0.04 }]);
+  unlock();
+  const spoken = (async () => { for (const line of LOBBY_T.welcome) await speak(line); })();
   await sheet.choose([
-    { t: LOBBY_T.kicker, role: 'kicker' },
-    { t: LOBBY_T.title, role: 'title', gap: 0.01 },
+    ...cover,
     ...LOBBY_T.welcome.map((t, i) => ({ t, role: 'body', gap: i ? 0.012 : 0.025 }))
   ], [APP_T.next]);
-  unlock();
 
   // 2. a player who left the room early last time chooses: start again or learn what it was
   if (room.real && leftBefore(room.id)) {
@@ -100,25 +142,31 @@ export async function runLobby(room) {
 
   // 3. consent, once, before the door
   const withRecording = await askConsent(sheet, { kicker: LOBBY_T.kicker, extra: room.extra });
-  sheet.close();
 
-  // 4. the doors: door 1 opens the room
-  board.write([{ t: LOBBY_T.chooseDoor, size: 54, weight: 600 }]);
+  // 4. the clipboard goes back to its hook and says what to do; door 1 opens the room
+  await sheet.back([...cover, { t: LOBBY_T.chooseDoor, role: 'title', gap: 0.04 }]);
   await spoken;
   speak(LOBBY_T.chooseDoor);
   const door = $('#door1');
   const leaf = door.querySelector('.clickable');
   document.documentElement.dataset.lobby = 'door';
-  await new Promise((resolve) => leaf.addEventListener('click', resolve, { once: true }));
+  await new Promise((resolve) => {
+    // while the leave question is open the door waits for its answer
+    const onDoor = () => { if (sheet.isAsking()) return; leaf.removeEventListener('click', onDoor); resolve(); };
+    leaf.addEventListener('click', onDoor);
+  });
   delete document.documentElement.dataset.lobby;
+  exitOff();   // rooms are left another way (left-early.js)
 
-  door.setAttribute('animation', { property: 'rotation', to: '0 95 0', dur: 700, easing: 'easeInOutQuad' }); // into the room
+  door.setAttribute('animation', { property: 'rotation', to: '0 95 0', dur: DOOR_MS, easing: 'easeInOutQuad' }); // into the room
+  light.peek(DOOR_MS);
   await delay(500);
   await $('#cam').components.fader.to(1);
+  light.full();
+  $('#rig').removeAttribute('locomotion');   // the room is played where the original was
   placePlayer(room.seat, room.bounds);
   door.removeAttribute('animation');
   door.setAttribute('rotation', '0 0 0');
-  board.write([]);
   await delay(250);
   await $('#cam').components.fader.to(0);
   return withRecording;

@@ -16,6 +16,12 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REPO = 'https://github.com/exxxit-game/object-preview.git';
 const git = (cwd, ...args) => execFileSync('git', args, { cwd, encoding: 'utf8' }).trim();
 
+// the copy is public and its commit shows the author's address: only the hidden GitHub one
+const email = git(ROOT, 'config', 'user.email');
+if (!email.endsWith('@users.noreply.github.com')) {
+  console.log(`not published: the commit would show the address ${email}; set the hidden GitHub address first`);
+  process.exit(1);
+}
 const sha = git(ROOT, 'rev-parse', '--short', 'HEAD');
 const dirty = git(ROOT, 'status', '--porcelain', '--', ...PUBLIC.map(p => p.replace(/\/$/, '')));
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'object-preview-'));
@@ -35,3 +41,27 @@ git(dir, '-c', `user.name=${git(ROOT, 'config', 'user.name')}`, '-c', `user.emai
 git(dir, 'push', '-q', '--force', REPO, 'main');
 fs.rmSync(dir, { recursive: true, force: true });
 console.log(`published ${sha}${dirty ? ' (+ uncommitted changes)' : ''}: https://exxxit-game.github.io/object-preview/`);
+
+// GitHub Pages builds the copy after the push and now and then fails with no reason given
+// ("Page build failed"); the old copy then stays online unnoticed. Wait for the build, ask for
+// one rebuild if it fails, and say how it ended (needs the GitHub CLI, signed in).
+const build = () => JSON.parse(execFileSync('gh', ['api', 'repos/exxxit-game/object-preview/pages/builds/latest'], { encoding: 'utf8' }));
+const settled = async () => {
+  for (let i = 0; i < 36; i++) {
+    await new Promise(r => setTimeout(r, 10000));
+    const b = build();
+    if (b.status === 'built' || b.status === 'errored') return b.status;
+  }
+  return 'still building';
+};
+try {
+  let status = await settled();
+  if (status === 'errored') {
+    execFileSync('gh', ['api', '-X', 'POST', 'repos/exxxit-game/object-preview/pages/builds']);
+    status = await settled();
+  }
+  console.log(status === 'built' ? 'live: the build finished' : `NOT live: the Pages build ${status}`);
+  if (status !== 'built') process.exitCode = 1;
+} catch (e) {
+  console.log('could not read the Pages build (gh):', e.message.split('\n')[0]);
+}

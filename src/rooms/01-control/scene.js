@@ -16,9 +16,10 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
     <a-entity laser-controls="hand: right" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" grab-press></a-entity>
   </a-entity>
 
-  <!-- light: ambient fill and one warm lamp under an enamel shade -->
-  <a-entity light="type: ambient; color: #c9cfd6; intensity: 0.55"></a-entity>
-  <a-entity light="type: point; color: #ffe2b0; intensity: 2.2; distance: 0; decay: 0.6" position="0 2.13 -0.2"></a-entity>
+  <!-- light: ambient fill and one warm lamp under an enamel shade (room-light: dark while
+       the player is in the corridor, see src/app/lobby/lobby.js) -->
+  <a-entity class="room-light" light="type: ambient; color: #c9cfd6; intensity: 0.55"></a-entity>
+  <a-entity class="room-light" light="type: point; color: #ffe2b0; intensity: 2.2; distance: 0; decay: 0.6" position="0 2.13 -0.2"></a-entity>
   <!-- everything up to the screen is static: merged after load into one mesh per look -->
   <a-entity merge-static>
   <a-cylinder radius="0.05" height="0.02" position="0 2.49 -0.2" color="#d8d4c8"></a-cylinder>
@@ -36,29 +37,30 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <!-- walls: painted concrete block, a darker band below a wooden rail at 0.8 m (on a joint) -->
   <a-plane position="0 1.25 -1.6" width="3.2" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
   <!-- back wall (0.2 m block wall to the corridor) around door 1's masonry opening
-       (x 0.1 to 1.1, up to 2.2 m: whole blocks) -->
-  <a-plane rotation="0 180 0" position="-0.75 1.25 1.6" width="1.7" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
-  <a-plane rotation="0 180 0" position="1.35 1.25 1.6" width="0.5" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
-  <a-plane rotation="0 180 0" position="0.6 2.35 1.6" width="1.0" height="0.3" surface="kind: block; tint: #8a9479"></a-plane>
+       (x 0.2 to 1.2, up to 2.2 m: on the block module, so no block is cut beside it:
+       NCMA TEK 05-12, tests/masonry.test.mjs) -->
+  <a-plane rotation="0 180 0" position="-0.7 1.25 1.6" width="1.8" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
+  <a-plane rotation="0 180 0" position="1.4 1.25 1.6" width="0.4" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
+  <a-plane rotation="0 180 0" position="0.7 2.35 1.6" width="1.0" height="0.3" surface="kind: block; tint: #8a9479"></a-plane>
   <a-plane rotation="0 -90 0" position="1.6 1.25 0" width="3.2" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
   <a-plane rotation="0 90 0" position="-1.6 1.25 -1.25" width="0.7" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
   <a-plane rotation="0 90 0" position="-1.6 1.25 0.95" width="1.3" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
   <a-plane rotation="0 90 0" position="-1.6 0.5 -0.3" width="1.2" height="1.0" surface="kind: block; tint: #858f74"></a-plane>
   <a-plane rotation="0 90 0" position="-1.6 2.15 -0.3" width="1.2" height="0.7" surface="kind: block; tint: #858f74"></a-plane>
   <a-plane position="0 0.4 -1.597" width="3.2" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
-  <a-plane rotation="0 180 0" position="-0.75 0.4 1.597" width="1.7" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
-  <a-plane rotation="0 180 0" position="1.35 0.4 1.597" width="0.5" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
+  <a-plane rotation="0 180 0" position="-0.7 0.4 1.597" width="1.8" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
+  <a-plane rotation="0 180 0" position="1.4 0.4 1.597" width="0.4" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
   <a-plane rotation="0 -90 0" position="1.597 0.4 0" width="3.2" height="0.8" surface="kind: block; tint: #59624c"></a-plane>
   <a-plane rotation="0 90 0" position="-1.597 0.4 0" width="3.2" height="0.8" surface="kind: block; tint: #59624c"></a-plane>
   <a-box position="0 0.8 -1.592" width="3.2" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
-  <a-box position="-0.7556 0.8 1.594" width="1.6888" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
-  <a-box position="1.3556 0.8 1.594" width="0.4888" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
+  <a-box position="-0.7056 0.8 1.594" width="1.7888" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
+  <a-box position="1.4056 0.8 1.594" width="0.3888" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
   <a-box position="1.592 0.8 0" width="0.012" height="0.025" depth="3.2" color="#4a3b2c"></a-box>
   <a-box position="-1.592 0.8 0" width="0.012" height="0.025" depth="3.2" color="#4a3b2c"></a-box>
   <!-- 4 in vinyl base (docs/building-standards.md); on the back wall it stops at the door frame -->
   <a-box position="0 0.051 -1.5975" width="3.2" height="0.102" depth="0.005" color="#2b2d29"></a-box>
-  <a-box position="-0.7556 0.051 1.5975" width="1.6888" height="0.102" depth="0.005" color="#2b2d29"></a-box>
-  <a-box position="1.3556 0.051 1.5975" width="0.4888" height="0.102" depth="0.005" color="#2b2d29"></a-box>
+  <a-box position="-0.7056 0.051 1.5975" width="1.7888" height="0.102" depth="0.005" color="#2b2d29"></a-box>
+  <a-box position="1.4056 0.051 1.5975" width="0.3888" height="0.102" depth="0.005" color="#2b2d29"></a-box>
   <a-box position="1.5975 0.051 0" width="0.005" height="0.102" depth="3.2" color="#2b2d29"></a-box>
   <a-box position="-1.5975 0.051 0" width="0.005" height="0.102" depth="3.2" color="#2b2d29"></a-box>
 
@@ -74,17 +76,17 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
        standards (docs/building-standards.md): hollow metal frame with a 2 in face through the
        0.2 m wall; stops on the corridor side hide the 1/8 in gaps around the leaf; aluminium
        threshold 1/2 in high; plaque and light switch on the latch side -->
-  <a-box position="0.1143 1.1021 1.7" width="0.051" height="2.2042" depth="0.22" color="#3d3a34"></a-box>
-  <a-box position="1.0857 1.1021 1.7" width="0.051" height="2.2042" depth="0.22" color="#3d3a34"></a-box>
-  <a-box position="0.6 2.1787 1.7" width="1.0224" height="0.051" depth="0.22" color="#3d3a34"></a-box>
-  <a-box position="0.1478 1.0766 1.663" width="0.016" height="2.1532" depth="0.016" color="#3d3a34"></a-box>
-  <a-box position="1.0522 1.0766 1.663" width="0.016" height="2.1532" depth="0.016" color="#3d3a34"></a-box>
-  <a-box position="0.6 2.1452 1.663" width="0.9204" height="0.016" depth="0.016" color="#3d3a34"></a-box>
-  <a-box position="0.6 0.0065 1.6325" width="0.9204" height="0.013" depth="0.127" material="color: #9a9c9e; metalness: .6; roughness: .4"></a-box>
+  <a-box position="0.2143 1.1021 1.7" width="0.051" height="2.2042" depth="0.22" color="#3d3a34"></a-box>
+  <a-box position="1.1857 1.1021 1.7" width="0.051" height="2.2042" depth="0.22" color="#3d3a34"></a-box>
+  <a-box position="0.7 2.1787 1.7" width="1.0224" height="0.051" depth="0.22" color="#3d3a34"></a-box>
+  <a-box position="0.2478 1.0766 1.663" width="0.016" height="2.1532" depth="0.016" color="#3d3a34"></a-box>
+  <a-box position="1.1522 1.0766 1.663" width="0.016" height="2.1532" depth="0.016" color="#3d3a34"></a-box>
+  <a-box position="0.7 2.1452 1.663" width="0.9204" height="0.016" depth="0.016" color="#3d3a34"></a-box>
+  <a-box position="0.7 0.0065 1.6325" width="0.9204" height="0.013" depth="0.127" material="color: #9a9c9e; metalness: .6; roughness: .4"></a-box>
   <!-- the 3'0" × 7'0" leaf swings into the room on three hinges at its left edge (pivot);
        lever on both sides at 1.024 m, 70 mm from the latch edge; kick plate on the push
        (corridor) side; closer on the pull side; the leaf is what the player points at -->
-  <a-entity id="door1" data-dynamic position="0.143 0 1.61">
+  <a-entity id="door1" data-dynamic position="0.243 0 1.61">
     <a-entity class="clickable" rounded-box="width: 0.914; height: 2.134; depth: 0.045; radius: 0.004; color: #6a5641; roughness: 0.55"
               position="0.457 1.083 0.0225"></a-entity>
     <a-box position="0.457 0.143 0.0458" width="0.864" height="0.254" depth="0.0015" material="color: #b9bcbe; metalness: .7; roughness: .3"></a-box>
@@ -98,9 +100,9 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
     <a-box position="0.22 2.09 -0.032" width="0.28" height="0.055" depth="0.06" color="#5b5d60"></a-box>
     <a-box position="0.33 2.13 -0.045" width="0.22" height="0.012" depth="0.012" color="#5b5d60"></a-box>
   </a-entity>
-  <a-entity id="plaque" panel="w: 0.32; h: 0.16; px: 640; bg: #15161a" position="1.36 1.55 1.594" rotation="0 180 0"></a-entity>
+  <a-entity id="plaque" class="on-wall" panel="w: 0.2; h: 0.2; px: 512; bg: #15161a" position="1.4 1.5 1.594" rotation="0 180 0"></a-entity>
   <a-entity rounded-box="width: 0.08; height: 0.12; depth: 0.012; radius: 0.006; color: #d8d2c2; roughness: 0.5"
-            position="1.36 1.067 1.592"></a-entity>
+            class="on-wall" position="1.4 1.1 1.592"></a-entity>
 
   <!-- observation room: desk with relay equipment, chair, the observer -->
   <a-box position="-2.4 1.25 -0.3" width="1.6" height="2.5" depth="2.4" material="color: #4a4d52; side: back; roughness: 1"></a-box>

@@ -26,9 +26,11 @@ function setPannerPosition(panner, p) {
 }
 
 // Plays a sound at a world position {x, y, z} in metres, or everywhere when pos is
-// null. Returns a handle with stop(). Silent before audio is unlocked.
+// null. Returns a handle with stop() and fade(volume, seconds) (a straight ramp, e.g. a
+// hum dying with its lamps). Silent before audio is unlocked.
 export function playSound(name, pos, volume = 1, loop = false) {
-  const handle = { stop() {} };
+  let target = volume;
+  const handle = { stop() {}, fade(v) { target = v; } };
   const ctx = getContext();
   if (!ctx) return handle;
   buffer(ctx, name).then((buf) => {
@@ -37,7 +39,13 @@ export function playSound(name, pos, volume = 1, loop = false) {
     src.buffer = buf;
     src.loop = loop;
     const gain = ctx.createGain();
-    gain.gain.value = volume;
+    gain.gain.value = target;
+    handle.fade = (v, seconds = 0) => {
+      const t = ctx.currentTime;
+      gain.gain.cancelScheduledValues(t);
+      gain.gain.setValueAtTime(gain.gain.value, t);
+      gain.gain.linearRampToValueAtTime(v, t + Math.max(0.01, seconds));
+    };
     src.connect(gain);
     if (pos) {
       const panner = ctx.createPanner();
