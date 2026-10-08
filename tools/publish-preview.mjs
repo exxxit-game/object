@@ -54,13 +54,38 @@ const settled = async () => {
   }
   return 'still building';
 };
+// Right after a build the Pages servers can still hand out some old files beside the new ones
+// (files are kept up to 10 minutes): a game whose modules come from two versions fails to start
+// ("Failed to fetch dynamically imported module"). So "live" only once every script, page and
+// style is served exactly as published.
+const BASE = 'https://exxxit-game.github.io/object-preview/';
+const pageFiles = PUBLIC.flatMap((p) => p.endsWith('/')
+  ? fs.readdirSync(path.join(ROOT, p), { recursive: true }).map((f) => (p + f).replace(/\\/g, '/'))
+  : [p]).filter((f) => /\.(js|html|css)$/.test(f) && f !== 'index.html');   // index.html gets the noindex line
+const served = async () => {
+  let old = [];
+  for (let i = 0; i < 12; i++) {
+    old = [];
+    for (let k = 0; k < pageFiles.length; k += 8) {
+      await Promise.all(pageFiles.slice(k, k + 8).map(async (f) => {
+        const text = await (await fetch(BASE + f)).text().catch(() => '');
+        const mine = fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
+        if (text.replace(/\r\n/g, '\n') !== mine) old.push(f);
+      }));
+    }
+    if (!old.length) return 'built';
+    await new Promise(r => setTimeout(r, 10000));
+  }
+  return `${old.length} files still served old: ${old.slice(0, 5).join(', ')}`;
+};
 try {
   let status = await settled();
   if (status === 'errored') {
     execFileSync('gh', ['api', '-X', 'POST', 'repos/exxxit-game/object-preview/pages/builds']);
     status = await settled();
   }
-  console.log(status === 'built' ? 'live: the build finished' : `NOT live: the Pages build ${status}`);
+  if (status === 'built') status = await served();
+  console.log(status === 'built' ? 'live: the build finished and every page file is served as published' : `NOT live: ${status}`);
   if (status !== 'built') process.exitCode = 1;
 } catch (e) {
   console.log('could not read the Pages build (gh):', e.message.split('\n')[0]);
