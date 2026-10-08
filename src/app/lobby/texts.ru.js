@@ -1,7 +1,6 @@
 // Words the player sees and hears in the lab corridor before the first room.
 // The player is always addressed formally ("вы").
 export const LOBBY_T = {
-  kicker: 'ЛАБОРАТОРИЯ',
   // the game's name stays in English in every language: the player is the object
   title: 'You are the object',
   // the head of the clipboard's form, as on a consent form: the participant's name goes on the

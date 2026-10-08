@@ -45,6 +45,7 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     const answers = [...sheet.querySelectorAll('.answer')];
     const out = sheet.dataset.overflow ? ['the page does not fit the sheet'] : [];
     if (sheet.dataset.orphan) out.push('a blank to fill in stands on a line of its own');
+    if (Number(sheet.dataset.letterMm) < 24) out.push(`text ${sheet.dataset.letterMm} mm, under 24 mm`);
     for (const a of answers) {
       a.object3D.getWorldPosition(p);
       const d = p.distanceTo(eye);

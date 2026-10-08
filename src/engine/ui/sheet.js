@@ -3,7 +3,6 @@ import '../reflect-env.js';
 import { createChoice } from './choice.js';
 import '../glide.js';
 import '../shapes.js';
-import { TYPE } from '../panel.js';
 
 // The clipboard sheet: everything the player reads or answers, one thought per page.
 // It is read 1 m in front of the player, a little below the eyes, and stays still
@@ -25,17 +24,14 @@ const HARDBOARD = '#3b2a1e';      // dark brown pressed hardboard, as the clipbo
 const HARDBOARD_HOVER = '#6e5038'; // the hanging clipboard brightens under the laser or mouse
 // the clip: nickel-plated steel with a soft sheen, mirroring the room round it (reflect-env)
 const METAL = 'color: #d4d7d9; metalness: 0.5; roughness: 0.45';
-// The page is typed as a typewriter types (a 1979 lab typed its papers on an IBM Selectric:
-// docs/decisions.md): one face (TYPE), one size, one ink; the head letter-spaced and the title in
-// capitals, centred and struck bold, as typists set them off. The size, in metres at 1 m, is the
-// largest at which the consent form fits the sheet (tests/smoke.mjs checks every page fits).
-const TYPED = 0.026;
-const INK = '#25231f';
+// Text roles: font size in metres at 1 m and ink, in the game's sans (FONT: a sans with a high
+// x-height, as Meta asks for text in VR). Reading comes first: no role is smaller than MIN_LETTER,
+// and tests/smoke.mjs fails a page drawn smaller (data-letter-mm).
+const MIN_LETTER = 0.024;
 const ROLES = {
-  kicker: { m: TYPED, color: INK, weight: 400, spacing: 6 },
-  title: { m: TYPED, color: INK, weight: 700, caps: true, align: 'center' },
-  body: { m: TYPED, color: INK, weight: 400 },
-  soft: { m: TYPED, color: INK, weight: 400 }
+  title: { m: 0.044, color: '#1d1b17', weight: 700 },
+  body: { m: 0.028, color: '#1d1b17', weight: 500 },
+  soft: { m: MIN_LETTER, color: '#4a453c', weight: 500 }
 };
 
 // inside: the wall faces of the space { minX, maxX, minZ, maxZ }; the sheet is never read
@@ -254,15 +250,16 @@ export function createSheet(scene, { inside = null } = {}) {
     if (p.was === 'closed') close();
   }
 
-  // blocks: [{ t, role: 'kicker' | 'title' | 'body' | 'soft', gap }]; returns the local
+  // blocks: [{ t, role: 'title' | 'body' | 'soft', gap }]; returns the local
   // y of the text's bottom edge (the sheet's centre is 0).
   function paint(blocks) {
     const panel = paper();
     const bottom = panel.write(blocks.map((b, i) => {
       const r = ROLES[b.role || 'body'];
-      return { t: r.caps ? b.t.toLocaleUpperCase(document.documentElement.lang || undefined) : b.t, size: r.m * DENSITY,
-        color: r.color, weight: r.weight, spacing: r.spacing || 0, align: r.align, gap: (b.gap ?? (i ? 0.012 : 0)) * DENSITY };
-    }), { top: true, fit: false, align: 'left', pad: MARGIN * DENSITY, bg: PAPER_BG, font: TYPE });
+      return { t: b.t, size: r.m * DENSITY, color: r.color, weight: r.weight,
+        gap: (b.gap ?? (i ? 0.012 : 0)) * DENSITY };
+    }), { top: true, fit: false, align: 'left', pad: MARGIN * DENSITY, bg: PAPER_BG });
+    el.dataset.letterMm = (Math.min(...blocks.map((b) => ROLES[b.role || 'body'].m)) * 1000).toFixed(1);
     const textBottom = PAPER.h / 2 - bottom;
     el.dataset.textBottom = textBottom.toFixed(3);
     if (panel.overflow) el.dataset.overflow = '1'; else delete el.dataset.overflow;

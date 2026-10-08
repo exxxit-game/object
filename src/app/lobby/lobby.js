@@ -129,7 +129,7 @@ export async function runLobby(room) {
   for (const el of document.querySelectorAll('#plaqueStairs, .room-plaque')) el.getObject3D('mesh').material.color.setScalar(WALL_PRINT_LIGHT);
   pinNotices($('#notePoster').components.panel, $('#noteFlyer').components.panel, WALL_PRINT_LIGHT);
   paintExtinguisherLabel($('#extLabel'));
-  const cover = [{ t: LOBBY_T.kicker, role: 'kicker' }, { t: LOBBY_T.participant, role: 'body', gap: 0.02 }];
+  const cover = [{ t: LOBBY_T.participant, role: 'body' }];
   await sheet.hang(SHEET_HOME, cover, WALL_PRINT_LIGHT);
   const exitOff = leaveButton(scene, sheet);   // the studio's poster on the board
   onFirstGesture(() => {});
@@ -153,7 +153,7 @@ export async function runLobby(room) {
   }
 
   // 3. consent, once, before the door
-  const withRecording = await askConsent(sheet, { kicker: LOBBY_T.kicker, extra: room.extra });
+  const withRecording = await askConsent(sheet, { extra: room.extra });
 
   // 4. the clipboard goes back to its hook and says what to do; door 1 opens the room
   await sheet.back([...cover, { t: LOBBY_T.chooseDoor, role: 'title', gap: 0.04 }]);
