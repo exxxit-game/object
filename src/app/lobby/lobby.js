@@ -15,7 +15,10 @@ export { corridorHTML } from './scene.js';
 // doors; the experimenter welcomes them on the board, asks the consent, and the player
 // points at door 1. The door opens, the view fades, and the player is at the table
 // (on the chair when seated). See docs/decisions.md, "The arrival".
-const SPOT = { x: -0.2, z: 2.75, yaw: 0 };
+// The player arrives facing door 1, the thing to do first. The corridor is a place to
+// stand and walk: a seated player sees it from standing eye height (lift); a room whose
+// original was seated puts its chair under them instead.
+const SPOT = { x: 0.6, z: 2.9, yaw: 0, lift: true };
 const BOUNDS = 'minX: -3.1; maxX: 2.7; minZ: 1.95; maxZ: 3.2';
 const BOARD_TOP = 1.95; // the board: centre 1.5 m, 0.9 m high
 const $ = (s) => document.querySelector(s);
@@ -26,9 +29,9 @@ loadVoice(VOICE_LINES, import.meta.url);
 // Puts the player at a spot facing a direction: in VR through the recenter component; on a
 // computer the rig goes to the origin and the camera to the spot, because room-bounds
 // limits the camera's own position (so its numbers are world metres with the rig at 0).
-function placePlayer({ x, z, yaw }, bounds) {
+function placePlayer({ x, z, yaw, lift = false }, bounds) {
   const rig = $('#rig');
-  rig.setAttribute('recenter', { x, z, yaw });
+  rig.setAttribute('recenter', { x, z, yaw, lift });
   if (rig.sceneEl.is('vr-mode')) { rig.components.recenter.apply(); return; }
   rig.object3D.position.set(0, 0, 0);
   rig.object3D.rotation.y = THREE.MathUtils.degToRad(yaw);
@@ -83,7 +86,7 @@ export async function runLobby(room) {
 
   // 3. consent, once, before the door
   const withRecording = await askConsent(board, choice, {
-    kicker: LOBBY_T.kicker, title: LOBBY_T.title, screenTop: BOARD_TOP, extra: room.extra
+    kicker: LOBBY_T.kicker, screenTop: BOARD_TOP, extra: room.extra
   });
 
   // 4. the doors: door 1 opens the room

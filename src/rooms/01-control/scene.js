@@ -35,14 +35,18 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
 
   <!-- walls: painted concrete block, a darker band below a wooden rail at 0.8 m (on a joint) -->
   <a-plane position="0 1.25 -1.6" width="3.2" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
-  <a-plane rotation="0 180 0" position="0 1.25 1.6" width="3.2" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
+  <!-- back wall around the opening of door 1 (x 0.15 to 1.05, up to 2.05 m) -->
+  <a-plane rotation="0 180 0" position="-0.725 1.25 1.6" width="1.75" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
+  <a-plane rotation="0 180 0" position="1.325 1.25 1.6" width="0.55" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
+  <a-plane rotation="0 180 0" position="0.6 2.275 1.6" width="0.9" height="0.45" surface="kind: block; tint: #8a9479"></a-plane>
   <a-plane rotation="0 -90 0" position="1.6 1.25 0" width="3.2" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
   <a-plane rotation="0 90 0" position="-1.6 1.25 -1.25" width="0.7" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
   <a-plane rotation="0 90 0" position="-1.6 1.25 0.95" width="1.3" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
   <a-plane rotation="0 90 0" position="-1.6 0.5 -0.3" width="1.2" height="1.0" surface="kind: block; tint: #858f74"></a-plane>
   <a-plane rotation="0 90 0" position="-1.6 2.15 -0.3" width="1.2" height="0.7" surface="kind: block; tint: #858f74"></a-plane>
   <a-plane position="0 0.4 -1.597" width="3.2" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
-  <a-plane rotation="0 180 0" position="0 0.4 1.597" width="3.2" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
+  <a-plane rotation="0 180 0" position="-0.725 0.4 1.597" width="1.75" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
+  <a-plane rotation="0 180 0" position="1.325 0.4 1.597" width="0.55" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
   <a-plane rotation="0 -90 0" position="1.597 0.4 0" width="3.2" height="0.8" surface="kind: block; tint: #59624c"></a-plane>
   <a-plane rotation="0 90 0" position="-1.597 0.4 0" width="3.2" height="0.8" surface="kind: block; tint: #59624c"></a-plane>
   <a-box position="0 0.8 -1.592" width="3.2" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
@@ -52,7 +56,9 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-box position="-1.592 0.8 0" width="0.012" height="0.025" depth="3.2" color="#4a3b2c"></a-box>
   <!-- baseboard -->
   <a-box position="0 0.04 -1.592" width="3.2" height="0.08" depth="0.012" color="#2b2d29"></a-box>
-  <a-box position="0 0.04 1.592" width="3.2" height="0.08" depth="0.012" color="#2b2d29"></a-box>
+  <!-- on the back wall the baseboard stops at the door frame, as trim does -->
+  <a-box position="-0.755 0.04 1.592" width="1.69" height="0.08" depth="0.012" color="#2b2d29"></a-box>
+  <a-box position="1.355 0.04 1.592" width="0.49" height="0.08" depth="0.012" color="#2b2d29"></a-box>
   <a-box position="1.592 0.04 0" width="0.012" height="0.08" depth="3.2" color="#2b2d29"></a-box>
   <a-box position="-1.592 0.04 0" width="0.012" height="0.08" depth="3.2" color="#2b2d29"></a-box>
 
@@ -68,20 +74,24 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-box position="0.12 1.055 1.58" width="0.06" height="2.11" depth="0.04" color="#3d3a34"></a-box>
   <a-box position="1.08 1.055 1.58" width="0.06" height="2.11" depth="0.04" color="#3d3a34"></a-box>
   <a-box position="0.6 2.08 1.58" width="1.02" height="0.06" depth="0.04" color="#3d3a34"></a-box>
-  <!-- the door leaf turns on its hinges (pivot at x 1.035): it opens when the player comes in
-       from the corridor; handles on both sides; the leaf is what the player points at -->
-  <a-entity id="door1" data-dynamic position="1.035 0 1.578">
-    <a-entity class="clickable" rounded-box="width: 0.88; height: 2.03; depth: 0.04; radius: 0.006; color: #6a5641; roughness: 0.55"
-              position="-0.435 1.02 0"></a-entity>
-    <a-box position="-0.435 0.13 -0.022" width="0.84" height="0.2" depth="0.003" material="color: #b9bcbe; metalness: .7; roughness: .3"></a-box>
-    <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="-0.795 1.0 -0.025" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
-    <a-box position="-0.735 1.0 -0.035" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
-    <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="-0.795 1.0 0.025" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
-    <a-box position="-0.735 1.0 0.035" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
-    <a-box position="0.005 0.4 -0.022" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
-    <a-box position="0.005 1.05 -0.022" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
-    <a-box position="0.005 1.7 -0.022" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
+  <!-- the door leaf turns on its hinges (pivot at x 1.05): it opens when the player comes in
+       from the corridor; handles on both sides; the leaf is what the player points at.
+       It fills the whole opening (a 36 × 80 inch commercial door): any gap would show the
+       room through the back wall, which is seen only from inside -->
+  <a-entity id="door1" data-dynamic position="1.05 0 1.578">
+    <a-entity class="clickable" rounded-box="width: 0.9; height: 2.045; depth: 0.04; radius: 0.006; color: #6a5641; roughness: 0.55"
+              position="-0.45 1.0275 0"></a-entity>
+    <a-box position="-0.45 0.13 -0.022" width="0.86" height="0.2" depth="0.003" material="color: #b9bcbe; metalness: .7; roughness: .3"></a-box>
+    <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="-0.81 1.0 -0.025" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
+    <a-box position="-0.75 1.0 -0.035" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
+    <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="-0.81 1.0 0.025" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
+    <a-box position="-0.75 1.0 0.035" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
+    <a-box position="-0.01 0.4 -0.022" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
+    <a-box position="-0.01 1.05 -0.022" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
+    <a-box position="-0.01 1.7 -0.022" width="0.02" height="0.1" depth="0.012" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-box>
   </a-entity>
+  <!-- threshold across the wall thickness, between the room floor and the corridor floor -->
+  <a-box position="0.6 0.006 1.625" width="0.9" height="0.012" depth="0.05" material="color: #9a9c9e; metalness: .6; roughness: .4"></a-box>
   <a-entity id="plaque" panel="w: 0.32; h: 0.16; px: 640; bg: #15161a" position="1.36 1.55 1.594" rotation="0 180 0"></a-entity>
   <a-entity rounded-box="width: 0.08; height: 0.12; depth: 0.012; radius: 0.006; color: #d8d2c2; roughness: 0.5"
             position="1.36 1.15 1.592"></a-entity>

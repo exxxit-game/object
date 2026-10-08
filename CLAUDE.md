@@ -59,6 +59,12 @@ player-facing text (src/rooms/*/texts.ru.js).
        docs/state.md.
     d. After a compaction, before anything else: read docs/state.md and the plan doc queue and
        table. The summary is not the list.
+23. Knowledge first, then thinking. Before building or changing anything (a scene part, a UI
+    element, a mechanic, a flow), find how it is normally done and read it: trade standards and
+    measurements (doors, trim, tiling, furniture), Meta and W3C XR guidelines, research, and
+    existing games or code that solved it. Write the source next to the decision (decisions.md,
+    the plan doc or a WHY comment). Only then design the rest. Nothing is invented from scratch
+    when a standard exists; the owner's taste is input, research decides.
 
 ## Commands
 - `npm test` — pure unit tests (node, under a second). Safe to run locally.

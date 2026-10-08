@@ -3,8 +3,9 @@ import { rigTransform, seatedLift } from './recenter-math.js';
 // Puts the player at the designed spot, facing the designed direction, in VR.
 // A headset sets its origin where the player happened to stand and look when the
 // session started, so without this the room appears shifted or rotated.
-// Runs on entering VR and when the player recenters the headset (reference
-// space "reset", e.g. holding the Meta button). Put on the camera rig.
+// Runs on entering VR, when the player recenters the headset (reference space
+// "reset", e.g. holding the Meta button) and when the headset is put back on.
+// Put on the camera rig.
 AFRAME.registerComponent('recenter', {
   schema: {
     x: { default: 0 },     // where the head should be (world metres)
@@ -26,6 +27,16 @@ AFRAME.registerComponent('recenter', {
       setTimeout(this.apply, 300);
       const space = sc.renderer.xr.getReferenceSpace();
       if (space && !this.space) { this.space = space; space.addEventListener('reset', () => setTimeout(this.apply, 100)); }
+      // Headset taken off and put back on: the session goes hidden, then visible, and the
+      // player may now sit or stand somewhere else, so they are placed again. The system
+      // menu only blurs the session (visible-blurred) and must not move anyone.
+      const session = sc.xrSession;
+      if (session) {
+        session.addEventListener('visibilitychange', () => {
+          if (session.visibilityState === 'hidden') this.wasHidden = true;
+          else if (session.visibilityState === 'visible' && this.wasHidden) { this.wasHidden = false; setTimeout(this.apply, 300); }
+        });
+      }
     });
     sc.addEventListener('exit-vr', () => {
       this.space = null;

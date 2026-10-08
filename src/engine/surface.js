@@ -1,8 +1,11 @@
+import { jointOrigin, bondOrigin } from './tile-math.js';
+
 // Surfaces drawn once on a canvas (no image files to load): painted block wall,
 // linoleum tiles, acoustic ceiling tiles, wood. Each kind is drawn once and shared.
-// Tiles and blocks follow ONE grid for the whole room, laid out from the room's centre
-// in world metres, so a wall cut into pieces, the band below the rail and the next
-// wall all line up, and the edges of the room get the same tile on both sides.
+// Tiles and blocks follow ONE grid per space (a room, the corridor), laid out from that
+// space's centre in world metres by the tile trade's rule (tile-math.js), so a wall cut
+// into pieces, the band below the rail and the next wall all line up, and the edges of
+// the space get equal cuts, never less than half a tile.
 // Wood (no grid) only repeats.
 // <a-plane surface="kind: linoleum"></a-plane>  <a-entity surface="kind: wood; repeat: 1 1">
 const SIZE = 512;
@@ -77,18 +80,21 @@ const KINDS = {
   }
 };
 
-// Metres covered by one copy of the drawing, and where the grid starts: a 3.2 m room
-// takes 8 blocks per course, 10 floor tiles and 5 ceiling tiles (centred on a tile).
+// Metres covered by one copy of the drawing (a joint at its edge) and the size of one
+// tile or block across. Where the joints go is worked out per space (tile-math.js).
 const GRID = {
-  block: { size: 1.6, shift: 0 },
-  linoleum: { size: 0.64, shift: 0 },
-  ceiling: { size: 0.64, shift: 0.32 }
+  block: { size: 1.6, tile: 0.4, bond: true }, // running bond: courses shifted by half a block
+  linoleum: { size: 0.64, tile: 0.32 },
+  ceiling: { size: 0.64, tile: 0.64 }
 };
 
 // UVs from world positions: across the surface (x, or z for walls facing x) and up
-// (y for walls, z for floor and ceiling). The geometry is cloned first: A-Frame shares
-// one geometry between planes of the same size.
-function worldUV(mesh, { size, shift }) {
+// (y for walls, z for floor and ceiling); block courses start at the floor. The
+// geometry is cloned first: A-Frame shares one geometry between planes of the same size.
+// space: { x, y: centre (x, z), z, w: length along x and along z } of the room it belongs to.
+function worldUV(mesh, { size, tile, bond }, space) {
+  const origin = bond ? bondOrigin : jointOrigin;
+  const ox = origin(space.x, space.z, tile), oz = origin(space.y, space.w, tile);
   mesh.updateMatrixWorld(true);
   mesh.geometry = mesh.geometry.clone();
   const pos = mesh.geometry.attributes.position, uv = mesh.geometry.attributes.uv;
@@ -97,9 +103,9 @@ function worldUV(mesh, { size, shift }) {
   const p = new THREE.Vector3();
   for (let i = 0; i < pos.count; i++) {
     p.fromBufferAttribute(pos, i).applyMatrix4(mesh.matrixWorld);
-    const across = flat || facesZ ? p.x : p.z;
-    const up = flat ? p.z : p.y;
-    uv.setXY(i, (across + shift) / size, (up + (flat ? shift : 0)) / size);
+    const across = flat || facesZ ? p.x - ox : p.z - oz;
+    const up = flat ? p.z - oz : p.y;
+    uv.setXY(i, across / size, up / size);
   }
   uv.needsUpdate = true;
 }
@@ -121,7 +127,10 @@ AFRAME.registerComponent('surface', {
   schema: {
     kind: { default: 'block', oneOf: Object.keys(KINDS) },
     repeat: { type: 'vec2', default: { x: 1, y: 1 } }, // wood only; tiled kinds use the room grid
-    tint: { default: '#ffffff' } // multiplies the drawn colours (darker paint band, etc.)
+    tint: { default: '#ffffff' }, // multiplies the drawn colours (darker paint band, etc.)
+    // the space whose tiles this surface shares: centre x, centre z, length along x, along z
+    // (default: room 01, 3.2 × 3.2 m around the origin)
+    space: { type: 'vec4', default: { x: 0, y: 0, z: 3.2, w: 3.2 } }
   },
   init() { this.apply = this.apply.bind(this); this.el.addEventListener('object3dset', this.apply); },
   update() { this.apply(); },
@@ -133,7 +142,7 @@ AFRAME.registerComponent('surface', {
     const sceneEl = this.el.sceneEl;
     // world positions are final only once the scene has loaded (merge-static runs after this)
     if (grid && !sceneEl.hasLoaded) { sceneEl.addEventListener('loaded', () => this.apply(), { once: true }); return; }
-    if (grid) worldUV(mesh, grid);
+    if (grid) worldUV(mesh, grid, this.data.space);
     const map = texture(this.data.kind).clone();
     if (!grid) map.repeat.set(this.data.repeat.x, this.data.repeat.y);
     map.needsUpdate = true;

@@ -60,7 +60,9 @@ async function playRoom(url, playtest) {
     await page.waitForFunction(() => document.querySelector('a-scene')?.hasLoaded, null, { timeout: 30000 });
     assert.equal(await page.evaluate(() => document.documentElement.dataset.roomState), 'idle');
     await pick(0);                       // corridor: "next" after the welcome
-    await pick(1);                       // start without recording
+    await pick(0);                       // consent page 1 (what this is, leaving, 18+): "next"
+    if (playtest) await pick(0);         // the playtest note, a page of its own
+    await pick(1);                       // last consent page: start without recording
     // the door to room 1 opens when pointed at
     await page.waitForFunction(() => document.documentElement.dataset.lobby === 'door', null, { timeout: 30000 });
     await page.evaluate(() => document.querySelector('#door1 .clickable').emit('click'));

@@ -7,24 +7,24 @@
 export const corridorHTML = `
 <a-entity id="corridor">
   <a-entity merge-static>
-    <a-plane rotation="-90 0 0" position="-0.2 0 2.55" width="6.4" height="1.8" surface="kind: linoleum"></a-plane>
-    <a-plane rotation="90 0 0" position="-0.2 2.5 2.55" width="6.4" height="1.8" surface="kind: ceiling"></a-plane>
+    <a-plane rotation="-90 0 0" position="-0.2 0 2.55" width="6.4" height="1.8" surface="kind: linoleum; space: -0.2 2.55 6.4 1.8"></a-plane>
+    <a-plane rotation="90 0 0" position="-0.2 2.5 2.55" width="6.4" height="1.8" surface="kind: ceiling; space: -0.2 2.55 6.4 1.8"></a-plane>
     <!-- north wall with the opening of door 1 (x 0.15 to 1.05, up to 2.05 m) -->
-    <a-plane position="-1.625 1.25 1.65" width="3.55" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
-    <a-plane position="2.025 1.25 1.65" width="1.95" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
-    <a-plane position="0.6 2.275 1.65" width="0.9" height="0.45" surface="kind: block; tint: #8a9479"></a-plane>
-    <a-plane position="-1.625 0.4 1.653" width="3.55" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
-    <a-plane position="2.025 0.4 1.653" width="1.95" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
+    <a-plane position="-1.625 1.25 1.65" width="3.55" height="2.5" surface="kind: block; tint: #8a9479; space: -0.2 2.55 6.4 1.8"></a-plane>
+    <a-plane position="2.025 1.25 1.65" width="1.95" height="2.5" surface="kind: block; tint: #8a9479; space: -0.2 2.55 6.4 1.8"></a-plane>
+    <a-plane position="0.6 2.275 1.65" width="0.9" height="0.45" surface="kind: block; tint: #8a9479; space: -0.2 2.55 6.4 1.8"></a-plane>
+    <a-plane position="-1.625 0.4 1.653" width="3.55" height="0.8" surface="kind: block; tint: #5d6650; space: -0.2 2.55 6.4 1.8"></a-plane>
+    <a-plane position="2.025 0.4 1.653" width="1.95" height="0.8" surface="kind: block; tint: #5d6650; space: -0.2 2.55 6.4 1.8"></a-plane>
     <a-plane rotation="0 90 0" position="0.15 1.025 1.625" width="0.05" height="2.05" color="#3d3a34"></a-plane>
     <a-plane rotation="0 -90 0" position="1.05 1.025 1.625" width="0.05" height="2.05" color="#3d3a34"></a-plane>
     <a-plane rotation="90 0 0" position="0.6 2.05 1.625" width="0.9" height="0.05" color="#3d3a34"></a-plane>
     <!-- south and end walls -->
-    <a-plane rotation="0 180 0" position="-0.2 1.25 3.45" width="6.4" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
-    <a-plane rotation="0 180 0" position="-0.2 0.4 3.447" width="6.4" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
-    <a-plane rotation="0 90 0" position="-3.4 1.25 2.55" width="1.8" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
-    <a-plane rotation="0 -90 0" position="3.0 1.25 2.55" width="1.8" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
-    <a-plane rotation="0 90 0" position="-3.397 0.4 2.55" width="1.8" height="0.8" surface="kind: block; tint: #59624c"></a-plane>
-    <a-plane rotation="0 -90 0" position="2.997 0.4 2.55" width="1.8" height="0.8" surface="kind: block; tint: #59624c"></a-plane>
+    <a-plane rotation="0 180 0" position="-0.2 1.25 3.45" width="6.4" height="2.5" surface="kind: block; tint: #8a9479; space: -0.2 2.55 6.4 1.8"></a-plane>
+    <a-plane rotation="0 180 0" position="-0.2 0.4 3.447" width="6.4" height="0.8" surface="kind: block; tint: #5d6650; space: -0.2 2.55 6.4 1.8"></a-plane>
+    <a-plane rotation="0 90 0" position="-3.4 1.25 2.55" width="1.8" height="2.5" surface="kind: block; tint: #858f74; space: -0.2 2.55 6.4 1.8"></a-plane>
+    <a-plane rotation="0 -90 0" position="3.0 1.25 2.55" width="1.8" height="2.5" surface="kind: block; tint: #858f74; space: -0.2 2.55 6.4 1.8"></a-plane>
+    <a-plane rotation="0 90 0" position="-3.397 0.4 2.55" width="1.8" height="0.8" surface="kind: block; tint: #59624c; space: -0.2 2.55 6.4 1.8"></a-plane>
+    <a-plane rotation="0 -90 0" position="2.997 0.4 2.55" width="1.8" height="0.8" surface="kind: block; tint: #59624c; space: -0.2 2.55 6.4 1.8"></a-plane>
     <!-- rails at 0.8 m and baseboards -->
     <a-box position="-1.625 0.8 1.658" width="3.55" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
     <a-box position="2.025 0.8 1.658" width="1.95" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
