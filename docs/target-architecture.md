@@ -46,7 +46,10 @@ tests/NN-*.test.mjs; the smoke test runs every room to its end in CI
 ## Still to build, in this order of need
 - Room 01 onto the clipboard: it still talks through its wall screen, and its flow helpers
   (say, ask, paging the reveal, phase timing) live in its room.js; they move to src/app/ so a
-  second room does not copy them, with a test listing what a room may import.
+  second room does not copy them, with a test listing what a room may import. Decided: a
+  questionnaire's answers are printed on the paper as lines with a box to tick (a 45-letter answer
+  as a dark button shrank under the 1.2° floor); work started on the local branch
+  claude/wip-experimenter, parked until the corridor is finished.
 - The reveal pager and a chart widget for "your timeline" (future src/app/reveal.js,
   src/engine/ui/timeline-chart.js).
 - "You against other players": read aggregates from the server (future src/engine/stats.js)

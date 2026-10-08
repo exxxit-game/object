@@ -62,12 +62,12 @@
    "Участник ___"; consent page 1 = short consent form (agree, known, date, "Подпись ___").
    Detail pass done (front, side, top of every corridor thing; headset 72 fps): extinguisher hook = fork round
    the neck, signs = plates on the doors, framed cork board, sheets and clipboard lie on the cork (tests guard).
-   Font: Inter shipped with the game, every text (owner chose it; a typewriter face was tried and dropped:
-   READING FIRST, sheet text never under 24 mm). The word "Лаборатория" is off the pages. NOW: the lab's seal
-   on the form (his sign: a snake round a globe), researching real seals and old engravings, pictures first.
-   NEXT name + signature drawn with the controller (kept on the device only), then end-wall pictures, then
-   LIGHTING (research first, before/after pictures), then texts. Audit of 9.10 (architecture, stale Ono docs,
-   room 01 off the clipboard) waits for his order. Later: floor directory by the stairs (1979 letter board).
+   Font: Inter (READING FIRST, sheet text >= 24 mm). Architecture (his word 9.10): tools pinned, map under
+   test, Ono docs gone, new structure rules, architecture-auditor before every "done". THE CORRIDOR FIRST (his word): finish it before
+   anything else, in his order: 1 signature on the form, 2 the lab's seal (his sign: a snake round a globe,
+   ring "Лаборатория экспериментальной психологии"), 3 end-wall pictures + a lively opening (Portal-like
+   look-at tasks, 1–2 clever jokes), 4 floor directory, 5 LIGHTING (research, before/after pictures). Then
+   room 01 onto the experimenter (parked on claude/wip-experimenter: lines to tick, chosen by him).
    Branch pushed ("Делай"), hidden address (rule 14). Style book https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH = THE whole picture. Built: plan B corridor 14.6 m (src/app/lobby/plan.js), numbers 101-109, NIU signs ON the
    doors (SIGN in src/app/brand.js), EXXXIT poster = leave, age asked, WS-900 extinguisher by the stairs, hint never in
    VR. Decided: floor = 9 rooms = one pack, floor 1 free, packs in the Horizon Store app. 72 fps, 124 calls.
