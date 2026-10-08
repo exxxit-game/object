@@ -38,24 +38,35 @@ function troffer(x) {
              material="color: #ffffff; emissive: #f2f6ff; emissiveIntensity: 0.95; roughness: 1" surface="kind: lens; glow: true"></a-plane>`;
 }
 
-// A 2.5 gal pressurized-water extinguisher (0.178 m across, 0.62 m tall) on a bracket on the
-// wall whose face is at z = wall, facing -z: top 1.496 m, bottom 0.869 m (at most 1.524 m and
-// at least 0.102 m: tests/standards.test.mjs). Parts stand at least 5 mm proud of each other.
+// A 2.5 gal stored-pressure water extinguisher as made in the 1970s (General WS-900, 1972:
+// polished stainless steel, 24 in tall, with a gauge; docs/research/vr/07-corridor-1979.md):
+// 7 in across, 0.62 m tall (S23), on a wall hook under its neck, on the wall whose face is at
+// z = wall, facing -z; top 1.484 m, bottom 0.869 m (at most 1.524 m and at least 0.102 m:
+// tests/standards.test.mjs). On the valve, as on every such unit: the carry handle and above it
+// the squeeze lever on one pin, the gauge in front, the hose out of the other side hanging down
+// to its nozzle. Every part touches the one it is fixed to (tests/standards.test.mjs).
+// brushed stainless: a mirror finish has nothing to mirror in a dim corridor and reads as dark grey
+const STEEL = 'material="color: #d3d7db; metalness: .25; roughness: .35"';
 function extinguisher(x, wall) {
   const z = wall - 0.03 - 0.089;
   return `
     <a-entity class="extinguisher">
-      <a-box position="${x} 1.36 ${wall - 0.015}" width="0.05" height="0.08" depth="0.03" color="#2b2b2b"></a-box>
-      <a-cylinder position="${x} 1.14 ${z}" radius="0.089" height="0.48" color="#a8231d"></a-cylinder>
-      <a-sphere position="${x} 1.38 ${z}" radius="0.089" scale="1 0.35 1" color="#a8231d"></a-sphere>
-      <a-sphere position="${x} 0.9 ${z}" radius="0.089" scale="1 0.35 1" color="#a8231d"></a-sphere>
-      <a-cylinder position="${x} 1.14 ${z}" radius="0.094" height="0.16" open-ended="true" theta-start="125" theta-length="110" color="#e2dccb"></a-cylinder>
-      <a-cylinder position="${x} 1.43 ${z}" radius="0.02" height="0.05" ${METAL}></a-cylinder>
-      <a-box position="${x} 1.462 ${z}" width="0.13" height="0.014" depth="0.03" ${METAL}></a-box>
-      <a-box position="${x} 1.49 ${z}" width="0.11" height="0.012" depth="0.026" ${METAL}></a-box>
-      <a-cylinder position="${x} 1.425 ${z - 0.021}" radius="0.016" height="0.006" rotation="90 0 0" color="#f2f0ea"></a-cylinder>
-      <a-cylinder position="${x + 0.1} 1.2 ${z - 0.035}" radius="0.008" height="0.46" color="#151515"></a-cylinder>
-      <a-cylinder position="${x + 0.1} 0.955 ${z - 0.035}" radius="0.011" height="0.04" color="#151515"></a-cylinder>
+      <a-box position="${x} 1.43 ${wall - 0.003}" width="0.04" height="0.1" depth="0.006" color="#2b2b2b"></a-box>
+      <a-box position="${x} 1.4 ${(wall + z) / 2}" width="0.03" height="0.012" depth="${(wall - z).toFixed(3)}" color="#2b2b2b"></a-box>
+      <a-cylinder position="${x} 1.14 ${z}" radius="0.089" height="0.48" ${STEEL}></a-cylinder>
+      <a-sphere position="${x} 1.38 ${z}" radius="0.089" scale="1 0.35 1" ${STEEL}></a-sphere>
+      <a-sphere position="${x} 0.9 ${z}" radius="0.089" scale="1 0.35 1" ${STEEL}></a-sphere>
+      <a-cylinder position="${x} 1.14 ${z}" radius="0.0905" height="0.17" open-ended="true" theta-start="130" theta-length="100" color="#a8231d"></a-cylinder>
+      <a-cylinder position="${x} 1.14 ${z}" radius="0.0912" height="0.146" open-ended="true" theta-start="133" theta-length="94" color="#ece6d6"></a-cylinder>
+      <a-cylinder position="${x} 1.425 ${z}" radius="0.022" height="0.04" ${METAL}></a-cylinder>
+      <a-box position="${x} 1.455 ${z}" width="0.06" height="0.03" depth="0.045" ${METAL}></a-box>
+      <a-cylinder position="${x} 1.455 ${z - 0.028}" radius="0.019" height="0.012" rotation="90 0 0" ${METAL}></a-cylinder>
+      <a-cylinder position="${x} 1.455 ${z - 0.035}" radius="0.015" height="0.002" rotation="90 0 0" color="#f2f0ea"></a-cylinder>
+      <a-box position="${x + 0.085} 1.447 ${z}" width="0.12" height="0.012" depth="0.03" ${METAL}></a-box>
+      <a-box position="${x + 0.085} 1.476 ${z}" rotation="0 0 6" width="0.12" height="0.012" depth="0.026" ${METAL}></a-box>
+      <a-cylinder position="${x + 0.03} 1.462 ${z}" radius="0.006" height="0.036" rotation="90 0 0" ${METAL}></a-cylinder>
+      <a-entity cable="radius: 0.008; color: #151515; points: ${x - 0.025} 1.455 ${z}, ${x - 0.06} 1.45 ${z - 0.01}, ${x - 0.105} 1.38 ${z - 0.02}, ${x - 0.11} 1.22 ${z - 0.03}, ${x - 0.105} 1.06 ${z - 0.035}"></a-entity>
+      <a-cylinder position="${x - 0.105} 1.03 ${z - 0.035}" radius="0.012" height="0.06" color="#151515"></a-cylinder>
     </a-entity>`;
 }
 

@@ -51,13 +51,44 @@ assert.ok(near((Number(attr(board, 'width')) - Number(attr(cork, 'width'))) / 2,
 const troffers = tags('a-box').filter(t => attr(t, 'color') === '#dcdcd5');
 assert.ok(troffers.length === 2 && troffers.every(t => near(Number(attr(t, 'width')), 1.2192) && near(Number(attr(t, 'depth')), 0.6096)), 'troffers 2 × 4 ft');
 // Fire extinguisher up to 40 lb: top at most 5 ft (1.524 m), bottom at least 4 in (102 mm)
-const ext = html.slice(html.indexOf('class="extinguisher"'), html.indexOf('</a-entity>', html.indexOf('class="extinguisher"')));
-const spans = [...ext.matchAll(/<a-(box|cylinder|sphere)[^>]*>/g)].map(([t, kind]) => {
-  const y = pos(t)[1];
-  const half = kind === 'sphere' ? Number(attr(t, 'radius')) * Number((attr(t, 'scale') || '1 1 1').split(' ')[1]) : Number(attr(t, 'height')) / 2;
-  return [y - half, y + half];
-});
-assert.ok(spans.length > 5, 'an extinguisher in the corridor');
-const extTop = Math.max(...spans.map(s => s[1])), extBottom = Math.min(...spans.map(s => s[0]));
+const extAt = html.indexOf('class="extinguisher"');
+const ext = html.slice(extAt, html.indexOf('\n    </a-entity>', extAt));
+// each part's box in the world [min, max] per axis: boxes (turned a little about z at most),
+// cylinders upright or laid along z, flattened spheres, hoses through their points
+const bound = (t) => {
+  const kind = t.match(/^<a-([a-z]+)/)[1];
+  if (/cable="/.test(t)) {
+    const r = prop(attr(t, 'cable'), 'radius');
+    const pts = attr(t, 'cable').match(/points:\s*([^"]*)/)[1].split(',').map((p) => p.trim().split(/\s+/).map(Number));
+    return [0, 1, 2].map((i) => [Math.min(...pts.map((p) => p[i])) - r, Math.max(...pts.map((p) => p[i])) + r]);
+  }
+  const [x, y, z] = pos(t);
+  const rot = (attr(t, 'rotation') || '0 0 0').split(' ').map(Number);
+  let half;
+  if (kind === 'box') {
+    const [w, h, d] = ['width', 'height', 'depth'].map((n) => Number(attr(t, n)));
+    const a = rot[2] * Math.PI / 180;
+    half = [(w * Math.abs(Math.cos(a)) + h * Math.abs(Math.sin(a))) / 2, (w * Math.abs(Math.sin(a)) + h * Math.abs(Math.cos(a))) / 2, d / 2];
+  } else if (kind === 'cylinder') {
+    const r = Number(attr(t, 'radius')), h = Number(attr(t, 'height'));
+    half = rot[0] === 90 ? [r, r, h / 2] : [r, h / 2, r];
+  } else if (kind === 'sphere') {
+    const r = Number(attr(t, 'radius')), s = (attr(t, 'scale') || '1 1 1').split(' ').map(Number);
+    half = [r * s[0], r * s[1], r * s[2]];
+  }
+  return [[x - half[0], x + half[0]], [y - half[1], y + half[1]], [z - half[2], z + half[2]]];
+};
+const parts = [...ext.matchAll(/<a-(box|cylinder|sphere|entity cable)[^>]*>/g)].map((m) => bound(m[0]));
+assert.ok(parts.length > 5, 'an extinguisher in the corridor');
+const extTop = Math.max(...parts.map((b) => b[1][1])), extBottom = Math.min(...parts.map((b) => b[1][0]));
 assert.ok(extTop <= 1.524 && extBottom >= 0.102, `extinguisher from ${extBottom.toFixed(3)} to ${extTop.toFixed(3)} m`);
+// nothing hangs in the air: every part touches the parts it is fixed to, all held by the wall hook
+// (the first part, on the wall); 1 mm of play for rounding
+const touch = (a, b) => [0, 1, 2].every((i) => a[i][0] <= b[i][1] + 0.001 && b[i][0] <= a[i][1] + 0.001);
+const held = new Set([0]);
+for (let grew = true; grew;) {
+  grew = false;
+  parts.forEach((b, i) => { if (!held.has(i) && [...held].some((j) => touch(b, parts[j]))) { held.add(i); grew = true; } });
+}
+assert.equal(held.size, parts.length, `extinguisher parts hanging in the air: ${parts.map((_, i) => i).filter((i) => !held.has(i)).join(', ')}`);
 console.log(`standards tests: ok (${leaves.length} doors, ${bases.length} base runs, extinguisher ${extBottom.toFixed(2)}–${extTop.toFixed(2)} m)`);
