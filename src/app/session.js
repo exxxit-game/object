@@ -4,9 +4,13 @@ import { issueReport } from './issue-report.js';
 // One play of a room, from consent to result. Every room uses this, so consent,
 // first/repeat runs and sending work the same everywhere.
 
+// The test copy for the owner's headset (exxxit-game.github.io/object-preview, made by
+// tools/publish-preview.mjs) never sends: our own checks must not reach the statistics.
+export const PREVIEW = location.pathname.startsWith('/object-preview');
+
 // Results are sent only with the privacy page published (privacy.html) and only
 // when the player chose "start with recording".
-const SENDING_ENABLED = true;
+const SENDING_ENABLED = !PREVIEW;
 
 // ?speed=N runs all timings N times faster for tests and headset checks; such
 // runs are never sent, so test data cannot reach the statistics.
