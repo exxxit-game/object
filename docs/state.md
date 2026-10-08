@@ -1,64 +1,59 @@
 # Project state and lessons (read this first in every new session)
 
 ## Where things are
-- Repo `exxxit-game/object` (local folder `C:\Users\admin\Documents\GitHub\objekt`).
-  Site: https://youaretheobject.com (GitHub Pages, https enforced, CNAME in repo).
-- Branches: `main` = live site (older package). `room-polish` = unreleased work:
-  sounds, hand grab, shadows, VR recenter + seated mode, consent, stats client,
-  code-review fixes, Daniel voice. `ono-faithful-wip` = parked 40-minute Ono pieces
-  (original schedules, signal light, analyseOno) for reuse.
-- Supabase project `objekt` (`rkvdwzlymmewsxjysgma`, eu-west-1). Table `app.runs`
-  in a private schema, only `public.submit_run()` for anon (insert-only, field
-  whitelist, 2 KB, flood guard). Migrations in `supabase/migrations/`.
-- ElevenLabs key: `C:\Users\admin\.elevenlabs-key.txt` (never in the repo).
-  Voice "Daniel", model eleven_v3, tag "[уверенно, твёрдо]". Tools:
-  `tools/make-voice.mjs`, `tools/make-sounds.mjs`.
-- Headset: Meta Quest 3 over USB (adb). `tools/quest-check.mjs` plays the room in
-  the headset; remote VR entry is impossible (needs a real controller press);
-  worn mode: `adb shell am broadcast -a com.oculus.vrpowermanager.prox_close`
-  (undo: `...automation_disable`).
+- Repo `exxxit-game/object` (folder `C:\Users\admin\Documents\GitHub\objekt`). Site:
+  https://youaretheobject.com (GitHub Pages from `main`; `main` is an OLD package).
+  `room-polish` = all current work, pushed, CI green. Release = owner's word only.
+- Room 01 = illusion of control (Alloy & Abramson 1979, Exp. 2), `src/rooms/01-control/`;
+  Ono kept under git tag `ono-room-final`. Playtest mode: `?playtest=1`. Test speed `?speed=N`.
+- Supabase `objekt` (`rkvdwzlymmewsxjysgma`, eu-west-1 Ireland), private schema `app`:
+  `runs` via `submit_run` (room 01 whitelist), `playtests` via `submit_playtest`; both
+  insert-only for anon, verified. Sending is ON in code with consent; privacy page `privacy.html`
+  (contact t.me/exxxit). Tests pin client fields to the SQL (`tests/results.test.mjs`, `tests/playtest.test.mjs`).
+- Papers (PDF + text, not in repo): `C:\Users\admin\Documents\objekt-papers\`; still missing:
+  `docs/papers-needed.md`. 145 cards from full texts: `docs/cards/`, checked by
+  `node tools/check-cards.mjs`; catalog generated: `docs/catalog.md` (`node tools/build-catalog.mjs`);
+  coverage closed: `docs/search-coverage.md`; ideas: `docs/ideas/`; headset abilities:
+  `docs/headset-capabilities.md`; owner page: https://claude.ai/artifact/Srhwjio7Ukp4FBDQAHpZB2
+- Headset: Quest 3 over USB; `tools/quest-check.mjs` (last full PASS before playtest mode);
+  `tools/xr-probe.html` (owner presses VR/MR/mic buttons); `scrcpy` installed.
+- Voice: ElevenLabs key `C:\Users\admin\.elevenlabs-key.txt`; Daniel, eleven_v3;
+  `tools/make-voice.mjs`, `tools/check-voice.mjs` (speech-to-text check), `tools/make-sounds.mjs`.
 
 ## Decisions with the owner
-- Rooms are faithful re-creations of published experiments. No invented mechanics.
-- Business: first room free, next rooms paid (bundle better than $1 each — to
-  revisit); licences for education; university partners. Never sell data, no ads
-  or third-party trackers.
-- Ethics: consent screen, 18+, "start without recording" button (approved), quit
-  any time, full debrief; anonymous data only; privacy page needed at
-  youaretheobject.com/privacy before recording. Science-grade data needs ethics
-  approval via a university co-author; preregister (OSF) before.
-- First and repeat runs are stored and analysed separately.
-- Formal address ("вы") everywhere; no music; batch releases only on the owner's word.
-- Name "Object": the human is the object of the experiment. Domain youaretheobject.com.
-
-- Original papers (PDF + text, not in the repo for copyright):
-  `C:\Users\admin\Documents\objekt-papers\`. Headset screen on the laptop: `scrcpy`.
+- Rooms are faithful re-creations of published experiments; no invented mechanics.
+- Space tiers: seated, standing, roomscale 2×2 m (base), large (offered only, never shrunk).
+- Live players replace scripted people only where the original had real participants or
+  a design like Mori & Arai; mixed reality where the original was a real room.
+- Business: first room free, later paid (decide with data); education licences; university
+  partners; never sell data, no ads or trackers. Possible second role: platform bringing
+  VR players to labs (hypothesis; ask labs first).
+- Ethics: consent, 18+ for recording, "start without recording", quit any time, debrief,
+  anonymous data; science only after ethics approval + preregistration + separate consent.
+- Playtest: 5–10 testers from the owner's Telegram VR community; 5 approved questions.
+- Formal "вы"; no music; batch releases only on the owner's word.
 
 ## How errors are caught (the owner cannot read code)
-- Rooms are built by the `new-room` skill; `paper-reviewer` agent checks each room
-  against its paper; `docs/mistakes.md` lists every past mistake with its guard.
-- A fact lives in one place and a test guards it (e.g. `protocol.js` + `tests/control-protocol.test.mjs`
-  with paper pages). A wrong number from memory turns the test red.
-- After each big step a fresh reviewer agent gets only the paper and the code and looks for
-  mismatches; it cannot inherit my mistakes.
-- Notes and files cannot grow: `tests/structure.test.mjs` caps this file (80 lines) and code
-  files (300), forbids engine→room imports and Russian text outside `texts.*.js`.
-- Every answer to the owner says what was run and what was seen; otherwise "not verified".
-- The owner's view is the CI light on GitHub (green / red), not the code.
+- `new-room` skill; `paper-reviewer` agent; `docs/mistakes.md` (every mistake has a guard).
+- Facts live in one place with a test; cards need quotes the checker finds in the paper.
+- `tests/structure.test.mjs`: file sizes, import direction, no Russian outside texts,
+  no dead modules, docs name real files, this file ≤ 80 lines, syntax, catalog current.
+- Answers say what was run and seen; otherwise "not verified". Owner sees CI light.
 
 ## Lessons (do not repeat)
-- **Read the original paper in full before designing a room.** Abstracts are not
-  enough: a true fact (S15 touching the ceiling) was once removed for that reason.
-- **Check fit before building:** original participant time ≤ ~10 minutes and the
-  participant has a clear task or tension. Ono (1987) is 40 minutes of waiting:
-  unsuitable as a room; compressing it changes the experiment.
-- Do the steps you can do yourself; verify in the headset yourself before asking
-  the owner to look; give clickable links; one decision per question.
-- File names that look like analytics get blocked by ad blockers (test exists).
-- Releases: batch, never many small releases per day.
+- Read the full paper before recommending or designing (summaries overstated effects twice).
+- Paper titles and DOIs from Crossref, never from memory. Shell heredocs eat backslashes:
+  edit regex code with the Edit tool. Never send the owner's email to services.
+- Faithful ≠ interesting: lead with short, within-person, suspicion-proof rooms;
+  personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
-## Next
-- Target layout of every file (now → final): `docs/target-architecture.md`.
-  Any refactor follows it; a room never re-implements shared parts.
-- Room 01 is the illusion of control (Alloy & Abramson 1979); Ono kept under tag `ono-room-final`.
-- Privacy page, diagnostics (errors/devices, with consent), "you vs others" read.
+## Open items (owner list, 08.10) — close in order
+1. DONE catalog from cards; DONE coverage map.
+2. First room: read in full Kohnstamm, Morehead, Hirschhorn, Fernández-Ruiz (+ pendulum,
+   two flashes, Drori); build 2–3 short prototypes; playtest decides.
+3. Plato's cave room design (own experiment, labelled as such).
+4. Owner-approved screenshot set for room 01 (rule 13).
+5. Diagnostics: errors and devices with consent (like Cosmogram).
+6. "You vs others" in the reveal: aggregate read function + display.
+7. Engagement: share card without spoilers, desktop version, Quest new-tab submission.
+8. Waiting on owner: play room 01 in headset; xr-probe; audio delay test; plugins; lab letter.
