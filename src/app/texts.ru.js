@@ -1,18 +1,22 @@
 // Words the player sees in every room: consent and shared buttons.
 // The player is always addressed formally ("вы").
 export const APP_T = {
+  // the lab's name, round its seal (src/app/seal.js)
+  lab: 'Лаборатория экспериментальной психологии',
   // one screen after another: a screen holds one thought, the last one the choice
   consent: {
-    // the first page is a short consent form, as such forms read: who agrees to what, what they
-    // know, the date and a line to sign
+    // the first two pages are a short consent form, as such forms read: who agrees to what, what
+    // they know; then the date, a line to sign and the place for the lab's seal
     form: {
       title: 'Согласие на участие',
       agree: 'Я, ______________________, соглашаюсь принять участие в психологическом исследовании.',
       known: 'Мне известно, что часть деталей раскроют только в конце и что прекратить участие можно в любой момент: снять шлем или закрыть страницу.',
       date: 'Дата:',
       sign: 'Подпись ______________________',
-      // shown where the button will be until the name and the signature are written
-      note: 'Впишите имя и распишитесь: зажмите курок или кнопку мыши и ведите по строке.'
+      mark: 'М.П.',
+      // shown where the button will be until the name, then the signature, is written
+      nameNote: 'Впишите имя: зажмите курок или кнопку мыши и ведите по строке.',
+      signNote: 'Распишитесь: зажмите курок или кнопку мыши и ведите по строке.'
     },
     locale: 'ru-RU',
     pages: [

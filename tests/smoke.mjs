@@ -34,8 +34,9 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     }).filter(Boolean);
   });
   // What a sheet page must satisfy (src/engine/ui/sheet-math.js; sources in docs/decisions.md):
-  // nothing runs off the paper, letters at least 1.2° and buttons at least 2.5° of view from
-  // the eyes, and up to four answers in one column.
+  // nothing runs off the paper, every letter (text, answers, a seal's ring) at least the smallest
+  // letter (24 mm at 1 m, 1.375° of view) and buttons at least 2.5° of view from the eyes, and up
+  // to four answers in one column.
   const sheetProblems = () => page.evaluate(() => {
     const sheet = document.querySelector('.sheet[data-open]');
     if (!sheet) return [];
@@ -46,10 +47,11 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     const out = sheet.dataset.overflow ? ['the page does not fit the sheet'] : [];
     if (sheet.dataset.orphan) out.push('a blank to fill in stands on a line of its own');
     if (Number(sheet.dataset.letterMm) < 24) out.push(`text ${sheet.dataset.letterMm} mm, under 24 mm`);
+    if (sheet.dataset.stampLetterMm && Number(sheet.dataset.stampLetterMm) < 24) out.push(`the seal's letters ${sheet.dataset.stampLetterMm} mm, under 24 mm`);
     for (const a of answers) {
       a.object3D.getWorldPosition(p);
       const d = p.distanceTo(eye);
-      if (deg(a.dataset.letterMm / 1000, d) < 1.2) out.push(`letters ${deg(a.dataset.letterMm / 1000, d).toFixed(2)}° < 1.2°`);
+      if (deg(a.dataset.letterMm / 1000, d) < 1.375) out.push(`answer letters ${deg(a.dataset.letterMm / 1000, d).toFixed(2)}° < 1.375°`);
       if (deg(a.getAttribute('panel').h, d) < 2.5) out.push(`button ${deg(a.getAttribute('panel').h, d).toFixed(2)}° < 2.5°`);
     }
     if (answers.length <= 4 && new Set(answers.map(a => a.object3D.position.x.toFixed(3))).size > 1) out.push('answers in two columns');
@@ -112,17 +114,30 @@ async function playRoom(url, playtest, { leave = false } = {}) {
   };
   // The consent form is signed by hand: a field over the name's and the signature's blanks, listed
   // for the mouse and the lasers, and no button until both have writing (src/engine/ui/ink.js).
-  const signForm = async () => {
-    await page.waitForFunction(() => document.querySelectorAll('.sheet .ink-field').length === 2, null, { timeout: 30000 });
+  // the form's two pages: the name, then the signature, which brings the lab's seal
+  const signPage = async (sealed) => {
+    await page.waitForFunction(() => document.querySelectorAll('.sheet .ink-field').length === 1, null, { timeout: 30000 });
     assert.equal(await page.evaluate(() => document.querySelectorAll('.sheet .answer').length), 0, 'the form moves on before it is signed');
     const listed = await page.evaluate(() => {
       const rc = document.querySelector('a-scene').components.raycaster;
       return [...document.querySelectorAll('.ink-field')].every((f) => rc.objects.some((o) => { for (let x = o; x; x = x.parent) if (x.el === f) return true; return false; }));
     });
     assert.ok(listed, 'the fields to sign are not listed for the mouse and the lasers');
+    assert.equal(await page.evaluate(() => !!document.querySelector('.sheet').dataset.stampTop), sealed, sealed ? 'no place for the seal by the signature' : 'a seal on the name page');
+    assert.ok(await page.evaluate(() => !document.querySelector('.sheet').dataset.stamped), 'the seal is pressed before the form is signed');
     await page.evaluate(() => document.querySelectorAll('.ink-field').forEach((f) => f.components.ink.addStroke([[0.1, 0.6], [0.4, 0.3], [0.7, 0.6], [0.9, 0.4]])));
+    if (sealed) {
+      // pressed once signed, and never over the hand signature (GOST R 7.0.97-2025, 5.24)
+      const s = await page.evaluate(() => {
+        const sheet = document.querySelector('.sheet'), f = sheet.querySelector('.ink-field');
+        return { stamped: sheet.dataset.stamped, top: Number(sheet.dataset.stampTop), field: f.object3D.position.y - f.components.ink.data.h / 2 };
+      });
+      assert.equal(s.stamped, '1', 'the seal is not pressed once the form is signed');
+      assert.ok(s.top <= s.field, `the seal reaches into the signature's field (${s.top} above ${s.field.toFixed(3)})`);
+    }
     await pick(0);
   };
+  const signForm = async () => { await signPage(false); await signPage(true); };
   // answers one question: a scale (click its middle, then "done") or a choice
   const answer = async () => {
     await page.waitForFunction(() => document.querySelector('.scale-bar') || document.querySelectorAll('.answer').length > 1, null, { timeout: 30000 });

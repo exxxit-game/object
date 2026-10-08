@@ -1,11 +1,15 @@
 import { createChoice } from './choice.js';
+import { MIN_LETTER } from './sheet-math.js';
+import { FONT } from '../panel.js';
 import './ink.js';
 
 // The page of the clipboard (sheet.js): its text in roles, the answer buttons under it, and on a
 // form a field over every blank (a run of underscores) to write in by hand (ink.js). Text never
 // shrinks to fit: a page that does not fit sets data-overflow, which the smoke test treats as an
 // error (split the text into pages instead). Reading comes first: no role is smaller than
-// MIN_LETTER, and the smoke test fails a page drawn smaller (data-letter-mm).
+// MIN_LETTER (sheet-math.js), and the smoke test fails a page drawn smaller (data-letter-mm). The
+// page is a large-print document (docs/decisions.md): what is printed on it, a seal included, is
+// sized from that letter, never from the paper.
 export const PAPER = { w: 0.56, h: 0.72 };
 export const PAPER_BG = '#e9e2cf';       // cream, not white: a large white page glares in a headset
 export const DENSITY = 2 * 1024 / 1.5;   // canvas px per metre: sharp when read from 1 m (choice.js)
@@ -13,7 +17,6 @@ export const MARGIN = 0.04;
 export const UNDER_TEXT = 0.03;
 const BUTTON_H = 0.07;            // about 4 degrees at 1 m (Meta: targets at least 2.5)
 const GAP = 0.025;
-const MIN_LETTER = 0.024;
 // Text roles: font size in metres at 1 m and ink, in the game's sans (FONT: a sans with a high
 // x-height, as Meta asks for text in VR).
 const ROLES = {
@@ -24,6 +27,10 @@ const ROLES = {
 // A field to write in: the blank's width, from a letter's height above its line (people write
 // above the line) to a third of one below it.
 const FIELD = { above: 1.0, below: 0.35, side: 0.3 };
+// A stamp's ink: violet, one of the standard stamp-pad inks (Trodat's range; stamp makers' common
+// colours); its shade, strength and the hand's slight turn as in the approved picture of its place
+// (docs/rooms/corridor-shots/seal-place.png, the right one, B); laid over the paper as ink is.
+const STAMP = { ink: [92, 60, 150], alpha: 0.82, turn: -0.12 };
 
 // el: the sheet entity; paperEl: its paper (a panel)
 export function createPage(el, paperEl) {
@@ -33,6 +40,7 @@ export function createPage(el, paperEl) {
     bottom: -PAPER.h / 2 + MARGIN, density: DENSITY
   });
   let fields = [];
+  const pressedInk = new WeakMap();   // a stamp's drawing turned to ink, made once
 
   // blocks: [{ t, role: 'title' | 'body' | 'soft', gap }]; returns the local y of the text's
   // bottom edge (the sheet's centre is 0).
@@ -75,10 +83,67 @@ export function createPage(el, paperEl) {
   }
   function dropFields() { fields.forEach((f) => f.remove()); fields = []; }
 
-  // Draws a page: the text, then the buttons (labels, onPick), and on a form its fields.
-  // Returns the top edge of the buttons.
-  function show({ blocks, labels = null, onPick = null, form = false }) {
-    const top = paint(blocks || []) - UNDER_TEXT;
+  // A form's place for the seal (an office seal goes by the signature, on a free place, never over
+  // the hand signature: GOST R 7.0.97-2025, 5.24): a square of stamp.size from top down, its mark
+  // printed in the middle; once the form is signed (pressed) the seal is pressed over it, a little
+  // turned, as a hand stamps. stamp: { size (m), mark, draw(ctx, r) }: draw paints the seal in
+  // black, outer radius r, ctx at its centre, and returns the font size of its smallest letter.
+  function stampPlace(top, stamp, pressed) {
+    const panel = paper(), g = panel.ctx, soft = ROLES.soft;
+    const cx = panel.c.width / 2, cy = (PAPER.h / 2 - top + stamp.size / 2) * DENSITY;
+    g.save();
+    g.font = `${soft.weight} ${soft.m * DENSITY}px ${FONT}`;
+    g.fillStyle = soft.color; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(stamp.mark, cx, cy);
+    if (pressed) {
+      const ink = inkOf(stamp);
+      g.translate(cx, cy); g.rotate(STAMP.turn); g.globalCompositeOperation = 'multiply';
+      g.drawImage(ink, -ink.width / 2, -ink.height / 2);
+    }
+    g.restore();
+    panel.tex.needsUpdate = true;
+    el.dataset.stampLetterMm = (inkOf(stamp).letter / DENSITY * 1000).toFixed(1);
+    el.dataset.stampTop = top.toFixed(3);
+    if (pressed) el.dataset.stamped = '1'; else delete el.dataset.stamped;
+  }
+
+  // the seal drawn in black on white, its black turned to stamp ink and its white to clear paper;
+  // the canvas leaves room round the radius for the outer ring's stroke
+  function inkOf(stamp) {
+    if (pressedInk.has(stamp)) return pressedInk.get(stamp);
+    const d = Math.round(stamp.size * DENSITY), n = Math.ceil(d * 1.06), c = document.createElement('canvas');
+    c.width = c.height = n;
+    const s = c.getContext('2d');
+    s.fillStyle = '#fff'; s.fillRect(0, 0, n, n);
+    s.translate(n / 2, n / 2);
+    c.letter = stamp.draw(s, d / 2);
+    const im = s.getImageData(0, 0, n, n), px = im.data, [r, gr, b] = STAMP.ink;
+    for (let i = 0; i < px.length; i += 4) {
+      const a = 1 - px[i] / 255;
+      px[i] = r; px[i + 1] = gr; px[i + 2] = b; px[i + 3] = 255 * a * STAMP.alpha;
+    }
+    s.putImageData(im, 0, 0);
+    pressedInk.set(stamp, c);
+    return c;
+  }
+  function clearStamp() { for (const k of ['stampLetterMm', 'stampTop', 'stamped']) delete el.dataset[k]; }
+
+  // Draws a page: the text, on a form its fields and its seal's place (stamp; pressed once signed),
+  // then the buttons (labels, onPick), or a note where they will be. Returns the top edge of the
+  // buttons.
+  function show({ blocks, labels = null, onPick = null, form = false, note = null, stamp = null, pressed = false }) {
+    blocks = blocks || [];
+    let top = paint(blocks) - UNDER_TEXT;
+    if (stamp) {
+      // the note waits under the seal's place, where the button will be
+      if (note) paint([...blocks, { t: note, role: 'soft', gap: stamp.size + 2 * UNDER_TEXT }]);
+      stampPlace(top, stamp, pressed);
+      top -= stamp.size + UNDER_TEXT;
+      if (top < -PAPER.h / 2 + MARGIN) el.dataset.overflow = '1';
+    } else {
+      clearStamp();
+      if (note) top = paint([...blocks, { t: note, role: 'soft', gap: UNDER_TEXT }]) - UNDER_TEXT;
+    }
     if (labels) {
       const needed = labels.length * BUTTON_H + (labels.length - 1) * GAP;
       if (top - needed < -PAPER.h / 2 + MARGIN) el.dataset.overflow = '1';

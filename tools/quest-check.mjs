@@ -97,9 +97,12 @@ await run(`(async () => {
     document.querySelector('.sheet[data-take]').emit('click'); // corridor: take the clipboard from the board
     await pick(0); // "next" after the welcome
     // the consent form: a line written in each field (name, signature), then "next"
-    while (document.querySelectorAll('.ink-field').length < 2) await w(150);
-    document.querySelectorAll('.ink-field').forEach((f) => f.components.ink.addStroke([[0.1, 0.6], [0.4, 0.3], [0.7, 0.6], [0.9, 0.4]]));
-    await pick(0);
+    for (let p = 0; p < 2; p++) {   // the form: the name page, then the signature page with the seal
+      while (!document.querySelector('.ink-field')) await w(150);
+      document.querySelectorAll('.ink-field').forEach((f) => f.components.ink.addStroke([[0.1, 0.6], [0.4, 0.3], [0.7, 0.6], [0.9, 0.4]]));
+      await pick(0);
+      await w(400);
+    }
     await pick(0); // the age: "yes"
     await pick(1); // last consent page: start without recording
     while (document.documentElement.dataset.lobby !== 'door') await w(150);

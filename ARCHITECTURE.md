@@ -35,7 +35,7 @@ added, renamed or removed without this table. `voice/` and `sound/` hold recordi
 | Folder | Files |
 |---|---|
 | `src/` | main.js (shell) · app/ · engine/ · rooms/ |
-| `src/app/` | brand.js (the game's colours, the sign family) · consent.js · hint.js (desktop hint) · issue-report.js · left-early.js · logo.js (the studio's mark) · playtest.js · playtest-report.js · session.js · texts.ru.js · lobby/ |
+| `src/app/` | brand.js (the game's colours, the sign family) · consent.js · hint.js (desktop hint) · issue-report.js · left-early.js · logo.js (the studio's mark) · playtest.js · playtest-report.js · seal.js (the lab's seal) · session.js · texts.ru.js · lobby/ |
 | `src/app/lobby/` | lobby.js (the corridor's flow) · scene.js · plan.js (the corridor to its end) · opening.js · sign.js · board.js · exit.js (the poster: leave the game) · stairs-sign.js · extinguisher-label.js · texts.ru.js · voice-lines.js · sound-list.js · voice/ · sound/ |
 | `src/engine/` | panel.js (canvas text) · audio.js · voice.js · sfx.js · log.js · results.js · fader.js · recenter.js · recenter-math.js · locomotion.js · locomotion-math.js · vignette.js · grab-press.js · haptics.js · blob-shadow.js · room-bounds.js · away-meter.js · surface.js · tile-math.js · lightbox.js · glide.js · merge-static.js · shapes.js · cable.js · mirror.js · door.js (every doorway) · reflect-env.js (mirrored surroundings) · ui/ |
 | `src/engine/ui/` | choice.js (answer buttons) · scale.js · sheet.js (the clipboard) · sheet-page.js (its page: text, buttons, fields) · ink.js (writing by hand on a form) · sheet-math.js |

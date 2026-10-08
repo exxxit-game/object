@@ -20,6 +20,8 @@ in full are in `C:\Users\admin\Documents\objekt-papers\` (PDF and text).
 | `07-corridor-1979.md` | a US university lab corridor of 1979: doors, signs, extinguishers, notices, typewriters |
 | `08-paper.md` | paper in the headset: large-print documents (UKAAF, CNIB), text inside pictures, forms that grow in pages |
 
+Other projects compared with ours, the good and the bad (file layout, psychology-experiment frameworks, WebXR samples and web games, engines from China and Japan): `docs/research/projects/file-layout.md`, `docs/research/projects/experiments.md`, `docs/research/projects/webxr-and-games.md`, `docs/research/projects/china-japan.md`.
+
 Each file ends with "Conflicts with our notes", "Top 15 for our game", the sources read and the gaps.
 Gaps that stayed open: paywalled ISO 9241-391/392/394, ISO/IEC 5927 and IEEE 3079 (scope pages
 only); GDC talks (video captions blocked); no study compares snap angles; no published timing

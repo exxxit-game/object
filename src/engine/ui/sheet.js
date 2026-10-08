@@ -1,6 +1,6 @@
 import { readingPose, glidePath, BOARD, CLIP, BOARD_REACH } from './sheet-math.js';
 import '../reflect-env.js';
-import { createPage, PAPER, PAPER_BG, DENSITY, UNDER_TEXT } from './sheet-page.js';
+import { createPage, PAPER, PAPER_BG, DENSITY } from './sheet-page.js';
 import '../glide.js';
 import '../shapes.js';
 
@@ -185,9 +185,10 @@ export function createSheet(scene, { inside = null } = {}) {
   // Every page change goes through here. While a question has cut in (interrupt), the new page
   // is kept for resume() instead of being drawn over the question, and its answers wait with it.
   // Returns the top of the answer buttons, or null when kept.
-  function setPage({ blocks, labels = null, onPick = null, form = false }) {
-    if (saved) { Object.assign(saved, { blocks, labels, onPick, form }); return null; }
-    page = { blocks, labels, onPick, form };
+  function setPage(next) {
+    next = { labels: null, onPick: null, form: false, note: null, stamp: null, pressed: false, ...next };
+    if (saved) { Object.assign(saved, next); return null; }
+    page = next;
     const top = pg.show(page);
     refreshRays();
     return top;
@@ -211,8 +212,7 @@ export function createSheet(scene, { inside = null } = {}) {
     } else if (saved.was === 'closed') open();
     pg.hideFields();
     refreshRays();
-    const top = pg.paint(blocks) - UNDER_TEXT;
-    return new Promise((resolve) => choice.show(labels, resolve, top));
+    return new Promise((resolve) => pg.show({ blocks, labels, onPick: resolve }));
   }
 
   async function resume() {
@@ -247,15 +247,16 @@ export function createSheet(scene, { inside = null } = {}) {
 
   // A form filled in by hand: every blank on the page (a run of underscores) takes ink from the
   // laser or the mouse (ink.js); note stands where the button will be until every blank has some
-  // writing, then the button (label). Resolves with the strokes, one list per blank in page order
-  // ([[u, v], ...] from 0 to 1 across its field).
-  async function fill(blocks, label, note) {
+  // writing, then the button (label). A form that is certified (stamp, sheet-page.js) gets its
+  // seal pressed at its place the moment it is signed. Resolves with the strokes, one list per
+  // blank in page order ([[u, v], ...] from 0 to 1 across its field).
+  async function fill(blocks, label, note, stamp = null) {
     await ready;
     open();
     return new Promise((resolve) => {
       const draw = () => {
         const done = pg.fields().length > 0 && pg.fields().every((f) => f.components.ink && f.components.ink.written());
-        setPage({ blocks: done ? blocks : [...blocks, { t: note, role: 'soft', gap: UNDER_TEXT }], labels: done ? [label] : null, form: true,
+        setPage({ blocks, note: done ? null : note, labels: done ? [label] : null, form: true, stamp, pressed: done,
           onPick: () => { const strokes = pg.fields().map((f) => f.components.ink.strokes); el.removeEventListener('inked', draw); pg.dropFields(); resolve(strokes); } });
       };
       draw();
