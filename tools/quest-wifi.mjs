@@ -8,8 +8,8 @@ import { execFileSync } from 'node:child_process';
 
 const PORT = 5555;
 const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8' }).trim();
-const ready = () => adb('devices').split('\n').slice(1)
-  .map(line => line.split('\t')).filter(([, state]) => state === 'device').map(([id]) => id);
+const listed = () => adb('devices').split('\n').slice(1).map(line => line.split('\t'));
+const ready = () => listed().filter(([, state]) => state === 'device').map(([id]) => id);
 
 let ip = process.argv[2];
 if (!ip) {
@@ -31,9 +31,16 @@ if (!ip) {
 const target = `${ip}:${PORT}`;
 console.log(adb('connect', target));
 if (!ready().includes(target)) {
-  console.log('No Wi-Fi link: the laptop and the headset must be on the same network.');
+  const asleep = listed().some(([id, state]) => id === target && state === 'offline');
+  console.log(asleep
+    ? 'The headset is asleep (its Wi-Fi sleeps too): wake it with the power button or put it on, then run this again.'
+    : 'No Wi-Fi link: the laptop and the headset must be on the same network.');
   process.exit(1);
 }
 adb('-s', target, 'reverse', 'tcp:3000', 'tcp:3000'); // the game at localhost:3000 in the headset
-console.log(`Headset on Wi-Fi at ${target}. Unplug the cable now.`);
+// "Worn" mode: the headset stays awake lying on the table, so the owner need not wear it
+// for checks. It drains the battery: keep the headset charging; undo with `off`.
+adb('-s', target, 'shell', 'am', 'broadcast', '-a', 'com.oculus.vrpowermanager.prox_close');
+console.log(`Headset on Wi-Fi at ${target}, kept awake. Unplug the cable now.`);
 console.log(`After a headset restart: node tools/quest-wifi.mjs ${ip}`);
+console.log(`Let it sleep again: adb -s ${target} shell am broadcast -a com.oculus.vrpowermanager.automation_disable`);

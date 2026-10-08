@@ -13,8 +13,9 @@
 <body>
 <!-- Headset capability probe: which WebXR features this headset and browser really
      give a web page. A session needs a real button press, so the owner presses the
-     two buttons once in the headset; the result is kept in window.__probe and in the
-     page, and is read over USB (CDP) afterwards. -->
+     buttons once in the headset (or the tools press them over the debug link: a click
+     sent that way counts as the user's); the result is kept in window.__probe, in the
+     page and in localStorage, and is read over USB or Wi-Fi (CDP) afterwards. -->
 <p>Проверка шлема. Нажмите все три кнопки по очереди. Проверки VR и MR длятся по 5 секунд, потом шлем сам вернётся сюда. Для микрофона разрешите доступ и скажите что-нибудь: ничего не записывается и не отправляется.</p>
 <button id="vr">Проверить VR</button>
 <button id="ar">Проверить MR</button>
@@ -24,9 +25,15 @@
 // No 'layers': together with the normal base layer the session fails (docs/headset-capabilities.md).
 const FEATURES = ['local-floor', 'bounded-floor', 'hand-tracking', 'plane-detection', 'mesh-detection',
   'anchors', 'hit-test', 'depth-sensing', 'light-estimation', 'dom-overlay', 'body-tracking'];
-window.__probe = {};
+// Results are also kept in localStorage: the headset browser reloads background tabs,
+// which would otherwise lose them before they are read.
+try { window.__probe = JSON.parse(localStorage.getItem('xr-probe') || '{}'); } catch (e) { window.__probe = {}; }
 const out = document.getElementById('out');
-const show = () => { out.textContent = JSON.stringify(window.__probe, null, 2); };
+const show = () => {
+  out.textContent = JSON.stringify(window.__probe, null, 2);
+  try { localStorage.setItem('xr-probe', JSON.stringify(window.__probe)); } catch (e) { /* private mode */ }
+};
+if (Object.keys(window.__probe).length) show();
 
 async function probe(mode) {
   const r = { mode, started: new Date().toISOString() };

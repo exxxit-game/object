@@ -50,26 +50,27 @@
 - Faithful ≠ interesting: lead with short, within-person, suspicion-proof rooms;
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
-## Open items (owner, 08.10). Owner: no rush; only room 01 until it is the model room.
-1. DONE: catalog, coverage, diagnostics, "you vs others", xr-probe (area 1.88 x 2.10 m), audio
-   4 + 24 ms, plan doc, early-exit choice, age group + "saw someone play" (server 0008), cable.
-2. NOW room 01 look. Style CHOSEN: the experiment's era (1979 university lab) + shared signs
-   (door with plaque "Room NN · name · year", observation mirror, screen, brand colour); add a
-   door, a static-reflection mirror, a chair; screenshots to the owner before release.
-3. Then the arrival: experimenter's welcome, lobby/menu, the room door; one unbroken journey.
-   Owner's hook: "you, like everyone, are sure this does not apply to you; see for yourself"
-   (bias blind spot: ask before the room, show the truth after). Entry ends seated on the chair.
-4. Strategy to think through: VR attention is free (sales down, little new content, VR media
-   short of topics); streams vs spoilers, media, Quest new tab.
-5. Plan doc sections to add: headset add-ons (report in hand: no Web Bluetooth in Quest
-   Browser; fans/lamps via smart plug; touch helps presence) and device combos (two headsets,
-   phone or laptop + headset, asymmetric roles).
-6. Later: first-room candidates (Kohnstamm, Morehead, Hirschhorn, Fernández-Ruiz, pendulum,
-   two flashes, Drori) and 2–3 prototypes; Plato's cave; share card, desktop version, Quest new
-   tab; headset measurements (battery, Hz, timing, audio loopback, jitter, hands, body, MR).
-7. Waiting on owner: play room 01 at real speed; lab letter; plugins.
-8. Dialogue review 08.10: all open requests are in the plan doc table (see the link above).
-Facts: legs from body tracking are AI-generated (never data); labs have Ouvrai (free) and VERA;
-Meta stopped commercial/education sales 20.02.2026; store sales need a store PWA (30%); Steam
-Sep 2026 Quest 3 26.9%, Quest 2 25.8%, 3S 11.1%, English 34.2%. Rules: science studies free;
-gate 0 = 7 of 10 finish + mean 7.
+## Open items (owner, 08.10). No rush; only room 01 until it is the model room. Owner is
+## getting lost: ONE step at a time, a short status after each. Every request: plan doc table.
+1. DONE: catalog, coverage, diagnostics, "you vs others", probes, plan doc, early-exit choice, age
+   + "saw someone play" (server 0008), cable, era look (door, plaque, mirror, chair), one tile
+   grid, chair under a seated player (no lift), merge-static (39 draw calls in the headset).
+2. NOW: headset frame rate. Probe in the headset: 72 fps at consent and at the reveal look;
+   quest-check said 62 during its fast run: re-run quest-check to confirm.
+3. NEXT: the arrival (welcome, lobby/menu, door, sit on the chair; one unbroken journey). Core
+   promise (owner): "take part in a real experiment and learn how YOU react; compare yourself
+   with the original and other players". Hook: bias blind spot ("you are sure it does not
+   apply to you; see for yourself"; ask before the room, show after). Show the concept first.
+4. Then: owner-approved screenshot set (re-shoot all); plan doc sections: add-ons, device combos.
+5. Headset without the owner: quest-wifi keeps it awake ("worn" mode); tools/xr-probe-run.mjs
+   presses probe buttons as a user gesture (CDP userGesture). Mic works; VR started once, then
+   NotSupportedError: investigate. Probe results now kept in localStorage.
+6. Domain: owner added the GitHub TXT; visible on Google/Cloudflare/Namecheap: owner presses Verify.
+7. Owner may have missed (tell him): plan doc section "Окно внимания" (VR attention is free);
+   circle needs fuel (new rooms, fresh tricks); offer: owner's wording in the circle diagram.
+8. Later: first-room candidates + prototypes; Plato's cave; influence (Bernays) rooms; packs not
+   $1; statistics plan; target-architecture.md update; share card, desktop, Quest new tab.
+9. Waiting on owner: play room 01 at real speed; lab letter; plugins; release word.
+Facts: body-tracking legs are AI-generated; labs have Ouvrai and VERA; Meta stopped education
+sales 20.02.2026; store sales need a store PWA (30%); Steam Sep 2026 Quest 3 26.9%, Quest 2
+25.8%, 3S 11.1%, English 34.2%. Rules: science studies free; gate 0 = 7 of 10 finish + mean 7.
