@@ -62,15 +62,15 @@
    "Участник ___"; consent page 1 = short consent form (agree, known, date, "Подпись ___").
    Detail pass done (front, side, top of every corridor thing; headset 72 fps): extinguisher hook = fork round
    the neck, signs = plates on the doors, framed cork board, sheets and clipboard lie on the cork (tests guard).
-   NEXT name + signature drawn with the controller (kept on the device only), then pictures for the end walls
-   (what hung in 1970s psych corridors, pictures first), then LIGHTING (owner: "свет адекватный", research
-   first, before/after pictures), then texts. A font of our own for every text (owner asked; each device
-   draws its own sans today, so pages fit differently): 1979 lab typefaces with Cyrillic, pictures first;
-   proposed right after the signature. Repo renamed youaretheobject. Searches: one question, 5 min.
+   Font: Inter shipped with the game, every text (owner chose it; a typewriter face was tried and dropped:
+   READING FIRST, sheet text never under 24 mm). The word "Лаборатория" is off the pages. NOW: the lab's seal
+   on the form (his sign: a snake round a globe), researching real seals and old engravings, pictures first.
+   NEXT name + signature drawn with the controller (kept on the device only), then end-wall pictures, then
+   LIGHTING (research first, before/after pictures), then texts. Audit of 9.10 (architecture, stale Ono docs,
+   room 01 off the clipboard) waits for his order. Later: floor directory by the stairs (1979 letter board).
    Branch pushed ("Делай"), hidden address (rule 14). Style book https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH = THE whole picture. Built: plan B corridor 14.6 m (src/app/lobby/plan.js), numbers 101-109, NIU signs ON the
    doors (SIGN in src/app/brand.js), EXXXIT poster = leave, age asked, WS-900 extinguisher by the stairs, hint never in
    VR. Decided: floor = 9 rooms = one pack, floor 1 free, packs in the Horizon Store app. 72 fps, 124 calls.
-   Later in step 4: floor directory by the stairs (1979 letter board), notices Letter + typewriter.
    Ideas after acceptance (plan doc): board notes, the tilted room, a map test, a secret door, the swap of roles.
 2. Headset: `quest-look.mjs worn on` keeps it awake (`worn off` after); asleep = only his power button wakes it;
    frames render only while the VR session is visible. Visual designs go to him as pictures BEFORE the game.
