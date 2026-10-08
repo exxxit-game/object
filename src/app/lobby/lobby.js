@@ -129,7 +129,7 @@ export async function runLobby(room) {
   sheet.el.addEventListener('taken', signAnswer, { once: true });
   await sheet.take([...cover, { t: LOBBY_T.takeSheet, role: 'body', gap: 0.04 }]);
   unlock();
-  const spoken = (async () => { for (const line of LOBBY_T.welcome) await speak(line); })();
+  const spoken = speak(LOBBY_T.welcome.join(' '));
   await sheet.choose([
     ...cover,
     ...LOBBY_T.welcome.map((t, i) => ({ t, role: 'body', gap: i ? 0.012 : 0.025 }))
