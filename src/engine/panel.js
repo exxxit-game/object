@@ -1,6 +1,8 @@
-// Text panel drawn on a canvas. Canvas text renders Cyrillic everywhere,
-// including inside a headset, where DOM and font loading are unavailable.
-export const FONT = '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+// Text panel drawn on a canvas: canvas text shows in a headset, where the page's DOM does not.
+// The game's own faces (css/fonts.css, loaded before a room starts: src/main.js): FONT for signs,
+// buttons and labels, TYPE for typed papers; the stand-ins after them only if a face failed to load.
+export const FONT = 'Inter, "Segoe UI", Roboto, Arial, sans-serif';
+export const TYPE = 'Cousine, "Courier New", monospace';
 
 const LINE_HEIGHT = 1.32;
 
@@ -52,12 +54,12 @@ AFRAME.registerComponent('panel', {
     this.write([]);
   },
 
-  // Wraps every block to the panel width at the given scale.
-  layout(blocks, scale, maxW) {
+  // Wraps every block to the panel width at the given scale, in the face font.
+  layout(blocks, scale, maxW, font = FONT) {
     const { ctx } = this;
     return blocks.map((b) => {
       const size = (b.size || 40) * scale;
-      ctx.font = `${b.weight || 400} ${size}px ${FONT}`;
+      ctx.font = `${b.weight || 400} ${size}px ${font}`;
       ctx.letterSpacing = `${(b.spacing || 0) * scale}px`;
       const lines = [];
       for (const para of String(b.t).split('\n')) {
@@ -73,8 +75,8 @@ AFRAME.registerComponent('panel', {
     });
   },
 
-  // blocks: [{ t, size, color, weight, gap, spacing }]
-  // opt: { bg, pad, top, align: 'center' | 'left', fit }
+  // blocks: [{ t, size, color, weight, gap, spacing, align }] (a block's align overrides the panel's)
+  // opt: { bg, pad, top, align: 'center' | 'left', fit, font (FONT unless given) }
   // fit (default true) shrinks text that would run off the panel; fit: false keeps the
   // sizes and sets this.overflow instead (a sheet that does not fit is a content error).
   // Returns where the text ends, in metres below the panel's top edge.
@@ -90,21 +92,24 @@ AFRAME.registerComponent('panel', {
 
     // Shrink to fit instead of running off the panel (long reports, longer languages).
     let scale = W / (this.data.ref || W);
-    let laid = this.layout(blocks, scale, maxW);
+    const font = opt.font || FONT;
+    let laid = this.layout(blocks, scale, maxW, font);
     for (let i = 0; opt.fit !== false && i < 4 && height(laid) > H - pad * 2; i++) {
       scale *= (H - pad * 2) / height(laid) * 0.98;
-      laid = this.layout(blocks, scale, maxW);
+      laid = this.layout(blocks, scale, maxW, font);
     }
     this.overflow = height(laid) > H - pad * 2;
+    // a blank to fill in (a run of underscores) wrapped away from the words it belongs to
+    this.orphan = laid.some((l) => l.lines.some((ln) => /^_+[,.:]?$/.test(ln.trim())));
 
     let y = opt.top ? pad : Math.max(pad, (H - height(laid)) / 2);
     ctx.textBaseline = 'top';
-    const align = opt.align || 'center';
-    ctx.textAlign = align;
-    const x = align === 'center' ? W / 2 : pad;
     laid.forEach((l, i) => {
       if (i) y += l.gap;
-      ctx.font = `${l.b.weight || 400} ${l.size}px ${FONT}`;
+      const align = l.b.align || opt.align || 'center';
+      ctx.textAlign = align;
+      const x = align === 'center' ? W / 2 : pad;
+      ctx.font = `${l.b.weight || 400} ${l.size}px ${font}`;
       ctx.letterSpacing = `${(l.b.spacing || 0) * scale}px`;
       ctx.fillStyle = l.b.color || '#e8e6e1';
       for (const ln of l.lines) { ctx.fillText(ln, x, y); y += l.size * LINE_HEIGHT; }

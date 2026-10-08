@@ -44,6 +44,7 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     const deg = (size, d) => 2 * Math.atan(size / 2 / d) * 180 / Math.PI;
     const answers = [...sheet.querySelectorAll('.answer')];
     const out = sheet.dataset.overflow ? ['the page does not fit the sheet'] : [];
+    if (sheet.dataset.orphan) out.push('a blank to fill in stands on a line of its own');
     for (const a of answers) {
       a.object3D.getWorldPosition(p);
       const d = p.distanceTo(eye);

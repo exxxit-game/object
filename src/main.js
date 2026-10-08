@@ -12,6 +12,15 @@ function showError(e) {
   hint.classList.add('show');
 }
 
-import(`./rooms/${id}/room.js`)
+// Every text is drawn on a canvas in the game's own faces (css/fonts.css), and a canvas drawn in a
+// stand-in face is never redrawn: the room starts once both faces, latin and cyrillic, are here, or
+// after FONT_WAIT_MS with whatever arrived (a stand-in face beats a dark screen). The sample text
+// holds a latin and a cyrillic letter, so both files of each face load.
+const FACES = ['400 16px Inter', '500 16px Inter', '600 16px Inter', '700 16px Inter', '400 16px Cousine', '700 16px Cousine'];
+const FONT_WAIT_MS = 6000;
+const SAMPLE = 'Aa ' + String.fromCodePoint(0x42f, 0x44f);
+const fonts = Promise.all(FACES.map((f) => document.fonts.load(f, SAMPLE))).catch(() => {});
+Promise.race([fonts, new Promise((r) => setTimeout(r, FONT_WAIT_MS))])
+  .then(() => import(`./rooms/${id}/room.js`))
   .then((room) => room.mount())
   .catch(showError);

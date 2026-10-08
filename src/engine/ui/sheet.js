@@ -3,6 +3,7 @@ import '../reflect-env.js';
 import { createChoice } from './choice.js';
 import '../glide.js';
 import '../shapes.js';
+import { TYPE } from '../panel.js';
 
 // The clipboard sheet: everything the player reads or answers, one thought per page.
 // It is read 1 m in front of the player, a little below the eyes, and stays still
@@ -24,14 +25,17 @@ const HARDBOARD = '#3b2a1e';      // dark brown pressed hardboard, as the clipbo
 const HARDBOARD_HOVER = '#6e5038'; // the hanging clipboard brightens under the laser or mouse
 // the clip: nickel-plated steel with a soft sheen, mirroring the room round it (reflect-env)
 const METAL = 'color: #d4d7d9; metalness: 0.5; roughness: 0.45';
-// Text roles: letter height in metres at 1 m (at least 21 mm, about 1.2 degrees) and ink. Until
-// the game draws in a font of its own, each device draws its own sans: a title must stay on one
-// line in the widest of them (Arial's widths, where the smoke test runs), not only in the headset's.
+// The page is typed as a typewriter types (a 1979 lab typed its papers on an IBM Selectric:
+// docs/decisions.md): one face (TYPE), one size, one ink; the head letter-spaced and the title in
+// capitals, centred and struck bold, as typists set them off. The size, in metres at 1 m, is the
+// largest at which the consent form fits the sheet (tests/smoke.mjs checks every page fits).
+const TYPED = 0.026;
+const INK = '#25231f';
 const ROLES = {
-  kicker: { m: 0.022, color: '#6b6457', weight: 700, spacing: 6 },
-  title: { m: 0.044, color: '#1d1b17', weight: 700 },
-  body: { m: 0.028, color: '#1d1b17', weight: 500 },
-  soft: { m: 0.024, color: '#4a453c', weight: 500 }
+  kicker: { m: TYPED, color: INK, weight: 400, spacing: 6 },
+  title: { m: TYPED, color: INK, weight: 700, caps: true, align: 'center' },
+  body: { m: TYPED, color: INK, weight: 400 },
+  soft: { m: TYPED, color: INK, weight: 400 }
 };
 
 // inside: the wall faces of the space { minX, maxX, minZ, maxZ }; the sheet is never read
@@ -256,12 +260,13 @@ export function createSheet(scene, { inside = null } = {}) {
     const panel = paper();
     const bottom = panel.write(blocks.map((b, i) => {
       const r = ROLES[b.role || 'body'];
-      return { t: b.t, size: r.m * DENSITY, color: r.color, weight: r.weight, spacing: r.spacing || 0,
-        gap: (b.gap ?? (i ? 0.012 : 0)) * DENSITY };
-    }), { top: true, fit: false, align: 'left', pad: MARGIN * DENSITY, bg: PAPER_BG });
+      return { t: r.caps ? b.t.toLocaleUpperCase(document.documentElement.lang || undefined) : b.t, size: r.m * DENSITY,
+        color: r.color, weight: r.weight, spacing: r.spacing || 0, align: r.align, gap: (b.gap ?? (i ? 0.012 : 0)) * DENSITY };
+    }), { top: true, fit: false, align: 'left', pad: MARGIN * DENSITY, bg: PAPER_BG, font: TYPE });
     const textBottom = PAPER.h / 2 - bottom;
     el.dataset.textBottom = textBottom.toFixed(3);
     if (panel.overflow) el.dataset.overflow = '1'; else delete el.dataset.overflow;
+    if (panel.orphan) el.dataset.orphan = '1'; else delete el.dataset.orphan;
     return textBottom;
   }
 
