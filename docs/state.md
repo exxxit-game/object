@@ -61,17 +61,19 @@
    Branch pushed (owner: "Делай"); commits use the hidden GitHub address (structure rule 14). The
    corridor is a 1979 US university lab: style book (Design System) https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH
    is THE whole picture: every element with rule, source, status; build only from it (memory whole-picture-first).
-   Done 08.10: EXXXIT poster on the board = leave ("Прекратить участие?"), no exit door; age asked; voice
-   re-recorded (Robust, welcome one take, evened); VR/MR research docs/research/vr (README).
-   NEXT, in order: draw calls under 200 (now 200 = Meta limit) before any detail; extinguisher as a 1970s
-   model (pictures first; fixes the floating lever and hose); "soon" doors in openings + round knobs;
-   plaques one way (1979 photo); notices US Letter + typewriter; clipboard board and clip; signature on the
-   consent; comfort settings pages. Owner decided: EXXXIT stays, clipboard font = readability.
+   Done 08.10: poster = leave ("Прекратить участие?"); age asked; voice evened; room hidden behind its shut door
+   and shared grid textures (draw calls 124 -> 27 a view); extinguisher = General WS-900 1972 (awaits his yes);
+   one door builder src/engine/door.js (round knobs); no-history-comments rule 16. Owner decided: EXXXIT stays,
+   clipboard font = readability, corridor = PLAN B (docs/art/corridor-plan.svg), floor = 9 rooms = one pack,
+   floor 1 free, packs = one-time purchases in the Horizon Store app (Digital Goods API; no web payments).
+   NOW: build plan B from src/app/lobby/plan.js (written, NOT yet used): corridor x -6.6..8.0, doors every
+   3.2 m from x 0.7 on both walls, stairs south at 0.7, plaques toward the entrance (plaqueX), board +0.2
+   (-1.6..0.0), extinguisher x -0.8; then scene.js, lobby.js (BOUNDS, SHEET_HOME), masonry/standards/sheet
+   tests read PLAN; door.js needs south-wall support (corridor at smaller z). Then pictures + headset perf.
+   After: floor directory by the stairs (1979 letter board), notices Letter + typewriter, clipboard, signature.
    Ideas after acceptance (plan doc): board notes, doors named once done, the tilted room, a map test.
-2. Headset: `tools/quest-look.mjs worn on` keeps it awake while I check (`worn off` after); an asleep
-   headset cannot be woken over Wi-Fi (needs his power button); frames render only while the VR
-   session is visible, else laptop frames (render-to-target in the browser pane). Visual designs go
-   to him as pictures BEFORE they go into the game.
+2. Headset: `quest-look.mjs worn on` keeps it awake (`worn off` after); asleep = only his power button wakes it;
+   frames render only while the VR session is visible. Visual designs go to him as pictures BEFORE the game.
 3. Then first room: read in full Fernández-Ruiz 1999, Hirschhorn 2024, Kohnstamm 1915; 5-minute
    prototypes; owner picks (wow fast, replay your moment, share). Gate 0: 7 of 10 finish, mean 7.
-4. Waiting on owner: commit + push word; domain Verify; his decisions in plan «Что нужно от тебя».
+4. Waiting on owner: his decisions in plan «Что нужно от тебя»; domain Verify.
