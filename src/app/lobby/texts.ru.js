@@ -14,7 +14,7 @@ export const LOBBY_T = {
   takeSheet: 'Возьмите планшетку: она висит на доске слева от двери.',
   chooseDoor: 'Выберите дверь. Сейчас открыта первая комната.',
   soon: 'СКОРО',
-  // the exit sign is the way to leave the game (exit.js)
+  // the studio's poster on the board is the way to leave the game (exit.js)
   exit: {
     ask: 'Выйти из игры?',
     note: 'Никакие данные никуда не отправятся.',

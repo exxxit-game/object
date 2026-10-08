@@ -16,8 +16,8 @@ const WALLS = [
   { name: 'corridor north wall', z: [1.79, 1.95], origin: bondOrigin(-0.2, 6.4, BLOCK) },
   { name: 'room back wall', z: [1.55, 1.79], origin: bondOrigin(0, 3.2, BLOCK) }
 ];
-// the corridor's left end wall (face x -3.4) runs along z; its joints are laid out across the
-// corridor's depth
+// the corridor's left end wall (face x -3.4), for anything fixed to it: it runs along z, its joints
+// laid out across the corridor's depth
 const END = { name: 'corridor left end wall', origin: bondOrigin(2.7, 1.8, BLOCK) };
 const wallAt = (z) => WALLS.find(w => z >= w.z[0] && z < w.z[1]);
 const offGrid = (v, origin, step) => { const r = (((v - origin) % step) + step) % step; return Math.min(r, step - r); };
@@ -40,12 +40,6 @@ for (const wall of WALLS) {
       assert.ok(offGrid(edge, wall.origin, MODULE) < EPS, `${wall.name}: door opening edge at ${edge.toFixed(4)} is off the block module`);
     }
   }
-}
-const endJambs = [...html.matchAll(/<a-box position="([-\d.]+) 1\.1021 ([\d.]+)" rotation="0 90 0" width="0\.051" height="2\.2042"/g)]
-  .map(m => Number(m[2])).sort((a, b) => a - b);
-assert.equal(endJambs.length, 2, 'the exit door in the end wall');
-for (const edge of [endJambs[0] - 0.0143, endJambs[1] + 0.0143]) {
-  assert.ok(offGrid(edge, END.origin, MODULE) < EPS, `${END.name}: door opening edge at z ${edge.toFixed(4)} is off the block module`);
 }
 
 // flat things on a wall: no joint closer than MIN_GAP to an edge, unless the edge is on it

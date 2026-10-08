@@ -65,7 +65,7 @@
    figure, green, doorway black: his choice; may change over time); thumbstick teleport, 45° snap
    turn, back step (locomotion.js); plaques show the room number only (name in the reveal);
    doors and flat wall things on the block module (tests/masonry.test.mjs; door 1 now at x 0.7).
-   Exit sign = the "leave" button (exit.js, sheet interrupt/resume); reviewer's 5 findings fixed, all
+   The EXXXIT poster on the board = the "leave" button (exit.js); reviewer's 5 findings fixed, all
    flows pass in the browser pane (hidden pane: drive frames with scene.tick); "leave" in VR NOT yet in
    the headset (asleep). Smooth moving by link (?move=smooth, ?turn=smooth). NEXT: VR/MR research
    (6 agents, scratchpad vr-research/ → one reference doc in docs/), then comfort settings as pictures.

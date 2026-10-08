@@ -14,7 +14,7 @@ const tags = (kind) => [...html.matchAll(new RegExp(`<${kind}[^>]*>`, 'g'))].map
 
 // Door leaves: 3'0" × 7'0" (0.914 × 2.134 m)
 const leaves = [...tags('a-entity')].filter(t => /color: #6a5641/.test(attr(t, 'rounded-box') || ''));
-assert.equal(leaves.length, 4, 'four doors in the corridor: door 1, two to come, the exit');
+assert.equal(leaves.length, 3, 'three doors in the corridor: door 1 and two to come');
 for (const t of leaves) {
   const rb = attr(t, 'rounded-box');
   assert.ok(near(prop(rb, 'width'), 0.914) && near(prop(rb, 'height'), 2.134), `door leaf ${rb}`);
@@ -23,10 +23,7 @@ for (const t of leaves) {
 const levers = tags('a-cylinder').filter(t => attr(t, 'radius') === '0.028');
 assert.ok(levers.length >= 4 && levers.every(t => near(pos(t)[1], 1.024)), 'levers at 1.024 m');
 const kicks = tags('a-box').filter(t => attr(t, 'width') === '0.864');
-assert.ok(kicks.length === 4 && kicks.every(t => near(Number(attr(t, 'height')), 0.254)), 'kick plates 254 × 864 mm');
-// The exit door's panic bar: 34–48 in above the floor, at least half the leaf wide (S25)
-const bar = tags('a-box').find(t => attr(t, 'width') === '0.72' && attr(t, 'height') === '0.05');
-assert.ok(bar && pos(bar)[1] >= 0.864 && pos(bar)[1] <= 1.219 && Number(attr(bar, 'width')) >= 0.914 / 2, 'panic bar');
+assert.ok(kicks.length === 3 && kicks.every(t => near(Number(attr(t, 'height')), 0.254)), 'kick plates 254 × 864 mm');
 // Door 1: three hinges, top 248 mm below the frame head (2.1532 m), bottom top 264 mm above the floor
 const door1 = sceneHTML.slice(sceneHTML.indexOf('id="door1"'), sceneHTML.indexOf('</a-entity>\n  <a-entity id="plaque"'));
 const hinges = [...door1.matchAll(/<a-cylinder radius="0.007" height="0.114" position="[-\d.]+ ([\d.]+)/g)].map(m => Number(m[1])).sort((a, b) => b - a);

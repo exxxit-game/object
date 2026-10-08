@@ -89,14 +89,14 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     if (onWall) assert.ok(sizes[0] >= 30, `answer text too small: ${sizes[0]}px`);
     await page.evaluate((n) => [...document.querySelectorAll('.answer')].find(e => +e.dataset.index === n).emit('click'), i);
   };
-  // The exit sign cuts in with "leave?" on the clipboard (src/app/lobby/exit.js); "stay" gives
+  // The studio's poster cuts in with "leave?" on the clipboard (src/app/lobby/exit.js); "stay" gives
   // back the page that was there, with its answers, on its hook or in front (sheet.js resume).
   const sheetState = () => page.evaluate(() => {
     const s = document.querySelector('.sheet');
     return { take: !!s.dataset.take, open: !!s.dataset.open, answers: s.querySelectorAll('.answer').length, text: s.dataset.textBottom };
   });
   const askLeave = async () => {
-    await page.evaluate(() => document.querySelector('#exitSign').emit('click'));
+    await page.evaluate(() => document.querySelector('#notePoster').emit('click'));
     await page.waitForFunction(() => document.querySelector('.sheet[data-open]') && document.querySelectorAll('.sheet .answer').length === 2, null, { timeout: 30000 });
   };
   const exitThenStay = async () => {
@@ -127,7 +127,7 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     await page.goto(url);
     await page.waitForFunction(() => document.querySelector('a-scene')?.hasLoaded, null, { timeout: 30000 });
     assert.equal(await page.evaluate(() => document.documentElement.dataset.roomState), 'idle');
-    // the exit sign pressed while the sign still plays: the clipboard's "take me" page comes
+    // the poster pressed while the sign still plays: the clipboard's "take me" page comes
     // while the question is open and waits behind it; "stay" puts it on its hook, ready
     await page.waitForFunction(() => document.querySelector('.sheet')?.getAttribute('visible'), null, { timeout: 30000 });
     if (!playtest && !leave) {
@@ -162,9 +162,15 @@ async function playRoom(url, playtest, { leave = false } = {}) {
       await exitThenStay();
     }
     await pick(0);                       // "next" after the welcome
-    await pick(0);                       // consent page 1 (what this is, leaving, 18+): "next"
+    await pick(0);                       // consent page 1 (what this is, leaving): "next"
     if (playtest) await pick(0);         // the playtest note, a page of its own
-    await pick(1);                       // last consent page: start without recording
+    if (playtest) {
+      await pick(1);                     // the age: "no" leads to a page of its own,
+      await pick(0);                     // which starts without recording
+    } else {
+      await pick(0);                     // the age: "yes"
+      await pick(1);                     // last consent page: start without recording
+    }
     // the door to room 1 opens when pointed at
     await page.waitForFunction(() => document.documentElement.dataset.lobby === 'door', null, { timeout: 30000 });
     if (!playtest) {
@@ -177,8 +183,8 @@ async function playRoom(url, playtest, { leave = false } = {}) {
       await page.waitForFunction(() => !document.querySelector('.sheet[data-open]'), null, { timeout: 30000 });
     }
     await page.evaluate(() => document.querySelector('#door1 .clickable').emit('click'));
-    // through the door the exit sign stops answering (the lasers reach it through the walls)
-    assert.equal(await page.evaluate(() => document.querySelector('#exitSign').classList.contains('clickable')), false, 'the exit sign answers from the room');
+    // through the door the poster stops answering (the lasers reach it through the walls)
+    assert.equal(await page.evaluate(() => document.querySelector('#notePoster').classList.contains('clickable')), false, 'the poster still answers from the room');
     // "understood" twice: after the instructions and after the control concept
     for (let i = 0; i < 2; i++) {
       await page.waitForFunction(() => document.documentElement.dataset.roomState === 'intro' &&

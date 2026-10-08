@@ -29,25 +29,6 @@ function soonDoor(c, dir) {
     <a-box position="${latch - dir * 0.06} 1.024 1.855" width="0.13" height="0.018" depth="0.018" ${METAL}></a-box>`;
 }
 
-// The exit door in the corridor's left end wall (face x = -3.4, facing +x), set on the wall like the
-// closed doors: frame, leaf, kick plate, and the panic bar exit doors carry on the push side (they
-// swing out, the way people leave): 34–48 in above the floor, at least half the leaf wide (S25).
-// Over it the lit exit sign, which is the game's "leave" button (exit.js); the box sits on the
-// joints like every flat thing on a wall. Parts stand at least 5 mm proud of each other.
-function exitDoor() {
-  const x = -3.4, z = 2.7;
-  return `
-    <a-box position="${x + 0.0125} 1.1021 ${z - 0.4857}" rotation="0 90 0" width="0.051" height="2.2042" depth="0.025" ${FRAME}></a-box>
-    <a-box position="${x + 0.0125} 1.1021 ${z + 0.4857}" rotation="0 90 0" width="0.051" height="2.2042" depth="0.025" ${FRAME}></a-box>
-    <a-box position="${x + 0.0125} 2.1787 ${z}" rotation="0 90 0" width="1.0224" height="0.051" depth="0.025" ${FRAME}></a-box>
-    <a-entity rounded-box="width: 0.914; height: 2.134; depth: 0.02; radius: 0.004; color: #6a5641; roughness: 0.55" rotation="0 90 0" position="${x + 0.015} 1.083 ${z}"></a-entity>
-    <a-box position="${x + 0.0262} 0.143 ${z}" rotation="0 90 0" width="0.864" height="0.254" depth="0.0015" material="color: #b9bcbe; metalness: .7; roughness: .3"></a-box>
-    <a-box position="${x + 0.04} 0.99 ${z - 0.33}" rotation="0 90 0" width="0.05" height="0.09" depth="0.03" ${METAL}></a-box>
-    <a-box position="${x + 0.04} 0.99 ${z + 0.33}" rotation="0 90 0" width="0.05" height="0.09" depth="0.03" ${METAL}></a-box>
-    <a-box position="${x + 0.065} 0.99 ${z}" rotation="0 90 0" width="0.72" height="0.05" depth="0.03" ${METAL}></a-box>
-    <a-box class="on-wall" position="${x + 0.05} 2.3 ${z}" rotation="0 90 0" width="1.0" height="0.2" depth="0.09" color="#2a2a2c"></a-box>`;
-}
-
 // A 2 × 4 ft troffer centred at x in the corridor's grid: a 25 mm painted frame around a lens
 // that glows with its two lamps behind it.
 function troffer(x) {
@@ -114,7 +95,6 @@ export const corridorHTML = `
     <!-- closed doors of the rooms to come -->
     ${soonDoor(-2.7, 1)}
     ${soonDoor(2.3, -1)}
-    ${exitDoor()}
     <!-- 2 × 4 ft fluorescent troffers, each filling two cells of the ceiling grid: a painted
          steel door frame and a prismatic lens (docs/building-standards.md, S20) -->
     ${troffer(-1.724)}
@@ -137,9 +117,6 @@ export const corridorHTML = `
             position="0.7 2.3 1.907"></a-entity>
   <!-- the sign's warm spill on the door and floor below it (not a hot spot on the ceiling) -->
   <a-entity id="signLight" light="type: point; color: #ffd9a0; intensity: 0; distance: 2.5; decay: 2" position="0.7 1.95 2.25"></a-entity>
-  <!-- the exit sign's face, drawn and made a button by exit.js, and its green spill -->
-  <a-entity id="exitSign" class="clickable" panel="w: 0.94; h: 0.16; px: 1024; bg: #237f52" rotation="0 90 0" position="-3.304 2.3 2.7"></a-entity>
-  <a-entity id="exitLight" light="type: point; color: #7dffb0; intensity: 0.3; distance: 2.5; decay: 2" position="-3.1 2.0 2.7"></a-entity>
   <!-- the corridor's own light, dim while the player is here (lobby.js, CORRIDOR_LIGHT) -->
   <a-entity id="corridorAmbient" light="type: ambient; color: #c9cfd6; intensity: 0"></a-entity>
   <a-entity id="corridorLamp" light="type: point; color: #eef2ff; intensity: 1.6; distance: 0; decay: 0.8" position="-0.2 2.3 2.7"></a-entity>
@@ -149,6 +126,6 @@ export const corridorHTML = `
   <a-entity id="soon1" panel="w: 0.32; h: 0.16; px: 640; bg: #15161a" position="-2.7 1.55 1.822"></a-entity>
   <a-entity id="soon2" panel="w: 0.32; h: 0.16; px: 640; bg: #15161a" position="2.3 1.55 1.822"></a-entity>
   <!-- A4 sheets (ISO 216) pinned beside the clipboard: the studio's poster and a flyer (board.js) -->
-  <a-entity id="notePoster" panel="w: 0.21; h: 0.297; px: 640" position="-1.47 1.6 1.84" rotation="0 0 2"></a-entity>
+  <a-entity id="notePoster" class="clickable" panel="w: 0.21; h: 0.297; px: 640" position="-1.47 1.6 1.84" rotation="0 0 2"></a-entity>
   <a-entity id="noteFlyer" panel="w: 0.21; h: 0.297; px: 640" position="-0.53 1.42 1.84" rotation="0 0 -1.5"></a-entity>
 </a-entity>`;

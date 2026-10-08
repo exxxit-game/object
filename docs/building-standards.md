@@ -25,8 +25,6 @@ marked "ours" is the game's rounding, with the reason.
 | Fire extinguisher | top at most 5 ft (1.524 m) above the floor for units up to 40 lb, bottom at least 4 in (102 mm) [S22]; 2.5 gal pressurized water (Class A) about 7 in (0.18 m) across, 24.5 in (0.62 m) tall, about 30 lb [S23] | one in the corridor, on the wall opposite the doors |
 | Room sign | on the wall at the latch side; lowest letter baseline at least 48 in (1.22 m), highest at most 60 in (1.525 m) [S1, 703.4.1] | same; plaques 0.4 × 0.2 m by door 1, 0.2 × 0.2 m inside the room, edges on the block joints (`tests/masonry.test.mjs`) |
 | Light box over a door | (ours) as wide as the masonry opening, 1.0 × 0.2 m, on the joints | the sign over door 1 |
-| Exit door | swings out (the way people leave); panic hardware on the push side, its bar 34–48 in (0.864–1.219 m) above the floor and at least half the leaf wide [S25] | the corridor's left end: bar at 0.99 m, 0.72 m wide |
-| Exit sign | lit, over the exit door; a safety sign is read up to distance l = z × h (its height h; z about 100–200 for internally lit signs) [S26] | the EXXXIT sign: pictogram 0.16 m high, read across the 6.4 m corridor with room to spare |
 | Switch, outlet | switch 42 in (1.067 m), outlet 18 in (0.457 m) to centre; reach 15–48 in [S1, S15]; in a block wall the box is set as the courses are laid, notched into the block [S24] | switch at 1.1 m (ours: inside one course, so no joint runs beside the plate; within reach) |
 | Corridor | at least 44 in (1.118 m) in a university building [S16, S17] | 1.8 m |
 
@@ -55,5 +53,3 @@ S21 VA master spec 10 11 23 tackboards (wbdg.org); Univ. of Houston master spec 
 S22 NFPA 10, 6.1.3.8 (quoted by San Diego Fire-Rescue, sandiego.gov; same values in the 1994 edition) ·
 S23 Kidde Pro 2.5 W-1 (466403) and Amerex 240 product listings ·
 S24 Hubbell RACO masonry boxes: the mason builds to the device height and notches the block round the box (hubbell.com) ·
-S25 IBC and NFPA 101 panic hardware height and actuating portion, as summarised by idighardware.com ("Cracking the code: panic hardware") ·
-S26 ISO 3864-1 distance factor, as given by Glamox, "Safety signs" (glamox.com).

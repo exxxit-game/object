@@ -13,7 +13,7 @@ import { VOICE_LINES } from './voice-lines.js';
 import { SOUNDS } from './sound-list.js';
 import { signOn, signAnswer } from './opening.js';
 import { pinNotices } from './board.js';
-import { exitSign } from './exit.js';
+import { leaveButton } from './exit.js';
 import { WALLS } from './scene.js';
 
 export { corridorHTML } from './scene.js';
@@ -119,7 +119,7 @@ export async function runLobby(room) {
   pinNotices($('#notePoster').components.panel, $('#noteFlyer').components.panel, WALL_PRINT_LIGHT);
   const cover = [{ t: LOBBY_T.kicker, role: 'kicker' }, { t: LOBBY_T.title, role: 'title', gap: 0.01 }];
   await sheet.hang(SHEET_HOME, cover, WALL_PRINT_LIGHT);
-  const exitOff = exitSign(scene, sheet);
+  const exitOff = leaveButton(scene, sheet);   // the studio's poster on the board
   onFirstGesture(() => {});
 
   // 0. the sign comes on and plays; 1. the voice points to the clipboard on the board, the
