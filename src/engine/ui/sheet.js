@@ -1,6 +1,6 @@
 import { readingPose, glidePath, BOARD, CLIP, BOARD_REACH } from './sheet-math.js';
 import '../reflect-env.js';
-import { createChoice } from './choice.js';
+import { createPage, PAPER, PAPER_BG, DENSITY, UNDER_TEXT } from './sheet-page.js';
 import '../glide.js';
 import '../shapes.js';
 
@@ -11,28 +11,11 @@ import '../shapes.js';
 // It may hang on a hook in the room first (hang): the player clicks it (take), it glides
 // to them, and after the last answer it glides back (back); docs/decisions.md, "The
 // opening is calm".
-// Text never shrinks to fit: a page that does not fit sets data-overflow, which the
-// smoke test treats as an error (split the text into pages instead).
-const PAPER = { w: 0.56, h: 0.72 };
-const MARGIN = 0.04;
-const DENSITY = 2 * 1024 / 1.5;   // canvas px per metre: sharp when read from 1 m (choice.js)
-const BUTTON_H = 0.07;            // about 4 degrees at 1 m (Meta: targets at least 2.5)
-const GAP = 0.025;
-const UNDER_TEXT = 0.03;
-const PAPER_BG = '#e9e2cf';       // cream, not white: a large white page glares in a headset
+// What a page shows and how (text, buttons, fields to write in): sheet-page.js.
 const HARDBOARD = '#3b2a1e';      // dark brown pressed hardboard, as the clipboard in the photo
 const HARDBOARD_HOVER = '#6e5038'; // the hanging clipboard brightens under the laser or mouse
 // the clip: nickel-plated steel with a soft sheen, mirroring the room round it (reflect-env)
 const METAL = 'color: #d4d7d9; metalness: 0.5; roughness: 0.45';
-// Text roles: font size in metres at 1 m and ink, in the game's sans (FONT: a sans with a high
-// x-height, as Meta asks for text in VR). Reading comes first: no role is smaller than MIN_LETTER,
-// and tests/smoke.mjs fails a page drawn smaller (data-letter-mm).
-const MIN_LETTER = 0.024;
-const ROLES = {
-  title: { m: 0.044, color: '#1d1b17', weight: 700 },
-  body: { m: 0.028, color: '#1d1b17', weight: 500 },
-  soft: { m: MIN_LETTER, color: '#4a453c', weight: 500 }
-};
 
 // inside: the wall faces of the space { minX, maxX, minZ, maxZ }; the sheet is never read
 // beyond them (sheet-math.js, readingPose).
@@ -52,19 +35,16 @@ export function createSheet(scene, { inside = null } = {}) {
     <a-cylinder radius="0.005" height="0.003" rotation="90 0 0" position="${0.3 * CLIP.hump.w} ${CLIP.hump.y - 0.012} ${CLIP.hump.d + 0.0015}" material="${METAL}"></a-cylinder>
     <a-entity loop="outer: ${CLIP.ring.r + CLIP.ring.tube}; hole: ${CLIP.ring.r - CLIP.ring.tube}; depth: 0.003; ${METAL}" position="0 ${CLIP.ring.y} ${CLIP.ring.z}"></a-entity>`;
   scene.appendChild(el);
-  const choice = createChoice(el, {
-    x: 0, y: 0, z: 0.005, w: PAPER.w - 2 * MARGIN, h: BUTTON_H, gap: GAP,
-    bottom: -PAPER.h / 2 + MARGIN, density: DENSITY
-  });
   // An entity added to a running scene starts its components a moment later: pages wait.
   const paperEl = el.querySelector('.paper');
+  const pg = createPage(el, paperEl), choice = pg.choice;
   const ready = new Promise((resolve) => {
     if (paperEl.hasLoaded) resolve(); else paperEl.addEventListener('loaded', resolve, { once: true });
   });
   const paper = () => paperEl.components.panel;
   const board = el.querySelector('.board');
   let isOpen = false;
-  let page = { blocks: null, labels: null, onPick: null };   // what it shows, to come back to
+  let page = { blocks: null, labels: null, onPick: null, form: false };   // what it shows, to come back to
   let waitingTake = false;
   // asking: a question has cut in and waits for its answer; saved: the page behind it, kept until
   // the sheet is back where it was (after the answer, during the trip back to the hook)
@@ -133,6 +113,7 @@ export function createSheet(scene, { inside = null } = {}) {
 
   function close() {
     choice.hide();
+    pg.hideFields();
     isOpen = false;
     el.setAttribute('visible', false);
     delete el.dataset.open;
@@ -153,9 +134,10 @@ export function createSheet(scene, { inside = null } = {}) {
 
   // Lasers and the mouse keep a list of what they can hit; a class change on an entity
   // that is already in the scene does not update it.
+  const refreshRays = () => { for (const r of [scene, ...scene.querySelectorAll('[raycaster]')]) r.components.raycaster?.refreshObjects(); };
   const clickable = (on) => {
     for (const part of [board, paperEl]) part.classList.toggle('clickable', on);
-    for (const r of [scene, ...scene.querySelectorAll('[raycaster]')]) r.components.raycaster?.refreshObjects();
+    refreshRays();
   };
 
   // Resolves once the player clicked the hanging sheet and it has reached them. blocks, if
@@ -193,6 +175,7 @@ export function createSheet(scene, { inside = null } = {}) {
   // Back on its hook (after the last answer); blocks, if given, are shown there.
   async function back(blocks) {
     choice.hide();
+    pg.hideFields();
     isOpen = false;
     delete el.dataset.open;
     await glideTo(home.pos, [0, home.yaw, 0], (e) => tint(1 - (1 - hookLight) * e));
@@ -202,15 +185,11 @@ export function createSheet(scene, { inside = null } = {}) {
   // Every page change goes through here. While a question has cut in (interrupt), the new page
   // is kept for resume() instead of being drawn over the question, and its answers wait with it.
   // Returns the top of the answer buttons, or null when kept.
-  function setPage({ blocks, labels = null, onPick = null }) {
-    if (saved) { Object.assign(saved, { blocks, labels, onPick }); return null; }
-    page = { blocks, labels, onPick };
-    const top = paint(blocks || []) - UNDER_TEXT;
-    if (labels) {
-      const needed = labels.length * BUTTON_H + (labels.length - 1) * GAP;
-      if (top - needed < -PAPER.h / 2 + MARGIN) el.dataset.overflow = '1';
-      choice.show(labels, onPick, top);
-    } else choice.hide();
+  function setPage({ blocks, labels = null, onPick = null, form = false }) {
+    if (saved) { Object.assign(saved, { blocks, labels, onPick, form }); return null; }
+    page = { blocks, labels, onPick, form };
+    const top = pg.show(page);
+    refreshRays();
     return top;
   }
 
@@ -230,7 +209,9 @@ export function createSheet(scene, { inside = null } = {}) {
       el.dataset.open = '1';
       await comeToPlayer();
     } else if (saved.was === 'closed') open();
-    const top = paint(blocks) - UNDER_TEXT;
+    pg.hideFields();
+    refreshRays();
+    const top = pg.paint(blocks) - UNDER_TEXT;
     return new Promise((resolve) => choice.show(labels, resolve, top));
   }
 
@@ -250,23 +231,6 @@ export function createSheet(scene, { inside = null } = {}) {
     if (p.was === 'closed') close();
   }
 
-  // blocks: [{ t, role: 'title' | 'body' | 'soft', gap }]; returns the local
-  // y of the text's bottom edge (the sheet's centre is 0).
-  function paint(blocks) {
-    const panel = paper();
-    const bottom = panel.write(blocks.map((b, i) => {
-      const r = ROLES[b.role || 'body'];
-      return { t: b.t, size: r.m * DENSITY, color: r.color, weight: r.weight,
-        gap: (b.gap ?? (i ? 0.012 : 0)) * DENSITY };
-    }), { top: true, fit: false, align: 'left', pad: MARGIN * DENSITY, bg: PAPER_BG });
-    el.dataset.letterMm = (Math.min(...blocks.map((b) => ROLES[b.role || 'body'].m)) * 1000).toFixed(1);
-    const textBottom = PAPER.h / 2 - bottom;
-    el.dataset.textBottom = textBottom.toFixed(3);
-    if (panel.overflow) el.dataset.overflow = '1'; else delete el.dataset.overflow;
-    if (panel.orphan) el.dataset.orphan = '1'; else delete el.dataset.orphan;
-    return textBottom;
-  }
-
   // A page to read (the voice may read it too); no buttons.
   async function say(blocks) {
     await ready;
@@ -281,8 +245,26 @@ export function createSheet(scene, { inside = null } = {}) {
     return new Promise((resolve) => setPage({ blocks, labels, onPick: resolve }));
   }
 
+  // A form filled in by hand: every blank on the page (a run of underscores) takes ink from the
+  // laser or the mouse (ink.js); note stands where the button will be until every blank has some
+  // writing, then the button (label). Resolves with the strokes, one list per blank in page order
+  // ([[u, v], ...] from 0 to 1 across its field).
+  async function fill(blocks, label, note) {
+    await ready;
+    open();
+    return new Promise((resolve) => {
+      const draw = () => {
+        const done = pg.fields().length > 0 && pg.fields().every((f) => f.components.ink && f.components.ink.written());
+        setPage({ blocks: done ? blocks : [...blocks, { t: note, role: 'soft', gap: UNDER_TEXT }], labels: done ? [label] : null, form: true,
+          onPick: () => { const strokes = pg.fields().map((f) => f.components.ink.strokes); el.removeEventListener('inked', draw); pg.dropFields(); resolve(strokes); } });
+      };
+      draw();
+      el.addEventListener('inked', draw);
+    });
+  }
+
   // whether a question has cut in (the caller holds other actions until it is answered)
   const isAsking = () => asking;
 
-  return { el, open, close, say, choose, hang, take, back, interrupt, resume, isAsking };
+  return { el, open, close, say, choose, fill, hang, take, back, interrupt, resume, isAsking };
 }

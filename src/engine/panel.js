@@ -78,7 +78,9 @@ AFRAME.registerComponent('panel', {
   // opt: { bg, pad, top, align: 'center' | 'left', fit }
   // fit (default true) shrinks text that would run off the panel; fit: false keeps the
   // sizes and sets this.overflow instead (a sheet that does not fit is a content error).
-  // Returns where the text ends, in metres below the panel's top edge.
+  // Returns where the text ends, in metres below the panel's top edge. this.blanks lists every
+  // blank to fill in (a run of three or more underscores) as drawn: { x0, x1, y (its line's top),
+  // size }, in canvas px, so a form can lay a field to write in over each (ui/sheet-page.js).
   write(blocks, opt = {}) {
     const { ctx, c } = this;
     const W = c.width, H = c.height;
@@ -105,12 +107,21 @@ AFRAME.registerComponent('panel', {
     const align = opt.align || 'center';
     ctx.textAlign = align;
     const x = align === 'center' ? W / 2 : pad;
+    this.blanks = [];
     laid.forEach((l, i) => {
       if (i) y += l.gap;
       ctx.font = `${l.b.weight || 400} ${l.size}px ${FONT}`;
       ctx.letterSpacing = `${(l.b.spacing || 0) * scale}px`;
       ctx.fillStyle = l.b.color || '#e8e6e1';
-      for (const ln of l.lines) { ctx.fillText(ln, x, y); y += l.size * LINE_HEIGHT; }
+      for (const ln of l.lines) {
+        ctx.fillText(ln, x, y);
+        const left = align === 'center' ? x - ctx.measureText(ln).width / 2 : x;
+        for (const m of ln.matchAll(/_{3,}/g)) {
+          const x0 = left + ctx.measureText(ln.slice(0, m.index)).width;
+          this.blanks.push({ x0, x1: x0 + ctx.measureText(m[0]).width, y, size: l.size });
+        }
+        y += l.size * LINE_HEIGHT;
+      }
     });
     ctx.letterSpacing = '0px';
     this.tex.needsUpdate = true;

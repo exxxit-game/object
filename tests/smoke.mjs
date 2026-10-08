@@ -110,6 +110,19 @@ async function playRoom(url, playtest, { leave = false } = {}) {
       return !!s.dataset.take === b.take && !!s.dataset.open === b.open && s.querySelectorAll('.answer').length === b.answers && s.dataset.textBottom === b.text;
     }, before, { timeout: 30000 });
   };
+  // The consent form is signed by hand: a field over the name's and the signature's blanks, listed
+  // for the mouse and the lasers, and no button until both have writing (src/engine/ui/ink.js).
+  const signForm = async () => {
+    await page.waitForFunction(() => document.querySelectorAll('.sheet .ink-field').length === 2, null, { timeout: 30000 });
+    assert.equal(await page.evaluate(() => document.querySelectorAll('.sheet .answer').length), 0, 'the form moves on before it is signed');
+    const listed = await page.evaluate(() => {
+      const rc = document.querySelector('a-scene').components.raycaster;
+      return [...document.querySelectorAll('.ink-field')].every((f) => rc.objects.some((o) => { for (let x = o; x; x = x.parent) if (x.el === f) return true; return false; }));
+    });
+    assert.ok(listed, 'the fields to sign are not listed for the mouse and the lasers');
+    await page.evaluate(() => document.querySelectorAll('.ink-field').forEach((f) => f.components.ink.addStroke([[0.1, 0.6], [0.4, 0.3], [0.7, 0.6], [0.9, 0.4]])));
+    await pick(0);
+  };
   // answers one question: a scale (click its middle, then "done") or a choice
   const answer = async () => {
     await page.waitForFunction(() => document.querySelector('.scale-bar') || document.querySelectorAll('.answer').length > 1, null, { timeout: 30000 });
@@ -164,7 +177,7 @@ async function playRoom(url, playtest, { leave = false } = {}) {
       await exitThenStay();
     }
     await pick(0);                       // "next" after the welcome
-    await pick(0);                       // consent page 1 (what this is, leaving): "next"
+    await signForm();                    // consent page 1, the form: signed by hand, then "next"
     if (playtest) await pick(0);         // the playtest note, a page of its own
     if (playtest) {
       await pick(1);                     // the age: "no" leads to a page of its own,
