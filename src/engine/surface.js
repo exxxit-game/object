@@ -1,7 +1,10 @@
 // Surfaces drawn once on a canvas (no image files to load): painted block wall,
-// linoleum tiles, acoustic ceiling tiles, wood. Each kind is drawn once and shared;
-// an entity only sets how many times it repeats.
-// <a-plane surface="kind: linoleum; repeat: 5.3 5.3"></a-plane>
+// linoleum tiles, acoustic ceiling tiles, wood. Each kind is drawn once and shared.
+// Tiles and blocks follow ONE grid for the whole room, laid out from the room's centre
+// in world metres, so a wall cut into pieces, the band below the rail and the next
+// wall all line up, and the edges of the room get the same tile on both sides.
+// Wood (no grid) only repeats.
+// <a-plane surface="kind: linoleum"></a-plane>  <a-entity surface="kind: wood; repeat: 1 1">
 const SIZE = 512;
 const cache = {};
 
@@ -36,7 +39,7 @@ const KINDS = {
       }
     }
   },
-  // linoleum: 2 × 2 tiles of 30 cm in two muted tones, fine speckle
+  // linoleum: 2 × 2 tiles of 32 cm in two muted tones, fine speckle
   linoleum(ctx, rand) {
     const half = SIZE / 2;
     ['#6b6257', '#615950', '#615950', '#6b6257'].forEach((c, i) => {
@@ -49,7 +52,7 @@ const KINDS = {
     ctx.strokeRect(0, 0, SIZE, SIZE);
     ctx.beginPath(); ctx.moveTo(half, 0); ctx.lineTo(half, SIZE); ctx.moveTo(0, half); ctx.lineTo(SIZE, half); ctx.stroke();
   },
-  // acoustic ceiling tile 60 cm with pinholes, framed by the metal grid
+  // acoustic ceiling tile 64 cm with pinholes, framed by the metal grid
   ceiling(ctx, rand) {
     ctx.fillStyle = '#cfcbc0';
     ctx.fillRect(0, 0, SIZE, SIZE);
@@ -74,6 +77,33 @@ const KINDS = {
   }
 };
 
+// Metres covered by one copy of the drawing, and where the grid starts: a 3.2 m room
+// takes 8 blocks per course, 10 floor tiles and 5 ceiling tiles (centred on a tile).
+const GRID = {
+  block: { size: 1.6, shift: 0 },
+  linoleum: { size: 0.64, shift: 0 },
+  ceiling: { size: 0.64, shift: 0.32 }
+};
+
+// UVs from world positions: across the surface (x, or z for walls facing x) and up
+// (y for walls, z for floor and ceiling). The geometry is cloned first: A-Frame shares
+// one geometry between planes of the same size.
+function worldUV(mesh, { size, shift }) {
+  mesh.updateMatrixWorld(true);
+  mesh.geometry = mesh.geometry.clone();
+  const pos = mesh.geometry.attributes.position, uv = mesh.geometry.attributes.uv;
+  const n = new THREE.Vector3(0, 0, 1).applyQuaternion(mesh.getWorldQuaternion(new THREE.Quaternion()));
+  const flat = Math.abs(n.y) > 0.5, facesZ = Math.abs(n.z) > 0.5;
+  const p = new THREE.Vector3();
+  for (let i = 0; i < pos.count; i++) {
+    p.fromBufferAttribute(pos, i).applyMatrix4(mesh.matrixWorld);
+    const across = flat || facesZ ? p.x : p.z;
+    const up = flat ? p.z : p.y;
+    uv.setXY(i, (across + shift) / size, (up + (flat ? shift : 0)) / size);
+  }
+  uv.needsUpdate = true;
+}
+
 function texture(kind) {
   if (cache[kind]) return cache[kind];
   const c = document.createElement('canvas');
@@ -90,7 +120,7 @@ function texture(kind) {
 AFRAME.registerComponent('surface', {
   schema: {
     kind: { default: 'block', oneOf: Object.keys(KINDS) },
-    repeat: { type: 'vec2', default: { x: 1, y: 1 } },
+    repeat: { type: 'vec2', default: { x: 1, y: 1 } }, // wood only; tiled kinds use the room grid
     tint: { default: '#ffffff' } // multiplies the drawn colours (darker paint band, etc.)
   },
   init() { this.apply = this.apply.bind(this); this.el.addEventListener('object3dset', this.apply); },
@@ -99,8 +129,13 @@ AFRAME.registerComponent('surface', {
   apply() {
     const mesh = this.el.getObject3D('mesh');
     if (!mesh) return;
+    const grid = GRID[this.data.kind];
+    const sceneEl = this.el.sceneEl;
+    // world positions are final only once the scene has loaded (merge-static runs after this)
+    if (grid && !sceneEl.hasLoaded) { sceneEl.addEventListener('loaded', () => this.apply(), { once: true }); return; }
+    if (grid) worldUV(mesh, grid);
     const map = texture(this.data.kind).clone();
-    map.repeat.set(this.data.repeat.x, this.data.repeat.y);
+    if (!grid) map.repeat.set(this.data.repeat.x, this.data.repeat.y);
     map.needsUpdate = true;
     mesh.material.map = map;
     mesh.material.color.set(this.data.tint);

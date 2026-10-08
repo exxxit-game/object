@@ -10,8 +10,11 @@ AFRAME.registerComponent('recenter', {
     x: { default: 0 },     // where the head should be (world metres)
     z: { default: 0.35 },
     yaw: { default: 0 },   // which way the player should face (degrees, 0 = -Z)
-    eye: { default: 1.6 }, // designed eye height; seated players are lifted to it
-    seatedBelow: { default: 1.35 }
+    eye: { default: 1.6 },  // designed eye height, used only with lift
+    seatedBelow: { default: 1.35 },
+    // lift: true raises a seated player to the standing eye height (rooms played standing).
+    // false keeps the real height: the room puts its chair under a seated player.
+    lift: { default: false }
   },
 
   init() {
@@ -26,17 +29,19 @@ AFRAME.registerComponent('recenter', {
     });
     sc.addEventListener('exit-vr', () => {
       this.space = null;
+      this.seated = undefined;
       this.el.object3D.position.copy(this.saved.p);
       this.el.object3D.rotation.y = this.saved.r;
     });
   },
 
-  // A seated player who stands up would end up lifted; re-check about once a second.
+  // A seated player who stands up (or a standing one who sits down) is re-placed;
+  // checked about once a second, with a margin so a lean does not flip it.
   tick(t) {
-    if (!this.lifted || t - (this.checked || 0) < 1000) return;
+    if (this.seated === undefined || t - (this.checked || 0) < 1000) return;
     this.checked = t;
-    const y = this.el.sceneEl.camera.el.object3D.position.y;
-    if (y > this.data.seatedBelow + 0.15) this.apply();
+    const y = this.el.sceneEl.camera.el.object3D.position.y; // real head height above the floor
+    if (this.seated ? y > this.data.seatedBelow + 0.15 : y < this.data.seatedBelow - 0.15) this.apply();
   },
 
   apply() {
@@ -50,9 +55,11 @@ AFRAME.registerComponent('recenter', {
     rig.rotation.y = t.yaw;
     rig.position.x = t.x;
     rig.position.z = t.z;
-    const lift = seatedLift(head.position.y, this.data.eye, this.data.seatedBelow);
+    const seated = head.position.y < this.data.seatedBelow;
+    const lift = this.data.lift ? seatedLift(head.position.y, this.data.eye, this.data.seatedBelow) : 0;
     rig.position.y = lift;
     this.lifted = lift > 0;
-    this.el.emit('recentered', { seated: lift > 0 });
+    this.seated = seated;
+    this.el.emit('recentered', { seated });
   }
 });

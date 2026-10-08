@@ -44,8 +44,8 @@ watching is better, living through it is the strongest form of explanation.
 | Data | Store only truly anonymous data (no IP, no account, no free text); ask consent before sending anything; say upfront that anonymous runs cannot be deleted later | [GDPR Recital 26](https://presencis.com/regulations/gdpr/recital-26/) |
 | Wording | "Online experiment", not "scientific study": publishing research needs ethics approval | — |
 
-Unknown, check in a headset: whether Quest Browser has Russian speech
-synthesis voices. If not, the experimenter is silent and needs recorded audio.
+Voice: recorded lines (ElevenLabs, Daniel), checked by speech-to-text with
+`tools/check-voice.mjs`; the browser's speech synthesis is not used.
 
 ## Phases
 Work on one phase at a time. A phase is done only when its exit check passes.

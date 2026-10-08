@@ -30,26 +30,26 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   </a-entity>
 
   <!-- floor and ceiling -->
-  <a-plane rotation="-90 0 0" position="0 0 0" width="3.2" height="3.2" surface="kind: linoleum; repeat: 5.333 5.333"></a-plane>
-  <a-plane rotation="90 0 0" position="0 2.5 0" width="3.2" height="3.2" surface="kind: ceiling; repeat: 5.333 5.333"></a-plane>
+  <a-plane rotation="-90 0 0" position="0 0 0" width="3.2" height="3.2" surface="kind: linoleum"></a-plane>
+  <a-plane rotation="90 0 0" position="0 2.5 0" width="3.2" height="3.2" surface="kind: ceiling"></a-plane>
 
-  <!-- walls: painted concrete block, a darker band below a wooden rail at 0.9 m -->
-  <a-plane position="0 1.25 -1.6" width="3.2" height="2.5" surface="kind: block; repeat: 2 1.5625; tint: #8a9479"></a-plane>
-  <a-plane rotation="0 180 0" position="0 1.25 1.6" width="3.2" height="2.5" surface="kind: block; repeat: 2 1.5625; tint: #8a9479"></a-plane>
-  <a-plane rotation="0 -90 0" position="1.6 1.25 0" width="3.2" height="2.5" surface="kind: block; repeat: 2 1.5625; tint: #858f74"></a-plane>
-  <a-plane rotation="0 90 0" position="-1.6 1.25 -1.25" width="0.7" height="2.5" surface="kind: block; repeat: 0.4375 1.5625; tint: #858f74"></a-plane>
-  <a-plane rotation="0 90 0" position="-1.6 1.25 0.95" width="1.3" height="2.5" surface="kind: block; repeat: 0.8125 1.5625; tint: #858f74"></a-plane>
-  <a-plane rotation="0 90 0" position="-1.6 2.15 -0.3" width="1.2" height="0.7" surface="kind: block; repeat: 0.75 0.4375; tint: #858f74"></a-plane>
-  <a-plane position="0 0.45 -1.597" width="3.2" height="0.9" surface="kind: block; repeat: 2 0.5625; tint: #5d6650"></a-plane>
-  <a-plane rotation="0 180 0" position="0 0.45 1.597" width="3.2" height="0.9" surface="kind: block; repeat: 2 0.5625; tint: #5d6650"></a-plane>
-  <a-plane rotation="0 -90 0" position="1.597 0.45 0" width="3.2" height="0.9" surface="kind: block; repeat: 2 0.5625; tint: #59624c"></a-plane>
-  <a-plane rotation="0 90 0" position="-1.597 0.45 0" width="3.2" height="0.9" surface="kind: block; repeat: 2 0.5625; tint: #59624c"></a-plane>
-  <a-box position="0 0.9 -1.592" width="3.2" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
-  <a-box position="-0.755 0.9 1.592" width="1.69" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
-  <a-box position="1.355 0.9 1.592" width="0.49" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
-  <a-box position="1.592 0.9 0" width="0.012" height="0.025" depth="3.2" color="#4a3b2c"></a-box>
-  <a-box position="-1.592 0.9 0.475" width="0.012" height="0.025" depth="2.25" color="#4a3b2c"></a-box>
-  <a-box position="-1.592 0.9 -1.2" width="0.012" height="0.025" depth="0.8" color="#4a3b2c"></a-box>
+  <!-- walls: painted concrete block, a darker band below a wooden rail at 0.8 m (on a joint) -->
+  <a-plane position="0 1.25 -1.6" width="3.2" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
+  <a-plane rotation="0 180 0" position="0 1.25 1.6" width="3.2" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
+  <a-plane rotation="0 -90 0" position="1.6 1.25 0" width="3.2" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.6 1.25 -1.25" width="0.7" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.6 1.25 0.95" width="1.3" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.6 0.5 -0.3" width="1.2" height="1.0" surface="kind: block; tint: #858f74"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.6 2.15 -0.3" width="1.2" height="0.7" surface="kind: block; tint: #858f74"></a-plane>
+  <a-plane position="0 0.4 -1.597" width="3.2" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
+  <a-plane rotation="0 180 0" position="0 0.4 1.597" width="3.2" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
+  <a-plane rotation="0 -90 0" position="1.597 0.4 0" width="3.2" height="0.8" surface="kind: block; tint: #59624c"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.597 0.4 0" width="3.2" height="0.8" surface="kind: block; tint: #59624c"></a-plane>
+  <a-box position="0 0.8 -1.592" width="3.2" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
+  <a-box position="-0.755 0.8 1.592" width="1.69" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
+  <a-box position="1.355 0.8 1.592" width="0.49" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
+  <a-box position="1.592 0.8 0" width="0.012" height="0.025" depth="3.2" color="#4a3b2c"></a-box>
+  <a-box position="-1.592 0.8 0" width="0.012" height="0.025" depth="3.2" color="#4a3b2c"></a-box>
   <!-- baseboard -->
   <a-box position="0 0.04 -1.592" width="3.2" height="0.08" depth="0.012" color="#2b2d29"></a-box>
   <a-box position="0 0.04 1.592" width="3.2" height="0.08" depth="0.012" color="#2b2d29"></a-box>
@@ -173,16 +173,17 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
       -1.575 0.045 -0.60"></a-entity>
     <a-box position="-1.585 0.05 -0.6" width="0.03" height="0.08" depth="0.08" color="#2a2a2a"></a-box>
 
-    <!-- the subject's chair (in the paper the subject sat), pulled aside so it never stands where the player is -->
-    <a-entity position="0.72 0 0.12" rotation="0 -25 0">
+    <!-- the subject's chair (in the paper the subject sat), facing the table: room.js puts it under a
+         seated player and pushes it back behind a standing one (that is where it starts) -->
+    <a-entity id="chair" data-dynamic position="0.1 0 0.95" rotation="0 -8 0">
       <a-entity rounded-box="width: 0.42; height: 0.05; depth: 0.42; radius: 0.02; color: #6a3b26; roughness: 0.5" position="0 0.46 0"></a-entity>
-      <a-entity rounded-box="width: 0.4; height: 0.24; depth: 0.03; radius: 0.012; color: #6a3b26; roughness: 0.5" position="0 0.8 -0.2"></a-entity>
+      <a-entity rounded-box="width: 0.4; height: 0.24; depth: 0.03; radius: 0.012; color: #6a3b26; roughness: 0.5" position="0 0.8 0.2"></a-entity>
       <a-cylinder radius="0.011" height="0.44" position="-0.18 0.22 -0.18" material="color: #a9acae; metalness: .8; roughness: .3"></a-cylinder>
       <a-cylinder radius="0.011" height="0.44" position="0.18 0.22 -0.18" material="color: #a9acae; metalness: .8; roughness: .3"></a-cylinder>
       <a-cylinder radius="0.011" height="0.44" position="-0.18 0.22 0.18" material="color: #a9acae; metalness: .8; roughness: .3"></a-cylinder>
       <a-cylinder radius="0.011" height="0.44" position="0.18 0.22 0.18" material="color: #a9acae; metalness: .8; roughness: .3"></a-cylinder>
-      <a-cylinder radius="0.01" height="0.32" position="-0.17 0.62 -0.2" material="color: #a9acae; metalness: .8; roughness: .3"></a-cylinder>
-      <a-cylinder radius="0.01" height="0.32" position="0.17 0.62 -0.2" material="color: #a9acae; metalness: .8; roughness: .3"></a-cylinder>
+      <a-cylinder radius="0.01" height="0.32" position="-0.17 0.62 0.2" material="color: #a9acae; metalness: .8; roughness: .3"></a-cylinder>
+      <a-cylinder radius="0.01" height="0.32" position="0.17 0.62 0.2" material="color: #a9acae; metalness: .8; roughness: .3"></a-cylinder>
     </a-entity>
   </a-entity>
 </a-scene>

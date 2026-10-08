@@ -58,6 +58,14 @@ const UNDER_TEXT = 0.05;
 
 let scene, choice, lowChoice, scale, shownScale, session, trials = null;
 let seated = false;
+// The chair: under a seated player (the head is above the back half of the seat), pushed
+// back behind a standing one, as if they had stood up from the table.
+const CHAIR = { seated: ['0 0 0.43', '0 0 0'], away: ['0.1 0 0.95', '0 -8 0'] };
+function placeChair(underPlayer) {
+  const [position, rotation] = underPlayer ? CHAIR.seated : CHAIR.away;
+  $('#chair').setAttribute('position', position);
+  $('#chair').setAttribute('rotation', rotation);
+}
 let xrVisible = true;
 let held = false; // the "you left before the end" box is open
 const paused = () => document.hidden || !xrVisible || held;
@@ -280,12 +288,12 @@ export function mount() {
     const s = scene.xrSession;
     if (s) s.addEventListener('visibilitychange', () => { xrVisible = s.visibilityState === 'visible'; });
   });
-  scene.addEventListener('exit-vr', () => { xrVisible = true; seated = false; });
+  scene.addEventListener('exit-vr', () => { xrVisible = true; seated = false; placeChair(false); });
   if (REAL) {
     watchExit(scene, { room: ROOM_ID, debrief: T.earlyDebrief, hold: (on) => { held = on; },
       midRoom: () => ['intro', 'run', 'questions'].includes(state) });
   }
-  $('#rig').addEventListener('recentered', (e) => { seated = !!(e.detail && e.detail.seated); });
+  $('#rig').addEventListener('recentered', (e) => { seated = !!(e.detail && e.detail.seated); placeChair(seated); });
   setState('idle');
   if (scene.hasLoaded) boot(); else scene.addEventListener('loaded', boot);
 }

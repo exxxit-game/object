@@ -56,6 +56,8 @@
    (door with plaque "Room NN · name · year", observation mirror, screen, brand colour); add a
    door, a static-reflection mirror, a chair; screenshots to the owner before release.
 3. Then the arrival: experimenter's welcome, lobby/menu, the room door; one unbroken journey.
+   Owner's hook: "you, like everyone, are sure this does not apply to you; see for yourself"
+   (bias blind spot: ask before the room, show the truth after). Entry ends seated on the chair.
 4. Strategy to think through: VR attention is free (sales down, little new content, VR media
    short of topics); streams vs spoilers, media, Quest new tab.
 5. Plan doc sections to add: headset add-ons (report in hand: no Web Bluetooth in Quest
@@ -65,6 +67,12 @@
    two flashes, Drori) and 2–3 prototypes; Plato's cave; share card, desktop version, Quest new
    tab; headset measurements (battery, Hz, timing, audio loopback, jitter, hands, body, MR).
 7. Waiting on owner: play room 01 at real speed; lab letter; plugins.
+8. Found in the 08.10 dialogue review: owe the owner step-by-step GitHub domain TXT
+   instructions; re-shoot the whole screenshot set (the 7 old shots show the old look); update
+   target-architecture.md (lobby, new engine files) and stale roadmap lines; owner's idea to sell
+   rooms in packs, not $1 each; statistics plan for science (analysis fixed in advance, sample
+   size); rooms about influence (Bernays) the owner wanted explained by taking part; check in the
+   headset that objects do not appear in wrong places after putting it on (recenter).
 Facts: legs from body tracking are AI-generated (never data); labs have Ouvrai (free) and VERA;
 Meta stopped commercial/education sales 20.02.2026; store sales need a store PWA (30%); Steam
 Sep 2026 Quest 3 26.9%, Quest 2 25.8%, 3S 11.1%, English 34.2%. Rules: science studies free;
