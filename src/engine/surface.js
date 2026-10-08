@@ -168,9 +168,11 @@ AFRAME.registerComponent('surface', {
     // world positions are final only once the scene has loaded (merge-static runs after this)
     if (grid && !sceneEl.hasLoaded) { sceneEl.addEventListener('loaded', () => this.apply(), { once: true }); return; }
     if (grid) worldUV(mesh, grid, this.data.space);
-    const map = texture(this.data.kind).clone();
-    if (!grid) map.repeat.set(this.data.repeat.x, this.data.repeat.y);
-    map.needsUpdate = true;
+    // A gridded kind takes its place from world UVs, so every surface of the kind shares one
+    // texture, and merge-static can merge the pieces of a wall into one mesh (one draw call;
+    // Meta: batch objects that share a material). Kinds without a grid repeat their own copy.
+    const map = grid ? texture(this.data.kind) : texture(this.data.kind).clone();
+    if (!grid) { map.repeat.set(this.data.repeat.x, this.data.repeat.y); map.needsUpdate = true; }
     mesh.material.map = map;
     if (this.data.glow) mesh.material.emissiveMap = map;
     mesh.material.color.set(this.data.tint);
