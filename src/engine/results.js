@@ -15,6 +15,18 @@ export function sendPlaytest(room, version, report) {
   return post(ENDPOINT.replace('submit_run', 'submit_playtest'), { p_room: room, p_version: version, p_report: report });
 }
 
+// Averages of other players' first runs (aggregates only; see 0006_compare_room.sql).
+// Resolves null on any failure or after 4 s, so the reveal never waits long.
+export function compareRoom(room, version) {
+  const timeout = new Promise((resolve) => setTimeout(() => resolve(null), 4000));
+  const ask = fetch(ENDPOINT.replace('submit_run', 'compare_room'), {
+    method: 'POST',
+    headers: { apikey: PUBLIC_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ p_room: room, p_version: version })
+  }).then(r => (r.ok ? r.json() : null)).catch(() => null);
+  return Promise.race([ask, timeout]);
+}
+
 function post(url, body) {
   try {
     return fetch(url, {

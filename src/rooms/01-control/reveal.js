@@ -15,8 +15,8 @@ const body = (t, gap = 22) => ({ t, size: 44, color: INK, weight: 500, gap });
 const soft = (t, gap = 22) => ({ t, size: 38, color: SOFT, weight: 500, gap });
 const round = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, Math.round(v)]));
 
-// r: analyse() result; condition: '25-25' | '75-75'
-export function revealPages(r, condition) {
+// r: analyse() result; condition: '25-25' | '75-75'; others: compare_room() result or null
+export function revealPages(r, condition, others = null) {
   const pct = condition.split('-')[0];
   const control = r.answers.control;
   const gender = r.answers.gender; // 0 men, 1 women, 2 not said
@@ -49,5 +49,11 @@ export function revealPages(r, condition) {
     body(APP_T.share, 34),
     soft(APP_T.link, 18)
   ];
-  return [you, truth, original, replication, diffs];
+  const mine = others && others[condition];
+  const players = [head(R.othersHeader)];
+  if (!mine) players.push(body(R.othersNone, 30));
+  else if (mine.control == null) players.push(body(R.othersFew(mine.n, pct), 30));
+  else players.push(body(R.others(mine.n, Math.round(mine.control), Math.round(mine.zero), pct), 30));
+  players.push(soft(R.othersYou(control), 26));
+  return [you, truth, original, replication, players, diffs];
 }

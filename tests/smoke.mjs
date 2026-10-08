@@ -79,7 +79,7 @@ async function playRoom(url, playtest) {
     await page.evaluate(() => clearInterval(window.__presser));
     for (let k = 0; k < 9; k++) await answer();
     await waitState('done');
-    for (let i = 0; i < 5; i++) await pick(0);   // reveal pages
+    for (let i = 0; i < 6; i++) await pick(0);   // reveal pages
     if (playtest) {
       for (let k = 0; k < 5; k++) await answer(); // playtest questions
       await pick(0);                              // thanks → play again

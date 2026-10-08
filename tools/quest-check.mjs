@@ -110,13 +110,13 @@ await run(`(async () => {
       await pick(0);
     }
     while (st() !== 'done') await w(200);
-    for (let i = 0; i < 4; i++) { await w(2500); await pick(0); }
+    for (let i = 0; i < 5; i++) { await w(2500); await pick(0); }
   })();
   return 1;
 })()`);
 const fps = await run(`new Promise(r => { let n = 0; const t0 = performance.now(); const f = () => { n++; if (performance.now() - t0 < 3000) requestAnimationFrame(f); else r(Math.round(n / 3)); }; requestAnimationFrame(f); })`);
 await run(`new Promise(r => { const t = setInterval(() => { if (document.documentElement.dataset.roomState === 'done') { clearInterval(t); r(1); } }, 300); setTimeout(() => r(0), 300000); })`);
-await sleep(16000);
+await sleep(19000);
 const result = await run(`({ states: window.__states, played: window.__played, screens: window.__screens, drawCalls: document.querySelector('a-scene').renderer.info.render.calls })`);
 
 // Screenshot of what the headset shows, via the Quest capture service.

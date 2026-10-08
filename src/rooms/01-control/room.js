@@ -14,6 +14,7 @@ import { createScale } from '../../engine/ui/scale.js';
 import { createAwayMeter } from '../../engine/away-meter.js';
 import { askConsent } from '../../app/consent.js';
 import { createSession, SPEED, PLAYTEST } from '../../app/session.js';
+import { compareRoom } from '../../engine/results.js';
 import { askPlaytest } from '../../app/playtest.js';
 import { playtestReport } from '../../app/playtest-report.js';
 import { APP_T } from '../../app/texts.ru.js';
@@ -172,7 +173,9 @@ async function reveal(condition) {
   session.finish({ condition, ...r, seated, speed: SPEED });
   await say(T.thanks);
   darkGlass(false);
-  const pages = revealPages(r, condition);
+  // test runs never ask the live server
+  const others = SPEED === 1 ? await compareRoom(ROOM_ID, ROOM_VERSION) : null;
+  const pages = revealPages(r, condition, others);
   const page = { pad: 2048 * 0.07 };
   for (let i = 0; i < pages.length; i++) {
     const top = writeTop(pages[i], page);
