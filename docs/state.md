@@ -18,6 +18,7 @@
 - Plan to 1M players (Russian doc for the owner, 08.10): https://claude.ai/code/artifact/71113d16-57ad-42ce-9905-87ff87dfdbd7
 - Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS, 72 fps, 08.10);
   `tools/xr-probe.html` (owner presses VR/MR/mic buttons); `scrcpy` installed.
+  Untethered: `node tools/quest-wifi.mjs` once with the cable, then unplug (owner has a battery strap).
 - Voice: ElevenLabs key `C:\Users\admin\.elevenlabs-key.txt`; Daniel, eleven_v3;
   `tools/make-voice.mjs`, `tools/check-voice.mjs` (speech-to-text check), `tools/make-sounds.mjs`.
 
