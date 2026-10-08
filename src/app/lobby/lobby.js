@@ -18,8 +18,8 @@ export { corridorHTML } from './scene.js';
 // The player arrives facing door 1, the thing to do first. The corridor is a place to
 // stand and walk: a seated player sees it from standing eye height (lift); a room whose
 // original was seated puts its chair under them instead.
-const SPOT = { x: 0.6, z: 2.9, yaw: 0, lift: true };
-const BOUNDS = 'minX: -3.1; maxX: 2.7; minZ: 1.95; maxZ: 3.2';
+const SPOT = { x: 0.6, z: 3.05, yaw: 0, lift: true };
+const BOUNDS = 'minX: -3.1; maxX: 2.7; minZ: 2.1; maxZ: 3.35';
 const $ = (s) => document.querySelector(s);
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -97,7 +97,7 @@ export async function runLobby(room) {
   await new Promise((resolve) => leaf.addEventListener('click', resolve, { once: true }));
   delete document.documentElement.dataset.lobby;
 
-  door.setAttribute('animation', { property: 'rotation', to: '0 -95 0', dur: 700, easing: 'easeInOutQuad' });
+  door.setAttribute('animation', { property: 'rotation', to: '0 95 0', dur: 700, easing: 'easeInOutQuad' }); // into the room
   await delay(500);
   await $('#cam').components.fader.to(1);
   placePlayer(room.seat, room.bounds);

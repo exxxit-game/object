@@ -42,7 +42,7 @@ const KINDS = {
       }
     }
   },
-  // linoleum: 2 × 2 tiles of 32 cm in two muted tones, fine speckle
+  // vinyl composition tile: 2 × 2 tiles of 12 in in two muted tones, fine speckle
   linoleum(ctx, rand) {
     const half = SIZE / 2;
     ['#6b6257', '#615950', '#615950', '#6b6257'].forEach((c, i) => {
@@ -55,7 +55,7 @@ const KINDS = {
     ctx.strokeRect(0, 0, SIZE, SIZE);
     ctx.beginPath(); ctx.moveTo(half, 0); ctx.lineTo(half, SIZE); ctx.moveTo(0, half); ctx.lineTo(SIZE, half); ctx.stroke();
   },
-  // acoustic ceiling tile 64 cm with pinholes, framed by the metal grid
+  // acoustic ceiling tile 24 in with pinholes, framed by the metal grid
   ceiling(ctx, rand) {
     ctx.fillStyle = '#cfcbc0';
     ctx.fillRect(0, 0, SIZE, SIZE);
@@ -82,10 +82,12 @@ const KINDS = {
 
 // Metres covered by one copy of the drawing (a joint at its edge) and the size of one
 // tile or block across. Where the joints go is worked out per space (tile-math.js).
+// Sizes from docs/building-standards.md: 12 in floor tiles, a 24 in ceiling grid; blocks
+// on the metric module (0.2 × 0.4 m) so walls stay whole half blocks.
 const GRID = {
   block: { size: 1.6, tile: 0.4, bond: true }, // running bond: courses shifted by half a block
-  linoleum: { size: 0.64, tile: 0.32 },
-  ceiling: { size: 0.64, tile: 0.64 }
+  linoleum: { size: 0.6096, tile: 0.3048 },
+  ceiling: { size: 0.6096, tile: 0.6096 }
 };
 
 // UVs from world positions: across the surface (x, or z for walls facing x) and up
