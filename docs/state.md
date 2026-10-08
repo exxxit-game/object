@@ -60,18 +60,18 @@
 1. Queue step 4: CORRIDOR ACCEPTED by the owner 8.10 (approved shots: docs/rooms/corridor-shots/). NOW, his word:
    the clipboard: DONE board+clip from a photo (Wikimedia Clipboard.jpg), hangs by its loop on the peg; form head
    "Участник ___"; consent page 1 = short consent form (agree, known, date, "Подпись ___").
-   Detail pass done (front, side, top of every corridor thing; headset 72 fps): extinguisher hook = fork round
-   the neck, signs = plates on the doors, framed cork board, sheets and clipboard lie on the cork (tests guard).
-   Font: Inter (READING FIRST, sheet text >= 24 mm). Architecture (his word 9.10): tools pinned, map under
-   test, Ono docs gone, new structure rules, architecture-auditor before every "done". THE CORRIDOR FIRST (his word): finish it before
-   anything else, in his order: 1 signature on the form, 2 the lab's seal (his sign: a snake round a globe,
-   ring "Лаборатория экспериментальной психологии"), 3 end-wall pictures + a lively opening (Portal-like
+   Detail pass done (front, side, top; tests guard; headset 72 fps). Font: Inter (READING FIRST, sheet text >= 24 mm). THE CORRIDOR FIRST (his word): finish it before
+   anything else, in his order: 1 signature on the form (DONE, he signed in VR 9.10), 2 the lab's seal (his sign: a snake round a globe,
+   ring "Лаборатория экспериментальной психологии"; drawing APPROVED 9.10, src/app/seal.js, head and tongue after Heath's Lachesis;
+   two stars = the snake's bite; place: by the signature (GOST R 7.0.97-2025 5.24), he chose it; its size waits for the paper rule).
+   NOW (his word: no stupid decisions carried into rooms): corridor AUDIT 9.10, docs/audit/scene.md, docs/audit/paper.md, docs/audit/flow.md (~90 findings,
+   highs checked by me), fix order in the plan doc section «Проверка коридора 9.10»; first fix = the paper rule (large print,
+   docs/research/vr/08-paper.md), 3 end-wall pictures + a lively opening (Portal-like
    look-at tasks, 1–2 clever jokes), 4 floor directory, 5 LIGHTING (research, before/after pictures). Then
    room 01 onto the experimenter (parked on claude/wip-experimenter: lines to tick, chosen by him).
    Branch pushed ("Делай"), hidden address (rule 14). Style book https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH = THE whole picture. Built: plan B corridor 14.6 m (src/app/lobby/plan.js), numbers 101-109, NIU signs ON the
    doors (SIGN in src/app/brand.js), EXXXIT poster = leave, age asked, WS-900 extinguisher by the stairs, hint never in
-   VR. Decided: floor = 9 rooms = one pack, floor 1 free, packs in the Horizon Store app. 72 fps, 124 calls.
-   Ideas after acceptance (plan doc): board notes, the tilted room, a map test, a secret door, the swap of roles.
+   VR. Decided: floor = 9 rooms = one pack, floor 1 free, packs in the Horizon Store app. 72 fps, 124 calls. Ideas: plan doc.
 2. Headset: `quest-look.mjs worn on` keeps it awake (`worn off` after); asleep = only his power button wakes it;
    frames render only while the VR session is visible. Visual designs go to him as pictures BEFORE the game.
 3. Then first room: read in full Fernández-Ruiz 1999, Hirschhorn 2024, Kohnstamm 1915; 5-minute

@@ -18,6 +18,7 @@ in full are in `C:\Users\admin\Documents\objekt-papers\` (PDF and text).
 | `05-wow.md` | presence and plausibility, first minutes, attention, reveals, curiosity, comedy, what breaks the science |
 | `06-science.md` | VR as an experiment platform: methods, replications, home studies, ethics, debrief, measurement |
 | `07-corridor-1979.md` | a US university lab corridor of 1979: doors, signs, extinguishers, notices, typewriters |
+| `08-paper.md` | paper in the headset: large-print documents (UKAAF, CNIB), text inside pictures, forms that grow in pages |
 
 Each file ends with "Conflicts with our notes", "Top 15 for our game", the sources read and the gaps.
 Gaps that stayed open: paywalled ISO 9241-391/392/394, ISO/IEC 5927 and IEEE 3079 (scope pages
