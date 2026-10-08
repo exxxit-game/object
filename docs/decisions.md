@@ -64,7 +64,7 @@ Why: the owner found he could not walk in a corridor made for walking. Meta's lo
 Consequence: the clipboard follows a player who moved (event player-moved); recenter keeps the new place when a seated player stands up.
 
 ## The studio's poster on the board is the game's "leave" button
-Pointing at the EXXXIT poster on the experimenter's board brightens it; pressing asks "Выйти из игры?" on the clipboard (it cuts in on any page and gives it back on "Остаться"); leaving fades out, ends VR and says how to come back (src/app/lobby/exit.js; sheet.js interrupt/resume). No exit door of its own.
+Pointing at the EXXXIT poster on the experimenter's board brightens it; pressing asks "Прекратить участие?" on the clipboard, in the lab's words, not a game's (it cuts in on any page and gives it back on "Продолжить"); the consent page says how to stop: the EXXXIT sign on the board, taking the headset off, or closing the page; leaving fades out, ends VR and says how to come back (src/app/lobby/exit.js; sheet.js interrupt/resume). No exit door of its own.
 Why: the owner's idea in his words: the logo will be taken for an exit, so let pressing it be the way out; a participant may leave at any time without penalty (ethics). A separate exit door with its own sign was built first and removed: the owner had asked for the poster itself.
 Consequence: the corridor has three doors (tests/standards.test.mjs); the poster stops answering once the player is through door 1; rooms leave through the left-early flow.
 ## Recording is for adults: the age is asked, not stated

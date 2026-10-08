@@ -14,13 +14,13 @@ export const LOBBY_T = {
   takeSheet: 'Возьмите планшетку: она висит на доске слева от двери.',
   chooseDoor: 'Выберите дверь. Сейчас открыта первая комната.',
   soon: 'СКОРО',
-  // the studio's poster on the board is the way to leave the game (exit.js)
+  // the studio's poster on the board ends the participation (exit.js), in the lab's words:
+  // the player is a participant here, not in a game
   exit: {
-    ask: 'Выйти из игры?',
-    note: 'Никакие данные никуда не отправятся.',
-    leave: 'Выйти',
-    stay: 'Остаться',
-    done: 'Вы вышли из игры. Чтобы вернуться, обновите страницу.'
+    ask: 'Прекратить участие?',
+    leave: 'Прекратить',
+    stay: 'Продолжить',
+    done: 'Участие прекращено. Чтобы вернуться, обновите страницу.'
   },
   // the flyer on the board (board.js): "подходите" is both "you qualify" and "you are coming closer"
   flyer: {

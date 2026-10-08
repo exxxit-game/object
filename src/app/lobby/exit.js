@@ -22,7 +22,7 @@ export function leaveButton(scene, sheet) {
   poster.addEventListener('mouseleave', () => tint(rest));
   poster.addEventListener('click', async () => {
     if (!on) return;
-    const pick = await sheet.interrupt([{ t: E.ask, role: 'title' }, { t: E.note, role: 'body', gap: 0.02 }], [E.leave, E.stay]);
+    const pick = await sheet.interrupt([{ t: E.ask, role: 'title' }], [E.leave, E.stay]);
     if (pick === 0) { off(); leave(scene, E.done); } else if (pick === 1) sheet.resume();
   });
   function off() {
