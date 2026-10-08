@@ -19,6 +19,8 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <!-- light: ambient fill and one warm lamp under an enamel shade -->
   <a-entity light="type: ambient; color: #c9cfd6; intensity: 0.55"></a-entity>
   <a-entity light="type: point; color: #ffe2b0; intensity: 2.2; distance: 0; decay: 0.6" position="0 2.13 -0.2"></a-entity>
+  <!-- everything up to the screen is static: merged after load into one mesh per look -->
+  <a-entity merge-static>
   <a-cylinder radius="0.05" height="0.02" position="0 2.49 -0.2" color="#d8d4c8"></a-cylinder>
   <a-entity cable="radius: 0.004; color: #e8e2d2; points: 0 2.48 -0.2, 0.004 2.40 -0.2, 0 2.30 -0.2, 0 2.28 -0.2"></a-entity>
   <a-entity position="0 2.12 -0.2">
@@ -55,7 +57,7 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-box position="-1.592 0.04 0" width="0.012" height="0.08" depth="3.2" color="#2b2d29"></a-box>
 
   <!-- one-way mirror in the left wall, framed on all sides -->
-  <a-plane id="glass" rotation="0 90 0" position="-1.595 1.4 -0.3" width="1.2" height="0.8" mirror-glass
+  <a-plane id="glass" data-dynamic rotation="0 90 0" position="-1.595 1.4 -0.3" width="1.2" height="0.8" mirror-glass
            material="color: #c2c9cd; metalness: 1; roughness: .04; opacity: .94; transparent: true"></a-plane>
   <a-box position="-1.585 0.99 -0.3" width="0.05" height="0.03" depth="1.26" color="#2a2a2a"></a-box>
   <a-box position="-1.585 1.81 -0.3" width="0.05" height="0.03" depth="1.26" color="#2a2a2a"></a-box>
@@ -89,7 +91,7 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-sphere radius="0.008" position="-2.785 0.9 -0.58" material="color: #300; emissive: #ff5040; emissiveIntensity: 0.8"></a-sphere>
   <a-sphere radius="0.008" position="-2.785 0.9 -0.54" material="color: #030; emissive: #50ff60; emissiveIntensity: 0.8"></a-sphere>
   <a-sphere radius="0.008" position="-2.765 0.84 -0.08" material="color: #330; emissive: #ffd040; emissiveIntensity: 0.8"></a-sphere>
-  <a-entity id="observer" visible="false" position="-3.0 0 -0.3" rotation="0 -90 0">
+  <a-entity id="observer" data-dynamic visible="false" position="-3.0 0 -0.3" rotation="0 -90 0">
     <a-entity rounded-box="width: 0.38; height: 0.56; depth: 0.22; radius: 0.08; color: #141416; roughness: 1" position="0 0.8 0.02"></a-entity>
     <a-cylinder radius="0.045" height="0.08" position="0 1.1 0.03" color="#141416" roughness="1"></a-cylinder>
     <a-sphere radius="0.105" position="0 1.22 0.03" color="#141416" roughness="1"></a-sphere>
@@ -110,11 +112,13 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
     -2.25 0.007 -0.63, -2.40 0.009 -0.61, -2.435 0.04 -0.6, -2.442 0.3 -0.595, -2.442 0.70 -0.59, -2.442 0.752 -0.585,
     -2.452 0.768 -0.58, -2.50 0.767 -0.575, -2.545 0.79 -0.57"></a-entity>
 
+  </a-entity>
+
   <!-- experimenter screen -->
   <a-box position="0 1.86 -1.585" width="2.12" height="1.12" depth="0.03" color="#1b1c1e"></a-box>
   <a-entity id="screen" panel="w: 2.0; h: 1.0; px: 2048; ref: 1300; bg: #0e0f11" position="0 1.86 -1.565"></a-entity>
 
-  <a-entity id="room">
+  <a-entity id="room" merge-static>
     <a-entity blob-shadow="w: 1.3; h: 0.8; opacity: 0.5" position="0 0.003 -0.3"></a-entity>
     <!-- table: wooden top (surface at 0.84 m) on a metal frame -->
     <a-entity rounded-box="width: 1.0; height: 0.035; depth: 0.52; radius: 0.004; color: #ffffff; roughness: 0.55"
@@ -140,9 +144,9 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
               position="0 0.846 -0.475"></a-entity>
     <a-torus radius="0.019" radius-tubular="0.0035" position="-0.045 1.02 -0.4505" material="color: #c9ccce; metalness: .85; roughness: .2"></a-torus>
     <a-torus radius="0.019" radius-tubular="0.0035" position="0.045 1.02 -0.4505" material="color: #c9ccce; metalness: .85; roughness: .2"></a-torus>
-    <a-sphere id="yellow" radius="0.016" position="-0.045 1.02 -0.448"
+    <a-sphere id="yellow" data-dynamic radius="0.016" position="-0.045 1.02 -0.448"
               material="color: #3a3310; emissive: #ffd23a; emissiveIntensity: 0; roughness: .25"></a-sphere>
-    <a-sphere id="green" radius="0.016" position="0.045 1.02 -0.448"
+    <a-sphere id="green" data-dynamic radius="0.016" position="0.045 1.02 -0.448"
               material="color: #0f2a12; emissive: #38ff5a; emissiveIntensity: 0; roughness: .25"></a-sphere>
 
     <!-- response box 15.5×7.5×4 cm, black bakelite with four screws, spring button in a chrome collar -->
@@ -154,7 +158,7 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
     <a-cylinder radius="0.0035" height="0.002" position="-0.064 0.881 -0.133" material="color: #b8bbbd; metalness: .8; roughness: .3"></a-cylinder>
     <a-cylinder radius="0.0035" height="0.002" position="0.064 0.881 -0.133" material="color: #b8bbbd; metalness: .8; roughness: .3"></a-cylinder>
     <a-cylinder radius="0.021" height="0.004" position="0 0.882 -0.16" material="color: #c9ccce; metalness: .85; roughness: .2"></a-cylinder>
-    <a-entity id="button" position="0 0.88 -0.16">
+    <a-entity id="button" data-dynamic position="0 0.88 -0.16">
       <a-cylinder id="buttonCap" class="clickable grabbable" radius="0.016" height="0.012" position="0 0.006 0"
                   material="color: #c9c5bb; roughness: .5"></a-cylinder>
     </a-entity>

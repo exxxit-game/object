@@ -7,6 +7,7 @@ import '../../engine/cable.js';
 import '../../engine/surface.js';
 import '../../engine/shapes.js';
 import '../../engine/mirror.js';
+import '../../engine/merge-static.js';
 import '../../engine/room-bounds.js';
 import { eventLog } from '../../engine/log.js';
 import { unlock } from '../../engine/audio.js';
