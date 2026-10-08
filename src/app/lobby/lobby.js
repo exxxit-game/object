@@ -87,13 +87,19 @@ function onFirstGesture(fn) {
 // the room's lights up to DOOR_PEEK of their own while the door opens (the room shows through
 // the opening, and the corridor brightens only a little, as from light out of a door); full,
 // called under the fade to black, sets every light to its in-room value at once.
+// The room's inside (class room-interior) is not drawn while its door is shut: the walls hide
+// it, and every part drawn costs frame time in the headset (Meta: fewer than 200 draw calls a
+// frame on Quest 3; cull what walls hide). It appears as the door starts to open.
 function lightCorridor() {
   const room = [...document.querySelectorAll('.room-light')].map((el) => [el, el.getAttribute('light').intensity]);
+  const inside = [...document.querySelectorAll('.room-interior')];
   const set = (el, v) => el.setAttribute('light', 'intensity', v);
   for (const [el] of room) set(el, 0);
+  for (const el of inside) el.object3D.visible = false;
   for (const [sel, [here]] of Object.entries(CORRIDOR_LIGHT)) set($(sel), here);
   return {
     peek: (ms) => {
+      for (const el of inside) el.object3D.visible = true;
       for (const [el, v] of room) el.setAttribute('animation__light', { property: 'light.intensity', to: v * DOOR_PEEK, dur: ms, easing: 'easeInOutQuad' });
     },
     full: () => {

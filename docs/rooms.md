@@ -25,6 +25,9 @@ test that pins those numbers to the paper.
    Every light of the room that is on in its markup carries class `room-light`: lights pass
    through walls, so the corridor keeps them off until the door opens (corridors are much
    dimmer than rooms: docs/building-standards.md). `tests/structure.test.mjs` checks it.
+   The room's inside (walls, furniture, screen) carries class `room-interior`, door 1's way
+   (frame, stops, threshold, leaf) never: the corridor leaves the inside undrawn until the door
+   opens (Meta: fewer than 200 draw calls a frame on Quest 3). `tests/structure.test.mjs` checks it.
 2. Fill `#hint` and add class `show` when ready.
 3. Start with the shared arrival `runLobby(room)` with room = `{ id, real, debrief, plaque: { number },
    seat: { x, z, yaw }, bounds, extra }` (the sign over the door, the clipboard taken from the

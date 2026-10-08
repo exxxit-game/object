@@ -119,6 +119,24 @@ for (const f of facing) {
   assert.ok(!/«Объект|Объект ·|в «Объекте»/.test(s), `${rel(f)} translates the game's name`);
 }
 
+// 15. Every room marks its inside with class room-interior, which the corridor leaves undrawn
+// while the door is shut (src/app/lobby/lobby.js; Meta: fewer than 200 draw calls a frame on
+// Quest 3), and the door the corridor sees (#door1) is never part of it.
+for (const room of fs.readdirSync(path.join(ROOT, 'src/rooms'))) {
+  const { sceneHTML } = await import(new URL(`../src/rooms/${room}/scene.js`, import.meta.url));
+  const open = [];
+  let marked = 0, doorInside = false;
+  for (const m of sceneHTML.matchAll(/<(\/?)(a-[a-z-]+)([^>]*)>/g)) {
+    if (m[1]) { open.pop(); continue; }
+    const interior = /class="[^"]*\broom-interior\b/.test(m[3]);
+    if (interior) marked++;
+    if (/id="door1"/.test(m[3]) && open.some(Boolean)) doorInside = true;
+    if (!/\/\s*$/.test(m[3])) open.push(interior);
+  }
+  assert.ok(marked > 0, `${room}: no part of the room is marked room-interior`);
+  assert.ok(!doorInside, `${room}: door 1 is inside a room-interior part (the corridor would hide it)`);
+}
+
 // 14. Commits name the account's hidden GitHub address, never a personal one: the repository and
 // the test copy are public, and every commit shows its author's address to anyone. Where no
 // address is set (CI does not commit), there is nothing to check.

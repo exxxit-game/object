@@ -71,3 +71,7 @@ Consequence: the corridor has three doors (tests/standards.test.mjs); the poster
 Before the recording choice the clipboard asks "Вам уже исполнилось 18 лет?"; "Нет" goes to a page of its own and the game starts without recording, with no way back to the choice in that run (src/app/consent.js).
 Why: a sentence "from 18" checks nothing, and Meta lets children from 10 use Quest; Steed et al. 2016 (IEEE TVCG) asked an 18+ item in their at-home VR study; the BPS guidance for internet research (2021) sends under-age entries to an exit page with no re-entry (docs/research/vr/06-science.md).
 Consequence: privacy.html already says recording is from 18; the game itself stays playable without recording; the smoke test answers "Да" in one run and "Нет" in the other.
+## What walls hide is not drawn
+While its door is shut the room behind it (class room-interior) is not drawn; it appears as the door starts to open (src/app/lobby/lobby.js). Door 1's way (frame, stops, threshold, leaf) is its own group, seen from both sides.
+Why: the corridor sat at 200 draw calls a frame in the headset, Meta's limit for Quest 3 (fewer than 200; device optimization comparison), and most of them were the room behind the wall; Meta's WebXR guidance: cull what cannot be seen. Measured: 124 to 41 draw calls for one view.
+Consequence: every room marks its inside (tests/structure.test.mjs); `node tools/quest-look.mjs perf` checks the budget in the headset before any new detail goes in.

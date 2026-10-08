@@ -21,7 +21,7 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-entity class="room-light" light="type: ambient; color: #c9cfd6; intensity: 0.55"></a-entity>
   <a-entity class="room-light" light="type: point; color: #ffe2b0; intensity: 2.2; distance: 0; decay: 0.6" position="0 2.13 -0.2"></a-entity>
   <!-- everything up to the screen is static: merged after load into one mesh per look -->
-  <a-entity merge-static>
+  <a-entity class="room-interior" merge-static>
   <a-cylinder radius="0.05" height="0.02" position="0 2.49 -0.2" color="#d8d4c8"></a-cylinder>
   <a-entity cable="radius: 0.004; color: #e8e2d2; points: 0 2.48 -0.2, 0.004 2.40 -0.2, 0 2.30 -0.2, 0 2.28 -0.2"></a-entity>
   <a-entity position="0 2.12 -0.2">
@@ -72,34 +72,6 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-box position="-1.585 1.4 -0.915" width="0.05" height="0.85" depth="0.03" color="#2a2a2a"></a-box>
   <a-box position="-1.585 1.4 0.315" width="0.05" height="0.85" depth="0.03" color="#2a2a2a"></a-box>
 
-  <!-- door 1, the door the experimenter leaves by (behind the player), built to the trade
-       standards (docs/building-standards.md): hollow metal frame with a 2 in face through the
-       0.2 m wall; stops on the corridor side hide the 1/8 in gaps around the leaf; aluminium
-       threshold 1/2 in high; plaque and light switch on the latch side -->
-  <a-box position="0.2143 1.1021 1.7" width="0.051" height="2.2042" depth="0.22" color="#3d3a34"></a-box>
-  <a-box position="1.1857 1.1021 1.7" width="0.051" height="2.2042" depth="0.22" color="#3d3a34"></a-box>
-  <a-box position="0.7 2.1787 1.7" width="1.0224" height="0.051" depth="0.22" color="#3d3a34"></a-box>
-  <a-box position="0.2478 1.0766 1.663" width="0.016" height="2.1532" depth="0.016" color="#3d3a34"></a-box>
-  <a-box position="1.1522 1.0766 1.663" width="0.016" height="2.1532" depth="0.016" color="#3d3a34"></a-box>
-  <a-box position="0.7 2.1452 1.663" width="0.9204" height="0.016" depth="0.016" color="#3d3a34"></a-box>
-  <a-box position="0.7 0.0065 1.6325" width="0.9204" height="0.013" depth="0.127" material="color: #9a9c9e; metalness: .6; roughness: .4"></a-box>
-  <!-- the 3'0" × 7'0" leaf swings into the room on three hinges at its left edge (pivot);
-       lever on both sides at 1.024 m, 70 mm from the latch edge; kick plate on the push
-       (corridor) side; closer on the pull side; the leaf is what the player points at -->
-  <a-entity id="door1" data-dynamic position="0.243 0 1.61">
-    <a-entity class="clickable" rounded-box="width: 0.914; height: 2.134; depth: 0.045; radius: 0.004; color: #6a5641; roughness: 0.55"
-              position="0.457 1.083 0.0225"></a-entity>
-    <a-box position="0.457 0.143 0.0458" width="0.864" height="0.254" depth="0.0015" material="color: #b9bcbe; metalness: .7; roughness: .3"></a-box>
-    <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="0.844 1.024 0.051" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
-    <a-box position="0.784 1.024 0.08" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
-    <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="0.844 1.024 -0.006" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
-    <a-box position="0.784 1.024 -0.035" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
-    <a-cylinder radius="0.007" height="0.114" position="-0.0016 1.8482 -0.004" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-cylinder>
-    <a-cylinder radius="0.007" height="0.114" position="-0.0016 1.0276 -0.004" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-cylinder>
-    <a-cylinder radius="0.007" height="0.114" position="-0.0016 0.207 -0.004" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-cylinder>
-    <a-box position="0.22 2.09 -0.032" width="0.28" height="0.055" depth="0.06" color="#5b5d60"></a-box>
-    <a-box position="0.33 2.13 -0.045" width="0.22" height="0.012" depth="0.012" color="#5b5d60"></a-box>
-  </a-entity>
   <a-entity id="plaque" class="on-wall" panel="w: 0.2; h: 0.2; px: 512; bg: #15161a" position="1.4 1.5 1.594" rotation="0 180 0"></a-entity>
   <a-entity rounded-box="width: 0.08; height: 0.12; depth: 0.012; radius: 0.006; color: #d8d2c2; roughness: 0.5"
             class="on-wall" position="1.4 1.1 1.592"></a-entity>
@@ -137,12 +109,44 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
     -2.452 0.768 -0.58, -2.50 0.767 -0.575, -2.545 0.79 -0.57"></a-entity>
 
   </a-entity>
+  <!-- door 1's way, seen from both sides: its own group, so the corridor can leave the room
+       interior undrawn while the door is shut (class room-interior, src/app/lobby/lobby.js) -->
+  <a-entity id="doorway" merge-static>
+    <!-- door 1, the door the experimenter leaves by (behind the player), built to the trade
+         standards (docs/building-standards.md): hollow metal frame with a 2 in face through the
+         0.2 m wall; stops on the corridor side hide the 1/8 in gaps around the leaf; aluminium
+         threshold 1/2 in high; plaque and light switch on the latch side -->
+    <a-box position="0.2143 1.1021 1.7" width="0.051" height="2.2042" depth="0.22" color="#3d3a34"></a-box>
+    <a-box position="1.1857 1.1021 1.7" width="0.051" height="2.2042" depth="0.22" color="#3d3a34"></a-box>
+    <a-box position="0.7 2.1787 1.7" width="1.0224" height="0.051" depth="0.22" color="#3d3a34"></a-box>
+    <a-box position="0.2478 1.0766 1.663" width="0.016" height="2.1532" depth="0.016" color="#3d3a34"></a-box>
+    <a-box position="1.1522 1.0766 1.663" width="0.016" height="2.1532" depth="0.016" color="#3d3a34"></a-box>
+    <a-box position="0.7 2.1452 1.663" width="0.9204" height="0.016" depth="0.016" color="#3d3a34"></a-box>
+    <a-box position="0.7 0.0065 1.6325" width="0.9204" height="0.013" depth="0.127" material="color: #9a9c9e; metalness: .6; roughness: .4"></a-box>
+    <!-- the 3'0" × 7'0" leaf swings into the room on three hinges at its left edge (pivot);
+         lever on both sides at 1.024 m, 70 mm from the latch edge; kick plate on the push
+         (corridor) side; closer on the pull side; the leaf is what the player points at -->
+    <a-entity id="door1" data-dynamic position="0.243 0 1.61">
+      <a-entity class="clickable" rounded-box="width: 0.914; height: 2.134; depth: 0.045; radius: 0.004; color: #6a5641; roughness: 0.55"
+                position="0.457 1.083 0.0225"></a-entity>
+      <a-box position="0.457 0.143 0.0458" width="0.864" height="0.254" depth="0.0015" material="color: #b9bcbe; metalness: .7; roughness: .3"></a-box>
+      <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="0.844 1.024 0.051" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
+      <a-box position="0.784 1.024 0.08" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
+      <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="0.844 1.024 -0.006" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
+      <a-box position="0.784 1.024 -0.035" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
+      <a-cylinder radius="0.007" height="0.114" position="-0.0016 1.8482 -0.004" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-cylinder>
+      <a-cylinder radius="0.007" height="0.114" position="-0.0016 1.0276 -0.004" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-cylinder>
+      <a-cylinder radius="0.007" height="0.114" position="-0.0016 0.207 -0.004" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-cylinder>
+      <a-box position="0.22 2.09 -0.032" width="0.28" height="0.055" depth="0.06" color="#5b5d60"></a-box>
+      <a-box position="0.33 2.13 -0.045" width="0.22" height="0.012" depth="0.012" color="#5b5d60"></a-box>
+    </a-entity>
+  </a-entity>
 
   <!-- experimenter screen -->
-  <a-box position="0 1.86 -1.585" width="2.12" height="1.12" depth="0.03" color="#1b1c1e"></a-box>
-  <a-entity id="screen" panel="w: 2.0; h: 1.0; px: 2048; ref: 1300; bg: #0e0f11" position="0 1.86 -1.565"></a-entity>
+  <a-box class="room-interior" position="0 1.86 -1.585" width="2.12" height="1.12" depth="0.03" color="#1b1c1e"></a-box>
+  <a-entity id="screen" class="room-interior" panel="w: 2.0; h: 1.0; px: 2048; ref: 1300; bg: #0e0f11" position="0 1.86 -1.565"></a-entity>
 
-  <a-entity id="room" merge-static>
+  <a-entity id="room" class="room-interior" merge-static>
     <a-entity blob-shadow="w: 1.3; h: 0.8; opacity: 0.5" position="0 0.003 -0.3"></a-entity>
     <!-- table: wooden top (surface at 0.84 m) on a metal frame -->
     <a-entity rounded-box="width: 1.0; height: 0.035; depth: 0.52; radius: 0.004; color: #ffffff; roughness: 0.55"
