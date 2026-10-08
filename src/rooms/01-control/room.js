@@ -4,6 +4,9 @@ import '../../engine/sfx.js';
 import '../../engine/grab-press.js';
 import '../../engine/blob-shadow.js';
 import '../../engine/cable.js';
+import '../../engine/surface.js';
+import '../../engine/shapes.js';
+import '../../engine/mirror.js';
 import '../../engine/room-bounds.js';
 import { eventLog } from '../../engine/log.js';
 import { unlock } from '../../engine/audio.js';
@@ -20,6 +23,7 @@ import { compareRoom } from '../../engine/results.js';
 import { askPlaytest } from '../../app/playtest.js';
 import { playtestReport } from '../../app/playtest-report.js';
 import { APP_T } from '../../app/texts.ru.js';
+import { writePlaque } from '../../app/brand.js';
 import { sceneHTML } from './scene.js';
 import { PROTOCOL } from './protocol.js';
 import { pickCondition, makeTapes, makeIntervals } from './schedule.js';
@@ -237,6 +241,7 @@ async function boot() {
   const lc = $('#cam').components['look-controls'];
   if (lc && lc.pitchObject) lc.pitchObject.rotation.x = -0.28;
   $('#hint').classList.add('show');
+  writePlaque($('#plaque').components.panel, { number: T.kicker, ...T.plaque });
   if (REAL && leftBefore(ROOM_ID)) {
     await askAfterLeaving(screen(), lowChoice, { room: ROOM_ID, debrief: T.earlyDebrief, screenTop: SCREEN_TOP });
   }

@@ -65,7 +65,12 @@ export function createChoice(scene, place) {
       el.classList.add('clickable', 'answer');
       el.dataset.index = i;
       el.dataset.size = size;
-      const paint = (bg) => el.components.panel && el.components.panel.write([{ t: text, size, weight: WEIGHT, color: TEXT }], { bg, pad: PAD });
+      // A button removed right after it appeared can still fire 'loaded' before its panel
+      // has a canvas: draw only once the canvas exists.
+      const paint = (bg) => {
+        const panel = el.components.panel;
+        if (panel && panel.c) panel.write([{ t: text, size, weight: WEIGHT, color: TEXT }], { bg, pad: PAD });
+      };
       el.addEventListener('loaded', () => paint(NORMAL));
       el.addEventListener('mouseenter', () => paint(HOVER));
       el.addEventListener('mouseleave', () => paint(NORMAL));

@@ -19,7 +19,7 @@ export function createScale(scene, place) {
 
   function draw(labels, step, value, unit, max = 100) {
     const panel = bar && bar.components.panel;
-    if (!panel) return;
+    if (!panel || !panel.c) return; // not drawn yet (see choice.js)
     const { ctx, c } = panel;
     const W = c.width, H = c.height;
     ctx.clearRect(0, 0, W, H);
