@@ -3,6 +3,7 @@ import '../../engine/recenter.js';
 import '../../engine/sfx.js';
 import '../../engine/grab-press.js';
 import '../../engine/blob-shadow.js';
+import '../../engine/cable.js';
 import '../../engine/room-bounds.js';
 import { eventLog } from '../../engine/log.js';
 import { unlock } from '../../engine/audio.js';

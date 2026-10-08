@@ -69,7 +69,8 @@
    Ouvrai (free) and VERA (NSF); Meta stopped commercial/education sales 20.02.2026; store sales
    need a store-installed PWA (30%).
 10. Owner 08.10, in order: (a) DONE early-exit choice + age group + "saw someone play" answer
-   (server 0008 applied); (b) room 01: the cable behind the table bends badly, fix it to the
-   room's real layout; (c) plan sections: headset add-ons (fan/wind, battery strap, touch,
+   (server 0008 applied); (b) DONE cable: one smooth tube along the room (src/engine/cable.js);
+   NEXT (owner: no rush, only room 01 until it is the model for all rooms): polish every object
+   and give the game its own recognisable style (offer style options first); (c) plan sections: headset add-ons (fan/wind, battery strap, touch,
    smell, props; research agent running) and device combos (two headsets online, phone or
    laptop + headset, asymmetric roles). Rules decided: science studies always free; gate 0 = 7/10 + 7.

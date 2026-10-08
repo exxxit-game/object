@@ -62,10 +62,11 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-cylinder radius="0.015" height="0.45" position="-2.84 0.22 -0.46" color="#777"></a-cylinder>
   <a-cylinder radius="0.015" height="0.45" position="-3.16 0.22 -0.14" color="#777"></a-cylinder>
   <a-cylinder radius="0.015" height="0.45" position="-3.16 0.22 -0.46" color="#777"></a-cylinder>
-  <!-- cable from the booth wall to the relay equipment -->
+  <!-- cable from the booth wall along the floor, up the desk's front edge, into the relay equipment -->
   <a-box position="-1.615 0.05 -0.6" width="0.03" height="0.08" depth="0.08" color="#2a2a2a"></a-box>
-  <a-cylinder radius="0.007" height="0.92" rotation="0 0 90" position="-2.09 0.008 -0.6" color="#111"></a-cylinder>
-  <a-cylinder radius="0.007" height="0.72" position="-2.55 0.37 -0.6" color="#111"></a-cylinder>
+  <a-entity cable="radius: 0.007; points: -1.62 0.045 -0.6, -1.64 0.02 -0.6, -1.68 0.007 -0.6, -1.95 0.007 -0.62,
+    -2.25 0.007 -0.63, -2.40 0.009 -0.61, -2.435 0.04 -0.6, -2.442 0.3 -0.595, -2.442 0.70 -0.59, -2.442 0.752 -0.585,
+    -2.452 0.768 -0.58, -2.50 0.767 -0.575, -2.545 0.79 -0.57"></a-entity>
 
   <!-- experimenter screen -->
   <a-box position="0 1.86 -1.585" width="2.12" height="1.12" depth="0.03" color="#1b1c1e"></a-box>
@@ -97,12 +98,14 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
                   material="color: #c9c5bb; roughness: .5"></a-cylinder>
     </a-entity>
 
-    <!-- cables: box to stand along the table, down the back edge, floor to the wall -->
-    <a-cylinder radius="0.005" height="0.27" rotation="90 0 0" position="0 0.845 -0.33" color="#111"></a-cylinder>
-    <a-cylinder radius="0.006" height="0.1" rotation="90 0 0" position="0 0.847 -0.52" color="#111"></a-cylinder>
-    <a-cylinder radius="0.006" height="0.84" position="0 0.42 -0.566" color="#111"></a-cylinder>
-    <a-cylinder radius="0.006" height="0.04" rotation="90 0 0" position="0 0.008 -0.583" color="#111"></a-cylinder>
-    <a-cylinder radius="0.006" height="1.57" rotation="0 0 90" position="-0.785 0.008 -0.6" color="#111"></a-cylinder>
+    <!-- cables: box to stand lying on the table; from the stand over the back edge, hanging
+         freely, onto the floor and along it to the wall socket (one radius above each surface) -->
+    <a-entity cable="radius: 0.005; points: 0 0.852 -0.19, 0 0.846 -0.215, 0.006 0.845 -0.27,
+      0.008 0.845 -0.34, 0.003 0.845 -0.40, 0 0.845 -0.44"></a-entity>
+    <a-entity cable="radius: 0.006; points: 0 0.846 -0.50, 0 0.846 -0.535, 0 0.846 -0.556, 0 0.836 -0.568,
+      0 0.80 -0.574, -0.01 0.55 -0.582, -0.03 0.25 -0.592, -0.06 0.06 -0.61, -0.11 0.008 -0.65,
+      -0.30 0.006 -0.70, -0.75 0.006 -0.69, -1.20 0.006 -0.64, -1.46 0.006 -0.61, -1.55 0.012 -0.60,
+      -1.575 0.045 -0.60"></a-entity>
     <a-box position="-1.585 0.05 -0.6" width="0.03" height="0.08" depth="0.08" color="#2a2a2a"></a-box>
   </a-entity>
 </a-scene>
