@@ -7,11 +7,20 @@ const ENDPOINT = 'https://rkvdwzlymmewsxjysgma.supabase.co/rest/v1/rpc/submit_ru
 const PUBLIC_KEY = 'sb_publishable_w6g0x6vgIM-AfAx-XDWyEw_Kqpm3nAN';
 
 export function sendResult(room, version, firstRun, report) {
+  return post(ENDPOINT, { p_room: room, p_version: version, p_first: firstRun, p_report: report });
+}
+
+// Playtest feedback (answers plus run measures), only in playtest mode.
+export function sendPlaytest(room, version, report) {
+  return post(ENDPOINT.replace('submit_run', 'submit_playtest'), { p_room: room, p_version: version, p_report: report });
+}
+
+function post(url, body) {
   try {
-    return fetch(ENDPOINT, {
+    return fetch(url, {
       method: 'POST',
       headers: { apikey: PUBLIC_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ p_room: room, p_version: version, p_first: firstRun, p_report: report }),
+      body: JSON.stringify(body),
       keepalive: true
     }).then(r => r.ok).catch(() => false);
   } catch (e) {

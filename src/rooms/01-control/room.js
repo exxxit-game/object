@@ -11,8 +11,11 @@ import { loadVoice, speak } from '../../engine/voice.js';
 import { pulse } from '../../engine/haptics.js';
 import { createChoice } from '../../engine/ui/choice.js';
 import { createScale } from '../../engine/ui/scale.js';
+import { createAwayMeter } from '../../engine/away-meter.js';
 import { askConsent } from '../../app/consent.js';
-import { createSession, SPEED } from '../../app/session.js';
+import { createSession, SPEED, PLAYTEST } from '../../app/session.js';
+import { askPlaytest } from '../../app/playtest.js';
+import { playtestReport } from '../../app/playtest-report.js';
 import { APP_T } from '../../app/texts.ru.js';
 import { sceneHTML } from './scene.js';
 import { PROTOCOL } from './protocol.js';
@@ -35,6 +38,9 @@ const screen = () => $('#screen').components.panel;
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 // Behind the player, where the door would be.
 const DOOR = { x: 0.6, y: 1.0, z: 1.5 };
+// The stand with the two lights: looking far away from it during the trials is
+// counted for the playtest (where attention drifts).
+const STAND = { x: 0, y: 1.02, z: -0.45 };
 // Top edge of the wall screen (centre 1.86 m, height 1.0 m) and the gap left
 // between a question and the buttons or scale under it.
 const SCREEN_TOP = 2.36;
@@ -44,6 +50,16 @@ let scene, choice, lowChoice, scale, shownScale, session, trials = null;
 let seated = false;
 let xrVisible = true;
 const paused = () => document.hidden || !xrVisible;
+
+// Playtest measures: when each phase started, seconds looking away during the trials.
+const phaseStart = {};
+const phaseSecs = {};
+let awaySecs = 0;
+function phase(name) {
+  const now = performance.now();
+  for (const [k, t] of Object.entries(phaseStart)) if (phaseSecs[k] == null) phaseSecs[k] = (now - t) / 1000;
+  if (name) phaseStart[name] = now;
+}
 
 // idle (consent) -> intro -> run -> questions -> done -> intro ...
 // Mirrored on <html data-room-state> so tests can observe the flow.
@@ -99,6 +115,7 @@ async function understood() {
 /* ---------- flow ---------- */
 async function intro() {
   setState('intro');
+  phase('intro');
   darkGlass(true);
   // As in the paper (pp. 451–452): instructions, a chance to ask; then the control
   // concept with the empty scale in view, and a chance to ask again.
@@ -118,6 +135,9 @@ async function intro() {
 
 async function runTrials() {
   setState('run');
+  phase('run');
+  const meter = createAwayMeter($('#cam'), STAND, paused);
+  meter.start();
   eventLog.reset();
   eventLog.begin();
   const condition = pickCondition(Math.random);
@@ -129,11 +149,13 @@ async function runTrials() {
   });
   await trials.run();
   trials = null;
+  awaySecs = meter.stop();
   return condition;
 }
 
 async function questions() {
   setState('questions');
+  phase('questions');
   playSound('door', DOOR, 0.8);
   await delay(1500 / SPEED);
   await say(T.back);
@@ -144,6 +166,7 @@ async function questions() {
 
 async function reveal(condition) {
   setState('done');
+  phase('reveal');
   eventLog.end();
   const r = analyse(eventLog.entries);
   session.finish({ condition, ...r, seated, speed: SPEED });
@@ -153,13 +176,27 @@ async function reveal(condition) {
   const page = { pad: 2048 * 0.07 };
   for (let i = 0; i < pages.length; i++) {
     const top = writeTop(pages[i], page);
-    const last = i === pages.length - 1;
+    const last = i === pages.length - 1 && !PLAYTEST;
     await pick([last ? APP_T.again : APP_T.next], top);
   }
+  phase(null);
+  if (PLAYTEST) await playtest(r);
+}
+
+// Playtest mode: five questions, then the answers with the run measures are sent.
+async function playtest(r) {
+  await say(APP_T.playtest.intro, true);
+  const answers = await askPlaytest({ ask, scale, choice });
+  session.finishPlaytest(playtestReport({
+    finished: true, secs: phaseSecs, away: awaySecs, presses: r.presses, voided: r.voided,
+    seated, userAgent: navigator.userAgent
+  }, answers));
+  await pick([APP_T.again], ask(APP_T.playtest.thanks));
 }
 
 async function play(withRecording) {
   session.begin(withRecording);
+  for (const k of Object.keys(phaseStart)) { delete phaseStart[k]; delete phaseSecs[k]; }
   await intro();
   const condition = await runTrials();
   await questions();
@@ -188,7 +225,9 @@ async function boot() {
   const lc = $('#cam').components['look-controls'];
   if (lc && lc.pitchObject) lc.pitchObject.rotation.x = -0.28;
   $('#hint').classList.add('show');
-  const withRecording = await askConsent(screen(), lowChoice, { kicker: T.kicker, title: T.title, screenTop: SCREEN_TOP });
+  const withRecording = await askConsent(screen(), lowChoice, {
+    kicker: T.kicker, title: T.title, screenTop: SCREEN_TOP, extra: PLAYTEST ? [APP_T.playtest.consent] : []
+  });
   unlock();
   playSound('room', null, 0.12, true);
   play(withRecording);
