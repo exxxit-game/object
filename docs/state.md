@@ -1,7 +1,7 @@
 # Project state and lessons (read this first in every new session)
 
 ## Where things are
-- Repo `exxxit-game/object` (folder `C:\Users\admin\Documents\GitHub\objekt`). Site:
+- Repo `exxxit-game/youaretheobject` (folder `C:\Users\admin\Documents\GitHub\objekt`). Site:
   https://youaretheobject.com (GitHub Pages from `main`; `main` is an OLD package). Work: `room-polish`.
   Session in a worktree (branch `claude/workflow-testing-plan-96f413` on top of room-polish): I may not
   touch the main folder; the owner fast-forwards it (`git -C <objekt> merge --ff-only <branch>`). Push = owner's word.
