@@ -10,8 +10,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 const room = process.argv[2];
-if (!/^[\w-]+$/.test(room || '')) { console.error('usage: node tools/check-voice.mjs <room-id>'); process.exit(1); }
-const roomDir = path.resolve('src/rooms', room);
+if (!/^[\w/-]+$/.test(room || '')) { console.error('usage: node tools/check-voice.mjs <room-id | app/lobby>'); process.exit(1); }
+const roomDir = room.includes('/') ? path.resolve('src', room) : path.resolve('src/rooms', room);
 const { VOICE_LINES } = await import(pathToFileURL(path.join(roomDir, 'voice-lines.js')).href);
 const key = fs.readFileSync(path.join(os.homedir(), '.elevenlabs-key.txt'), 'utf8').replace(/^﻿/, '').trim();
 const norm = (s) => s.toLowerCase().replace(/ё/g, 'е').replace(/[^a-zа-я0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();

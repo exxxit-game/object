@@ -32,3 +32,8 @@ Consequence: a study is paid for by the partner lab or a grant, never by the par
 Leaving VR mid-room shows "go back" or "learn what it was"; a closed page asks the same at the next visit. Nothing is revealed without a click.
 Why: debriefing must be available to early leavers (BPS), but someone who left by accident may want to come back naive.
 Consequence: src/app/left-early.js; test runs (?speed=N) leave no mark.
+
+## The arrival: a lab corridor whose doors are the menu
+The player starts in a 1979 lab corridor behind the room's door: the experimenter's welcome and the consent are there (once, before the door); each door with its plaque is a room ("soon" on the closed ones). Pointing at a door opens it, the screen fades, and the player is at the table, on the chair when seated. One page and one scene, so VR is never left between corridor and room.
+Why: the owner wants an unbroken journey that begins like a real experiment and says the promise first ("take part in a real experiment and learn how YOU react"); a page change would end the VR session.
+Consequence: the room's flow starts after the corridor hands over the consent; the hook question (bias blind spot) is asked to a random half before the room and to the other half after it, recorded, once the paper is read in full.

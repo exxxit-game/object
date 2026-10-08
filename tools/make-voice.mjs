@@ -1,5 +1,5 @@
 // Generates the experimenter recordings of a room with ElevenLabs.
-// Usage: node tools/make-voice.mjs <room-id> [--force]
+// Usage: node tools/make-voice.mjs <room-id | app/lobby> [--force]
 // The API key is read from ~/.elevenlabs-key.txt and never printed or stored in the repo.
 // Existing files are kept unless --force is given, so re-running costs nothing.
 import fs from 'node:fs';
@@ -14,11 +14,13 @@ const MODEL_ID = 'eleven_v3';
 const SETTINGS = { stability: 0.5 };
 const DELIVERY = '[уверенно, твёрдо] ';
 
+// A room id (01-control) or a folder under src/ with its own voice-lines.js (app/lobby).
 const room = process.argv[2];
 const force = process.argv.includes('--force');
-if (!/^[\w-]+$/.test(room || '')) { console.error('usage: node tools/make-voice.mjs <room-id> [--force]'); process.exit(1); }
+if (!/^[\w/-]+$/.test(room || '')) { console.error('usage: node tools/make-voice.mjs <room-id | app/lobby> [--force]'); process.exit(1); }
 
-const roomDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'src', 'rooms', room);
+const src = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'src');
+const roomDir = room.includes('/') ? path.join(src, room) : path.join(src, 'rooms', room);
 const { VOICE_LINES } = await import(pathToFileURL(path.join(roomDir, 'voice-lines.js')).href);
 const key = fs.readFileSync(path.join(os.homedir(), '.elevenlabs-key.txt'), 'utf8').replace(/^﻿/, '').trim();
 

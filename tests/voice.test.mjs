@@ -2,10 +2,11 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
-const rooms = fs.readdirSync(new URL('../src/rooms/', import.meta.url));
+// every room, and the lab corridor before the rooms
+const rooms = [...fs.readdirSync(new URL('../src/rooms/', import.meta.url)).map((r) => `rooms/${r}`), 'app/lobby'];
 let total = 0;
 for (const room of rooms) {
-  const dir = new URL(`../src/rooms/${room}/`, import.meta.url);
+  const dir = new URL(`../src/${room}/`, import.meta.url);
   const { VOICE_LINES } = await import(new URL('voice-lines.js', dir));
   for (const line of VOICE_LINES) {
     const file = new URL(line.file, dir);
