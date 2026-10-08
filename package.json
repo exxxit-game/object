@@ -8,6 +8,6 @@
     "serve": "node tests/static-server.mjs"
   },
   "devDependencies": {
-    "playwright": "^1.48.0"
+    "playwright": "1.64.0"
   }
 }
