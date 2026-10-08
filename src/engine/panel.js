@@ -4,6 +4,18 @@ export const FONT = '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 
 const LINE_HEIGHT = 1.32;
 
+// A plate's body behind its printed face: a box without its front, which would lie on the print
+// and flicker with it; one material, so the bodies in a merged part of a scene become one mesh.
+function body(w, h, depth) {
+  const g = new THREE.BoxGeometry(w, h, depth);
+  const front = g.groups[4];   // BoxGeometry's faces: +x, -x, +y, -y, +z, -z
+  const index = Array.from(g.index.array);
+  index.splice(front.start, front.count);
+  g.setIndex(index);
+  g.clearGroups();
+  return g.translate(0, 0, -depth / 2);
+}
+
 AFRAME.registerComponent('panel', {
   schema: {
     w: { default: 1 },
@@ -12,7 +24,13 @@ AFRAME.registerComponent('panel', {
     // Canvas width the block sizes are designed for. Lets a panel raise its
     // resolution (px) without changing how big the text looks. 0 = same as px.
     ref: { default: 0 },
-    bg: { default: 'rgba(0,0,0,0)' }
+    bg: { default: 'rgba(0,0,0,0)' },
+    // a sign is a plate: its printed face stands this deep (metres) in front of what it is fixed
+    // on, on a body of its background colour reaching back to it
+    thick: { default: 0 },
+    // a print lying on another surface (paper on cork) is drawn over it by a depth offset, as
+    // decals are, so it lies on it without the two flickering into each other
+    decal: { default: false }
   },
 
   init() {
@@ -28,6 +46,8 @@ AFRAME.registerComponent('panel', {
       new THREE.PlaneGeometry(d.w, d.h),
       new THREE.MeshBasicMaterial({ map: this.tex, transparent: true })
     );
+    if (d.decal) Object.assign(mesh.material, { polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+    if (d.thick > 0) mesh.add(new THREE.Mesh(body(d.w, d.h, d.thick), new THREE.MeshStandardMaterial({ color: d.bg, roughness: 0.6 })));
     this.el.setObject3D('mesh', mesh);
     this.write([]);
   },

@@ -1,3 +1,5 @@
+import { SIGN_GAP } from '../engine/door.js';
+
 // The game's own colours, the same in every room: the plaque by the door, accents
 // on the experimenter's screen. One place, so every room stays recognisable.
 export const BRAND = {
@@ -17,8 +19,9 @@ const inch = (n) => +(n * 0.0254).toFixed(4);
 export const SIGN = { w: inch(9), y: inch(60), fromFrame: inch(4), px: 2560 };
 SIGN.number = Math.round(inch(2) * SIGN.px / 0.7);
 SIGN.letters = Math.round(inch(0.75) * SIGN.px / 0.7);
-// the panel of a sign at a door: one size for every kind
-export const SIGN_PANEL = `panel="w: ${SIGN.w}; h: ${SIGN.w}; px: ${Math.round(SIGN.w * SIGN.px)}; bg: ${BRAND.plate}"`;
+// the panel of a sign at a door: one size for every kind, a plate as thick as its face stands off
+// the door or wall it is fixed on (door.js, SIGN_GAP)
+export const SIGN_PANEL = `panel="w: ${SIGN.w}; h: ${SIGN.w}; px: ${Math.round(SIGN.w * SIGN.px)}; bg: ${BRAND.plate}; thick: ${SIGN_GAP}"`;
 
 // The plaque on every room's door: its number and nothing else. The experiment's name would tell
 // the player what is studied before they do it, and people who know the hypothesis act on it

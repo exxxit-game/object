@@ -6,7 +6,7 @@
 // Northwestern, Georgia Tech, Smithsonian guidelines); every door's latch is on the side toward
 // the entrance, and its sign is on the leaf (brand.js). Floors above hold more rooms. Pure: no
 // A-Frame, so tests read it in node.
-import { hangY } from '../../engine/ui/sheet-math.js';
+import { hangY, BOARD_REACH } from '../../engine/ui/sheet-math.js';
 
 export const PLAN = {
   from: -6.6, to: 8.0,          // the end walls' faces (x), a whole number of 0.2 m blocks
@@ -20,15 +20,20 @@ export const PLAN = {
   // the experimenter's board left of room 101 (its edges on the block joints), and the
   // extinguisher opposite it
   // the clipboard hangs by its ring on a peg (hook: its height, peg: its radius), placed so the
-  // clipboard lies on the cork with its ring below the frame
-  board: { x: -0.8, y: 1.5, w: 1.6, h: 1.0, hook: 1.92, peg: 0.005 },
+  // clipboard lies on the cork with its ring below the frame; in depth, as framed cork boards are
+  // made: an aluminium body on the wall (body), a lip round its front (border wide, lip deep), the
+  // cork inside the lip, standing cork proud of the body and below the lip's face
+  board: { x: -0.8, y: 1.5, w: 1.6, h: 1.0, hook: 1.92, peg: 0.005, body: 0.03, border: 0.044, lip: 0.006, cork: 0.002 },
   extinguisher: -0.8
 };
 
 const round = (v) => Math.round(v * 1e4) / 1e4;
 
-// the clipboard's home: hanging by its ring on the board's peg, its paper 2 cm off the cork
-export const SHEET_HOME = { pos: [PLAN.board.x, round(hangY(PLAN.board.hook, PLAN.board.peg)), 1.855], yaw: 0, away: [0, 0, 1] };
+// the cork's face (z), what is pinned or hung on the board lies on
+export const CORK_Z = round(PLAN.north + PLAN.board.body + PLAN.board.cork);
+// the clipboard's home: hanging by its ring on the board's peg, its back on the cork (half a
+// millimetre off it, the back face hidden)
+export const SHEET_HOME = { pos: [PLAN.board.x, round(hangY(PLAN.board.hook, PLAN.board.peg)), round(CORK_Z + 0.0005 + BOARD_REACH.back)], yaw: 0, away: [0, 0, 1] };
 // the doors: north wall rooms in every bay; south wall rooms, with the stairs in the middle bay
 const doors = [
   ...PLAN.bays.map((k) => ({ x: round(PLAN.entrance + k * PLAN.bay), k, wall: 'north', kind: k === 0 ? 'room1' : 'soon' })),

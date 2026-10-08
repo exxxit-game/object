@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict';
 import { sceneHTML } from '../src/rooms/01-control/scene.js';
 import { corridorHTML } from '../src/app/lobby/scene.js';
-import { DOORS } from '../src/app/lobby/plan.js';
+import { DOORS, PLAN, CORK_Z } from '../src/app/lobby/plan.js';
 
 const html = sceneHTML + corridorHTML;
 const near = (a, b, e = 0.0015) => Math.abs(a - b) < e;
@@ -114,4 +114,33 @@ for (const h of hanger) {
     assert.ok(!pierce(parts[h], parts[i]), `the hanger's part ${h} runs through the extinguisher's part ${i}`);
   });
 }
+// The board as framed cork boards are made: the cork lies inside the aluminium lip, below its face
+// and off the body under it; the sheets lie on the cork (drawn over it as decals), each pin's head
+// on its sheet, the peg out of the cork
+const B = PLAN.board;
+const corkZ = pos(cork)[2];
+assert.equal(corkZ, CORK_Z, 'the cork where the plan puts it');
+const alu = tags('a-box').filter((t) => /#b9bcbf/.test(attr(t, 'material') || ''));
+const body = alu.find((t) => near(Number(attr(t, 'width')), B.w) && near(Number(attr(t, 'height')), B.h) && near(Number(attr(t, 'depth')), B.body));
+const lips = alu.filter((t) => near(Number(attr(t, 'depth')), B.lip));
+assert.ok(body && lips.length === 4, 'the board: a body and a lip of four bars');
+const bodyFace = pos(body)[2] + B.body / 2;
+assert.ok(near(pos(body)[2] - B.body / 2, PLAN.north), 'the body of the board on the wall');
+for (const l of lips) {
+  assert.ok(near(pos(l)[2] - B.lip / 2, bodyFace), 'the lip on the face of the body');
+  assert.ok(corkZ > bodyFace && corkZ < pos(l)[2] + B.lip / 2, 'the cork below the face of the lip, off the body');
+}
+const [cw, ch] = [Number(attr(cork, "width")), Number(attr(cork, "height"))];
+assert.ok(near(cw, B.w - 2 * B.border) && near(ch, B.h - 2 * B.border), 'the cork fills the lip');
+const sheets = tags('a-entity').filter((t) => /id="note/.test(t));
+assert.ok(sheets.length === 2, 'two sheets pinned on the board');
+for (const s of sheets) {
+  assert.ok(pos(s)[2] > corkZ && pos(s)[2] - corkZ <= 0.001, `${attr(s, 'id')}: ${((pos(s)[2] - corkZ) * 1000).toFixed(1)} mm off the cork`);
+  assert.ok(/decal: true/.test(attr(s, 'panel')), `${attr(s, 'id')}: drawn over the cork as a decal`);
+}
+const pins = tags('a-sphere').filter((t) => near(pos(t)[0], B.x, B.w / 2) && near(pos(t)[1], B.y, B.h / 2) && pos(t)[2] > PLAN.north && pos(t)[2] < 1.9);
+assert.equal(pins.length, sheets.length, 'a pin in each sheet');
+for (const p of pins) assert.ok(near(pos(p)[2] - Number(attr(p, 'radius')), pos(sheets[0])[2], 0.0005), 'the head of a pin on its sheet');
+const peg = tags('a-cylinder').find((t) => near(pos(t)[1], B.hook, 1e-6) && near(pos(t)[0], B.x, 1e-6));
+assert.ok(peg && near(pos(peg)[2] - Number(attr(peg, 'height')) / 2, corkZ, 0.0005), 'the peg comes out of the cork');
 console.log(`standards tests: ok (${leaves.length} doors, ${bases.length} base runs, extinguisher ${extBottom.toFixed(2)}–${extTop.toFixed(2)} m)`);

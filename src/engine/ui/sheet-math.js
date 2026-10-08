@@ -100,9 +100,18 @@ export function boardCorners({ pos, pitch, yaw }, { w, h = 0, top = h / 2, botto
   return out;
 }
 
+// The space a trip may use: EDGE_CLEAR inside the walls, except at a wall the board rests near at
+// either end of the trip (hanging on a board on that wall): it comes no nearer that wall than it
+// rests there, so it leaves the board straight out instead of being held off it.
+function tripSpace(inside, ends) {
+  const xs = ends.map((c) => c[0]), zs = ends.map((c) => c[2]);
+  return { minX: Math.min(inside.minX + EDGE_CLEAR, ...xs), maxX: Math.max(inside.maxX - EDGE_CLEAR, ...xs),
+    minZ: Math.min(inside.minZ + EDGE_CLEAR, ...zs), maxZ: Math.max(inside.maxZ - EDGE_CLEAR, ...zs) };
+}
+
 // a, b: start and end [x, y, z]; away: the horizontal way out from the wall the sheet
 // hangs on; head: the eyes; room (optional): { from, to: { pitch, yaw }, board, inside } to keep
-// every corner of the board EDGE_CLEAR inside the walls all the way (tripPose).
+// every corner of the board inside the walls all the way (tripPose, tripSpace).
 // Returns the curve's control point and its duration in ms. The full swing is used unless it
 // would bring the sheet nearer the eyes than both GLIDE.nearest and its own start and end; then a
 // smaller one; a swing that would put a corner into a wall is pushed further out from the wall.
@@ -112,8 +121,10 @@ export function glidePath(a, b, away, head, room = null) {
   let side = [-dz / len, dx / len];
   if (side[0] * away[0] + side[1] * away[2] < 0) side = [-side[0], -side[1]];
   const allowed = Math.min(GLIDE.nearest, dist3(a, head), dist3(b, head));
-  const clear = (ctrl) => !room || Array.from({ length: 41 }, (_, i) => tripPose({ pos: a, ...room.from }, ctrl, { pos: b, ...room.to }, i / 40))
-    .every((p) => boardCorners(p, room.board).every((c) => within(room.inside, c, EDGE_CLEAR)));
+  const from = room && { pos: a, ...room.from }, to = room && { pos: b, ...room.to };
+  const space = room && tripSpace(room.inside, [from, to].flatMap((p) => boardCorners(p, room.board)));
+  const clear = (ctrl) => !room || Array.from({ length: 41 }, (_, i) => tripPose(from, ctrl, to, i / 40))
+    .every((p) => boardCorners(p, room.board).every((c) => within(space, c, 0)));
   let best = null;
   search: for (const out of GLIDE.out) {
     for (const k of [1, 0.6, 0.3, 0]) {

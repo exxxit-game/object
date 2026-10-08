@@ -6,7 +6,7 @@
 // and a 24 in ceiling grid laid out from the corridor's centre, 2 × 4 ft troffers in the grid.
 // Static parts are merged after load; the door signs and the light box change, so they stay apart.
 import { doorHTML, CHROME } from '../../engine/door.js';
-import { PLAN, DOORS, CENTRE, LENGTH, WIDTH, toEntrance, wallRuns } from './plan.js';
+import { PLAN, DOORS, CENTRE, LENGTH, WIDTH, CORK_Z, toEntrance, wallRuns } from './plan.js';
 import { SIGN, SIGN_PANEL } from '../brand.js';
 
 export { WALLS } from './plan.js';
@@ -123,6 +123,18 @@ function extinguisher(x, wall) {
 }
 
 const B = PLAN.board;
+const ALU = 'material="color: #b9bcbf; metalness: .6; roughness: .35"';
+// what lies on the cork: a sheet half a millimetre off it (drawn over it as a decal, panel.js), a
+// pin's head touching the sheet
+const ON_CORK = r(CORK_Z + 0.0005), PIN = 0.006;
+// the board's lip: four aluminium bars round the cork on the body's face
+function lip() {
+  const z = r(PLAN.north + B.body + B.lip / 2), inner = B.h - 2 * B.border;
+  return [[0, (B.h - B.border) / 2, B.w, B.border], [0, -(B.h - B.border) / 2, B.w, B.border],
+    [-(B.w - B.border) / 2, 0, B.border, inner], [(B.w - B.border) / 2, 0, B.border, inner]]
+    .map(([dx, dy, w, h]) => `
+    <a-box position="${r(B.x + dx)} ${r(B.y + dy)} ${z}" width="${r(w)}" height="${r(h)}" depth="${B.lip}" ${ALU}></a-box>`).join('');
+}
 export const corridorHTML = `
 <a-entity id="corridor">
   <a-entity merge-static>
@@ -140,14 +152,14 @@ export const corridorHTML = `
     <!-- 2 × 4 ft fluorescent troffers, each filling two cells of the ceiling grid: a painted
          steel door frame and a prismatic lens (docs/building-standards.md, S20) -->
     ${TROFFERS.map(troffer).join('')}
-    <!-- the experimenter's board: cork in an aluminium frame (S21); the hook the clipboard
-         hangs on (src/app/lobby/lobby.js) -->
-    <a-box class="on-wall" position="${B.x} ${B.y} 1.815" width="${B.w}" height="${B.h}" depth="0.03" material="color: #b9bcbf; metalness: .6; roughness: .35"></a-box>
-    <a-cylinder position="${B.x} ${B.hook} 1.8575" radius="${B.peg}" height="0.045" rotation="90 0 0" ${METAL}></a-cylinder>
+    <!-- the experimenter's board: cork in an aluminium frame (S21), the body on the wall and the
+         lip round the cork; the peg the clipboard hangs on, out of the cork (src/app/lobby/lobby.js) -->
+    <a-box class="on-wall" position="${B.x} ${B.y} ${r(PLAN.north + B.body / 2)}" width="${B.w}" height="${B.h}" depth="${B.body}" ${ALU}></a-box>${lip()}
+    <a-cylinder position="${B.x} ${B.hook} ${r(CORK_Z + 0.0225)}" radius="${B.peg}" height="0.045" rotation="90 0 0" ${METAL}></a-cylinder>
     <!-- the pins of the two sheets beside the clipboard (#notePoster, #noteFlyer below), at the
          top middle of each tilted sheet -->
-    <a-sphere position="${r(B.x - 0.4748)} 1.7364 1.843" radius="0.006" color="#9b2a22"></a-sphere>
-    <a-sphere position="${r(B.x + 0.4736)} 1.5565 1.843" radius="0.006" color="#2a4a8b"></a-sphere>
+    <a-sphere position="${r(B.x - 0.4748)} 1.7364 ${r(ON_CORK + PIN)}" radius="${PIN}" color="#9b2a22"></a-sphere>
+    <a-sphere position="${r(B.x + 0.4736)} 1.5565 ${r(ON_CORK + PIN)}" radius="${PIN}" color="#2a4a8b"></a-sphere>
     <!-- a 2.5 gal water extinguisher on its wall bracket, opposite the board (S22, S23) -->
     ${extinguisher(PLAN.extinguisher, PLAN.south)}
     <!-- the light box over room 101's door (like the "in session" boxes over lab doors): surface
@@ -162,8 +174,8 @@ export const corridorHTML = `
   <!-- the corridor's own light, dim while the player is here (lobby.js, CORRIDOR_LIGHT) -->
   <a-entity id="corridorAmbient" light="type: ambient; color: #c9cfd6; intensity: 0"></a-entity>
   <a-entity id="corridorLamp" light="type: point; color: #eef2ff; intensity: 1.6; distance: 0; decay: 0.8" position="-0.2 2.3 ${CENTRE.z}"></a-entity>
-  <a-plane position="${B.x} ${B.y} 1.835" width="1.512" height="0.912" surface="kind: cork; repeat: 3.024 1.824"></a-plane>
+  <a-plane position="${B.x} ${B.y} ${CORK_Z}" width="${r(B.w - 2 * B.border)}" height="${r(B.h - 2 * B.border)}" surface="kind: cork; repeat: 3.024 1.824"></a-plane>
   <!-- A4 sheets (ISO 216) pinned beside the clipboard: the studio's poster and a flyer (board.js) -->
-  <a-entity id="notePoster" class="clickable" panel="w: 0.21; h: 0.297; px: 640" position="${r(B.x - 0.47)} 1.6 1.84" rotation="0 0 2"></a-entity>
-  <a-entity id="noteFlyer" panel="w: 0.21; h: 0.297; px: 640" position="${r(B.x + 0.47)} 1.42 1.84" rotation="0 0 -1.5"></a-entity>
+  <a-entity id="notePoster" class="clickable" panel="w: 0.21; h: 0.297; px: 640; decal: true" position="${r(B.x - 0.47)} 1.6 ${ON_CORK}" rotation="0 0 2"></a-entity>
+  <a-entity id="noteFlyer" panel="w: 0.21; h: 0.297; px: 640; decal: true" position="${r(B.x + 0.47)} 1.42 ${ON_CORK}" rotation="0 0 -1.5"></a-entity>
 </a-entity>`;

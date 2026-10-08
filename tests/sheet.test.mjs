@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { frontPose, readingPose, letterDeg, READ_DIST, DROP_DEG, GLIDE, glidePath, curvePoint, easeInOut, tripPose, boardCorners, within, EDGE_CLEAR, BOARD_REACH, CLIP } from '../src/engine/ui/sheet-math.js';
 import { corridorHTML, WALLS } from '../src/app/lobby/scene.js';
-import { BOUNDS, PLAN, SHEET_HOME } from '../src/app/lobby/plan.js';
+import { BOUNDS, PLAN, SHEET_HOME, CORK_Z } from '../src/app/lobby/plan.js';
 
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 const near = (a, b, e = 1e-9) => Math.abs(a - b) < e;
@@ -51,13 +51,18 @@ for (const head of [[0.7, 1.6, 3.05], [-1.0, 1.6, 2.9], [2.5, 1.2, 3.3], [-3.0, 
 }
 // Anywhere the player can stand in the corridor, facing anywhere, the sheet is read inside its
 // walls, and on its trip from the hook and back no corner of the board, tilted and turned as it
-// goes, comes nearer a wall than EDGE_CLEAR (docs/mistakes.md). Facing door 1 from the arrival
-// spot it stays straight ahead.
+// goes, comes nearer a wall than EDGE_CLEAR (docs/mistakes.md), except the wall it hangs on: on
+// its hook its back lies on the cork, nearer that wall, and it comes no nearer than that. Facing
+// door 1 from the arrival spot it stays straight ahead.
 const SPACE = corridorHTML.match(/space: ([-\d.]+) ([-\d.]+) ([-\d.]+) ([-\d.]+)/).slice(1).map(Number);
 assert.deepEqual([(WALLS.minX + WALLS.maxX) / 2, (WALLS.minZ + WALLS.maxZ) / 2, WALLS.maxX - WALLS.minX, WALLS.maxZ - WALLS.minZ].map(v => +v.toFixed(3)), SPACE, 'WALLS is the corridor drawn by scene.js');
 let spots = 0, legs = 0;
 const hook = { pos: home, pitch: 0, yaw: 0 };
 const clear = (p) => boardCorners(p, BOARD_REACH).every((c) => within(WALLS, c, EDGE_CLEAR - 1e-9));
+const hookBack = Math.min(...boardCorners(hook, BOARD_REACH).map((c) => c[2]));
+assert.ok(hookBack >= CORK_Z && hookBack - CORK_Z <= 0.001, `on its hook the clipboard's back lies on the cork (${((hookBack - CORK_Z) * 1000).toFixed(1)} mm off it)`);
+const onTrip = (p) => boardCorners(p, BOARD_REACH).every((c) => c[0] >= WALLS.minX + EDGE_CLEAR - 1e-9 && c[0] <= WALLS.maxX - EDGE_CLEAR + 1e-9
+  && c[2] >= Math.min(WALLS.minZ + EDGE_CLEAR, hookBack) - 1e-9 && c[2] <= WALLS.maxZ - EDGE_CLEAR + 1e-9);
 for (let x = BOUNDS.minX; x <= BOUNDS.maxX + 1e-9; x += 0.29) {
   for (const z of [BOUNDS.minZ, (BOUNDS.minZ + BOUNDS.maxZ) / 2, BOUNDS.maxZ]) {
     for (let deg = 0; deg < 360; deg += 30) {
@@ -68,7 +73,7 @@ for (let x = BOUNDS.minX; x <= BOUNDS.maxX + 1e-9; x += 0.29) {
         const room = { from: { pitch: a.pitch, yaw: a.yaw }, to: { pitch: b.pitch, yaw: b.yaw }, board: BOARD_REACH, inside: WALLS };
         const { ctrl } = glidePath(a.pos, b.pos, away, head, room);
         for (let i = 0; i <= 40; i++) {
-          assert.ok(clear(tripPose(a, ctrl, b, easeInOut(i / 40))), `${where}: on the trip a corner of the sheet goes into a wall`);
+          assert.ok(onTrip(tripPose(a, ctrl, b, easeInOut(i / 40))), `${where}: on the trip a corner of the sheet goes into a wall`);
         }
         legs++;
       }
@@ -84,7 +89,7 @@ assert.equal(readingPose([0.7, 1.6, 3.05], 0, wall, WALLS, BOARD_REACH).yaw, 0, 
   const ringTop = SHEET_HOME.pos[1] + CLIP.ring.y + CLIP.ring.r - CLIP.ring.tube;
   assert.ok(near(ringTop, PLAN.board.hook + PLAN.board.peg, 1e-4), `the ring rests on the peg (${ringTop.toFixed(4)} vs ${(PLAN.board.hook + PLAN.board.peg).toFixed(4)})`);
   const ringZ = SHEET_HOME.pos[2] + CLIP.ring.z;
-  assert.ok(ringZ > 1.835 && ringZ < 1.835 + 0.045, 'the ring is on the peg, not past its end');
+  assert.ok(ringZ > CORK_Z && ringZ < CORK_Z + 0.045, 'the ring is on the peg, not past its end');
 }
 assert.ok(easeInOut(0) === 0 && easeInOut(1) === 1 && near(easeInOut(0.5), 0.5), 'eases from start to end');
 assert.ok(easeInOut(0.1) < 0.1 && easeInOut(0.9) > 0.9, 'slow start and slow stop');
