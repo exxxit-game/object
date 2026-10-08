@@ -71,7 +71,7 @@ export function createPage(el, paperEl) {
     return fields;
   }
   function hideFields() {
-    for (const f of fields) { f.setAttribute('visible', false); f.classList.remove('clickable'); }
+    for (const f of fields) { f.components.ink?.up(); f.setAttribute('visible', false); f.classList.remove('clickable'); }
   }
   function dropFields() { fields.forEach((f) => f.remove()); fields = []; }
 

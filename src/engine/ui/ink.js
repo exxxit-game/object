@@ -3,13 +3,18 @@
 // the mouse points; moving draws until it is let go. The pointer's jitter (a ray held at arm's
 // length shakes) is smoothed by the 1€ filter (Casiez, Roussel & Vogel 2012, CHI): little
 // smoothing when the pen moves fast, more when it moves slowly. A pen's line, in blue ballpoint
-// ink, wide enough to see from 1 m. On a desktop the mouse would also turn the view while it is
-// held: the view stays still while a stroke is drawn.
+// ink, wide enough to see from 1 m. On a desktop the mouse (or a finger) would also turn the view
+// while it is held: the view stays still while a stroke is drawn. A ray that slips off the field
+// lifts the pen; back on it, a new stroke starts (no line across the gap). The pen also lifts when
+// the button is let go anywhere, the trigger is no longer held, or VR is left, so it never sticks.
+// In VR every laser's cursor hears any controller's select (A-Frame 1.7): a stroke starts only
+// for the controller whose own trigger is held.
 // strokes: [[[u, v], ...], ...], u and v from 0 to 1 across the field (v down), for keeping.
 const INK = '#1f3a93';
 const LINE_M = 0.0022;
 // 1€ filter settings, in the field's metres: the slow cutoff (Hz) and how fast it rises with speed
 const MIN_CUTOFF = 1.5, BETA = 30, D_CUTOFF = 1;
+const STEP_M = 0.0005;   // a point is kept only this far from the last: a still hand adds nothing
 
 function oneEuro() {
   const alpha = (cutoff, dt) => 1 / (1 + 1 / (2 * Math.PI * cutoff * dt));
@@ -45,38 +50,54 @@ AFRAME.registerComponent('ink', {
     this.strokes = [];
     this.pen = null;
     this.el.addEventListener('mousedown', (e) => this.down(e.detail && e.detail.cursorEl));
+    this.up = this.up.bind(this);
+    this.el.sceneEl.addEventListener('exit-vr', this.up);
+  },
+
+  // a controller's trigger, while its pen is down; true for the mouse and for hands without one
+  held(cursor) {
+    const tc = cursor.components['tracked-controls'];
+    const pad = tc && tc.controller && tc.controller.gamepad;
+    if (tc && !tc.controller) return false;   // the controller is gone
+    return !pad || !!(pad.buttons[0] && pad.buttons[0].pressed);
   },
 
   down(cursor) {
-    if (!cursor || this.pen) return;
+    if (!cursor || this.pen || !this.held(cursor)) return;
     const look = this.el.sceneEl.camera && this.el.sceneEl.camera.el.components['look-controls'];
-    const points = [];
-    this.strokes.push(points);
-    this.pen = { cursor, points, filter: oneEuro(), look: look && look.data.enabled };
-    if (look) look.data.enabled = false;
-    const up = () => { cursor.removeEventListener('mouseup', up); this.up(); };
-    cursor.addEventListener('mouseup', up);
+    this.pen = { cursor, points: null, filter: oneEuro(), look: look && { enabled: look.data.enabled, touch: look.data.touchEnabled } };
+    if (look) { look.data.enabled = false; look.data.touchEnabled = false; }
+    cursor.addEventListener('mouseup', this.up);
+    window.addEventListener('mouseup', this.up);
+    window.addEventListener('touchend', this.up);
   },
 
   up() {
     const pen = this.pen;
     if (!pen) return;
     this.pen = null;
+    pen.cursor.removeEventListener('mouseup', this.up);
+    window.removeEventListener('mouseup', this.up);
+    window.removeEventListener('touchend', this.up);
     const look = this.el.sceneEl.camera && this.el.sceneEl.camera.el.components['look-controls'];
-    if (look && pen.look) look.data.enabled = true;
-    if (pen.points.length < 2) this.strokes.pop();
+    if (look && pen.look) { look.data.enabled = pen.look.enabled; look.data.touchEnabled = pen.look.touch; }
+    this.strokes = this.strokes.filter((s) => s.length >= 2);
     this.el.emit('inked', { strokes: this.strokes.length });
   },
 
   tick(t) {
     const pen = this.pen;
     if (!pen) return;
+    if (!this.held(pen.cursor)) { this.up(); return; }
     const hit = pen.cursor.components.raycaster && pen.cursor.components.raycaster.getIntersection(this.el);
-    if (!hit || !hit.uv) { pen.filter = oneEuro(); return; }   // off the field: the pen lifts until it is back
+    // off the field: the pen is lifted; back on it, the next point starts a new stroke
+    if (!hit || !hit.uv) { pen.points = null; pen.filter = oneEuro(); return; }
     const { w, h } = this.data;
     const [x, y] = pen.filter(t, [hit.uv.x * w, (1 - hit.uv.y) * h]);
     const p = [x / w, y / h];
+    if (!pen.points) { pen.points = []; this.strokes.push(pen.points); }
     const prev = pen.points[pen.points.length - 1];
+    if (prev && Math.hypot((p[0] - prev[0]) * w, (p[1] - prev[1]) * h) < STEP_M) return;
     pen.points.push(p);
     if (prev) this.segment(prev, p);
   },
@@ -108,6 +129,7 @@ AFRAME.registerComponent('ink', {
   },
 
   remove() {
-    if (this.pen) this.up();
+    this.up();
+    this.el.sceneEl.removeEventListener('exit-vr', this.up);
   }
 });
