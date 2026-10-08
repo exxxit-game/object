@@ -29,11 +29,24 @@ for (const f of code) {
   }
 }
 
-// 3. Player-facing (Cyrillic) text only in texts.*.js files (CLAUDE.md rule 4).
-// Comments are allowed to be in English only, so any Cyrillic outside texts files is a leak.
-const cyr = code.filter(f => !/texts\.\w+\.js$/.test(f) && /[А-Яа-яЁё]/.test(fs.readFileSync(f, 'utf8')))
-  .map(rel);
-assert.deepEqual(cyr, [], `Russian text outside texts files: ${cyr.join(', ')}`);
+// 3. Russian only in the files named here (CLAUDE.md rules 4 and the language line): anywhere else
+// in the repository a Cyrillic letter fails, so none slips in unnoticed. A new file that needs one
+// is added here by name, with its reason.
+{
+  const RUSSIAN = [
+    /^src\/(app|app\/lobby|rooms\/[\w-]+)\/texts\.ru\.js$/,          // every word the player reads or hears
+    /^(privacy\.html|README\.md|tools\/xr-probe\.html)$/,             // pages people read: data, the project, the headset probe
+    /^(tests\/(structure|plaque|control-reveal)\.test\.mjs|tools\/(check-voice|make-voice|quest-check)\.mjs)$/,   // checks and tools of the Russian texts
+    /^(CLAUDE\.md|docs\/(state|mistakes|decisions)\.md|docs\/rooms\/01-control\.md|docs\/research\/vr\/06-science\.md|docs\/art\/corridor-plan\.svg)$/, // the owner's words and the player's text, quoted
+    /^\.claude\/(agents\/request-auditor\.md|skills\/new-room\/SKILL\.md)$/,   // the plan doc's Russian headings, quoted
+    /^docs\/cards\//                                                         // papers quoted in their own language
+  ];
+  const skip = /^(\.git|node_modules|vendor)$|\.(mp3|wav|woff2|jpe?g|png|pdf|ico|webp)$/;
+  const tree = (dir) => fs.readdirSync(dir, { withFileTypes: true }).filter((e) => !skip.test(e.name))
+    .flatMap((e) => (e.isDirectory() ? tree(path.join(dir, e.name)) : [path.join(dir, e.name)]));
+  const cyr = tree(ROOT).map(rel).filter((f) => !RUSSIAN.some((r) => r.test(f)) && /[\u0400-\u04FF]/.test(fs.readFileSync(path.join(ROOT, f), 'utf8')));
+  assert.deepEqual(cyr, [], `Russian outside the files allowed to hold it: ${cyr.join(', ')}`);
+}
 
 // 4. Every room has the required files.
 const REQUIRED = ['room.js', 'scene.js', 'report.js', 'texts.ru.js', 'voice-lines.js', 'sound-list.js'];
@@ -58,10 +71,10 @@ const unused = code.filter(f => !/(main|room)\.js$/.test(f))
 assert.deepEqual(unused, [], `modules nobody imports: ${unused.join(', ')}`);
 
 // 7. Docs do not lie about files: every `src/…`, `tests/…`, `tools/…` or `docs/…`
-// path written in backticks in a doc must exist. target-architecture.md is exempt
-// (it names future files on purpose); the archive keeps history.
-const docs = [path.join(ROOT, 'ARCHITECTURE.md'), path.join(ROOT, 'CLAUDE.md'),
-  ...walk(path.join(ROOT, 'docs')).filter(f => f.endsWith('.md') && !/target-architecture|archive/.test(f))];
+// path written in backticks in a doc must exist (a file still to be built is named without
+// backticks, as docs/target-architecture.md does).
+const docs = [path.join(ROOT, 'ARCHITECTURE.md'), path.join(ROOT, 'CLAUDE.md'), path.join(ROOT, 'README.md'),
+  ...walk(path.join(ROOT, 'docs')).filter(f => f.endsWith('.md'))];
 const missing = [];
 for (const d of docs) {
   for (const m of fs.readFileSync(d, 'utf8').matchAll(/`((?:src|tests|tools|docs|\.claude|\.github)\/[\w./-]+?)`/g)) {
@@ -112,7 +125,7 @@ for (const dir of fs.readdirSync(path.join(ROOT, 'src/rooms'))) {
 
 // 13. The game's name stays "You are the object" in every language: no player-facing text calls
 // it «Объект» (the word "объект" itself may appear in a sentence).
-const facing = [path.join(ROOT, 'privacy.html'), path.join(ROOT, 'index.html'),
+const facing = [path.join(ROOT, 'privacy.html'), path.join(ROOT, 'index.html'), path.join(ROOT, 'README.md'),
   ...code.filter(f => /texts\.ru\.js$/.test(f))];
 for (const f of facing) {
   const s = fs.readFileSync(f, 'utf8');
@@ -202,4 +215,24 @@ assert.ok(!author || author.endsWith('@users.noreply.github.com'), `git commits 
   for (const f of ['src/', ...folders('src/'), 'css/', 'tests/', 'tools/']) assert.ok(mapped.has(f), `ARCHITECTURE.md: the folder ${f} is not in the map`);
 }
 
+// 21. Styles live only in css/ (CLAUDE.md rule 3): no <style> block and no style="" attribute in a
+// page or in the code that builds markup.
+{
+  const pages = ['index.html', 'privacy.html', ...fs.readdirSync(path.join(ROOT, 'tools')).filter((f) => f.endsWith('.html')).map((f) => `tools/${f}`)];
+  const styled = [...pages.map((p) => path.join(ROOT, p)), ...code].filter((f) => /<style[\s>]|\sstyle="/.test(fs.readFileSync(f, 'utf8'))).map(rel);
+  assert.deepEqual(styled, [], `styles outside css/: ${styled.join(', ')}`);
+}
+
+// 22. No doc lies forgotten: every doc under docs/ is linked or named from another doc, CLAUDE.md,
+// ARCHITECTURE.md or README.md (the experiment cards from their catalog), so a stale one is
+// found and kept or deleted, not left to mislead.
+{
+  const all = [path.join(ROOT, 'CLAUDE.md'), path.join(ROOT, 'ARCHITECTURE.md'), path.join(ROOT, 'README.md'), ...walk(path.join(ROOT, 'docs')).filter((f) => f.endsWith('.md'))];
+  const texts = new Map(all.map((f) => [f, fs.readFileSync(f, 'utf8')]));
+  const lost = all.filter((f) => /[\\/]docs[\\/]/.test(f)).filter((f) => {
+    const r = rel(f), name = path.basename(f);
+    return ![...texts].some(([g, t]) => g !== f && (t.includes(r) || t.includes(r.replace(/^docs\//, '')) || (path.dirname(g) === path.dirname(f) && (t.includes(`(${name})`) || t.includes(`\`${name}\``)))));
+  }).map(rel);
+  assert.deepEqual(lost, [], `docs nothing links to: ${lost.join(', ')}`);
+}
 console.log('structure tests: ok');

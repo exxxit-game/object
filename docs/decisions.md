@@ -9,7 +9,7 @@ Consequence: no bundler, no npm runtime dependencies.
 
 ## Rooms talk to the engine only through the contract
 Engine never imports rooms; components communicate by DOM events
-(`look-change`) or the shared `eventLog`. Keeps rooms replaceable.
+(e.g. `taken` from the clipboard) or the shared `eventLog`. Keeps rooms replaceable.
 Consequence: no `window.*` globals between files.
 
 ## Heavy tests run in GitHub Actions, not on the laptop

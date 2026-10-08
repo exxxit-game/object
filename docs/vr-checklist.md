@@ -23,7 +23,7 @@ A-Frame docs. Status for room 01 in brackets.
 - No text crammed with its buttons: one thought per sheet, buttons never pushed onto a frame. [done: the clipboard, one thought per sheet (tests/smoke.mjs)]
 
 ## Interaction
-- Targets at least 2.5–3° of view; panels at 1–1.5 m. [levers ok]
+- Targets at least 2.5–3° of view; panels at 1–1.5 m. [clipboard at 1 m, buttons 4°: tests/smoke.mjs]
 - Feedback on every press: visual + sound + haptic pulse. [haptic: added]
 - Playable with one hand; hand tracking optional. [one hand ok; hands not checked]
 
@@ -42,7 +42,7 @@ A-Frame docs. Status for room 01 in brackets.
 - After failed session requests Quest Browser may refuse new ones until restarted: `adb shell am force-stop com.oculus.browser`.
 
 ## Accessibility
-- Never rely on colour alone (red/green is the most confused pair). [levers: pending owner decision]
+- Never rely on colour alone (red/green is the most confused pair). [room 01's yellow and green lights: unchecked]
 
 ## Files and loading
 - No served file name that looks like tracking: ad blockers block it and the room never loads. [tests/names.test.mjs]

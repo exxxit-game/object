@@ -8,7 +8,7 @@ Read docs/state.md first (decisions, lessons, where things are), then ARCHITECTU
 Current plan and its queue: the plan doc linked in docs/state.md (docs/roadmap.md is the long view). Owner speaks Russian; answer him in
 Russian, plain words, no jargon. Everything in the repo is English except
 player-facing text (the texts.ru.js files in src/app, src/app/lobby and src/rooms/*, and the
-static page privacy.html).
+static page privacy.html) and README.md, which is in Russian and English.
 
 ## Rules
 1. No history in code. Comments explain WHY, never WHEN or WHO asked.
@@ -69,7 +69,8 @@ static page privacy.html).
     h. Short questions, bug reports and remarks about the vision are requests too. A question
        I ask him that waits for his answer goes into "Что нужно от тебя".
     i. Guard: after a long stretch of work, and before saying a step is done, run the
-       `request-auditor` agent (owner messages vs the plan) and fix what it finds.
+       `request-auditor` agent (owner messages vs the plan) and the `architecture-auditor` agent
+       (code and docs vs ARCHITECTURE.md and docs/target-architecture.md), and fix what they find.
 23. We RECREATE (воссоздаём), we do not invent. Everything around the experiments (the building,
     doors, signs, furniture, objects, their sizes and proportions) is carried over from a real
     source as it is; invention goes only into the experiments we design and the words. A size or

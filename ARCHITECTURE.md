@@ -41,7 +41,7 @@ added, renamed or removed without this table. `voice/` and `sound/` hold recordi
 | `src/engine/ui/` | choice.js (answer buttons) · scale.js · sheet.js (the clipboard) · sheet-math.js |
 | `src/rooms/` | 01-control/ (one folder per room, docs/rooms.md) |
 | `src/rooms/01-control/` | illusion of control (Alloy & Abramson 1979): protocol.js (every number, with paper pages) · original.js (results in the reveal) · schedule.js · trials.js · questions.js · report.js (log → measures) · reveal.js · scene.js · chair.js · room.js · texts.ru.js · voice-lines.js · sound-list.js · voice/ · sound/ |
-| `css/` | base.css · hint.css · privacy.css · fonts.css |
+| `css/` | base.css · hint.css · privacy.css · fonts.css · xr-probe.css (the headset probe page) |
 | `tests/` | names.test.mjs · voice.test.mjs · sound.test.mjs · recenter.test.mjs · tiles.test.mjs · sheet.test.mjs · fonts.test.mjs · standards.test.mjs · glow.test.mjs · logo.test.mjs · locomotion.test.mjs · plaque.test.mjs · masonry.test.mjs · structure.test.mjs · control-protocol.test.mjs · control-schedule.test.mjs · control-report.test.mjs · control-reveal.test.mjs · playtest.test.mjs · results.test.mjs · issues.test.mjs · smoke.mjs (CI) · static-server.mjs |
 | `tools/` | make-voice.mjs · check-voice.mjs · make-sounds.mjs · publish-preview.mjs (the test copy) · quest-look.mjs (look and measure in the headset) · quest-check.mjs · quest-wifi.mjs · xr-probe.html · xr-probe-run.mjs · build-catalog.mjs · check-cards.mjs |
 
@@ -50,4 +50,6 @@ added, renamed or removed without this table. `voice/` and `sound/` hold recordi
 - [docs/state.md](docs/state.md): read first. [docs/decisions.md](docs/decisions.md): why things are as they are. [docs/mistakes.md](docs/mistakes.md): mistakes and the guards that catch them.
 - [docs/engine.md](docs/engine.md), [docs/rooms.md](docs/rooms.md) (the room contract), [docs/testing.md](docs/testing.md).
 - [docs/building-standards.md](docs/building-standards.md): the trade standards the corridor is built to. [docs/sources.md](docs/sources.md): the source of every fact shown to the player.
+- [docs/target-architecture.md](docs/target-architecture.md): where the game ends up, and what is still to build. [docs/roadmap.md](docs/roadmap.md): the long view.
 - [docs/rooms/01-control.md](docs/rooms/01-control.md): room 01 against its paper. [docs/vr-checklist.md](docs/vr-checklist.md): what every scene is checked for.
+- [docs/research/vr/README.md](docs/research/vr/README.md): VR and MR norms read from their sources (Meta, W3C, papers), the base of every scene and UI decision.

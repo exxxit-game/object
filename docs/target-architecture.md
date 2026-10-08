@@ -1,74 +1,63 @@
 # Target architecture: the finished game
 
-Purpose: every change is made knowing where the file ends up, so fixing one place
-never breaks or duplicates another. Current files are mapped to their final place.
+Purpose: every change is made knowing where it ends up, so fixing one place never breaks or
+duplicates another. This page is the picture of the end; what is built now is in
+[ARCHITECTURE.md](../ARCHITECTURE.md), the order of work in the plan doc (docs/state.md).
+Files that do not exist yet are written without backticks (structure rule 7 checks the rest).
 
 ## The finished game in one picture
 ```
 youaretheobject.com
- ├─ index.html → lobby: list of rooms, language, progress, (paid rooms unlocked)
- ├─ privacy.html (ru, en): what is recorded, why, where, how long
- └─ ?room=NN-name → one room, always the same life cycle:
+ ├─ index.html → the lab's corridor: a door per room, a floor per pack (floor 1 free,
+ │               floors above bought once), language, progress
+ ├─ privacy.html: what is recorded, why, where, how long
+ └─ every room runs the same life cycle, on the clipboard:
 
-  consent (record / no record) → instruction → experiment (room logic)
-     → after-questions (manipulation, prior knowledge) → reveal pages
-     → original study + differences → "you vs other players" → send result
+  consent → instruction (voice + clipboard) → experiment (the room's own logic, logged)
+     → after-questions (manipulation, prior knowledge) → reveal (what you did, how you were
+       caught) → the original study and how this room differs → you against other players
+     → the result sent only with consent
 ```
 
 ## Layers
 | Layer | Folder | Knows about | Never knows about |
 |---|---|---|---|
-| Shell | `index.html`, `src/main.js` | which room or lobby to load | room logic |
-| App | `src/app/` | consent, session life cycle, language, lobby, purchases | a specific room |
-| Engine | `src/engine/` | A-Frame components, audio, voice, panels, log, UI widgets, results/diagnostics transport | rooms, texts |
-| Room | `src/rooms/NN-name/` | its own scene, flow, report, texts, recordings | other rooms |
-| Server | `supabase/migrations/` | per-room result validation, aggregates | game code |
+| Shell | `index.html`, `src/main.js` | which room to load, the game's face | room logic |
+| App | `src/app/` | the corridor, consent, the clipboard flow, reveal paging, session, language, purchases | a specific room |
+| Engine | `src/engine/` | A-Frame components, audio, voice, panels, the clipboard sheet, log, UI widgets, results transport | rooms, texts |
+| Room | `src/rooms/NN-name/` | its own scene, experiment, report, texts, recordings | other rooms |
+| Server | `supabase/migrations/` | per-room result validation, aggregates for "you against others" | game code |
 
-## Final room folder (every room the same)
+## Every room the same folder
 ```
 src/rooms/NN-name/
-  room.js          flow only: phases of THIS experiment (uses app/session.js)
+  room.js          the phases of THIS experiment only (consent, paging, sending come from app/)
   scene.js         markup
-  report.js        log → report, pure, tested
-  texts.ru.js      every word, Russian      texts.en.js  English (later)
-  voice-lines.js   spoken lines            voice/ru/*.mp3, voice/en/*.mp3
-  sound-list.js    effects                 sound/*.mp3
-  <objects>.js     room-specific objects (e.g. levers.js)
-docs/rooms/NN-name.md, docs/sources.md section, docs/prereg/NN-name.md
-tests/NN-name.report.test.mjs; smoke runs every room in CI
+  protocol.js      every number of the original procedure, with paper pages
+  report.js        log → measures, pure, tested
+  reveal.js        its reveal pages, pure
+  texts.ru.js      every word (texts.en.js and other languages later)
+  voice-lines.js   spoken lines, voice/<lang>/*.mp3
+  sound-list.js    effects, sound/*.mp3
+docs/rooms/NN-name.md (against its paper), its docs/sources.md section
+tests/NN-*.test.mjs; the smoke test runs every room to its end in CI
 ```
 
-## Current file → final place
-| Now | Final | Action |
-|---|---|---|
-| `src/engine/panel.js, audio.js, voice.js, sfx.js, log.js, timeline.js, haptics.js, blob-shadow.js, grab-press.js, recenter.js, recenter-math.js` | engine (as is) | keep; voice gets a language folder |
-| `src/engine/results.js` | engine | keep; add `issues.js` (errors/devices, with consent) and `stats.js` (read aggregates for "you vs others") |
-| `src/engine/swing.js, reach-watch.js` | engine | keep (generic) |
-| `src/engine/look-watch.js` | engine | keep only if a room uses it (Ono painting removed) |
-| `src/rooms/01-ono/question.js` | `src/engine/ui/choice.js` | generalize: any number of answers |
-| `src/rooms/01-ono/chart.js` | `src/engine/ui/timeline-chart.js` | generalize: lanes, bands, shaded phases |
-| `src/rooms/01-ono/reveal.js` | room keeps its pages; pager → `src/app/reveal.js` | split |
-| consent/boot code in `room.js` | `src/app/consent.js` | move; shared texts in `src/app/texts.ru.js` |
-| start/finish/send code in `room.js` | `src/app/session.js` | move (life cycle, first/repeat flag, sending) |
-| `src/rooms/01-ono/room-bounds.js` | `src/engine/room-bounds.js` | generalize (bounds as parameters) |
-| `src/rooms/01-ono/ambience.js` | room tone → engine `sfx`; observer noises per room | split |
-| `src/rooms/01-ono/clock.js, lamps.js, painting.js` | Ono-specific, invented | remove from room 01 when the room is replaced |
-| `src/rooms/01-ono/*` (scene, levers, report, texts, voice, sound) | become the booth for the next room (illusion of control) or the parked Ono | decided with the experiment catalog |
-| `tools/quest-check.mjs` | per-room checks driven by room metadata | generalize |
-| `tools/make-voice.mjs, make-sounds.mjs` | per room and language | add language |
-| — | `tools/new-room.mjs` | scaffold a room folder with all files and tests |
-| — | `privacy.html`, `src/app/lobby/` | create |
-| `supabase/migrations/*` | `submit_run` with per-room validation; `room_stats(room, version)` aggregates | extend per room |
-
-**Status.** Done: `src/engine/ui/choice.js`, `src/engine/ui/scale.js`, `src/app/consent.js`,
-`src/app/session.js`, `src/engine/room-bounds.js`; the Ono room and its unused engine parts are
-removed (kept under git tag `ono-room-final`); room 01 is `src/rooms/01-control/`.
-Open: reveal pager in `src/app/`, chart widget, `issues.js` and `stats.js`, lobby, privacy page,
-`tools/new-room.mjs`, per-room server validation.
+## Still to build, in this order of need
+- Room 01 onto the clipboard: it still talks through its wall screen, and its flow helpers
+  (say, ask, paging the reveal, phase timing) live in its room.js; they move to src/app/ so a
+  second room does not copy them, with a test listing what a room may import.
+- The reveal pager and a chart widget for "your timeline" (future src/app/reveal.js,
+  src/engine/ui/timeline-chart.js).
+- "You against other players": read aggregates from the server (future src/engine/stats.js)
+  and per-room validation in submit_run.
+- Languages: texts.en.js beside every texts.ru.js, voice per language, each language's script
+  in the game's face (tests/fonts.test.mjs fails until its file is added).
+- A headset run in CI (an emulated WebXR device) beside the desktop smoke test.
+- A room scaffold (future tools/new-room.mjs): all files and tests of a new room at once.
 
 ## Rules that follow from this
 - A room never re-implements consent, sending, reveal paging, choice panels or charts.
-- Every room ships: report tests, voice/sound file tests, a smoke run to the end,
-  sources with page numbers, a deviations list, a preregistration draft.
-- No music in rooms (it changes mood and behaviour). The lobby may have none too
-  until the owner decides.
+- Every room ships: report tests, voice and sound file tests, a smoke run to the end, sources
+  with page numbers, a deviations list, a preregistration draft.
+- No music in rooms: it changes mood and behaviour.
