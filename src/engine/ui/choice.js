@@ -1,36 +1,42 @@
 import { FONT } from '../panel.js';
 
-// A column of answer buttons in front of a wall, chosen with the laser (VR) or
-// the mouse (desktop). Any number of answers; one pick, then the buttons go away.
+// A column of answer buttons on a wall or on the clipboard sheet, chosen with the laser
+// (VR) or the mouse (desktop). Any number of answers; one pick, then the buttons go away.
 // All answers of one question share one text size: a smaller answer would look
 // less important and could bias the choice.
 const NORMAL = '#1d2026';
 const HOVER = '#343b47';
 const TEXT = '#f2efe8';
-// Canvas pixels per metre of button: the same on every button, so a text size means
-// the same real letter height on a narrow button as on a wide one.
+// Canvas pixels per metre of button: the same on every button of a place, so a text size
+// means the same real letter height on a narrow button as on a wide one. Walls read from
+// about 2 m use this; the sheet, read from 1 m, passes twice the density so the texture
+// stays as sharp as the headset shows it.
 const PX_PER_M = 1024 / 1.5;
-const PAD = 10;
+const PAD_M = 10 / PX_PER_M;   // inner margin, metres
+const SIZE_M = 54 / PX_PER_M;  // largest letters, metres
 const MIN_GAP = 0.01; // metres between buttons when a long list is squeezed into one column
-const SIZE = 54;
 const WEIGHT = 600;
 const LINE_HEIGHT = 1.32; // as in panel.js
+// Buttons ignore clicks this long after they appear: no double answers from one press.
+const READY_MS = 300;
 
-// The largest common size at which every label fits on one line of the button.
-function commonSize(labels, pxW, pxH) {
+// The largest common size (canvas px) at which every label fits on one line of the button.
+function commonSize(labels, pxW, pxH, density) {
+  const size = SIZE_M * density, pad = PAD_M * density;
   const ctx = document.createElement('canvas').getContext('2d');
-  ctx.font = `${WEIGHT} ${SIZE}px ${FONT}`;
+  ctx.font = `${WEIGHT} ${size}px ${FONT}`;
   const widest = Math.max(...labels.map(t => ctx.measureText(t).width));
-  const byWidth = Math.floor(SIZE * (pxW - PAD * 2) / widest);
-  const byHeight = Math.floor((pxH - PAD * 2) / LINE_HEIGHT);
-  return Math.min(SIZE, byWidth, byHeight);
+  const byWidth = Math.floor(size * (pxW - pad * 2) / widest);
+  const byHeight = Math.floor((pxH - pad * 2) / LINE_HEIGHT);
+  return Math.min(Math.floor(size), byWidth, byHeight);
 }
 
-// place: { x, y (top button), z, w, h, gap, bottom (lowest edge the buttons may reach) }
+// parent: the scene or any entity (the sheet); place is in the parent's metres:
+// { x, y (top button), z, w, h, gap, bottom (lowest edge the buttons may reach), density }
 // A list that would run below `bottom` in one column is shown in two columns,
 // read down the first column, then the second; smaller buttons would mean smaller letters.
-export function createChoice(scene, place) {
-  const { x = 0, y, z, w = 1.5, h = 0.13, gap = 0.025, bottom = null } = place;
+export function createChoice(parent, place) {
+  const { x = 0, y, z, w = 1.5, h = 0.13, gap = 0.025, bottom = null, density = PX_PER_M } = place;
   let els = [];
 
   function hide() {
@@ -55,8 +61,10 @@ export function createChoice(scene, place) {
     const bw = cols === 1 ? w : (w - g) / 2;
     hide();
     let done = false;
-    const px = Math.round(bw * PX_PER_M);
-    const size = commonSize(labels, px, Math.round(bh * PX_PER_M));
+    const px = Math.round(bw * density);
+    const size = commonSize(labels, px, Math.round(bh * density), density);
+    const pad = Math.round(PAD_M * density);
+    const shownAt = performance.now();
     els = labels.map((text, i) => {
       const col = Math.floor(i / rows), row = i % rows;
       const el = document.createElement('a-entity');
@@ -65,22 +73,24 @@ export function createChoice(scene, place) {
       el.classList.add('clickable', 'answer');
       el.dataset.index = i;
       el.dataset.size = size;
+      el.dataset.letterMm = (size / density * 1000).toFixed(1);
+      setTimeout(() => { el.dataset.ready = '1'; }, READY_MS);
       // A button removed right after it appeared can still fire 'loaded' before its panel
       // has a canvas: draw only once the canvas exists.
       const paint = (bg) => {
         const panel = el.components.panel;
-        if (panel && panel.c) panel.write([{ t: text, size, weight: WEIGHT, color: TEXT }], { bg, pad: PAD });
+        if (panel && panel.c) panel.write([{ t: text, size, weight: WEIGHT, color: TEXT }], { bg, pad });
       };
       el.addEventListener('loaded', () => paint(NORMAL));
       el.addEventListener('mouseenter', () => paint(HOVER));
       el.addEventListener('mouseleave', () => paint(NORMAL));
       el.addEventListener('click', () => {
-        if (done) return;
+        if (done || performance.now() - shownAt < READY_MS) return;
         done = true;
         hide();
         onPick(i);
       });
-      scene.appendChild(el);
+      parent.appendChild(el);
       return el;
     });
   }

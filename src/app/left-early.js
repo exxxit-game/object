@@ -18,24 +18,14 @@ export function leftBefore(room) {
   try { return localStorage.getItem(key(room)) === '1'; } catch (e) { return false; }
 }
 
-// Next visit, before the consent screen: "start again" or "what was it".
-// screen: a panel component; choice: an engine/ui/choice instance; screenTop: world
-// height of the screen's top edge; debrief: the room's short explanation.
-export async function askAfterLeaving(screen, choice, { room, debrief, screenTop }) {
+// Next visit, before the consent: "start again" or "what was it", on the clipboard sheet.
+// sheet: an engine/ui/sheet instance; debrief: the room's short explanation.
+export async function askAfterLeaving(sheet, { room, debrief }) {
   const L = APP_T.leftEarly;
-  const write = (blocks) => {
-    const bottom = screen.write(blocks, { top: true });
-    screen.el.dataset.textBottom = (screenTop - bottom).toFixed(3);
-    return screenTop - bottom - 0.05;
-  };
-  const pick = (labels, top) => new Promise((resolve) => choice.show(labels, resolve, top));
-  const learn = (await pick([L.again, L.learn], write([{ t: L.before, size: 60, weight: 600 }]))) === 1;
+  const learn = (await sheet.choose([{ t: L.before, role: 'body' }], [L.again, L.learn])) === 1;
   markReached(room);
   if (learn) {
-    await pick([L.again], write([
-      { t: L.before, size: 48, weight: 600 },
-      { t: debrief, size: 40, color: '#c4c0b7', weight: 500, gap: 18 }
-    ]));
+    await sheet.choose([{ t: L.before, role: 'body' }, { t: debrief, role: 'soft', gap: 0.02 }], [L.again]);
   }
 }
 

@@ -92,7 +92,7 @@ await send('Input.dispatchKeyEvent', { type: 'keyDown', ...key });
 await send('Input.dispatchKeyEvent', { type: 'keyUp', ...key });
 await run(`(async () => {
   const st = () => document.documentElement.dataset.roomState; const w = (ms) => new Promise(r => setTimeout(r, ms));
-  const pick = async (i) => { for (;;) { const a = [...document.querySelectorAll('.answer')].find(e => +e.dataset.index === i); if (a) { a.emit('click'); return; } await w(150); } };
+  const pick = async (i) => { for (;;) { const a = [...document.querySelectorAll('.answer')].find(e => +e.dataset.index === i && e.dataset.ready); if (a) { a.emit('click'); return; } await w(150); } };
   (async () => {
     await pick(0); // corridor: "next" after the welcome
     await pick(0); // consent page 1 (what this is, leaving, 18+): "next"

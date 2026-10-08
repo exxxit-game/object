@@ -19,25 +19,51 @@ async function playRoom(url, playtest) {
 
   const waitState = (s, timeout = 60000) =>
     page.waitForFunction((x) => document.documentElement.dataset.roomState === x, s, { timeout });
-  // No button or scale may cover the text on the screen: the top edge of every
-  // widget must be below the last line (#screen data-text-bottom, metres).
+  // No button or scale may cover the text: the top edge of every widget must be below
+  // the last line. On the clipboard sheet in its own metres (data-text-bottom of .sheet),
+  // on the room's wall screen in world metres (#screen data-text-bottom).
   const overlaps = () => page.evaluate(() => {
-    const bottom = Number(document.querySelector('#screen').dataset.textBottom);
+    const sheet = document.querySelector('.sheet[data-open]');
     const p = new THREE.Vector3();
     return [...document.querySelectorAll('.answer, .scale-bar')].map((el) => {
-      el.object3D.getWorldPosition(p);
+      const onSheet = !!el.closest('.sheet');
+      const bottom = Number((onSheet ? sheet : document.querySelector('#screen')).dataset.textBottom);
+      if (onSheet) p.copy(el.object3D.position); else el.object3D.getWorldPosition(p);
       const top = p.y + el.getAttribute('panel').h / 2;
       return top > bottom + 0.001 ? `${el.className} top ${top.toFixed(3)} > text ${bottom}` : null;
     }).filter(Boolean);
   });
+  // What a sheet page must satisfy (src/engine/ui/sheet-math.js; sources in docs/decisions.md):
+  // nothing runs off the paper, letters at least 1.2° and buttons at least 2.5° of view from
+  // the eyes, and up to four answers in one column.
+  const sheetProblems = () => page.evaluate(() => {
+    const sheet = document.querySelector('.sheet[data-open]');
+    if (!sheet) return [];
+    const eye = new THREE.Vector3(), p = new THREE.Vector3();
+    document.querySelector('a-scene').camera.getWorldPosition(eye);
+    const deg = (size, d) => 2 * Math.atan(size / 2 / d) * 180 / Math.PI;
+    const answers = [...sheet.querySelectorAll('.answer')];
+    const out = sheet.dataset.overflow ? ['the page does not fit the sheet'] : [];
+    for (const a of answers) {
+      a.object3D.getWorldPosition(p);
+      const d = p.distanceTo(eye);
+      if (deg(a.dataset.letterMm / 1000, d) < 1.2) out.push(`letters ${deg(a.dataset.letterMm / 1000, d).toFixed(2)}° < 1.2°`);
+      if (deg(a.getAttribute('panel').h, d) < 2.5) out.push(`button ${deg(a.getAttribute('panel').h, d).toFixed(2)}° < 2.5°`);
+    }
+    if (answers.length <= 4 && new Set(answers.map(a => a.object3D.position.x.toFixed(3))).size > 1) out.push('answers in two columns');
+    return out;
+  });
   // clicks the answer button with this index, waiting until it exists
   const pick = async (i) => {
-    await page.waitForFunction((n) => [...document.querySelectorAll('.answer')].some(e => +e.dataset.index === n), i, { timeout: 30000 });
+    // buttons accept a click once they are ready (choice.js ignores the first 0.3 s)
+    await page.waitForFunction((n) => [...document.querySelectorAll('.answer')].some(e => +e.dataset.index === n && e.dataset.ready), i, { timeout: 30000 });
     assert.deepEqual(await overlaps(), [], 'a button covers the text');
+    assert.deepEqual(await sheetProblems(), [], 'a sheet page breaks the reading rules');
     // all answers of a question share one readable text size
     const sizes = await page.evaluate(() => [...new Set([...document.querySelectorAll('.answer')].map(e => Number(e.dataset.size)))]);
     assert.equal(sizes.length, 1, `answer sizes differ: ${sizes}`);
-    assert.ok(sizes[0] >= 30, `answer text too small: ${sizes[0]}px`);
+    const onWall = await page.evaluate(() => !document.querySelector('.answer').closest('.sheet'));
+    if (onWall) assert.ok(sizes[0] >= 30, `answer text too small: ${sizes[0]}px`);
     await page.evaluate((n) => [...document.querySelectorAll('.answer')].find(e => +e.dataset.index === n).emit('click'), i);
   };
   // answers one question: a scale (click its middle, then "done") or a choice

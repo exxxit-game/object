@@ -54,7 +54,9 @@ AFRAME.registerComponent('panel', {
   },
 
   // blocks: [{ t, size, color, weight, gap, spacing }]
-  // opt: { bg, pad, top, align: 'center' | 'left' }
+  // opt: { bg, pad, top, align: 'center' | 'left', fit }
+  // fit (default true) shrinks text that would run off the panel; fit: false keeps the
+  // sizes and sets this.overflow instead (a sheet that does not fit is a content error).
   // Returns where the text ends, in metres below the panel's top edge.
   write(blocks, opt = {}) {
     const { ctx, c } = this;
@@ -69,10 +71,11 @@ AFRAME.registerComponent('panel', {
     // Shrink to fit instead of running off the panel (long reports, longer languages).
     let scale = W / (this.data.ref || W);
     let laid = this.layout(blocks, scale, maxW);
-    for (let i = 0; i < 4 && height(laid) > H - pad * 2; i++) {
+    for (let i = 0; opt.fit !== false && i < 4 && height(laid) > H - pad * 2; i++) {
       scale *= (H - pad * 2) / height(laid) * 0.98;
       laid = this.layout(blocks, scale, maxW);
     }
+    this.overflow = height(laid) > H - pad * 2;
 
     let y = opt.top ? pad : Math.max(pad, (H - height(laid)) / 2);
     ctx.textBaseline = 'top';
