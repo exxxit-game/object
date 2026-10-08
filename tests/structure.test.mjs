@@ -64,7 +64,7 @@ const docs = [path.join(ROOT, 'ARCHITECTURE.md'), path.join(ROOT, 'CLAUDE.md'),
   ...walk(path.join(ROOT, 'docs')).filter(f => f.endsWith('.md') && !/target-architecture|archive/.test(f))];
 const missing = [];
 for (const d of docs) {
-  for (const m of fs.readFileSync(d, 'utf8').matchAll(/`((?:src|tests|tools|docs|\.claude)\/[\w./-]+?)`/g)) {
+  for (const m of fs.readFileSync(d, 'utf8').matchAll(/`((?:src|tests|tools|docs|\.claude|\.github)\/[\w./-]+?)`/g)) {
     if (!m[1].includes("NN-") && !fs.existsSync(path.join(ROOT, m[1]))) missing.push(`${rel(d)} → ${m[1]}`);
   }
 }

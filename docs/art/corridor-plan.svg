@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 760" font-family="Segoe UI, Arial, sans-serif" font-size="13">
   <!-- Corridor of the lab, seen from above, two ways to lay it out to its end (1 m = 40 px).
        Every room is a bay of 3.2 m (the width of room 1); in every bay the door stands at the same
-       place and the plaque at its latch side, toward the way the player comes from. -->
+       place, its latch toward the way the player comes from; plan A drew the plaques on the wall at
+       the latch side, plan B (built) has them on the doors. -->
   <style>
     .wall { fill: #8a9479; }
     .floor { fill: #e9e2cf; }
@@ -106,7 +107,7 @@
   <g transform="translate(700 420)">
     <text class="h" x="0" y="10">Обозначения</text>
     <rect class="door" x="0" y="24" width="24" height="8"/><text class="t" x="34" y="33">дверь (одинаковая везде)</text>
-    <rect class="plaque" x="0" y="46" width="8" height="6"/><text class="t" x="34" y="53">табличка со стороны замка</text>
+    <rect class="plaque" x="0" y="46" width="8" height="6"/><text class="t" x="34" y="53">табличка у замка (только А; в Б — на двери)</text>
     <rect class="board" x="0" y="66" width="24" height="5"/><text class="t" x="34" y="73">доска с планшеткой</text>
     <rect class="ext" x="0" y="86" width="8" height="6"/><text class="t" x="34" y="93">огнетушитель</text>
     <circle class="start" cx="6" cy="112" r="6"/><text class="t" x="34" y="116">где появляется игрок</text>

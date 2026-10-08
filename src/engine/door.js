@@ -18,8 +18,11 @@ const FRAME = 'color="#3d3a34"';
 export const CHROME = { color: '#cfd2d5', metalness: 0.35, roughness: 0.3 };
 const PLATE = 'material="color: #b9bcbe; metalness: .7; roughness: .3"';
 const HINGE = 'material="color: #9a9c9e; metalness: .7; roughness: .35"';
-const LEAF = { w: 0.914, h: 2.134, t: 0.045 };
+export const LEAF = { w: 0.914, h: 2.134, t: 0.045 };
 const OPENING = 1.0;
+// a sign stands this far off the leaf: two faces closer than 5 mm flicker in a headset, worst at the
+// far end of the corridor (docs/vr-checklist.md)
+export const SIGN_GAP = 0.006;
 // a Plymouth knob turned about its axis, from the door face out: rose, shank, knob
 const KNOB = 'points: 0.0325 0, 0.0325 0.004, 0.03 0.008, 0.012 0.009, 0.011 0.026, 0.019 0.031, 0.026 0.04, 0.027 0.047, 0.024 0.054, 0.015 0.058, 0 0.0587';
 
@@ -55,6 +58,6 @@ export function doorHTML({ x, room = 1.6, corridor = 1.8, latch = 1, leaf = '', 
                 position="${lx(LEAF.w / 2)} 1.083 ${lz(LEAF.t / 2)}"></a-entity>
       <a-box position="${lx(LEAF.w / 2)} 0.143 ${lz(0.0458)}" width="0.864" height="0.254" depth="0.0015" ${PLATE}></a-box>
       ${knob(LEAF.t, true)}${roomSide}${sign ? `
-      <a-entity ${sign.attrs}${s < 0 ? ' rotation="0 180 0"' : ''} position="${lx(LEAF.w / 2)} ${sign.y} ${lz(LEAF.t + 0.002)}"></a-entity>` : ''}
+      <a-entity ${sign.attrs}${s < 0 ? ' rotation="0 180 0"' : ''} position="${lx(LEAF.w / 2)} ${sign.y} ${lz(LEAF.t + SIGN_GAP)}"></a-entity>` : ''}
     </a-entity>`;
 }

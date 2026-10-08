@@ -46,7 +46,7 @@ A door sign shows the room's number only, on the door's corridor face (`doorHTML
 the wall inside: the experiment's name would tell the player what is studied before they do it
 (demand characteristics); the name comes in the reveal, and on the door once the room is done
 (`tests/plaque.test.mjs`). The number comes from the corridor plan (`src/app/lobby/plan.js`):
-the room imports it for its texts and its own sign, the lobby writes every sign.
+the room imports it for its texts and its own sign; the lobby writes the corridor's signs and door 1's.
 
 Add a room: read the paper in full first (CLAUDE.md rule 16), write the spec, then
 `protocol.js` and its test, then the rest. File names must not look like tracking

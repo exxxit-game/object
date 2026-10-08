@@ -12,6 +12,7 @@ import { corridorHTML } from '../src/app/lobby/scene.js';
 import { bondOrigin, courseShifted } from '../src/engine/tile-math.js';
 import { PLAN, DOORS, CENTRE, LENGTH, WIDTH } from '../src/app/lobby/plan.js';
 import { SIGN } from '../src/app/brand.js';
+import { LEAF } from '../src/engine/door.js';
 
 const BLOCK = 0.4, COURSE = 0.2, MODULE = 0.2, MIN_GAP = 0.04, EPS = 0.002;
 // the walls things sit on, by the z of their face: the corridor's long walls (from its plan) and
@@ -80,10 +81,18 @@ for (const tag of items.filter(t => !/\bdoor-sign\b/.test(attr(t, 'class')))) {
 const signs = [...html.matchAll(/<a-entity[^>]*class="[^"]*\bdoor-sign\b[^"]*"[^>]*>/g)].map(m => m[0]);
 assert.equal(signs.length, DOORS.length + 1, 'a sign at every door and inside room 01');
 assert.ok(SIGN.w === 0.2286 && SIGN.y === 1.524 && SIGN.fromFrame === 0.1016, 'the sign family in inches: 9 in square, 60 in up, 4 in from the frame');
+// the room number as large as the rules allow, 2 in (ADA 2010 703.2.5): it only ever grows
+assert.equal(SIGN.number, Math.round(0.0508 * SIGN.px / 0.7), 'a room number 2 in high');
 for (const tag of signs) {
   const y = Number(attr(tag, 'position').split(' ')[1]);
   const name = attr(tag, 'id') || attr(tag, 'data-number');
   assert.ok(y === SIGN.y && y >= 1.22 && y <= 1.525, `${name} centre at ${y} m`);
   assert.ok(prop(attr(tag, 'panel'), 'w') === SIGN.w && prop(attr(tag, 'panel'), 'h') === SIGN.w, `${name}: not the 9 in sign`);
+  // a sign on a leaf: 5 mm or more off its corridor face (closer faces flicker), facing away from it
+  if (!/\bon-wall\b/.test(attr(tag, 'class'))) {
+    const z = Number(attr(tag, 'position').split(' ')[2]);
+    assert.ok(Math.abs(z) - LEAF.t >= 0.005 - 1e-9, `${name}: ${((Math.abs(z) - LEAF.t) * 1000).toFixed(1)} mm off the leaf`);
+    assert.equal(z < 0, /0 180 0/.test(attr(tag, 'rotation') || ''), `${name}: faces into its door`);
+  }
 }
 console.log(`masonry tests: ok (${jambs.length / 2} doors, ${items.length} things on walls)`);
