@@ -13,11 +13,23 @@ Not a big game: small rooms, minutes each. Reading about an experiment is weak,
 watching is better, living through it is the strongest form of explanation.
 
 ## End point (release 1.0)
-- Lobby + 3 rooms, each through the full arc above.
-- Runs smoothly in Quest Browser and on desktop; works in Chrome and Firefox.
-- Anonymous statistics with consent; "you vs others" shown in every reveal.
-- Closed playtest done with VR players; top issues fixed.
-- Public page and link; optional later: Meta Horizon Store via WebXR PWA.
+- Lobby + 3 rooms, each through the full arc above: one first-room hook chosen by a
+  playtest (not by opinion), room 01 (illusion of control), and one more.
+- Russian and English; Quest Browser and desktop where the room allows.
+- Privacy page, consent, anonymous statistics; "you vs others" in every reveal.
+- Playtested with at least 10 people outside the team; top issues fixed.
+- Public page and link; optional later: Meta Horizon Store as a WebXR PWA.
+
+## Science track (runs beside the game)
+- Evidence that people take part for a personal result and a comparison with others:
+  Moral Machine (2.3 million people, 40 million decisions, Awad et al. 2018, Nature),
+  LabintheWild (about 3.5 million volunteers, feedback-driven design, Reinecke & Gajos),
+  Sea Hero Quest (more than 4 million players). All were short and on phones or
+  computers, not in VR.
+- Before any data counts as science: a university partner, ethics approval, a separate
+  science consent, preregistration (OSF) of one study.
+- First study candidates are the open questions in `docs/ideas/` (e.g. does mixed reality
+  bring VR effects back to real-room size; how much one reveal weakens the next room).
 
 ## Principles (from research)
 | Area | Rule | Source |
@@ -39,38 +51,37 @@ synthesis voices. If not, the experimenter is silent and needs recorded audio.
 Work on one phase at a time. A phase is done only when its exit check passes.
 
 ### 0. Foundation — done
-Structure, rules, docs, sources, unit + smoke tests, CI on every push.
+Structure, rules, tests, CI, headset check tool, voice pipeline, card method
+(`docs/cards/`, 130+ experiments read from full texts), guards in `docs/mistakes.md`.
 
-### 1. Room 01 at release quality
-- Headset check on Quest: stable frame rate, readable text, levers reachable.
-- Experimenter voice that works in the headset (recorded or verified synthesis).
-- Start screen: what this is, that you can quit any time, consent for statistics.
-- Exit check: the owner plays it in the headset start to finish with no problem.
+### 1. Room 01 verified — almost done
+Built, reviewed twice against the paper, passes the headset check.
+Exit check: the owner plays it at real speed in the headset; smoke test green on GitHub.
 
-### 2. Statistics
-- Each finished run sends an anonymous summary (the `analyse()` report, no ids).
-- Server: insert-only endpoint, aggregated read for the reveal.
-- Reveal shows "you / all players / original".
-- Exit check: test runs appear in the database and the numbers show in the reveal.
+### 2. First playtest (before building more rooms)
+5–10 people outside the team play room 01. Measured: who finishes, where they get bored
+(head turned away, long pauses), a 1–10 "would you play the next room", and what they
+retell in their own words. Exit check: a written result in docs/playtests/.
 
-### 3. Lobby and room 02
-- Lobby to pick a room. Room 02 is a new folder under the room contract.
-- Exit check: both rooms pass unit + smoke tests; owner plays both in the headset.
+### 3. Choose the first room by testing, not by opinion
+Read the top candidates' papers in full (Kohnstamm, Morehead, Hirschhorn, Shams, Drori,
+Pailhès, DRM); build two or three short prototypes; playtest them the same way.
+Exit check: one hook chosen on the playtest numbers.
 
-### 4. Closed playtest
-- Link to VR community testers, short feedback form.
-- Watch: share of players who finish, where they quit, frame-rate problems.
-- Exit check: top issues from testers fixed.
+### 4. Statistics live
+Privacy page, server whitelist per room, consent, "you vs others" read.
+Exit check: a real run appears in the database and in the reveal.
 
-### 5. Public release
-- Public page, link for headsets; Firefox smoke test working in CI.
-- Later, optional: Meta Horizon Store as a WebXR PWA.
+### 5. Lobby, third room, English
+Exit check: all rooms pass unit, smoke and headset checks; owner plays all.
+
+### 6. Soft launch
+Free link to VR communities; measure completion and "next room" clicks.
+Exit check: numbers collected; decide pricing with data.
 
 ## Room candidates
-Full selection, criteria, rejected effects and sources: [experiments.md](experiments.md).
-Decided: room 02 is the smoke room (Latané & Darley 1968).
-Order: 01 Superstition (built) → 02 Smoke room → Door swap → Anchoring →
-Repetition = truth (Bernays) → Conformity → False memory → others.
+Only from passing cards in `docs/cards/` (full text read, quotes checked). Coverage of
+every area: `docs/search-coverage.md`. Papers still to obtain: `docs/papers-needed.md`.
 
 ## Scope guard
 - New ideas go to "Room candidates" or a "Later" note, not into the current phase.
@@ -90,6 +101,5 @@ Repetition = truth (Bernays) → Conformity → False memory → others.
   a university co-author whose ethics board reviews the study. Requirements to
   expect: 18+, consent screen saying some details are revealed at the end, full
   debrief, quit any time, data plan. Do not collect data "for science" before approval.
-- **Room 01 flow:** intro, round 1 (12 points), question (4 answers), round 2,
-  report (belief, repeated system), original study. Seated players are lifted to
-  standing eye height automatically.
+- **Room 01** is the illusion of control (Alloy & Abramson 1979, Exp. 2): faithful, seated,
+  about 16 minutes. Its reveal is strongest as "you vs others", so it sits mid-game, not first.
