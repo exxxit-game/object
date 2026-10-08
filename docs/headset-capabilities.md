@@ -5,6 +5,8 @@ The game runs in the Quest Browser (WebXR). Every capability below has a status:
 (reliable news, not Meta), **unverified**. Feature-level checks inside a session need a
 button press in the headset: open `tools/xr-probe.html` (served by `npm run serve`) and
 press the buttons; the result is read over USB. Last probe: 8 Oct 2026, Quest 3, browser 152.
+Do not request the `layers` feature: with the normal base layer the session fails
+("Can't use baseLayer with layers feature requested").
 
 | Capability | Status | Source | What it gives an experiment |
 |---|---|---|---|
@@ -17,13 +19,13 @@ press the buttons; the result is read over USB. Last probe: 8 Oct 2026, Quest 3,
 | Hand tracking without controllers, 25 joints | our headset: feature granted (hands not yet held up in a test) | [Meta](https://developers.meta.com/horizon/documentation/web/webxr-hands/) | Body-ownership rooms with the player's own hand shape; grasping, pointing, gestures |
 | Microphone (spoken answers) | our headset: permission granted, sound level read | [Babylon forum](https://forum.babylonjs.com/t/using-meta-quest-2-microphone-inside-of-webxr-game/38321) | Spoken explanations (choice blindness), voice timing; needs the player's permission and a privacy rule |
 | Several live players at once | web standard (WebSocket/WebRTC); our Supabase has realtime | — | Experiments with real people instead of scripted agents (Asch, economic games, coordination) |
-| Statistics across players | built (anonymous results, sending off until the privacy page) | `src/app/session.js` | Between-group effects (anchoring, framing) become visible as "you vs others" |
+| Statistics across players | built (anonymous results, sent only with the player's consent; privacy page `privacy.html`) | `src/app/session.js` | Between-group effects (anchoring, framing) become visible as "you vs others" |
 | Real walking inside the boundary | Meta: roomscale minimum 2 × 2 m, stationary 1 × 1 m | [Meta](https://www.meta.com/help/quest/1190192431422476/) | Rooms by space tier (`docs/decisions.md`) |
 | Boundary size (`bounded-floor`) | our headset: works in VR and MR; owner's area 1.88 × 2.10 m | [Meta forum](https://communityforums.atmeta.com/discussions/dev-openxr/webxr-requesting-boundsgeometry-for-play-space-returns-empty-array-or-a-small-sq/1217563) | Offer large-space rooms only to players who have the space |
 | Spatial sound, controller vibration | our headset: used in room 01 | `src/engine/sfx.js`, `src/engine/haptics.js` | Sounds from a place; touch confirmation |
 | Eye tracking | not on Quest 3 | — | Not available: no gaze measures (head direction only) |
 | Camera images (raw passthrough frames) | not available in Quest Browser WebXR | [Meta forum](https://communityforums.atmeta.com/discussions/Questions_Discussions/request-webxr-raw-camera-access-camera-access-feature-in-quest-browser/1367463) | Not available to a web game (native apps only) |
-| Full-body tracking | our headset: `body-tracking` granted without flags (browser 152); output not yet checked | [Wikipedia: Quest Browser](https://en.wikipedia.org/wiki/Meta_Quest_Browser) | Not usable for players |
+| Full-body tracking | our headset: `body-tracking` granted without flags (browser 152); output not yet checked | [Wikipedia: Quest Browser](https://en.wikipedia.org/wiki/Meta_Quest_Browser) | Posture and arm movement, once the output is checked |
 | Desktop players (mouse, no headset) | built | `src/main.js` | Rooms that do not need the body can also run on a computer |
 | Force feedback, smell, heat | not available | — | Weight, smoke smell, fire heat cannot be real |
 

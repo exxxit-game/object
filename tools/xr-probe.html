@@ -21,6 +21,7 @@
 <button id="mic">Проверить микрофон</button>
 <pre id="out">Результатов пока нет.</pre>
 <script>
+// No 'layers': together with the normal base layer the session fails (docs/headset-capabilities.md).
 const FEATURES = ['local-floor', 'bounded-floor', 'hand-tracking', 'plane-detection', 'mesh-detection',
   'anchors', 'hit-test', 'depth-sensing', 'light-estimation', 'dom-overlay', 'body-tracking'];
 window.__probe = {};

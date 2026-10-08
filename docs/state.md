@@ -15,7 +15,7 @@
   `node tools/check-cards.mjs`; catalog generated: `docs/catalog.md` (`node tools/build-catalog.mjs`);
   coverage closed: `docs/search-coverage.md`; ideas: `docs/ideas/`; headset abilities:
   `docs/headset-capabilities.md`; owner page: https://claude.ai/artifact/Srhwjio7Ukp4FBDQAHpZB2
-- Headset: Quest 3 over USB; `tools/quest-check.mjs` (last full PASS before playtest mode);
+- Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS, 72 fps, 08.10);
   `tools/xr-probe.html` (owner presses VR/MR/mic buttons); `scrcpy` installed.
 - Voice: ElevenLabs key `C:\Users\admin\.elevenlabs-key.txt`; Daniel, eleven_v3;
   `tools/make-voice.mjs`, `tools/check-voice.mjs` (speech-to-text check), `tools/make-sounds.mjs`.
@@ -56,4 +56,5 @@
 5. DONE diagnostics: app.issues + submit_issue, sent only with recording (max 5 per load).
 6. DONE "you vs others": compare_room (first runs, n >= 10) + reveal page.
 7. Engagement: share card without spoilers, desktop version, Quest new-tab submission.
-8. Waiting on owner: play room 01 in headset; xr-probe; audio delay test; plugins; lab letter.
+8. Waiting on owner: play room 01 in headset at real speed; plugins; lab letter.
+   DONE 08.10: xr-probe (all features in VR and MR, area 1.88 x 2.10 m), audio delay 4 + 24 ms.

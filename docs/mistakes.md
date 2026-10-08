@@ -25,3 +25,4 @@ when a better guard appears.
 | A ranked list of experiments was built from search summaries without reading the papers | `tools/check-cards.mjs`: every fact in `docs/cards/README.md` cards must quote the full text |
 | Paper titles were written from memory into a list (one was wrong) | `docs/papers-needed.md`: every title and DOI looked up in Crossref before writing |
 | The quote checker dropped Japanese, Chinese and Korean characters, so any quote in those languages passed | `tools/check-cards.mjs` keeps letters of every script and refuses quotes under 8 characters |
+| The headset probe requested the `layers` feature, so the mixed-reality session failed to start | `docs/headset-capabilities.md` (do not request `layers`); note in `tools/xr-probe.html` |
