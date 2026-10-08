@@ -55,7 +55,10 @@ export function createSheet(scene, { inside = null } = {}) {
   let isOpen = false;
   let page = { blocks: null, labels: null, onPick: null };   // what it shows, to come back to
   let waitingTake = false;
+  // asking: a question has cut in and waits for its answer; saved: the page behind it, kept until
+  // the sheet is back where it was (after the answer, during the trip back to the hook)
   let asking = false, saved = null;
+  const busy = () => asking || !!saved;
   let home = null;   // { pos: [x, y, z], yaw, away: [x, y, z] } while it has a hook
   // The paper is drawn unlit so it reads well; on its hook it is dimmed to the light of the
   // room around it (or it would glow in a dim corridor), and brightens on the way to the player.
@@ -144,17 +147,17 @@ export function createSheet(scene, { inside = null } = {}) {
   // given, are shown on it while it waits (what the voice says, for a player without sound).
   function take(blocks) {
     if (blocks) setPage({ blocks });
-    if (!asking) clickable(true);   // else resume() makes it so, once the question is gone
+    if (!busy()) clickable(true);   // else resume() makes it so, once the question is gone
     waitingTake = true;
     const hover = (on) => board.setAttribute('material', 'color', on ? WOOD_HOVER : WOOD);
-    const enter = () => { if (!asking) hover(true); }, leave = () => hover(false);
+    const enter = () => { if (!busy()) hover(true); }, leave = () => hover(false);
     el.addEventListener('mouseenter', enter);
     el.addEventListener('mouseleave', leave);
     el.dataset.take = '1';
     return new Promise((resolve) => {
       // a click on a question that cut in (interrupt) is not a take
       const onClick = async () => {
-        if (asking) return;
+        if (busy()) return;
         el.removeEventListener('click', onClick);
         waitingTake = false;
         el.emit('taken', null, false);
@@ -185,7 +188,7 @@ export function createSheet(scene, { inside = null } = {}) {
   // is kept for resume() instead of being drawn over the question, and its answers wait with it.
   // Returns the top of the answer buttons, or null when kept.
   function setPage({ blocks, labels = null, onPick = null }) {
-    if (asking && saved) { Object.assign(saved, { blocks, labels, onPick }); return null; }
+    if (saved) { Object.assign(saved, { blocks, labels, onPick }); return null; }
     page = { blocks, labels, onPick };
     const top = paint(blocks || []) - UNDER_TEXT;
     if (labels) {
@@ -202,7 +205,7 @@ export function createSheet(scene, { inside = null } = {}) {
   // where it was. Null while one is already asked.
   async function interrupt(blocks, labels) {
     await ready;
-    if (asking) return null;
+    if (busy()) return null;
     asking = true;
     while (el.components.glide.trip) await new Promise((r) => setTimeout(r, 100));
     saved = { ...page, was: isOpen ? 'open' : home ? 'hanging' : 'closed' };
@@ -218,6 +221,7 @@ export function createSheet(scene, { inside = null } = {}) {
 
   async function resume() {
     if (!saved) return;
+    asking = false;   // answered: the game goes on (a door opens) while the sheet goes back
     choice.hide();
     if (saved.was === 'hanging') {
       isOpen = false;
@@ -226,7 +230,6 @@ export function createSheet(scene, { inside = null } = {}) {
     }
     const p = saved;
     saved = null;
-    asking = false;
     setPage(p);
     if (p.was === 'hanging' && waitingTake) clickable(true);
     if (p.was === 'closed') close();
