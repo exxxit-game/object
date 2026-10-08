@@ -58,17 +58,15 @@
 
 ## Open items (08.10). ONE step at a time, a short status after each. Every request: plan doc table.
 1. NOW (queue step 4): corridor until the owner says "коридор принят"; nothing beyond it before that.
-   All UNCOMMITTED (commit/push only on his word). Built: sign with the name and endings A/B/C by
-   visit (?sign=a|b|c); clipboard on the board's hook, taken by a click, its instruction on it too;
-   dim corridor (S13); sounds at measured gains (sound-list.js SOUND_GAIN, `tools/quest-look.mjs`
-   levels); board: flyer "ТРЕБУЮТСЯ ИСПЫТУЕМЫЕ … Вы подходите." + EXXXIT poster (official ISO 7010
-   figure, green, doorway black: his choice; may change over time); thumbstick teleport, 45° snap
-   turn, back step (locomotion.js); plaques show the room number only (name in the reveal);
-   doors and flat wall things on the block module (tests/masonry.test.mjs; door 1 now at x 0.7).
-   The EXXXIT poster on the board = the "leave" button (exit.js); reviewer's 5 findings fixed, all
-   flows pass in the browser pane (hidden pane: drive frames with scene.tick); "leave" in VR NOT yet in
-   the headset (asleep). Smooth moving by link (?move=smooth, ?turn=smooth). NEXT: VR/MR research
-   (6 agents, scratchpad vr-research/ → one reference doc in docs/), then comfort settings as pictures.
+   Branch pushed (owner: "Делай"); commits use the hidden GitHub address (structure rule 14). The
+   corridor is a 1979 US university lab: style book (Design System) https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH
+   is THE whole picture: every element with rule, source, status; build only from it (memory whole-picture-first).
+   Done 08.10: EXXXIT poster on the board = leave ("Прекратить участие?"), no exit door; age asked; voice
+   re-recorded (Robust, welcome one take, evened); VR/MR research docs/research/vr (README).
+   NEXT, in order: draw calls under 200 (now 200 = Meta limit) before any detail; extinguisher as a 1970s
+   model (pictures first; fixes the floating lever and hose); "soon" doors in openings + round knobs;
+   plaques one way (1979 photo); notices US Letter + typewriter; clipboard board and clip; signature on the
+   consent; comfort settings pages. Owner decided: EXXXIT stays, clipboard font = readability.
    Ideas after acceptance (plan doc): board notes, doors named once done, the tilted room, a map test.
 2. Headset: `tools/quest-look.mjs worn on` keeps it awake while I check (`worn off` after); an asleep
    headset cannot be woken over Wi-Fi (needs his power button); frames render only while the VR
