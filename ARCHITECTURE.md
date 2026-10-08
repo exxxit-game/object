@@ -33,7 +33,7 @@ src/main.js
 src/app/        consent.js · session.js · left-early.js · brand.js · logo.js · texts.ru.js
                 playtest.js · playtest-report.js · issue-report.js
 src/app/lobby/  the arrival corridor: lobby.js (the flow) · scene.js · opening.js · sign.js
-                board.js · exit.js (the studio's poster: leave the game) · texts.ru.js
+                plan.js (the corridor to its end) · board.js · exit.js (the studio's poster: leave the game) · texts.ru.js
                 voice-lines.js · sound-list.js · voice/ · sound/
 src/engine/     panel.js · audio.js · voice.js · sfx.js · log.js · results.js · fader.js
                 recenter.js · recenter-math.js · locomotion.js · locomotion-math.js · vignette.js

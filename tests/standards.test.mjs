@@ -4,6 +4,7 @@
 import assert from 'node:assert/strict';
 import { sceneHTML } from '../src/rooms/01-control/scene.js';
 import { corridorHTML } from '../src/app/lobby/scene.js';
+import { DOORS } from '../src/app/lobby/plan.js';
 
 const html = sceneHTML + corridorHTML;
 const near = (a, b, e = 0.0015) => Math.abs(a - b) < e;
@@ -14,25 +15,25 @@ const tags = (kind) => [...html.matchAll(new RegExp(`<${kind}[^>]*>`, 'g'))].map
 
 // Door leaves: 3'0" × 7'0" (0.914 × 2.134 m)
 const leaves = [...tags('a-entity')].filter(t => /color: #6a5641/.test(attr(t, 'rounded-box') || ''));
-assert.equal(leaves.length, 3, 'three doors in the corridor: door 1 and two to come');
+assert.equal(leaves.length, DOORS.length, 'every door of the corridor plan');
 for (const t of leaves) {
   const rb = attr(t, 'rounded-box');
   assert.ok(near(prop(rb, 'width'), 0.914) && near(prop(rb, 'height'), 2.134), `door leaf ${rb}`);
 }
 // Every door set in its wall the same way (src/engine/door.js): leaves at one depth, frames
 // through the whole wall
-assert.equal(new Set(leaves.map(t => pos(t)[2])).size, 1, 'door leaves at different depths in their walls');
+assert.equal(new Set(leaves.map(t => Math.abs(pos(t)[2]))).size, 1, 'door leaves at different depths in their walls');
 const jambs = tags('a-box').filter(t => attr(t, 'height') === '2.2042');
-assert.ok(jambs.length === 6 && jambs.every(t => attr(t, 'depth') === '0.22' && near(pos(t)[2], 1.7)), 'every frame through the wall');
+assert.ok(jambs.length === DOORS.length * 2 && jambs.every(t => attr(t, 'depth') === '0.22' && (near(pos(t)[2], 1.7) || near(pos(t)[2], 3.7))), 'every frame through the wall');
 // Round knobs as in 1979, at 1.024 m (strike centreline), 2 3/4 in (70 mm) from the latch edge;
 // one on the corridor side of every door, one inside the room that opens
 const knobs = tags('a-entity').filter(t => /class="knob"/.test(t));
-assert.equal(knobs.length, 4, 'a knob on each door, and inside room 1');
+assert.equal(knobs.length, DOORS.length + 1, 'a knob on each door, and inside room 1');
 assert.ok(knobs.every(t => near(pos(t)[1], 1.024) && near(Math.abs(pos(t)[0]), 0.914 - 0.07)), 'knobs at 1.024 m, 70 mm from the latch edge');
 assert.ok(!tags('a-cylinder').some(t => attr(t, 'radius') === '0.028'), 'no lever roses left');
 // kick plates 10 × 34 in on every door
 const kicks = tags('a-box').filter(t => attr(t, 'width') === '0.864');
-assert.ok(kicks.length === 3 && kicks.every(t => near(Number(attr(t, 'height')), 0.254)), 'kick plates 254 × 864 mm');
+assert.ok(kicks.length === DOORS.length && kicks.every(t => near(Number(attr(t, 'height')), 0.254)), 'kick plates 254 × 864 mm');
 // Door 1: three hinges, top 248 mm below the frame head (2.1532 m), bottom top 264 mm above the floor
 const door1 = sceneHTML.slice(sceneHTML.indexOf('id="door1"'), sceneHTML.indexOf('</a-entity>\n  <a-entity id="plaque"'));
 const hinges = [...door1.matchAll(/<a-cylinder radius="0.007" height="0.114" position="[-\d.]+ ([\d.]+)/g)].map(m => Number(m[1])).sort((a, b) => b - a);
@@ -41,7 +42,7 @@ assert.equal(hinges.length, 3, 'three hinges on door 1');
 assert.ok(near(hinges[0], top) && near(hinges[2], bottom) && near(hinges[1], (top + bottom) / 2), `hinge centres ${hinges}`);
 // Threshold at most 1/2 in high
 const sills = tags('a-box').filter(t => attr(t, 'depth') === '0.127'); // the 5 in wide saddle
-assert.ok(sills.length === 3 && sills.every(t => Number(attr(t, 'height')) <= 0.013), 'a threshold at most 13 mm at every door');
+assert.ok(sills.length === DOORS.length && sills.every(t => Number(attr(t, 'height')) <= 0.013), 'a threshold at most 13 mm at every door');
 // 4 in vinyl base everywhere
 const bases = tags('a-box').filter(t => attr(t, 'color') === '#2b2d29');
 assert.ok(bases.length >= 10 && bases.every(t => near(Number(attr(t, 'height')), 0.102)), 'base 102 mm high');
@@ -58,7 +59,7 @@ const cork = tags('a-plane').find(t => /kind: cork/.test(attr(t, 'surface') || '
 assert.ok(near((Number(attr(board, 'width')) - Number(attr(cork, 'width'))) / 2, 0.044) && near((Number(attr(board, 'height')) - Number(attr(cork, 'height'))) / 2, 0.044), 'tackboard trim 44 mm');
 // Troffers: 2 × 4 ft (0.6096 × 1.2192 m)
 const troffers = tags('a-box').filter(t => attr(t, 'color') === '#dcdcd5');
-assert.ok(troffers.length === 2 && troffers.every(t => near(Number(attr(t, 'width')), 1.2192) && near(Number(attr(t, 'depth')), 0.6096)), 'troffers 2 × 4 ft');
+assert.ok(troffers.length >= 2 && troffers.every(t => near(Number(attr(t, 'width')), 1.2192) && near(Number(attr(t, 'depth')), 0.6096)), 'troffers 2 × 4 ft');
 // Fire extinguisher up to 40 lb: top at most 5 ft (1.524 m), bottom at least 4 in (102 mm)
 const extAt = html.indexOf('class="extinguisher"');
 const ext = html.slice(extAt, html.indexOf('\n    </a-entity>', extAt));

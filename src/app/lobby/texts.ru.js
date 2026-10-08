@@ -14,6 +14,8 @@ export const LOBBY_T = {
   takeSheet: 'Возьмите планшетку: она висит на доске слева от двери.',
   chooseDoor: 'Выберите дверь. Сейчас открыта первая комната.',
   soon: 'СКОРО',
+  // the plaque by the stairs the player came up, in the middle of the corridor
+  stairs: 'ЛЕСТНИЦА',
   // the studio's poster on the board ends the participation (exit.js), in the lab's words:
   // the player is a participant here, not in a game
   exit: {

@@ -15,6 +15,7 @@ import { signOn, signAnswer } from './opening.js';
 import { pinNotices } from './board.js';
 import { leaveButton } from './exit.js';
 import { WALLS } from './scene.js';
+import { PLAN, BOUNDS as AREA } from './plan.js';
 
 export { corridorHTML } from './scene.js';
 
@@ -26,11 +27,11 @@ export { corridorHTML } from './scene.js';
 // stand and walk: a seated player sees it from standing eye height (lift); a room whose
 // original was seated puts its chair under them instead.
 export const SPOT = { x: 0.7, z: 3.05, yaw: 0, lift: true };
-const BOUNDS = 'minX: -3.1; maxX: 2.7; minZ: 2.1; maxZ: 3.35';
+const BOUNDS = `minX: ${AREA.minX}; maxX: ${AREA.maxX}; minZ: ${AREA.minZ}; maxZ: ${AREA.maxZ}`;
 // The clipboard hangs on the experimenter's board left of door 1, its back 1 cm off the cork
 // (faces at least 5 mm apart, or they flicker) and the peg (scene.js) through its clip, facing
 // the corridor: the only stretch of wall wide enough for it.
-const SHEET_HOME = { pos: [-1.0, 1.5, 1.855], yaw: 0, away: [0, 0, 1] };
+const SHEET_HOME = { pos: [PLAN.board.x, 1.5, 1.855], yaw: 0, away: [0, 0, 1] };
 // Print on the corridor walls (the clipboard's paper on its hook, the plaques and notices) is
 // drawn unlit for legibility; dimmed to this so it does not glow in the dim corridor (chosen
 // by eye in rendered frames; the clipboard brightens for reading on its way to the player).
@@ -118,10 +119,11 @@ export async function runLobby(room) {
   placePlayer(SPOT, BOUNDS);
   $('#rig').setAttribute('locomotion', `${BOUNDS}; ${comfort()}`);   // the corridor is walked with the thumbsticks too
   writePlaque($('#plaqueOut').components.panel, room.plaque);
-  for (const id of ['#soon1', '#soon2']) {
-    $(id).components.panel.write([{ t: LOBBY_T.soon, size: 62, weight: 700, color: BRAND.accent, spacing: 6 }], { bg: BRAND.plate });
-  }
-  for (const id of ['#plaqueOut', '#soon1', '#soon2']) $(id).getObject3D('mesh').material.color.setScalar(WALL_PRINT_LIGHT);
+  // every other plaque, in the same lettering as room 101's (brand.js)
+  const plate = (el, t) => el.components.panel.write([{ t, size: 62, weight: 700, color: BRAND.accent, spacing: 6 }], { bg: BRAND.plate });
+  for (const el of document.querySelectorAll('.soon')) plate(el, LOBBY_T.soon);
+  plate($('#plaqueStairs'), LOBBY_T.stairs);
+  for (const el of document.querySelectorAll('#plaqueOut, #plaqueStairs, .soon')) el.getObject3D('mesh').material.color.setScalar(WALL_PRINT_LIGHT);
   pinNotices($('#notePoster').components.panel, $('#noteFlyer').components.panel, WALL_PRINT_LIGHT);
   const cover = [{ t: LOBBY_T.kicker, role: 'kicker' }, { t: LOBBY_T.title, role: 'title', gap: 0.01 }];
   await sheet.hang(SHEET_HOME, cover, WALL_PRINT_LIGHT);

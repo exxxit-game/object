@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import { frontPose, readingPose, letterDeg, READ_DIST, DROP_DEG, GLIDE, glidePath, curvePoint, easeInOut } from '../src/engine/ui/sheet-math.js';
 import { corridorHTML, WALLS } from '../src/app/lobby/scene.js';
+import { BOUNDS, PLAN } from '../src/app/lobby/plan.js';
 
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 const near = (a, b, e = 1e-9) => Math.abs(a - b) < e;
@@ -27,7 +28,7 @@ assert.ok(near(letterDeg(0.021, 1), 1.2, 0.01), '21 mm at 1 m is about 1.2 degre
 // The clipboard's trip from its hook to the reading spot and back (docs/mistakes.md):
 // slow enough, eased, swinging out from the wall and down, never nearer than
 // GLIDE.nearest to the eyes, and the same arc back.
-const home = [-1.0, 1.5, 1.855], away = [0, 0, 1], wall = { pos: home, away };
+const home = [PLAN.board.x, 1.5, 1.855], away = [0, 0, 1], wall = { pos: home, away };
 let trips = 0;
 // from the arrival spot, across the corridor, and pressed against the board (people walk
 // up to a thing they are told to take); the corridor keeps the eyes at z 2.1 or more
@@ -55,8 +56,8 @@ const SPACE = corridorHTML.match(/space: ([-\d.]+) ([-\d.]+) ([-\d.]+) ([-\d.]+)
 assert.deepEqual([(WALLS.minX + WALLS.maxX) / 2, (WALLS.minZ + WALLS.maxZ) / 2, WALLS.maxX - WALLS.minX, WALLS.maxZ - WALLS.minZ].map(v => +v.toFixed(3)), SPACE, 'WALLS is the corridor drawn by scene.js');
 const HALF_W = 0.3;
 let spots = 0;
-for (let x = -3.1; x <= 2.7 + 1e-9; x += 0.29) {
-  for (const z of [2.1, 2.7, 3.35]) {
+for (let x = BOUNDS.minX; x <= BOUNDS.maxX + 1e-9; x += 0.29) {
+  for (const z of [BOUNDS.minZ, (BOUNDS.minZ + BOUNDS.maxZ) / 2, BOUNDS.maxZ]) {
     for (let deg = 0; deg < 360; deg += 30) {
       const p = readingPose([x, 1.6, z], deg * Math.PI / 180, wall, WALLS, HALF_W);
       const rx = Math.cos(p.yaw) * HALF_W, rz = -Math.sin(p.yaw) * HALF_W;
