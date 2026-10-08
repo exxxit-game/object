@@ -61,7 +61,8 @@ Exit check: the owner plays it at real speed in the headset; smoke test green on
 ### 2. First playtest (before building more rooms)
 5–10 people outside the team play room 01. Measured: who finishes, where they get bored
 (head turned away, long pauses), a 1–10 "would you play the next room", and what they
-retell in their own words. Exit check: a written result in docs/playtests/.
+retell in their own words. Exit check (owner 08.10): 7 of 10 finish and the mean "would play the
+next room" is at least 7 of 10; a written result in docs/playtests/.
 
 ### 3. Choose the first room by testing, not by opinion
 Read the top candidates' papers in full (Kohnstamm, Morehead, Hirschhorn, Shams, Drori,

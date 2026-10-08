@@ -1,12 +1,14 @@
 // Room 01's result must be exactly what the server accepts
-// (supabase/migrations/0005_submit_run_01_control.sql): same fields, answer keys
+// (the newest supabase/migrations/*.sql that defines submit_run): same fields, answer keys
 // and ranges. A mismatch would silently lose every player's result.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { analyse } from '../src/rooms/01-control/report.js';
 import { T } from '../src/rooms/01-control/texts.ru.js';
 
-const sql = fs.readFileSync(new URL('../supabase/migrations/0005_submit_run_01_control.sql', import.meta.url), 'utf8');
+const dir = new URL('../supabase/migrations/', import.meta.url);
+const sql = fs.readdirSync(dir).filter(f => f.endsWith('.sql')).sort()
+  .map(f => fs.readFileSync(new URL(f, dir), 'utf8')).filter(s => s.includes('function public.submit_run')).at(-1);
 const list = (name) => [...sql.match(new RegExp(`${name} constant text\\[\\] := array\\[([^\\]]+)\\]`))[1]
   .matchAll(/'([^']+)'/g)].map(m => m[1]);
 const allowed = list('allowed');
@@ -20,7 +22,7 @@ const log = [
 const Q = T.questions;
 const maxAnswer = { control: 100, total: 100, ifPress: 100, ifNoPress: 100, certainty: 100,
   evidence: Q.evidence.answers.length - 1, hypotheses: Q.hypotheses.answers.length - 1,
-  gender: Q.gender.answers.length - 1, knew: Q.knew.answers.length - 1 };
+  gender: Q.gender.answers.length - 1, age: Q.age.answers.length - 1, knew: Q.knew.answers.length - 1 };
 for (const [key, value] of Object.entries(maxAnswer)) log.push({ t: 60, k: 'answer', v: { key, value, pos: 0 } });
 
 // exactly what room.js sends: { condition, ...analyse(log), seated, speed }

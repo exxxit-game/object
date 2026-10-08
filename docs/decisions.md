@@ -22,3 +22,13 @@ Each room carries the space its original procedure needs: seated, standing (Meta
 Why 1.8 and not Meta's 2 × 2 m minimum: on the owner's headset the browser reported 1.88 × 2.10 m, less than Meta's minimum, so a 2 × 2 m room would not fit even there.
 A room bigger than the player's boundary is offered only to players who have that space; it is never shrunk, since a shrunk procedure is a different experiment.
 Consequence: every room states the space its original needs; at the start the game reads the player's boundary (WebXR bounded-floor, works on the owner's Quest 3) and compares. Too small: say how much is needed and offer another room. Boundary unreadable: only seated and standing rooms, or ask the player.
+
+## Research studies are always free for the player
+A room whose data goes into a registered study is free while the study runs; paid rooms are entertainment only, and payment is recorded.
+Why: paying changes who takes part and biases the sample; all known citizen-science projects are free.
+Consequence: a study is paid for by the partner lab or a grant, never by the participant.
+
+## A player who leaves early chooses whether to learn what it was
+Leaving VR mid-room shows "go back" or "learn what it was"; a closed page asks the same at the next visit. Nothing is revealed without a click.
+Why: debriefing must be available to early leavers (BPS), but someone who left by accident may want to come back naive.
+Consequence: src/app/left-early.js; test runs (?speed=N) leave no mark.

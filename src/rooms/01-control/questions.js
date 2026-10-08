@@ -6,7 +6,7 @@ import { eventLog } from '../../engine/log.js';
 // The measures after the trials (pp. 449–451): judgment of control first, then
 // if-press, if-not-press and total percentages (p. 454 says total was completed
 // last; p. 450 lists it second — we follow the completion order), then
-// the post-questionnaire, then our two additions (gender, prior knowledge).
+// the post-questionnaire, then our additions (gender, age group, prior knowledge).
 // Every answer goes to the event log as { key, value }.
 const Q = T.questions;
 const SCALES = [
@@ -16,7 +16,7 @@ const SCALES = [
   ['total', T.percentLabels, '%'],
   ['certainty', Q.certainty.labels, '']
 ];
-const CHOICES = ['evidence', 'hypotheses', 'gender', 'knew'];
+const CHOICES = ['evidence', 'hypotheses', 'gender', 'age', 'knew'];
 // Reasons are shown in a random order per player so that no reason gains from
 // being first; the last answer ("other") stays last. The log keeps the index in texts.ru.js.
 const SHUFFLED = new Set(['evidence']);

@@ -77,7 +77,7 @@ async function playRoom(url, playtest) {
     });
     await waitState('questions', 120000);
     await page.evaluate(() => clearInterval(window.__presser));
-    for (let k = 0; k < 9; k++) await answer();
+    for (let k = 0; k < 10; k++) await answer(); // 5 scales + 5 choices (questions.js)
     await waitState('done');
     for (let i = 0; i < 6; i++) await pick(0);   // reveal pages
     if (playtest) {

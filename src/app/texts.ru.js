@@ -23,6 +23,14 @@ export const APP_T = {
     psych: { ask: 'Знакомы ли вы с психологией?', answers: ['Нет', 'Немного', 'Учился(ась)'] },
     thanks: 'Спасибо, это очень поможет.'
   },
+  // A player who left before the end (src/app/left-early.js).
+  leftEarly: {
+    now: 'Вы вышли до конца опыта.',
+    before: 'В прошлый раз вы вышли до конца опыта.',
+    back: 'Вернуться в опыт',
+    learn: 'Узнать, что это было',
+    again: 'Пройти заново'
+  },
   understood: 'Понятно',
   repeat: 'Повторить',
   next: 'Дальше',

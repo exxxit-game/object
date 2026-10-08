@@ -13,6 +13,7 @@ import { createChoice } from '../../engine/ui/choice.js';
 import { createScale } from '../../engine/ui/scale.js';
 import { createAwayMeter } from '../../engine/away-meter.js';
 import { askConsent } from '../../app/consent.js';
+import { markStarted, markReached, leftBefore, askAfterLeaving, watchExit } from '../../app/left-early.js';
 import { createSession, SPEED, PLAYTEST } from '../../app/session.js';
 import { compareRoom } from '../../engine/results.js';
 import { askPlaytest } from '../../app/playtest.js';
@@ -45,12 +46,17 @@ const STAND = { x: 0, y: 1.02, z: -0.45 };
 // Top edge of the wall screen (centre 1.86 m, height 1.0 m) and the gap left
 // between a question and the buttons or scale under it.
 const SCREEN_TOP = 2.36;
+// Answer buttons stay above the screen's lower edge (with a small margin).
+const SCREEN_LOW = SCREEN_TOP - 1.0 + 0.02;
 const UNDER_TEXT = 0.05;
 
 let scene, choice, lowChoice, scale, shownScale, session, trials = null;
 let seated = false;
 let xrVisible = true;
-const paused = () => document.hidden || !xrVisible;
+let held = false; // the "you left before the end" box is open
+const paused = () => document.hidden || !xrVisible || held;
+// Real play only: test runs (?speed=N) leave no "left early" mark.
+const REAL = SPEED === 1;
 
 // Playtest measures: when each phase started, seconds looking away during the trials.
 const phaseStart = {};
@@ -168,6 +174,7 @@ async function questions() {
 async function reveal(condition) {
   setState('done');
   phase('reveal');
+  if (REAL) markReached(ROOM_ID);
   eventLog.end();
   const r = analyse(eventLog.entries);
   session.finish({ condition, ...r, seated, speed: SPEED });
@@ -199,6 +206,7 @@ async function playtest(r) {
 
 async function play(withRecording) {
   session.begin(withRecording);
+  if (REAL) markStarted(ROOM_ID);
   for (const k of Object.keys(phaseStart)) { delete phaseStart[k]; delete phaseSecs[k]; }
   await intro();
   const condition = await runTrials();
@@ -220,14 +228,17 @@ function pressButton(e) {
 /* ---------- boot ---------- */
 async function boot() {
   // answer buttons under a short question at the top of the screen
-  choice = createChoice(scene, { y: 2.02, z: -1.555, w: 1.5 });
-  lowChoice = createChoice(scene, { y: 1.48, z: -1.555, w: 0.9, h: 0.12 });
+  choice = createChoice(scene, { y: 2.02, z: -1.555, w: 1.5, bottom: SCREEN_LOW });
+  lowChoice = createChoice(scene, { y: 1.48, z: -1.555, w: 0.9, h: 0.12, bottom: SCREEN_LOW });
   scale = createScale(scene, { y: 1.78, z: -1.555 });
   shownScale = createScale(scene, { y: 1.6, z: -1.555 });
   // On desktop the view starts tilted slightly down, toward the table.
   const lc = $('#cam').components['look-controls'];
   if (lc && lc.pitchObject) lc.pitchObject.rotation.x = -0.28;
   $('#hint').classList.add('show');
+  if (REAL && leftBefore(ROOM_ID)) {
+    await askAfterLeaving(screen(), lowChoice, { room: ROOM_ID, debrief: T.earlyDebrief, screenTop: SCREEN_TOP });
+  }
   const withRecording = await askConsent(screen(), lowChoice, {
     kicker: T.kicker, title: T.title, screenTop: SCREEN_TOP, extra: PLAYTEST ? [APP_T.playtest.consent] : []
   });
@@ -263,6 +274,10 @@ export function mount() {
     if (s) s.addEventListener('visibilitychange', () => { xrVisible = s.visibilityState === 'visible'; });
   });
   scene.addEventListener('exit-vr', () => { xrVisible = true; seated = false; });
+  if (REAL) {
+    watchExit(scene, { room: ROOM_ID, debrief: T.earlyDebrief, hold: (on) => { held = on; },
+      midRoom: () => ['intro', 'run', 'questions'].includes(state) });
+  }
   $('#rig').addEventListener('recentered', (e) => { seated = !!(e.detail && e.detail.seated); });
   setState('idle');
   if (scene.hasLoaded) boot(); else scene.addEventListener('loaded', boot);

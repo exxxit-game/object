@@ -101,7 +101,7 @@ await run(`(async () => {
     while (st() !== 'run') await w(100);
     let k = 0;
     while (st() === 'run') { if (document.querySelector('#yellow').getAttribute('material').emissiveIntensity > 0 && k++ % 3 === 0) document.querySelector('#buttonCap').emit('click'); await w(60); }
-    for (let q = 0; q < 9; q++) {
+    for (let q = 0; q < 10; q++) { // 5 scales + 5 choices (src/rooms/01-control/questions.js)
       // the experimenter speaks first: wait until a scale or several answers are shown
       while (!document.querySelector('.scale-bar') && document.querySelectorAll('.answer').length < 2) await w(150);
       await w(300);
