@@ -13,8 +13,8 @@ const BLOCK = 0.4, COURSE = 0.2, MODULE = 0.2, MIN_GAP = 0.04, EPS = 0.002;
 // the walls things sit on, by the z of their face: the corridor's north wall and the room's back
 // wall, each with the joint origin its surface uses (surface.js, space of the corridor / the room)
 const WALLS = [
-  { name: 'corridor north wall', z: [1.79, 1.95], origin: bondOrigin(-0.2, 6.4, BLOCK) },
-  { name: 'room back wall', z: [1.55, 1.79], origin: bondOrigin(0, 3.2, BLOCK) }
+  { name: 'corridor north wall', z: [1.79, 1.95], x: [-3.4, 3.0], origin: bondOrigin(-0.2, 6.4, BLOCK) },
+  { name: 'room back wall', z: [1.55, 1.79], x: [-1.6, 1.6], origin: bondOrigin(0, 3.2, BLOCK) }
 ];
 // the corridor's left end wall (face x -3.4), for anything fixed to it: it runs along z, its joints
 // laid out across the corridor's depth
@@ -32,8 +32,8 @@ assert.equal(jambs.length, 6, 'three doors, two jambs each');
 // the floor course is laid whole from the origin, the next one shifted (as surface.js draws)
 assert.ok(!courseShifted(0) && courseShifted(1) && !courseShifted(2), 'running bond from a whole floor course');
 for (const wall of WALLS) {
-  // door 1 goes through both walls: its frame (z 1.7) counts for each
-  const xs = jambs.filter(j => wallAt(j.z) === wall || j.z === 1.7).map(j => j.x).sort((a, b) => a - b);
+  // a frame goes through the whole wall (z 1.7): it counts for each wall it stands in
+  const xs = jambs.filter(j => (wallAt(j.z) === wall || j.z === 1.7) && j.x > wall.x[0] && j.x < wall.x[1]).map(j => j.x).sort((a, b) => a - b);
   assert.equal(xs.length, wall === WALLS[0] ? 6 : 2, `${wall.name}: its door frames`);
   for (let i = 0; i < xs.length; i += 2) {
     for (const edge of [xs[i] - 0.0143, xs[i + 1] + 0.0143]) {

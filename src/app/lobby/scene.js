@@ -7,27 +7,15 @@
 // ceiling grid laid out from the corridor's centre, 2 × 4 ft troffers in the grid. Static
 // parts are merged after load; the plaques and the sign change, so they stay apart. Sizes in
 // metres; the corridor runs x -3.4 to 3.0, z 1.8 to 3.6.
+import { doorHTML, CHROME } from '../../engine/door.js';
+
 const SPACE = 'space: -0.2 2.7 6.4 1.8';
 // its wall faces, for what must stay inside them (the clipboard; tests/sheet.test.mjs checks
 // they match SPACE)
 export const WALLS = { minX: -3.4, maxX: 3.0, minZ: 1.8, maxZ: 3.6 };
 const BLOCK = (tint) => `surface="kind: block; tint: ${tint}; ${SPACE}"`;
 const FRAME = 'color="#3d3a34"';
-const METAL = 'material="color: #c9ccce; metalness: .8; roughness: .25"';
-
-// A closed door of a room to come, set on the wall: frame, leaf, lever on the latch side
-// (dir +1: latch on the right), kick plate on the push side.
-function soonDoor(c, dir) {
-  const latch = c + dir * 0.387;
-  return `
-    <a-box position="${c - 0.4857} 1.1021 1.8125" width="0.051" height="2.2042" depth="0.025" ${FRAME}></a-box>
-    <a-box position="${c + 0.4857} 1.1021 1.8125" width="0.051" height="2.2042" depth="0.025" ${FRAME}></a-box>
-    <a-box position="${c} 2.1787 1.8125" width="1.0224" height="0.051" depth="0.025" ${FRAME}></a-box>
-    <a-entity rounded-box="width: 0.914; height: 2.134; depth: 0.02; radius: 0.004; color: #6a5641; roughness: 0.55" position="${c} 1.083 1.81"></a-entity>
-    <a-box position="${c} 0.143 1.8208" width="0.864" height="0.254" depth="0.0015" material="color: #b9bcbe; metalness: .7; roughness: .3"></a-box>
-    <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="${latch} 1.024 1.826" ${METAL}></a-cylinder>
-    <a-box position="${latch - dir * 0.06} 1.024 1.855" width="0.13" height="0.018" depth="0.018" ${METAL}></a-box>`;
-}
+const METAL = `material="color: ${CHROME.color}; metalness: ${CHROME.metalness}; roughness: ${CHROME.roughness}"`;
 
 // A 2 × 4 ft troffer centred at x in the corridor's grid: a 25 mm painted frame around a lens
 // that glows with its two lamps behind it.
@@ -75,16 +63,24 @@ export const corridorHTML = `
   <a-entity merge-static>
     <a-plane rotation="-90 0 0" position="-0.2 0 2.7" width="6.4" height="1.8" surface="kind: linoleum; ${SPACE}"></a-plane>
     <a-plane rotation="90 0 0" position="-0.2 2.5 2.7" width="6.4" height="1.8" surface="kind: ceiling; ${SPACE}"></a-plane>
-    <!-- the floor inside door 1's opening, from the threshold to the corridor -->
+    <!-- the floor inside each door's opening, from the threshold to the corridor -->
+    <a-plane rotation="-90 0 0" position="-2.7 0 1.748" width="0.9204" height="0.104" surface="kind: linoleum; ${SPACE}"></a-plane>
     <a-plane rotation="-90 0 0" position="0.7 0 1.748" width="0.9204" height="0.104" surface="kind: linoleum; ${SPACE}"></a-plane>
-    <!-- north wall with door 1's masonry opening (x 0.2 to 1.2, up to 2.2 m). Openings and the
+    <a-plane rotation="-90 0 0" position="2.3 0 1.748" width="0.9204" height="0.104" surface="kind: linoleum; ${SPACE}"></a-plane>
+    <!-- north wall with door 1's masonry opening and the soon doors' (x 0.2 to 1.2, -3.2 to -2.2, 1.8 to 2.8, up to 2.2 m). Openings and the
          flat things on the walls start and end on the 0.2 m block module, so no sliver of a cut
          block shows beside them (NCMA TEK 05-12; tests/masonry.test.mjs) -->
-    <a-plane position="-1.6 1.25 1.8" width="3.6" height="2.5" ${BLOCK('#8a9479')}></a-plane>
-    <a-plane position="2.1 1.25 1.8" width="1.8" height="2.5" ${BLOCK('#8a9479')}></a-plane>
+    <a-plane position="-3.3 1.25 1.8" width="0.2" height="2.5" ${BLOCK('#8a9479')}></a-plane>
+    <a-plane position="-1.0 1.25 1.8" width="2.4" height="2.5" ${BLOCK('#8a9479')}></a-plane>
+    <a-plane position="1.5 1.25 1.8" width="0.6" height="2.5" ${BLOCK('#8a9479')}></a-plane>
+    <a-plane position="2.9 1.25 1.8" width="0.2" height="2.5" ${BLOCK('#8a9479')}></a-plane>
+    <a-plane position="-2.7 2.35 1.8" width="1.0" height="0.3" ${BLOCK('#8a9479')}></a-plane>
     <a-plane position="0.7 2.35 1.8" width="1.0" height="0.3" ${BLOCK('#8a9479')}></a-plane>
-    <a-plane position="-1.6 0.4 1.803" width="3.6" height="0.8" ${BLOCK('#5d6650')}></a-plane>
-    <a-plane position="2.1 0.4 1.803" width="1.8" height="0.8" ${BLOCK('#5d6650')}></a-plane>
+    <a-plane position="2.3 2.35 1.8" width="1.0" height="0.3" ${BLOCK('#8a9479')}></a-plane>
+    <a-plane position="-3.3 0.4 1.803" width="0.2" height="0.8" ${BLOCK('#5d6650')}></a-plane>
+    <a-plane position="-1.0 0.4 1.803" width="2.4" height="0.8" ${BLOCK('#5d6650')}></a-plane>
+    <a-plane position="1.5 0.4 1.803" width="0.6" height="0.8" ${BLOCK('#5d6650')}></a-plane>
+    <a-plane position="2.9 0.4 1.803" width="0.2" height="0.8" ${BLOCK('#5d6650')}></a-plane>
     <!-- south and end walls -->
     <a-plane rotation="0 180 0" position="-0.2 1.25 3.6" width="6.4" height="2.5" ${BLOCK('#8a9479')}></a-plane>
     <a-plane rotation="0 180 0" position="-0.2 0.4 3.597" width="6.4" height="0.8" ${BLOCK('#5d6650')}></a-plane>
@@ -92,20 +88,24 @@ export const corridorHTML = `
     <a-plane rotation="0 -90 0" position="3.0 1.25 2.7" width="1.8" height="2.5" ${BLOCK('#858f74')}></a-plane>
     <a-plane rotation="0 90 0" position="-3.397 0.4 2.7" width="1.8" height="0.8" ${BLOCK('#59624c')}></a-plane>
     <a-plane rotation="0 -90 0" position="2.997 0.4 2.7" width="1.8" height="0.8" ${BLOCK('#59624c')}></a-plane>
-    <!-- rail at 0.8 m and 4 in vinyl base; on the north wall both stop at door 1's frame -->
-    <a-box position="-1.6056 0.8 1.806" width="3.5888" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
-    <a-box position="2.1056 0.8 1.806" width="1.7888" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
+    <!-- rail at 0.8 m and 4 in vinyl base; on the north wall both stop at every door frame -->
+    <a-box position="-3.3056 0.8 1.806" width="0.1888" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
+    <a-box position="-1 0.8 1.806" width="2.3776" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
+    <a-box position="1.5 0.8 1.806" width="0.5776" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
+    <a-box position="2.9056 0.8 1.806" width="0.1888" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
     <a-box position="-0.2 0.8 3.594" width="6.4" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
     <a-box position="-3.394 0.8 2.7" width="0.012" height="0.025" depth="1.8" color="#4a3b2c"></a-box>
     <a-box position="2.994 0.8 2.7" width="0.012" height="0.025" depth="1.8" color="#4a3b2c"></a-box>
-    <a-box position="-1.6056 0.051 1.8025" width="3.5888" height="0.102" depth="0.005" color="#2b2d29"></a-box>
-    <a-box position="2.1056 0.051 1.8025" width="1.7888" height="0.102" depth="0.005" color="#2b2d29"></a-box>
+    <a-box position="-3.3056 0.051 1.8025" width="0.1888" height="0.102" depth="0.005" color="#2b2d29"></a-box>
+    <a-box position="-1 0.051 1.8025" width="2.3776" height="0.102" depth="0.005" color="#2b2d29"></a-box>
+    <a-box position="1.5 0.051 1.8025" width="0.5776" height="0.102" depth="0.005" color="#2b2d29"></a-box>
+    <a-box position="2.9056 0.051 1.8025" width="0.1888" height="0.102" depth="0.005" color="#2b2d29"></a-box>
     <a-box position="-0.2 0.051 3.5975" width="6.4" height="0.102" depth="0.005" color="#2b2d29"></a-box>
     <a-box position="-3.3975 0.051 2.7" width="0.005" height="0.102" depth="1.8" color="#2b2d29"></a-box>
     <a-box position="2.9975 0.051 2.7" width="0.005" height="0.102" depth="1.8" color="#2b2d29"></a-box>
-    <!-- closed doors of the rooms to come -->
-    ${soonDoor(-2.7, 1)}
-    ${soonDoor(2.3, -1)}
+    <!-- closed doors of the rooms to come, built like door 1 (src/engine/door.js) -->
+    ${doorHTML({ x: -2.7, latch: 1 })}
+    ${doorHTML({ x: 2.3, latch: -1 })}
     <!-- 2 × 4 ft fluorescent troffers, each filling two cells of the ceiling grid: a painted
          steel door frame and a prismatic lens (docs/building-standards.md, S20) -->
     ${troffer(-1.724)}
@@ -132,10 +132,11 @@ export const corridorHTML = `
   <a-entity id="corridorAmbient" light="type: ambient; color: #c9cfd6; intensity: 0"></a-entity>
   <a-entity id="corridorLamp" light="type: point; color: #eef2ff; intensity: 1.6; distance: 0; decay: 0.8" position="-0.2 2.3 2.7"></a-entity>
   <a-plane position="-1.0 1.5 1.835" width="1.512" height="0.912" surface="kind: cork; repeat: 3.024 1.824"></a-plane>
-  <!-- plaques: room 1 on the latch side of its door, "soon" notices on the closed doors -->
-  <a-entity id="plaqueOut" class="on-wall" panel="w: 0.4; h: 0.2; px: 640; bg: #15161a" position="1.5 1.5 1.806"></a-entity>
-  <a-entity id="soon1" panel="w: 0.32; h: 0.16; px: 640; bg: #15161a" position="-2.7 1.55 1.822"></a-entity>
-  <a-entity id="soon2" panel="w: 0.32; h: 0.16; px: 640; bg: #15161a" position="2.3 1.55 1.822"></a-entity>
+  <!-- plaques, all one size: each on the wall at its door's latch side, 4 cm from the frame (soon door 2's latch side
+       is door 1's: its plaque on the nearest wall beside it, ADA 1991 4.30.6) -->
+  <a-entity id="plaqueOut" class="on-wall" panel="w: 0.2; h: 0.2; px: 512; bg: #15161a" position="1.35 1.5 1.806"></a-entity>
+  <a-entity id="soon1" class="on-wall" panel="w: 0.2; h: 0.2; px: 512; bg: #15161a" position="-2.05 1.5 1.806"></a-entity>
+  <a-entity id="soon2" class="on-wall" panel="w: 0.2; h: 0.2; px: 512; bg: #15161a" position="1.65 1.5 1.806"></a-entity>
   <!-- A4 sheets (ISO 216) pinned beside the clipboard: the studio's poster and a flyer (board.js) -->
   <a-entity id="notePoster" class="clickable" panel="w: 0.21; h: 0.297; px: 640" position="-1.47 1.6 1.84" rotation="0 0 2"></a-entity>
   <a-entity id="noteFlyer" panel="w: 0.21; h: 0.297; px: 640" position="-0.53 1.42 1.84" rotation="0 0 -1.5"></a-entity>

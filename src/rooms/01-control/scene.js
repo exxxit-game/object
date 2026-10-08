@@ -5,6 +5,8 @@
 // through the door and comes back (p. 452). The wall screen carries the words of the
 // experimenter. Look: a university lab of 1979 (painted block walls, linoleum,
 // acoustic ceiling, bakelite and chrome). Sizes in metres.
+import { doorHTML } from '../../engine/door.js';
+
 export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true" background="color: #0b0b0d"
          cursor="rayOrigin: mouse" raycaster="objects: .clickable; far: 8"
          vr-mode-ui="enabled: true" loading-screen="enabled: false" xr-mode-ui="enabled: true">
@@ -112,34 +114,9 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <!-- door 1's way, seen from both sides: its own group, so the corridor can leave the room
        interior undrawn while the door is shut (class room-interior, src/app/lobby/lobby.js) -->
   <a-entity id="doorway" merge-static>
-    <!-- door 1, the door the experimenter leaves by (behind the player), built to the trade
-         standards (docs/building-standards.md): hollow metal frame with a 2 in face through the
-         0.2 m wall; stops on the corridor side hide the 1/8 in gaps around the leaf; aluminium
-         threshold 1/2 in high; plaque and light switch on the latch side -->
-    <a-box position="0.2143 1.1021 1.7" width="0.051" height="2.2042" depth="0.22" color="#3d3a34"></a-box>
-    <a-box position="1.1857 1.1021 1.7" width="0.051" height="2.2042" depth="0.22" color="#3d3a34"></a-box>
-    <a-box position="0.7 2.1787 1.7" width="1.0224" height="0.051" depth="0.22" color="#3d3a34"></a-box>
-    <a-box position="0.2478 1.0766 1.663" width="0.016" height="2.1532" depth="0.016" color="#3d3a34"></a-box>
-    <a-box position="1.1522 1.0766 1.663" width="0.016" height="2.1532" depth="0.016" color="#3d3a34"></a-box>
-    <a-box position="0.7 2.1452 1.663" width="0.9204" height="0.016" depth="0.016" color="#3d3a34"></a-box>
-    <a-box position="0.7 0.0065 1.6325" width="0.9204" height="0.013" depth="0.127" material="color: #9a9c9e; metalness: .6; roughness: .4"></a-box>
-    <!-- the 3'0" × 7'0" leaf swings into the room on three hinges at its left edge (pivot);
-         lever on both sides at 1.024 m, 70 mm from the latch edge; kick plate on the push
-         (corridor) side; closer on the pull side; the leaf is what the player points at -->
-    <a-entity id="door1" data-dynamic position="0.243 0 1.61">
-      <a-entity class="clickable" rounded-box="width: 0.914; height: 2.134; depth: 0.045; radius: 0.004; color: #6a5641; roughness: 0.55"
-                position="0.457 1.083 0.0225"></a-entity>
-      <a-box position="0.457 0.143 0.0458" width="0.864" height="0.254" depth="0.0015" material="color: #b9bcbe; metalness: .7; roughness: .3"></a-box>
-      <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="0.844 1.024 0.051" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
-      <a-box position="0.784 1.024 0.08" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
-      <a-cylinder radius="0.028" height="0.012" rotation="90 0 0" position="0.844 1.024 -0.006" material="color: #c9ccce; metalness: .8; roughness: .25"></a-cylinder>
-      <a-box position="0.784 1.024 -0.035" width="0.13" height="0.018" depth="0.018" material="color: #c9ccce; metalness: .8; roughness: .25"></a-box>
-      <a-cylinder radius="0.007" height="0.114" position="-0.0016 1.8482 -0.004" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-cylinder>
-      <a-cylinder radius="0.007" height="0.114" position="-0.0016 1.0276 -0.004" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-cylinder>
-      <a-cylinder radius="0.007" height="0.114" position="-0.0016 0.207 -0.004" material="color: #9a9c9e; metalness: .7; roughness: .35"></a-cylinder>
-      <a-box position="0.22 2.09 -0.032" width="0.28" height="0.055" depth="0.06" color="#5b5d60"></a-box>
-      <a-box position="0.33 2.13 -0.045" width="0.22" height="0.012" depth="0.012" color="#5b5d60"></a-box>
-    </a-entity>
+    <!-- door 1, the door the experimenter leaves by (behind the player): built like every door of
+         the lab (src/engine/door.js); its plaque and light switch on the latch side -->
+    ${doorHTML({ x: 0.7, latch: 1, leaf: 'id="door1" data-dynamic', clickable: true, inside: true })}
   </a-entity>
 
   <!-- experimenter screen -->
