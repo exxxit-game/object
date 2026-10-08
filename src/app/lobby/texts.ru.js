@@ -2,7 +2,9 @@
 // The player is always addressed formally ("вы").
 export const LOBBY_T = {
   kicker: 'ЛАБОРАТОРИЯ',
-  title: 'Объект',
+  // the game's name stays in English in every language: the player is the object
+  title: 'You are the object',
+  sign: 'YOU ARE THE OBJECT',
   // the promise first: what the player is offered (owner's words)
   welcome: [
     'Добро пожаловать в лабораторию.',

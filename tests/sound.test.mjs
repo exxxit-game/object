@@ -2,10 +2,11 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
-const rooms = fs.readdirSync(new URL('../src/rooms/', import.meta.url));
+// every room, plus the corridor shared by all rooms
+const rooms = [...fs.readdirSync(new URL('../src/rooms/', import.meta.url)).map(r => `rooms/${r}`), 'app/lobby'];
 let total = 0;
 for (const room of rooms) {
-  const dir = new URL(`../src/rooms/${room}/`, import.meta.url);
+  const dir = new URL(`../src/${room}/`, import.meta.url);
   const { SOUNDS } = await import(new URL('sound-list.js', dir));
   for (const s of SOUNDS) {
     const file = new URL(s.file, dir);

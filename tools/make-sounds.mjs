@@ -1,5 +1,6 @@
-// Generates the sound effects of a room with ElevenLabs sound generation.
-// Usage: node tools/make-sounds.mjs <room-id> [--force]
+// Generates the sound effects of a room (or of a folder under src/ with its own
+// sound-list.js, e.g. app/lobby) with ElevenLabs sound generation.
+// Usage: node tools/make-sounds.mjs <room-id | app/lobby> [--force]
 // The API key is read from ~/.elevenlabs-key.txt and never printed or stored in the repo.
 import fs from 'node:fs';
 import os from 'node:os';
@@ -8,9 +9,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const room = process.argv[2];
 const force = process.argv.includes('--force');
-if (!/^[\w-]+$/.test(room || '')) { console.error('usage: node tools/make-sounds.mjs <room-id> [--force]'); process.exit(1); }
+if (!/^[\w/-]+$/.test(room || '')) { console.error('usage: node tools/make-sounds.mjs <room-id | app/lobby> [--force]'); process.exit(1); }
 
-const roomDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'src', 'rooms', room);
+const src = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'src');
+const roomDir = room.includes('/') ? path.join(src, room) : path.join(src, 'rooms', room);
 const { SOUNDS } = await import(pathToFileURL(path.join(roomDir, 'sound-list.js')).href);
 const key = fs.readFileSync(path.join(os.homedir(), '.elevenlabs-key.txt'), 'utf8').replace(/^﻿/, '').trim();
 

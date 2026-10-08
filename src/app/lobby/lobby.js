@@ -5,16 +5,20 @@ import { APP_T } from '../texts.ru.js';
 import { loadVoice, speak } from '../../engine/voice.js';
 import { unlock } from '../../engine/audio.js';
 import { createSheet } from '../../engine/ui/sheet.js';
+import { loadSounds, playSound } from '../../engine/sfx.js';
 import '../../engine/fader.js';
+import '../../engine/glow.js';
 import { LOBBY_T } from './texts.ru.js';
 import { VOICE_LINES } from './voice-lines.js';
+import { SOUNDS } from './sound-list.js';
+import { SIGN_START, SIGN_AT } from './sign.js';
 
 export { corridorHTML } from './scene.js';
 
-// The arrival before the first room: the player stands in the lab corridor facing the
-// doors; the experimenter welcomes them on the board, asks the consent, and the player
-// points at door 1. The door opens, the view fades, and the player is at the table
-// (on the chair when seated). See docs/decisions.md, "The arrival".
+// The arrival before the first room: the player stands in the lab corridor facing door 1;
+// the sign over it comes on, the clipboard sheet welcomes them and asks the consent, and
+// the player points at door 1. The door opens, the view fades, and the player is at the
+// table (on the chair when seated). See docs/decisions.md, "The arrival".
 // The player arrives facing door 1, the thing to do first. The corridor is a place to
 // stand and walk: a seated player sees it from standing eye height (lift); a room whose
 // original was seated puts its chair under them instead.
@@ -24,6 +28,7 @@ const $ = (s) => document.querySelector(s);
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
 loadVoice(VOICE_LINES, import.meta.url);
+loadSounds(SOUNDS, import.meta.url);
 
 // Puts the player at a spot facing a direction: in VR through the recenter component; on a
 // computer the rig goes to the origin and the camera to the spot, because room-bounds
@@ -48,12 +53,18 @@ function onFirstGesture(fn) {
   $('a-scene').addEventListener('enter-vr', go, { once: true });
 }
 
-// The experimenter's board is the lab's sign; what the player reads or answers is on
-// the clipboard sheet in front of them.
-const sign = [
-  { t: LOBBY_T.kicker, size: 34, color: '#9a968d', weight: 700, spacing: 8 },
-  { t: LOBBY_T.title, size: 90, weight: 700, gap: 14 }
-];
+// The light box over door 1 comes on first, before any text (src/app/lobby/sign.js says
+// why): in a headset once the player is in VR and placed facing the door, on a computer
+// at once. Its starter clicks and then its hum come from the sign.
+function signOn(gesture) {
+  const face = $('#signFace');
+  face.components.panel.write([{ t: LOBBY_T.sign, size: 72, weight: 800, color: '#ffe7b0', spacing: 6 }], { bg: '#160f05', pad: 40 });
+  face.addEventListener('glow-rise', () => playSound('sign-click', SIGN_AT, 0.6));
+  const when = AFRAME.utils.device.checkHeadsetConnected() ? gesture.then(() => delay(400)) : Promise.resolve();
+  return when
+    .then(() => face.components.glow.run(SIGN_START))
+    .then(() => { playSound('sign-hum', SIGN_AT, 0.08, true); });
+}
 
 // room: { id, plaque: { number, name, year }, debrief, seat: { x, z, yaw }, bounds, extra, real }
 // Resolves with true when the player chose to start with recording, once inside the room.
@@ -66,11 +77,15 @@ export async function runLobby(room) {
   for (const id of ['#soon1', '#soon2']) {
     $(id).components.panel.write([{ t: LOBBY_T.soon, size: 62, weight: 700, color: BRAND.accent, spacing: 6 }], { bg: BRAND.plate });
   }
-  board.write(sign);
+  board.write([]);
 
-  // 1. welcome: the promise first; the voice starts with the player's first gesture
+  // 0. the sign comes on; 1. welcome on the sheet: the promise first; the voice reads it
+  // once the sign is lit and the player has made a gesture (audio needs one)
   let spoken = Promise.resolve();
-  onFirstGesture(() => { spoken = (async () => { for (const line of LOBBY_T.welcome) await speak(line); })(); });
+  const gesture = new Promise((resolve) => onFirstGesture(resolve));
+  const lit = signOn(gesture);
+  gesture.then(() => { spoken = (async () => { await lit; for (const line of LOBBY_T.welcome) await speak(line); })(); });
+  await lit;
   await sheet.choose([
     { t: LOBBY_T.kicker, role: 'kicker' },
     { t: LOBBY_T.title, role: 'title', gap: 0.01 },
@@ -88,7 +103,7 @@ export async function runLobby(room) {
   sheet.close();
 
   // 4. the doors: door 1 opens the room
-  board.write([...sign, { t: LOBBY_T.chooseDoor, size: 46, weight: 600, gap: 30 }]);
+  board.write([{ t: LOBBY_T.chooseDoor, size: 54, weight: 600 }]);
   await spoken;
   speak(LOBBY_T.chooseDoor);
   const door = $('#door1');
@@ -103,7 +118,7 @@ export async function runLobby(room) {
   placePlayer(room.seat, room.bounds);
   door.removeAttribute('animation');
   door.setAttribute('rotation', '0 0 0');
-  board.write(sign);
+  board.write([]);
   await delay(250);
   await $('#cam').components.fader.to(0);
   return withRecording;

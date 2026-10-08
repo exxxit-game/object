@@ -65,7 +65,13 @@ export const corridorHTML = `
     <a-box position="1.324 2.49 2.7" width="1.2192" height="0.02" depth="0.6096" material="color: #f4f6f8; emissive: #eef4ff; emissiveIntensity: 1.1"></a-box>
     <!-- the experimenter's board frame -->
     <a-box position="-1.0 1.5 1.815" width="1.42" height="1.02" depth="0.03" color="#1b1c1e"></a-box>
+    <!-- the light box over door 1 (like the "in session" boxes over lab doors) -->
+    <a-box position="0.6 2.34 1.845" width="0.96" height="0.26" depth="0.09" color="#2a2a2c"></a-box>
   </a-entity>
+  <a-entity id="signFace" panel="w: 0.9; h: 0.2; px: 1024; bg: #160f05" glow="light: #signLight; lightMax: 0.7; level: 0.04"
+            position="0.6 2.34 1.891"></a-entity>
+  <!-- the sign's warm spill on the door and floor below it (not a hot spot on the ceiling) -->
+  <a-entity id="signLight" light="type: point; color: #ffd9a0; intensity: 0; distance: 2.5; decay: 2" position="0.6 1.95 2.25"></a-entity>
   <a-entity light="type: point; color: #eef2ff; intensity: 1.6; distance: 0; decay: 0.8" position="-0.2 2.3 2.7"></a-entity>
   <a-entity id="lobbyBoard" panel="w: 1.3; h: 0.9; px: 1331; ref: 845; bg: #0e0f11" position="-1.0 1.5 1.834"></a-entity>
   <!-- plaques: room 1 on the latch side of its door, "soon" notices on the closed doors -->

@@ -90,4 +90,13 @@ for (const f of scripts) {
 try { execFileSync(process.execPath, [path.join(ROOT, 'tools/build-catalog.mjs'), '--check'], { stdio: 'pipe' }); }
 catch (e) { assert.fail(String(e.stderr || e.stdout).trim()); }
 
+// 11. A component never gives its own method the name play() or pause() with arguments:
+// A-Frame calls those itself when an entity starts and stops, so a sign told to "play"
+// its start-up lit nothing.
+const hijacked = code.filter(f => {
+  const s = fs.readFileSync(f, 'utf8');
+  return /registerComponent/.test(s) && /^\s{2}(play|pause)\s*\(\s*\w/m.test(s);
+}).map(rel);
+assert.deepEqual(hijacked, [], `component methods named play/pause: ${hijacked.join(', ')}`);
+
 console.log('structure tests: ok');
