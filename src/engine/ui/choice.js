@@ -7,17 +7,22 @@ import { FONT } from '../panel.js';
 const NORMAL = '#1d2026';
 const HOVER = '#343b47';
 const TEXT = '#f2efe8';
-const PX = 1024;
-const PAD = 16;
+// Canvas pixels per metre of button: the same on every button, so a text size means
+// the same real letter height on a narrow button as on a wide one.
+const PX_PER_M = 1024 / 1.5;
+const PAD = 10;
 const SIZE = 54;
 const WEIGHT = 600;
+const LINE_HEIGHT = 1.32; // as in panel.js
 
-// The largest common size at which every label fits on one line.
-function commonSize(labels) {
+// The largest common size at which every label fits on one line of the button.
+function commonSize(labels, pxW, pxH) {
   const ctx = document.createElement('canvas').getContext('2d');
   ctx.font = `${WEIGHT} ${SIZE}px ${FONT}`;
   const widest = Math.max(...labels.map(t => ctx.measureText(t).width));
-  return Math.min(SIZE, Math.floor(SIZE * (PX - PAD * 2) / widest));
+  const byWidth = Math.floor(SIZE * (pxW - PAD * 2) / widest);
+  const byHeight = Math.floor((pxH - PAD * 2) / LINE_HEIGHT);
+  return Math.min(SIZE, byWidth, byHeight);
 }
 
 // place: { x, y (top button), z, w, h, gap }
@@ -38,10 +43,11 @@ export function createChoice(scene, place) {
     const y0 = top == null ? y : top - bh / 2;
     hide();
     let done = false;
-    const size = commonSize(labels);
+    const px = Math.round(w * PX_PER_M);
+    const size = commonSize(labels, px, Math.round(bh * PX_PER_M));
     els = labels.map((text, i) => {
       const el = document.createElement('a-entity');
-      el.setAttribute('panel', `w: ${w}; h: ${bh}; px: ${PX}`);
+      el.setAttribute('panel', `w: ${w}; h: ${bh}; px: ${px}`);
       el.setAttribute('position', `${x} ${(y0 - i * (bh + gap)).toFixed(3)} ${z}`);
       el.classList.add('clickable', 'answer');
       el.dataset.index = i;
