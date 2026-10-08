@@ -15,6 +15,11 @@ export function sendPlaytest(room, version, report) {
   return post(ENDPOINT.replace('submit_run', 'submit_playtest'), { p_room: room, p_version: version, p_report: report });
 }
 
+// A game error from the player's device (only with consent; see app/session.js).
+export function sendIssue(room, version, report) {
+  return post(ENDPOINT.replace('submit_run', 'submit_issue'), { p_room: room, p_version: version, p_report: report });
+}
+
 // Averages of other players' first runs (aggregates only; see 0006_compare_room.sql).
 // Resolves null on any failure or after 4 s, so the reveal never waits long.
 export function compareRoom(room, version) {

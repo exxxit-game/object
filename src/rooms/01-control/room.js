@@ -250,6 +250,7 @@ export function mount() {
   document.title = T.pageTitle;
   fillHint();
   session = createSession(ROOM_ID, ROOM_VERSION);
+  session.watchIssues(() => ({ state, xr: !!(scene && scene.is && scene.is('vr-mode')) }));
   loadVoice(VOICE_LINES, import.meta.url);
   loadSounds(SOUNDS, import.meta.url);
   document.body.insertAdjacentHTML('beforeend', sceneHTML);

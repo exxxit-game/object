@@ -53,7 +53,7 @@
    two flashes, Drori); build 2–3 short prototypes; playtest decides.
 3. Plato's cave room design (own experiment, labelled as such).
 4. Owner-approved screenshot set for room 01 (rule 13).
-5. Diagnostics: errors and devices with consent (like Cosmogram).
-6. "You vs others" in the reveal: aggregate read function + display.
+5. DONE diagnostics: app.issues + submit_issue, sent only with recording (max 5 per load).
+6. DONE "you vs others": compare_room (first runs, n >= 10) + reveal page.
 7. Engagement: share card without spoilers, desktop version, Quest new-tab submission.
 8. Waiting on owner: play room 01 in headset; xr-probe; audio delay test; plugins; lab letter.
