@@ -21,7 +21,9 @@
   Its section "Как идём дальше" is THE queue: work only on its top step, one at a time.
 - Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS, 72 fps, 08.10);
   `tools/xr-probe.html` (owner presses VR/MR/mic buttons); `scrcpy` installed.
-  Untethered: `node tools/quest-wifi.mjs` once with the cable, then unplug (owner has a battery strap).
+  Owner plays the test copy https://exxxit-game.github.io/object-preview/ (bookmark in the headset; no
+  laptop or cable): `node tools/publish-preview.mjs` before he looks; it never sends data. Never make
+  him plug cables; adb over Wi-Fi (`tools/quest-wifi.mjs`) only for my own checks.
 - Voice: ElevenLabs key `C:\Users\admin\.elevenlabs-key.txt`; Daniel, eleven_v3;
   `tools/make-voice.mjs`, `tools/check-voice.mjs` (speech-to-text check), `tools/make-sounds.mjs`.
 
