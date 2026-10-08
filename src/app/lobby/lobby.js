@@ -129,7 +129,7 @@ export async function runLobby(room) {
   for (const el of document.querySelectorAll('#plaqueStairs, .room-plaque')) el.getObject3D('mesh').material.color.setScalar(WALL_PRINT_LIGHT);
   pinNotices($('#notePoster').components.panel, $('#noteFlyer').components.panel, WALL_PRINT_LIGHT);
   paintExtinguisherLabel($('#extLabel'));
-  const cover = [{ t: LOBBY_T.kicker, role: 'kicker' }, { t: LOBBY_T.title, role: 'title', gap: 0.01 }];
+  const cover = [{ t: LOBBY_T.kicker, role: 'kicker' }, { t: LOBBY_T.participant, role: 'body', gap: 0.02 }];
   await sheet.hang(SHEET_HOME, cover, WALL_PRINT_LIGHT);
   const exitOff = leaveButton(scene, sheet);   // the studio's poster on the board
   onFirstGesture(() => {});

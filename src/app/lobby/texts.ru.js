@@ -4,6 +4,9 @@ export const LOBBY_T = {
   kicker: 'ЛАБОРАТОРИЯ',
   // the game's name stays in English in every language: the player is the object
   title: 'You are the object',
+  // the head of the clipboard's form, as on a consent form: the participant's name goes on the
+  // line (the game's name is on the light box over the door, not on the form)
+  participant: 'Участник ____________________________',
   // the promise first: what the player is offered
   welcome: [
     'Добро пожаловать в лабораторию.',
