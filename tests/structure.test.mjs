@@ -148,6 +148,15 @@ for (const f of new Set([...commented, ...written])) {
   assert.ok(at < 0, `${rel(f)}: a control character at ${at} (a \\b lost to the shell?)`);
 }
 
+// 19. No secret keys in the repository, which is public: only the database's publishable key
+// (sb_publishable_, insert-only by design, src/engine/results.js) may be here; the voice key lives
+// in ~/.elevenlabs-key.txt (tools/make-voice.mjs).
+const secret = new RegExp(`sk_(?:live|test)_[A-Za-z0-9]{16,}|sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sb_secret_[A-Za-z0-9_-]{10,}|${['service', 'role'].join('_')}|eyJhbGciOi[A-Za-z0-9._-]{30,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY`);
+for (const f of new Set([...commented, ...written, path.join(ROOT, 'index.html'), path.join(ROOT, 'privacy.html')])) {
+  const hit = fs.readFileSync(f, 'utf8').match(secret);
+  assert.ok(!hit, `${rel(f)}: something like a secret key (${hit?.[0].slice(0, 12)}…)`);
+}
+
 // 15. Every room marks its inside with class room-interior, which the corridor leaves undrawn
 // while the door is shut (src/app/lobby/lobby.js; Meta: fewer than 200 draw calls a frame on
 // Quest 3), and the door the corridor sees (#door1) is never part of it.
