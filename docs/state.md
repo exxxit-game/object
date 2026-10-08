@@ -4,7 +4,7 @@
 - Repo `exxxit-game/object` (folder `C:\Users\admin\Documents\GitHub\objekt`). Site:
   https://youaretheobject.com (GitHub Pages from `main`; `main` is an OLD package).
   `room-polish` = all current work. I never push: check `git status -sb` for commits CI has not
-  seen (08.10: 6 not pushed; last green CI at 240df9e). Release = owner's word only.
+  seen (08.10: nothing pushed after 240df9e, the last green CI). Release = owner's word only.
 - Room 01 = illusion of control (Alloy & Abramson 1979, Exp. 2), `src/rooms/01-control/`;
   Ono kept under git tag `ono-room-final`. Playtest mode: `?playtest=1`. Test speed `?speed=N`.
 - Supabase `objekt` (`rkvdwzlymmewsxjysgma`, eu-west-1 Ireland), private schema `app`:
