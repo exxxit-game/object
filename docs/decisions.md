@@ -133,3 +133,8 @@ Consequence: every change to the game or the probe needs a fresh practice review
 Each end wall carries a print of Arcimboldo's Vegetable Gardener (about 1590, public domain) in a thin silver metal section frame: the right way up (a face) at the west end, upside down (a bowl of vegetables) at the east, with no caption (src/app/lobby/scene.js).
 Why: the empty ends did not draw the player down the corridor; the owner chose this picture from real ones shown to him, for its meaning («Человек видит то, что хочет. Или то, что мы скажем ему видеть») and as a detail for whoever notices it is one picture («Без всяких подсказок»). What hung in 1970s psychology corridors is not documented online (docs/research/vr/09-end-wall-pictures.md).
 Consequence: the frames lie on the block module like every flat thing on a wall (tests/masonry.test.mjs, now for the end walls too); the print's size and frame face still need a dated source; the ends are the corridor's darkest part, which the light item answers.
+
+## A picture frame is one moulding profile run round the picture
+src/engine/moulding.js builds a frame as framers do: one cross-section, read off a photo of the real frame, cut at 45 degrees and joined round the picture, so its beads, steps and hollows run round the corners (the end walls' Arcimboldo, after its frame in Cremona).
+Why: boxes stacked in bands read as square steps (the owner: «не квадратная, как у тебя… такие волны внутрь идут»); a profile is how a moulding is made and gives any later frame the same way.
+Consequence: a frame's widths come from its photo; how high each part stands off the wall cannot be read off a frontal photo and is marked as our estimate where it is used.

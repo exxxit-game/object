@@ -163,48 +163,49 @@ function lip() {
 // (the owner's choice; docs/research/vr/09-end-wall-pictures.md). It hangs as in its museum (Museo
 // Civico Ala Ponzone, Cremona; Monica Rondoni's photo, Wikimedia Commons, CC BY-SA 4.0, the owner's
 // pick): at its own size, 24 cm wide (Web Gallery of Art; its height from the scan), straight in a
-// gilded frame with no mat. The frame's face is measured on that photo, in parts of the picture's
-// width: the moulding a third of it each side; from the picture out, a narrow gilded sight edge, a
-// dark liner, a gilded slope and the broad flat outer band. The photo is frontal, so the frame's
-// depths are not in it (the depths in FRAME: our estimate, docs/board.md). Its bottom edge lies on a block joint
+// gilded frame with no mat. The frame's profile (src/engine/moulding.js) is read off that photo at
+// full size, its widths in parts of the moulding, a third of the picture's width: from the outside
+// in, a rounded outer bead, two steps down into a hollow, the broad flat band of stippled gilding, a
+// rounded ridge, a deep hollow running in, a bead, and the sight edge over the picture. The photo is
+// frontal, so how high each part stands off the wall is our estimate (PROFILE's h; docs/board.md).
+// Gold as measured (Physically Based database, "Gold": linear 1.059, 0.773, 0.307, metalness 1), its
+// roughness our estimate for old gilding; it mirrors the corridor round it (reflect-env), as the
+// extinguisher's steel does: bare metal reads as plastic. Its bottom edge lies on a block joint
 // (tests/masonry.test.mjs). No glass is drawn: in a headset it would only mirror the troffers. The
 // picture is the Commons scan less its dark scanner edge (1024 x 1360 px), lit by the corridor's own
-// light. The frames merge with the corridor; the picture is turned after load (lobby.js).
+// light; it is turned after load (lobby.js).
 const ART = 'vendor/art/arcimboldo-vegetable-gardener.jpg';
-// gold as measured (Physically Based database, "Gold": linear 1.059, 0.773, 0.307, metalness 1), its
-// roughness our estimate for old gilding; the liner's colour sampled on the photo. The gilding mirrors
-// the corridor round it (reflect-env), as the extinguisher's steel does: bare metal reads as plastic.
-const GOLD = 'material="color: #ffe396; metalness: 1; roughness: .35"';
-const LINER = 'material="color: #5d3e21; roughness: .8"';
 const PICTURE = { w: 0.24, h: r(0.24 * 1360 / 1024) };
-// the moulding's width (m); its bands as [from, to] in parts of it, out from the picture's edge, with
-// the depth of each band's face off the wall; the body behind is the frame's back on the wall
-const FRAME = { m: r(0.24 / 3), body: 0.012, bands: [[0, 0.06, 0.024, GOLD], [0.06, 0.19, 0.02, LINER], [0.19, 0.48, 0.03, GOLD], [0.48, 1, 0.04, GOLD]] };
-const OUTER = { w: r(PICTURE.w + 2 * FRAME.m), h: r(PICTURE.h + 2 * FRAME.m) };
+const M = 0.08;            // the moulding's width, a third of the picture's
+const BODY = 0.012;        // the frame's back board under the picture, in its rebate
+// points round an arc in the profile's plane (u in, h off the wall), from angle a to b in degrees
+const arc = (cu, ch, rad, a, b, n = 4) => Array.from({ length: n + 1 }, (_, i) => {
+  const t = (a + (b - a) * i / n) * Math.PI / 180;
+  return [cu + rad * Math.cos(t), ch + rad * Math.sin(t)];
+});
+// the profile, outside in; the widths in parts of M as measured (outer bead 0-0.075, steps and
+// hollow to 0.25, flat band to 0.66, ridge to 0.73, hollow to 0.88, bead to 0.955, sight edge to 1)
+const PROFILE = [
+  [0, 0], [0, 0.033], ...arc(0.003, 0.033, 0.003, 180, 0).slice(1),
+  [0.006, 0.031], [0.010, 0.031], [0.010, 0.029], ...arc(0.013, 0.029, 0.003, 180, 270).slice(1),
+  [0.0185, 0.026], ...arc(0.0185, 0.0285, 0.0025, 270, 360).slice(1), [0.053, 0.0285],
+  ...arc(0.0555, 0.0285, 0.0025, 180, 0).slice(1), ...arc(0.068, 0.0285, 0.0100, 180, 270, 6).slice(1),
+  [0.070, 0.0185], ...arc(0.073, 0.0185, 0.003, 180, 0).slice(1), [0.076, 0.017], [0.080, 0.017], [0.080, BODY]
+].map(([u, h]) => r(u) + ' ' + r(h)).join(', ');
+const OUTER = { w: r(PICTURE.w + 2 * M), h: r(PICTURE.h + 2 * M) };
 const PRINT_Y = r(1.2 + OUTER.h / 2);
 const END_PRINTS = [{ x: PLAN.from, facing: 1, turn: 0 }, { x: PLAN.to, facing: -1, turn: 180 }];
 // Each new visit the two swap ends, for whoever notices (the owner's detail): the picture's turn
 // on end i (0 west, 1 east), visits counted from 0 (opening.js, visitsSoFar)
 export const printTurn = (i, visits) => (END_PRINTS[i].turn + 180 * (Math.abs(visits | 0) % 2)) % 360;
-// the frame on an end wall, every part placed in the corridor's own axes, facing along x: its body,
-// then each band as four boxes round the picture, from the body's face to the band's face
-function printFrame({ x, facing }) {
-  const at = (d) => r(x + facing * d), rot = `rotation="0 ${facing * 90} 0"`, y = PRINT_Y, z = CENTRE.z;
-  const ring = ([from, to, face, mat]) => {
-    const a = from * FRAME.m, b = to * FRAME.m, band = r(b - a), mid = (a + b) / 2, d = r(face - FRAME.body), cx = at(FRAME.body + d / 2);
-    const across = r(PICTURE.w + 2 * b), up = r(PICTURE.h + 2 * a);
-    return [[y + PICTURE.h / 2 + mid, z, across, band], [y - PICTURE.h / 2 - mid, z, across, band], [y, z - PICTURE.w / 2 - mid, band, up], [y, z + PICTURE.w / 2 + mid, band, up]]
-      .map(([by, bz, w, h]) => `<a-box ${rot} position="${cx} ${r(by)} ${r(bz)}" width="${w}" height="${h}" depth="${d}" ${mat}></a-box>`).join('');
-  };
-  return `
-    <a-entity class="end-frame" data-dynamic merge-static reflect-env>
-      <a-box class="on-wall" ${rot} position="${at(FRAME.body / 2)} ${y} ${z}" width="${OUTER.w}" height="${OUTER.h}" depth="${FRAME.body}" ${LINER}></a-box>
-      ${FRAME.bands.map(ring).join('')}
-    </a-entity>`;
-}
-// the picture in the frame's rebate, on the body's face (turned 180 degrees on one end)
+// the frame's back on the wall, as every flat thing on a wall lies on the block module
+const printBack = ({ x, facing }) => `
+    <a-box class="on-wall" rotation="0 ${facing * 90} 0" position="${r(x + facing * BODY / 2)} ${PRINT_Y} ${CENTRE.z}" width="${OUTER.w}" height="${OUTER.h}" depth="${BODY}" color="#3b2a17"></a-box>`;
+// the gilded frame and the picture in it (turned 180 degrees on one end)
 const printImage = ({ x, facing, turn }) => `
-  <a-plane class="end-print" rotation="0 ${facing * 90} ${turn}" position="${r(x + facing * (FRAME.body + 0.0005))} ${PRINT_Y} ${CENTRE.z}"
+  <a-entity class="end-frame" reflect-env position="${x} ${PRINT_Y} ${CENTRE.z}" rotation="0 ${facing * 90} 0"
+            moulding="width: ${OUTER.w}; height: ${OUTER.h}; profile: ${PROFILE}; color: #ffe396; metalness: 1; roughness: .35"></a-entity>
+  <a-plane class="end-print" rotation="0 ${facing * 90} ${turn}" position="${r(x + facing * (BODY + 0.0005))} ${PRINT_Y} ${CENTRE.z}"
            width="${PICTURE.w}" height="${PICTURE.h}" decal material="src: ${ART}; roughness: 1"></a-plane>`;
 export const corridorHTML = `
 <a-entity id="corridor">
@@ -233,8 +234,8 @@ export const corridorHTML = `
     <a-sphere position="${pinAt(NOTES.flyer)} ${r(ON_CORK + PIN)}" radius="${PIN}" color="#2a4a8b"></a-sphere>
     <!-- a 2.5 gal water extinguisher on its wall bracket, opposite the board (S22, S23) -->
     ${extinguisher(PLAN.extinguisher, PLAN.south)}
-    <!-- the print on each end wall: its frame and paper (the picture below) -->
-    ${END_PRINTS.map(printFrame).join('')}
+    <!-- the back of the frame on each end wall (the frame and picture below) -->
+    ${END_PRINTS.map(printBack).join('')}
     <!-- the light box over room 101's door (like the "in session" boxes over lab doors): surface
          mounted, its back on the wall, as wide as the frame head it stands on (1.0224 m, door.js),
          its foot on the head's top, its top on a block joint (sign.js) -->
