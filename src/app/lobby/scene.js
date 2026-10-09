@@ -7,7 +7,7 @@
 // Static parts are merged after load; the door signs and the light box change, so they stay apart.
 import { doorHTML, CHROME } from '../../engine/door.js';
 import { PLAN, DOORS, CENTRE, LENGTH, WIDTH, CORK_Z, toEntrance, wallRuns } from './plan.js';
-import { LETTER, PAPER_BG } from '../../engine/ui/sheet-math.js';
+import { LETTER } from '../../engine/ui/sheet-math.js';
 import { jointOrigin, CEILING } from '../../engine/tile-math.js';
 import { SIGN, SIGN_PANEL } from '../brand.js';
 import { SIGN_AT, SIGN_BOX } from './sign.js';
@@ -157,39 +157,55 @@ function lip() {
     .map(([dx, dy, w, h]) => `
     <a-box position="${r(B.x + dx)} ${r(B.y + dy)} ${z}" width="${r(w)}" height="${r(h)}" depth="${B.lip}" ${ALU}></a-box>`).join('');
 }
-// The end walls: one print of Arcimboldo's Vegetable Gardener (about 1590; Wikimedia Commons, public
-// domain, docs/art/credits.md) on each, the right way up (a face) at the west end and upside down (a
-// bowl of vegetables) at the east, with no caption: whoever walks to both ends may notice it is one
-// picture (the owner's choice; docs/research/vr/09-end-wall-pictures.md). A paper print in a thin
-// silver metal section frame (on sale from 1968, 09 Q4), its edges clear of the block joints
-// (tests/masonry.test.mjs). The print is 16 x 20 in, the frame's face 6 mm and the white border round
-// the picture 1 in at top and bottom: none has a dated source yet (docs/board.md). No glass is drawn:
-// a framed print sits behind glazing (Library of Congress, "Matting and framing"), which in a headset
-// would only mirror the troffers. The picture is the Commons scan less its dark scanner edge (1024 x
-// 1360 px), lit by the corridor's own light like everything round it (the ends are its darkest part:
-// the light item answers that). The frames and paper merge with the corridor; the picture is turned
-// after load (lobby.js), so it stays apart.
+// The end walls: Arcimboldo's Vegetable Gardener (about 1590; Wikimedia Commons, public domain,
+// docs/art/credits.md) on each, the right way up (a face) at one end and upside down (a bowl of
+// vegetables) at the other, with no caption: whoever walks to both ends may notice it is one picture
+// (the owner's choice; docs/research/vr/09-end-wall-pictures.md). It hangs as in its museum (Museo
+// Civico Ala Ponzone, Cremona; Monica Rondoni's photo, Wikimedia Commons, CC BY-SA 4.0, the owner's
+// pick): at its own size, 24 cm wide (Web Gallery of Art; its height from the scan), straight in a
+// gilded frame with no mat. The frame's face is measured on that photo, in parts of the picture's
+// width: the moulding a third of it each side; from the picture out, a narrow gilded sight edge, a
+// dark liner, a gilded slope and the broad flat outer band. The photo is frontal, so the frame's
+// depths are not in it (the depths in FRAME: our estimate, docs/board.md). Its bottom edge lies on a block joint
+// (tests/masonry.test.mjs). No glass is drawn: in a headset it would only mirror the troffers. The
+// picture is the Commons scan less its dark scanner edge (1024 x 1360 px), lit by the corridor's own
+// light. The frames merge with the corridor; the picture is turned after load (lobby.js).
 const ART = 'vendor/art/arcimboldo-vegetable-gardener.jpg';
-const PRINT = { w: 0.4064, h: 0.508, face: 0.006, depth: 0.0206, lip: 0.003, y: 1.46, border: 0.0254 };
-const IMAGE = { w: r((PRINT.h - 2 * PRINT.border) * 1024 / 1360), h: r(PRINT.h - 2 * PRINT.border) };
+// gold as measured (Physically Based database, "Gold": linear 1.059, 0.773, 0.307, metalness 1), its
+// roughness our estimate for old gilding; the liner's colour sampled on the photo. The gilding mirrors
+// the corridor round it (reflect-env), as the extinguisher's steel does: bare metal reads as plastic.
+const GOLD = 'material="color: #ffe396; metalness: 1; roughness: .35"';
+const LINER = 'material="color: #5d3e21; roughness: .8"';
+const PICTURE = { w: 0.24, h: r(0.24 * 1360 / 1024) };
+// the moulding's width (m); its bands as [from, to] in parts of it, out from the picture's edge, with
+// the depth of each band's face off the wall; the body behind is the frame's back on the wall
+const FRAME = { m: r(0.24 / 3), body: 0.012, bands: [[0, 0.06, 0.024, GOLD], [0.06, 0.19, 0.02, LINER], [0.19, 0.48, 0.03, GOLD], [0.48, 1, 0.04, GOLD]] };
+const OUTER = { w: r(PICTURE.w + 2 * FRAME.m), h: r(PICTURE.h + 2 * FRAME.m) };
+const PRINT_Y = r(1.2 + OUTER.h / 2);
 const END_PRINTS = [{ x: PLAN.from, facing: 1, turn: 0 }, { x: PLAN.to, facing: -1, turn: 180 }];
 // Each new visit the two swap ends, for whoever notices (the owner's detail): the picture's turn
 // on end i (0 west, 1 east), visits counted from 0 (opening.js, visitsSoFar)
 export const printTurn = (i, visits) => (END_PRINTS[i].turn + 180 * (Math.abs(visits | 0) % 2)) % 360;
-// a print's frame and paper, every part placed in the corridor's own axes, facing along x
+// the frame on an end wall, every part placed in the corridor's own axes, facing along x: its body,
+// then each band as four boxes round the picture, from the body's face to the band's face
 function printFrame({ x, facing }) {
-  const { w, h, face, depth, lip, y } = PRINT, at = (d) => r(x + facing * d), rot = `rotation="0 ${facing * 90} 0"`;
-  const fw = r(w + 2 * face), fh = r(h + 2 * face), z = CENTRE.z;
-  const bars = [[r(y + (h + face) / 2), z, fw, face], [r(y - (h + face) / 2), z, fw, face], [y, r(z - (w + face) / 2), face, h], [y, r(z + (w + face) / 2), face, h]];
+  const at = (d) => r(x + facing * d), rot = `rotation="0 ${facing * 90} 0"`, y = PRINT_Y, z = CENTRE.z;
+  const ring = ([from, to, face, mat]) => {
+    const a = from * FRAME.m, b = to * FRAME.m, band = r(b - a), mid = (a + b) / 2, d = r(face - FRAME.body), cx = at(FRAME.body + d / 2);
+    const across = r(PICTURE.w + 2 * b), up = r(PICTURE.h + 2 * a);
+    return [[y + PICTURE.h / 2 + mid, z, across, band], [y - PICTURE.h / 2 - mid, z, across, band], [y, z - PICTURE.w / 2 - mid, band, up], [y, z + PICTURE.w / 2 + mid, band, up]]
+      .map(([by, bz, w, h]) => `<a-box ${rot} position="${cx} ${r(by)} ${r(bz)}" width="${w}" height="${h}" depth="${d}" ${mat}></a-box>`).join('');
+  };
   return `
-    <a-box class="on-wall" ${rot} position="${at(depth / 2)} ${y} ${z}" width="${fw}" height="${fh}" depth="${depth}" ${ALU}></a-box>
-    <a-plane ${rot} position="${at(depth + 0.0005)} ${y} ${z}" width="${w}" height="${h}" decal material="color: ${PAPER_BG}; roughness: 1"></a-plane>
-    ${bars.map(([by, bz, bw, bh]) => `<a-box ${rot} position="${at(depth + lip / 2)} ${by} ${bz}" width="${bw}" height="${bh}" depth="${lip}" ${ALU}></a-box>`).join('')}`;
+    <a-entity class="end-frame" data-dynamic merge-static reflect-env>
+      <a-box class="on-wall" ${rot} position="${at(FRAME.body / 2)} ${y} ${z}" width="${OUTER.w}" height="${OUTER.h}" depth="${FRAME.body}" ${LINER}></a-box>
+      ${FRAME.bands.map(ring).join('')}
+    </a-entity>`;
 }
-// the picture on the paper (turned 180 degrees on the east wall)
+// the picture in the frame's rebate, on the body's face (turned 180 degrees on one end)
 const printImage = ({ x, facing, turn }) => `
-  <a-plane class="end-print" rotation="0 ${facing * 90} ${turn}" position="${r(x + facing * (PRINT.depth + 0.001))} ${PRINT.y} ${CENTRE.z}"
-           width="${IMAGE.w}" height="${IMAGE.h}" decal="layer: 2" material="src: ${ART}; roughness: 1"></a-plane>`;
+  <a-plane class="end-print" rotation="0 ${facing * 90} ${turn}" position="${r(x + facing * (FRAME.body + 0.0005))} ${PRINT_Y} ${CENTRE.z}"
+           width="${PICTURE.w}" height="${PICTURE.h}" decal material="src: ${ART}; roughness: 1"></a-plane>`;
 export const corridorHTML = `
 <a-entity id="corridor">
   <a-entity merge-static>
