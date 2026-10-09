@@ -64,11 +64,11 @@
    headset walk: 90 fps, 130 draw calls max; 7: placement to see in his next session), plan checked twice,
    premortem, docs split, rules review, guards proven, Claude Code read. Allow rules on his yes
    (.claude/settings.json: quest-look, gh run, publish-preview); VR only on his head (quest-look vr).
-   f) style book matched to the game 9.10. Waiting: his yes on the new CLAUDE.md. Now: cause 8 (docs/audit/numbers.md);
-   then the fact-checker, request and architecture auditors. Open talk: the start's tone (his 9.10: not
-   Portal 2 humour, "learn about yourself"), touches step 7.
-   After his app update: onFailure "block" on the guards. His guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9
-   His word 9.10: he knows nothing of git, GitHub or Claude Code: explain each thing he meets, plainly. Next
+   f) style book matched to the game 9.10. Waiting: his yes on the new CLAUDE.md; the 1976 UBC §3305 photo
+   (he looks). NEXT SESSION: cause 8 rows by docs/audit/numbers.md (sources in batches; headset rows into
+   the 4.3 session; patches with their item); then the fact-checker, request and architecture auditors.
+   Open talk: the start's tone (his 9.10: not Portal 2 humour, "learn about yourself"), touches step 7.
+   His guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9. He knows nothing of git or GitHub: explain. Next
    (place in the queue waits for his word, proposed right after 4.1): GitHub done fully: pull requests
    with checks and a reviewer, a release with a version and Russian notes per live update, a build stamp.
 2. Then 4.2, the data lever first (data stay with us, our own lab; what we need from scientists beyond
