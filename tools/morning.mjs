@@ -33,6 +33,12 @@ say(onlyHere.length ? 'WARN' : 'ok', onlyHere.length ? `only on this laptop: ${o
 say(configEmailOk() ? 'ok' : 'FAIL', configEmailOk() ? 'git signs with the private address' : `git's user.email is not ${PRIVATE_EMAIL}`);
 const guard = sh('git', ['config', 'core.hooksPath']);
 say(guard === 'tools/hooks' ? 'ok' : 'FAIL', guard === 'tools/hooks' ? 'the push guard is on' : 'the push guard is off: git config core.hooksPath tools/hooks');
+// the setting is shared by every checkout of the repository, the hooks are files in each: a
+// checkout made before they existed runs no guard at all
+const HOOKS = ['pre-commit', 'pre-push'];
+const unguarded = (sh('git', ['worktree', 'list', '--porcelain']) || '').split('\n').filter((l) => l.startsWith('worktree '))
+  .map((l) => l.slice(9)).filter((dir) => HOOKS.some((h) => !fs.existsSync(path.join(dir, 'tools', 'hooks', h))));
+say(unguarded.length ? 'FAIL' : 'ok', unguarded.length ? `checkouts whose commits run no guard (bring them up to date): ${unguarded.join(', ')}` : `every checkout has the hooks (${HOOKS.join(', ')})`);
 // main is the live site: on GitHub it can be neither deleted nor rewritten (the owner's yes, the
 // ruleset "main is the live site"); a setting can be switched off without a trace in the code
 const rules = sh('gh', ['api', 'repos/exxxit-game/youaretheobject/rules/branches/main', '--jq', '[.[].type] | join(" ")']);
