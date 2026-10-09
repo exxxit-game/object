@@ -33,9 +33,10 @@ export function battery() {
 export const worn = (on) => adb('shell', 'am', 'broadcast', '-a', `com.oculus.vrpowermanager.${on ? 'prox_close' : 'automation_disable'}`);
 export function sleepNow() { worn(false); adb('shell', 'input', 'keyevent', 'KEYCODE_SLEEP'); }
 // On a person's head: the power service reads the headset as mounted with no override of ours
-// (`dumpsys vrpowermanager`). Restarting the browser or the headset then throws the owner out of
-// what he is doing, so those wait until he takes it off.
-export const onHead = (powerDump) => /State: HEADSET_MOUNTED/.test(powerDump) && !/Virtual proximity state: ENABLED/.test(powerDump);
+// (`dumpsys vrpowermanager`: "Virtual proximity state: DISABLED"; our "worn on" reads CLOSE).
+// Restarting the browser or the headset then throws the owner out of what he is doing, so those
+// wait until he takes it off.
+export const onHead = (powerDump) => /State: HEADSET_MOUNTED/.test(powerDump) && /Virtual proximity state: DISABLED/.test(powerDump);
 export const wornByPerson = () => onHead(adb('shell', 'dumpsys', 'vrpowermanager'));
 // The browser restarted, the game page opened again: a browser that has lost its link to the VR
 // system answers every request to enter VR with NotSupportedError, whatever the page asks for.

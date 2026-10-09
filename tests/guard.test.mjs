@@ -86,7 +86,7 @@ for (const c of allowed) {
 // says mounted with no override of ours (tools/headset.mjs). Dumps as the headset printed them.
 const dump = (state, virtual) => `Virtual proximity state: ${virtual}\nisAutosleepDisabled: false\nState: ${state}\n`;
 assert.ok(onHead(dump('HEADSET_MOUNTED', 'DISABLED')), 'worn by the owner reads as on his head');
-assert.ok(!onHead(dump('HEADSET_MOUNTED', 'ENABLED')), 'our own "worn on" override is not a person');
+assert.ok(!onHead(dump('HEADSET_MOUNTED', 'CLOSE')), 'our own "worn on" override is not a person');
 assert.ok(!onHead(dump('HEADSET_UNMOUNTED', 'DISABLED')) && !onHead(dump('STANDBY', 'DISABLED')), 'off the head is free to restart');
 
 console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the headset's wearer seen)`);
