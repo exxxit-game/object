@@ -108,6 +108,8 @@ Memory files are not versioned, so their earlier text is known only from the ses
 
 ## The proposed order of CLAUDE.md
 
+The full draft, waiting for the owner's yes: `claude-md-proposed.md` (about 7.3 KB against 7.8 KB now).
+
 1. **Ready first** (now 23, widened to everything). 2. **Truth** (5, 11, 18, 19, 20; lessons 4, 6).
 3. **Data and keys** (now spread over the Commands section and the hooks). 4. **Working with the
 owner** (9, 15, 21, 22, shorter). 5. **Checking** (8, 12, 13, 14, 24). 6. **Rooms** (10, 16, 17).
