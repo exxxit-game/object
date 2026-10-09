@@ -1,7 +1,6 @@
 import { APP_T } from './texts.ru.js';
 import { drawSeal, sealRadius } from './seal.js';
 import { MIN_LETTER } from '../engine/ui/sheet-math.js';
-import { FONT } from '../engine/panel.js';
 
 // The consent every room starts with (ethics: informed consent, quit any time, recording only
 // when chosen and only from 18), on the clipboard sheet, one page after another: a page
@@ -27,7 +26,7 @@ function keep([name = [], sign = []]) {
 // the lab's seal, drawn in black for the sheet to press in stamp ink
 const SEAL_R = sealRadius(MIN_LETTER);
 const seal = (mark, locale) => ({ size: 2 * SEAL_R, mark,
-  draw: (ctx, r) => drawSeal(ctx, r, { ring: APP_T.lab.toLocaleUpperCase(locale), ink: '#000', paper: '#fff', font: FONT }) });
+  draw: (ctx, r) => drawSeal(ctx, r, { ring: APP_T.lab.toLocaleUpperCase(locale), ink: '#000', paper: '#fff' }) });
 
 export async function askConsent(sheet, { extra = [] }) {
   const C = APP_T.consent;

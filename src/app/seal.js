@@ -10,6 +10,11 @@
 // text's size: UKAAF G003, Creating clear print and large print documents, 2012, p. 15).
 export const RING_LETTER = 0.115;
 export const sealRadius = (letter) => letter / RING_LETTER;
+// The ring's face: Oswald, a bold sans fit for a stamp (thin serifs do not print), the owner's pick;
+// declared in css/fonts.css and waited for before a room starts (src/main.js)
+const FACE = '600';
+const FAMILY = 'Oswald, "Arial Narrow", sans-serif';
+const LIGHT = [-Math.SQRT1_2, -Math.SQRT1_2];               // towards the light: upper left, as the globe is lit
 
 const RING = { at: 0.835, span: 1.52 * Math.PI };          // the name's middle line and its arc
 const GLOBE = { r: 0.43, tilt: 0.3 };
@@ -19,11 +24,11 @@ const HEAD = 0.2;                                           // the head's length
 
 // ctx is translated to the seal's centre; R its outer radius. ring: the name round it. Returns
 // the font size of the ring's letters as drawn, in ctx units.
-export function drawSeal(ctx, R, { ring, ink, paper, font }) {
+export function drawSeal(ctx, R, { ring, ink, paper }) {
   const g = ctx, r = R * GLOBE.r, w = R * 0.011;
   g.save();
   g.lineJoin = 'round'; g.lineCap = 'round'; g.strokeStyle = ink; g.fillStyle = ink;
-  drawRings(g, R, ring, font);
+  drawRings(g, R, ring);
   const coil = coilPoints(r);
   drawCoil(g, coil, false, r, w, ink, paper);   // the coil's far side, behind the globe
   drawNeck(g, R, w, ink, paper);                // rises from behind the globe
@@ -33,15 +38,21 @@ export function drawSeal(ctx, R, { ring, ink, paper, font }) {
   return R * RING_LETTER;
 }
 
-function drawRings(g, R, ring, font) {
+function drawRings(g, R, ring) {
   for (const [at, line] of [[1, 0.04], [0.93, 0.012], [0.74, 0.016]]) {
     g.lineWidth = R * line; g.beginPath(); g.arc(0, 0, R * at, 0, 7); g.stroke();
   }
-  g.font = `700 ${R * RING_LETTER}px ${font}`; g.textAlign = 'center'; g.textBaseline = 'middle';
-  const letters = [...ring], start = -Math.PI / 2 - RING.span / 2;
+  g.font = `${FACE} ${R * RING_LETTER}px ${FAMILY}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+  // set as text along a line is set (SVG textPath): each letter where the face's own advances and
+  // kerning put it in the line, the arc's spare length shared out evenly as letter spacing, centred
+  // at the top
+  g.fontKerning = 'normal';
+  const letters = [...ring], rad = R * RING.at, room = RING.span * rad;
+  const at = letters.map((_, i) => g.measureText(letters.slice(0, i).join('')).width).concat(g.measureText(ring).width);
+  const spare = (room - at[letters.length]) / letters.length;
   letters.forEach((ch, i) => {
-    g.save(); g.rotate(start + RING.span * (i + 0.5) / letters.length + Math.PI / 2);
-    g.fillText(ch, 0, -R * RING.at); g.restore();
+    const mid = -room / 2 + (at[i] + at[i + 1]) / 2 + spare * (i + 0.5);
+    g.save(); g.rotate(mid / rad); g.fillText(ch, 0, -rad); g.restore();
   });
   for (const a of [Math.PI - 0.16, Math.PI + 0.16]) {
     g.save(); g.rotate(a); g.translate(0, -R * RING.at); g.beginPath();
@@ -95,26 +106,30 @@ const edge = (pts, i, s) => [pts[i].x + s * pts[i].nx * pts[i].w / 2, pts[i].y +
 const trace = (g, ps) => ps.forEach(([x, y], k) => (k ? g.lineTo(x, y) : g.moveTo(x, y)));
 
 // A stretch of body: paper inside, diamond scales across it, the shadow strokes on one side
-// (shade: +1, -1, or 0 for none), then its two outlines.
+// (shade: true on the side turned from the light, false for none), then its two outlines.
 function drawBand(g, pts, idx, { w, ink, paper, thin, shade, shadeStep }) {
   const L = idx.map((i) => edge(pts, i, 1)), Rr = idx.map((i) => edge(pts, i, -1));
   const shape = () => { g.beginPath(); trace(g, L); for (let k = Rr.length - 1; k >= 0; k--) g.lineTo(...Rr[k]); g.closePath(); };
   g.fillStyle = paper; shape(); g.fill();
   g.save(); shape(); g.clip();
   g.strokeStyle = ink; g.lineWidth = w * 0.45;
-  for (let k = 0; k + 5 < idx.length; k += 5) {
+  // the lattice is laid along the whole body (every fifth point of it), so where the coil passes
+  // behind the globe and comes out again its diamonds run on unbroken
+  for (let k = 0; k + 5 < idx.length; k++) {
     const i = idx[k], j = idx[k + 5];
-    if (pts[i].w < thin) continue;
+    if (i % 5 || pts[i].w < thin) continue;
     g.beginPath();
     g.moveTo(...edge(pts, i, 0.95)); g.lineTo(...edge(pts, j, -0.95));
     g.moveTo(...edge(pts, i, -0.95)); g.lineTo(...edge(pts, j, 0.95));
     g.stroke();
   }
+  // the shadow on the side turned from the light, which falls from the upper left as on the globe
   g.lineWidth = w * 0.5;
   for (let k = 0; shade && k < idx.length; k += shadeStep) {
     const i = idx[k];
     if (pts[i].w < thin) continue;
-    g.beginPath(); g.moveTo(...edge(pts, i, shade)); g.lineTo(...edge(pts, i, shade * 0.45)); g.stroke();
+    const away = pts[i].nx * LIGHT[0] + pts[i].ny * LIGHT[1] > 0 ? -1 : 1;
+    g.beginPath(); g.moveTo(...edge(pts, i, away)); g.lineTo(...edge(pts, i, away * 0.55)); g.stroke();
   }
   g.restore();
   g.strokeStyle = ink; g.lineWidth = w * 1.4;
@@ -129,7 +144,7 @@ function drawCoil(g, pts, front, r, w, ink, paper) {
     if ((p.z >= 0) === front) { if (!run) { run = i ? [i - 1] : []; runs.push(run); } run.push(i); }
     else if (run) { run.push(i); run = null; }
   });
-  for (const idx of runs) drawBand(g, pts, idx, { w, ink, paper, thin: r * 0.03, shade: front ? -1 : 0, shadeStep: 2 });
+  for (const idx of runs) drawBand(g, pts, idx, { w, ink, paper, thin: r * 0.03, shade: front, shadeStep: 2 });
 }
 
 // The neck rising from behind the globe, and the head at its end.
@@ -141,7 +156,7 @@ function drawNeck(g, R, w, ink, paper) {
     pts.push({ x: x * R, y: y * R, w: R * (0.085 - 0.03 * t) });
   }
   withNormals(pts);
-  drawBand(g, pts, pts.map((_, i) => i), { w, ink, paper, thin: 0, shade: 1, shadeStep: 2 });
+  drawBand(g, pts, pts.map((_, i) => i), { w, ink, paper, thin: 0, shade: true, shadeStep: 2 });
   drawHead(g, pts[m], R, w, ink, paper);
 }
 
@@ -163,10 +178,14 @@ function drawHead(g, end, R, w, ink, paper) {
   drawTongue(g, H, w, ink);
   g.fillStyle = paper; smooth(outline); g.fill();
   g.save(); smooth(outline); g.clip(); g.strokeStyle = ink; g.lineWidth = w * 0.4;
-  for (let u = 0.04; u < 0.9; u += 0.075) {
-    for (let v = -0.24; v < 0.02; v += 0.06) {   // small round scales in rows along the head
+  // round scales in rows along the head, as Heath cuts them, staggered row to row, and none over the
+  // eye, which must read
+  const eyeAt = H(0.68, -0.1);
+  for (let row = 0, v = -0.22; v < 0.04; v += 0.085, row++) {
+    for (let u = 0.08 + (row % 2) * 0.055; u < 0.88; u += 0.11) {
       const c = H(u, v);
-      g.beginPath(); g.arc(c[0], c[1], L * 0.03, turn - 1.2, turn + 1.2); g.stroke();
+      if (Math.hypot(c[0] - eyeAt[0], c[1] - eyeAt[1]) < L * 0.14) continue;
+      g.beginPath(); g.arc(c[0], c[1], L * 0.045, turn - 1.3, turn + 1.3); g.stroke();
     }
   }
   g.lineWidth = w * 0.5;
