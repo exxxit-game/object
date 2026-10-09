@@ -28,6 +28,9 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   standards decide, not his pick («всем соответствие будешь делать, а не то, что я выбрал» 8.10 17:39);
   comfort fixes the one exception («точечные правки комфорта мы будем вводить» 9.10 11:01).
 - Rooms are faithful re-creations of published experiments; no invented mechanics.
+- The model is Guy Ritchie's "Revolver", not Portal: a game played again and again to understand it,
+  built detail by detail («вместо портала… смысл фильма Гая Ричи «Револьвер»… надо сделать так, чтобы
+  и нашу игру много раз перепроходили, чтобы разобраться в ней… деталька за деталькой» 9.10).
 - Readability beats period look («Читаемость» 8.10); pictures before the game («мне надо его увидеть,
   чтобы потом уже… его в игру добавлять» 8.10); beauty only within the weakest headset's budget
   («максимум красоты, ну не в нагрузку» 9.10 11:43).
