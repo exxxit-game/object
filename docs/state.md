@@ -62,9 +62,9 @@
 ## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
 1. Queue step 4.1 NOW. Done: causes 1-6, 9-11 (docs/audit/README.md; 5 on his "Делаем" 9.10, pictures
    https://claude.ai/artifact/22VLRrRJje5dvK84Q5Jyqp), plan checked twice, premortem, docs split, rules review,
-   guards proven, Claude Code read. Cause 5 green on GitHub (smoke included); its headset check waits for
-   him: the boundary window blocks VR after sleep. Allow rules on his yes (.claude/settings.json: quest-look,
-   gh run, publish-preview). Waiting: his yes on the new CLAUDE.md. Next: causes 7, 8; f) the style book;
+   guards proven, Claude Code read. Cause 5 green on GitHub (smoke included) and seen in his headset walk
+   9.10 (frames, 90 fps, 130 draw calls max). Allow rules on his yes (.claude/settings.json: quest-look,
+   gh run, publish-preview). VR only on his head (quest-look vr). Waiting: his yes on the new CLAUDE.md. Next: causes 7, 8; f) the style book;
    then the fact-checker, request and architecture auditors. Open talk: the start's tone (his 9.10: not
    Portal 2 humour, "learn about yourself"), touches step 7.
    After his app update: onFailure "block" on the guards. His guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9
@@ -74,6 +74,6 @@
 2. Then 4.2, the data lever first (data stay with us, our own lab; what we need from scientists beyond
    name and ethics approval). Data protection = "the most serious of all": LINDDUN, STRIDE, OWASP ASVS, a
    break-in try on a copy, CSP, the provider must not read rows, permission rules (claude-code/C2).
-   Then 4.3 (headset, logged measures; meta-vr plugin), the corridor items 3-5, 4a, step 5.
+   Then 4.3 (walking, sitting, hands, objects: checklist to him first), corridor items 3-7, 4a, step 5.
 3. Corridor ACCEPTED 8.10 (docs/rooms/corridor-shots/). Style book: https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH.
-   Visual designs go to him as pictures BEFORE the game. Headset on USB: quest-look worn on, check, sleep.
+   Visual designs go to him as pictures BEFORE the game. Headset: his walks over Wi-Fi (quest-wifi), I watch.
