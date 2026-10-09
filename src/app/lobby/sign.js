@@ -109,12 +109,13 @@ export function facesSign(eye, forward) {
 // { headset: a VR headset can be used here, questBrowser: this is the headset's own browser };
 // moment: 'load', 'flat-press' (a key or a press on the 3D view on the flat page) or 'enter-vr'.
 // Returns 'now', 'settle' (after the player has looked around in VR: settleArrival) or 'wait'.
-// On a computer without VR: at once. In the headset's own browser the flat page is only the door
-// to VR, and people press or drag on it to look around before they press VR: a press there never
-// starts the sign. Elsewhere (a computer with a VR runtime, a phone with AR) a player may stay
-// on the flat page, and a press there starts it.
+// Never at load: a browser plays no sound before the player's first press, and the sign's clicks,
+// meant to turn the eyes to it, were lost (or, held for the press, went off all at once). On a
+// computer, VR or not, the first press on the flat page starts it. In the headset's own browser
+// the flat page is only the door to VR, and people press or drag on it to look around before they
+// press VR: a press there never starts the sign; entering VR does.
 export function arrivalStep({ headset, questBrowser }, moment) {
-  if (!headset) return moment === 'load' ? 'now' : 'wait';
+  if (!headset) return moment === 'flat-press' ? 'now' : 'wait';
   if (moment === 'enter-vr') return 'settle';
   if (moment === 'flat-press') return questBrowser ? 'wait' : 'now';
   return 'wait';

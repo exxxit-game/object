@@ -174,6 +174,9 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     await page.goto(url);
     await page.waitForFunction(() => document.querySelector('a-scene')?.hasLoaded, null, { timeout: 30000 });
     assert.equal(await page.evaluate(() => document.documentElement.dataset.roomState), 'idle');
+    // on a computer the sign starts at the player's first press, when its sounds can play
+    // (src/app/lobby/sign.js, arrivalStep): a real key press, as a player's
+    await page.keyboard.press('Space');
     // the poster pressed while the sign still plays: the clipboard's "take me" page comes
     // while the question is open and waits behind it; "stay" puts it on its hook, ready
     await page.waitForFunction(() => document.querySelector('.sheet')?.getAttribute('visible'), null, { timeout: 30000 });

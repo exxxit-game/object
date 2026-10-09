@@ -78,11 +78,14 @@ assert.ok(SIGN_LIT_AT > SIGN_TRIES.at(-1)[1], 'the hum starts once the sign is l
 // sign shines alone before the voice.
 assert.ok(ARRIVAL.orientS >= 10, 'the sign must wait at least 10 s after entering VR');
 // The rule itself, run: in the headset's browser a press on the flat page never starts the sign,
-// only VR does, after the wait; a computer starts it at once; a computer with a VR runtime on a press.
+// only VR does, after the wait; a computer starts it on the first press. Never at load: the
+// browser plays no sound before a press, so the sign's clicks were lost, or, held for the press,
+// went off all at once.
 const quest = { headset: true, questBrowser: true }, pcVr = { headset: true, questBrowser: false }, pc = { headset: false, questBrowser: false };
 assert.deepEqual(['load', 'flat-press', 'enter-vr'].map((m) => arrivalStep(quest, m)), ['wait', 'wait', 'settle'], 'Quest: only VR starts the sign');
 assert.deepEqual(['load', 'flat-press'].map((m) => arrivalStep(pcVr, m)), ['wait', 'now'], 'a computer with a VR runtime: a press on the flat page');
-assert.equal(arrivalStep(pc, 'load'), 'now', 'a computer without VR: at once');
+assert.deepEqual(['load', 'flat-press'].map((m) => arrivalStep(pc, m)), ['wait', 'now'], 'a computer without VR: the first press');
+for (const d of [quest, pcVr, pc]) assert.notEqual(arrivalStep(d, 'load'), 'now', 'nothing that sounds starts before the first press');
 // and the wait, timed with a fake clock: even a player facing the sign from the start waits orientS
 {
   let clock = 0;
