@@ -3,7 +3,7 @@ import { onUnlock } from '../../engine/audio.js';
 import { SOUND_GAIN } from './sound-list.js';
 import { SPEED } from '../session.js';
 import '../../engine/lightbox.js';
-import { arrivalStep, settleArrival, SIGN_WORDS, SIGN_STYLE, SIGN_ENDINGS, SIGN_ANSWER, SIGN_LIT_AT, SIGN_AT, ARRIVAL, facesSign, pickEnding } from './sign.js';
+import { arrivalStep, settleArrival, SIGN_WORDS, SIGN_STYLE, SIGN_ENDINGS, SIGN_ANSWER, SIGN_AT, ARRIVAL, facesSign, pickEnding } from './sign.js';
 
 // The first moments in the corridor, before any text: the light box over door 1 waits
 // until the player has looked around, then starts and plays with the game's name
@@ -25,6 +25,7 @@ function nextEnding() {
 }
 const fast = (keys) => keys.map(([t, levels, cue]) => [t / SPEED, levels, cue]);
 let hum = null;
+let humAsked = false;
 let humLevel = 1;   // the hum's share of its full level; the cues change it
 
 // Resolves when the sign's play is over and the voice and the clipboard may follow.
@@ -38,14 +39,15 @@ export function signOn(scene) {
     if (cue.hum === undefined) return;
     humLevel = cue.hum;
     if (hum) hum.fade(humLevel * SOUND_GAIN['sign-hum'], (cue.humS || 0) / SPEED);
+    // the first hum cue (the sign fully lit) starts it; on a computer the sign may light before
+    // the first click, and the hum then starts with that click at the level of the latest cue
+    else if (!humAsked) { humAsked = true; onUnlock(() => { hum = playSound('sign-hum', SIGN_AT, humLevel * SOUND_GAIN['sign-hum'], true); }); }
   });
   return arrival(scene)
     .then(() => {
       // when the sign starts, for the checks (the smoke test, the headset tools)
       document.documentElement.dataset.signStart = String(Math.round(performance.now()));
       ending = nextEnding();
-      // on a computer the sign may light before the first click: the hum then starts with it
-      delay(SIGN_LIT_AT).then(() => onUnlock(() => { hum = playSound('sign-hum', SIGN_AT, humLevel * SOUND_GAIN['sign-hum'], true); }));
       return box.run(fast(SIGN_ENDINGS[ending]));
     })
     .then(() => (scene.is('vr-mode') ? delay(ARRIVAL.litPauseS) : null));

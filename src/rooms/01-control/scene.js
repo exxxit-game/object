@@ -9,6 +9,9 @@ import { doorHTML } from '../../engine/door.js';
 import { SIGN, SIGN_PANEL } from '../../app/brand.js';
 import { plaqueX, ROOM1_NUMBER } from '../../app/lobby/plan.js';
 
+// the booth's floor space, 3.2 × 3.2 m round the origin: its tiles and blocks are laid from it
+const SPACE = 'space: 0 0 3.2 3.2';
+
 export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true" background="color: #0b0b0d"
          cursor="rayOrigin: mouse" raycaster="objects: .clickable; far: 8"
          vr-mode-ui="enabled: true" loading-screen="enabled: false" xr-mode-ui="enabled: true">
@@ -35,27 +38,27 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   </a-entity>
 
   <!-- floor and ceiling -->
-  <a-plane rotation="-90 0 0" position="0 0 0" width="3.2" height="3.2" surface="kind: linoleum"></a-plane>
-  <a-plane rotation="90 0 0" position="0 2.5 0" width="3.2" height="3.2" surface="kind: ceiling"></a-plane>
+  <a-plane rotation="-90 0 0" position="0 0 0" width="3.2" height="3.2" surface="kind: linoleum; ${SPACE}"></a-plane>
+  <a-plane rotation="90 0 0" position="0 2.5 0" width="3.2" height="3.2" surface="kind: ceiling; ${SPACE}"></a-plane>
 
   <!-- walls: painted concrete block, a darker band below a wooden rail at 0.8 m (on a joint) -->
-  <a-plane position="0 1.25 -1.6" width="3.2" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
+  <a-plane position="0 1.25 -1.6" width="3.2" height="2.5" surface="kind: block; tint: #8a9479; ${SPACE}"></a-plane>
   <!-- back wall (0.2 m block wall to the corridor) around door 1's masonry opening
        (x 0.2 to 1.2, up to 2.2 m: on the block module, so no block is cut beside it:
        NCMA TEK 05-12, tests/masonry.test.mjs) -->
-  <a-plane rotation="0 180 0" position="-0.7 1.25 1.6" width="1.8" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
-  <a-plane rotation="0 180 0" position="1.4 1.25 1.6" width="0.4" height="2.5" surface="kind: block; tint: #8a9479"></a-plane>
-  <a-plane rotation="0 180 0" position="0.7 2.35 1.6" width="1.0" height="0.3" surface="kind: block; tint: #8a9479"></a-plane>
-  <a-plane rotation="0 -90 0" position="1.6 1.25 0" width="3.2" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
-  <a-plane rotation="0 90 0" position="-1.6 1.25 -1.25" width="0.7" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
-  <a-plane rotation="0 90 0" position="-1.6 1.25 0.95" width="1.3" height="2.5" surface="kind: block; tint: #858f74"></a-plane>
-  <a-plane rotation="0 90 0" position="-1.6 0.5 -0.3" width="1.2" height="1.0" surface="kind: block; tint: #858f74"></a-plane>
-  <a-plane rotation="0 90 0" position="-1.6 2.15 -0.3" width="1.2" height="0.7" surface="kind: block; tint: #858f74"></a-plane>
-  <a-plane position="0 0.4 -1.597" width="3.2" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
-  <a-plane rotation="0 180 0" position="-0.7 0.4 1.597" width="1.8" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
-  <a-plane rotation="0 180 0" position="1.4 0.4 1.597" width="0.4" height="0.8" surface="kind: block; tint: #5d6650"></a-plane>
-  <a-plane rotation="0 -90 0" position="1.597 0.4 0" width="3.2" height="0.8" surface="kind: block; tint: #59624c"></a-plane>
-  <a-plane rotation="0 90 0" position="-1.597 0.4 0" width="3.2" height="0.8" surface="kind: block; tint: #59624c"></a-plane>
+  <a-plane rotation="0 180 0" position="-0.7 1.25 1.6" width="1.8" height="2.5" surface="kind: block; tint: #8a9479; ${SPACE}"></a-plane>
+  <a-plane rotation="0 180 0" position="1.4 1.25 1.6" width="0.4" height="2.5" surface="kind: block; tint: #8a9479; ${SPACE}"></a-plane>
+  <a-plane rotation="0 180 0" position="0.7 2.35 1.6" width="1.0" height="0.3" surface="kind: block; tint: #8a9479; ${SPACE}"></a-plane>
+  <a-plane rotation="0 -90 0" position="1.6 1.25 0" width="3.2" height="2.5" surface="kind: block; tint: #858f74; ${SPACE}"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.6 1.25 -1.25" width="0.7" height="2.5" surface="kind: block; tint: #858f74; ${SPACE}"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.6 1.25 0.95" width="1.3" height="2.5" surface="kind: block; tint: #858f74; ${SPACE}"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.6 0.5 -0.3" width="1.2" height="1.0" surface="kind: block; tint: #858f74; ${SPACE}"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.6 2.15 -0.3" width="1.2" height="0.7" surface="kind: block; tint: #858f74; ${SPACE}"></a-plane>
+  <a-plane position="0 0.4 -1.597" width="3.2" height="0.8" surface="kind: block; tint: #5d6650; ${SPACE}"></a-plane>
+  <a-plane rotation="0 180 0" position="-0.7 0.4 1.597" width="1.8" height="0.8" surface="kind: block; tint: #5d6650; ${SPACE}"></a-plane>
+  <a-plane rotation="0 180 0" position="1.4 0.4 1.597" width="0.4" height="0.8" surface="kind: block; tint: #5d6650; ${SPACE}"></a-plane>
+  <a-plane rotation="0 -90 0" position="1.597 0.4 0" width="3.2" height="0.8" surface="kind: block; tint: #59624c; ${SPACE}"></a-plane>
+  <a-plane rotation="0 90 0" position="-1.597 0.4 0" width="3.2" height="0.8" surface="kind: block; tint: #59624c; ${SPACE}"></a-plane>
   <a-box position="0 0.8 -1.592" width="3.2" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
   <a-box position="-0.7056 0.8 1.594" width="1.7888" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
   <a-box position="1.4056 0.8 1.594" width="0.3888" height="0.025" depth="0.012" color="#4a3b2c"></a-box>

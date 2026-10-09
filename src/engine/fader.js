@@ -25,7 +25,9 @@ AFRAME.registerComponent('fader', {
   tick(t, dt) {
     const m = this.mesh.material;
     if (!this.done) return;
-    const step = (dt || 16) / this.data.ms;
+    // dt is always a number: the scene's render loop passes 1000 × its clock's delta (0 on the
+    // very first frame, which then moves nothing)
+    const step = dt / this.data.ms;
     m.opacity = this.target > m.opacity ? Math.min(this.target, m.opacity + step) : Math.max(this.target, m.opacity - step);
     if (m.opacity === this.target) {
       this.mesh.visible = this.target > 0;

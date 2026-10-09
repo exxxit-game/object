@@ -1,4 +1,4 @@
-import { jointOrigin, bondOrigin, courseShifted, CEILING } from './tile-math.js';
+import { jointOrigin, bondOrigin, courseShifted, CEILING, GRID } from './tile-math.js';
 
 // Surfaces drawn once on a canvas (no image files to load): painted block wall,
 // linoleum tiles, acoustic ceiling tiles, cork, a lamp's lens, wood. Each kind is drawn once
@@ -8,7 +8,7 @@ import { jointOrigin, bondOrigin, courseShifted, CEILING } from './tile-math.js'
 // into pieces, the band below the rail and the next wall all line up, and the edges of
 // the space get equal cuts, never less than half a tile.
 // Cork, lens and wood (no grid) only repeat.
-// <a-plane surface="kind: linoleum"></a-plane>  <a-entity surface="kind: wood; repeat: 1 1">
+// <a-plane surface="kind: linoleum; space: 0 0 3.2 3.2"></a-plane>  <a-entity surface="kind: wood; repeat: 1 1">
 const SIZE = 512;
 // the ceiling grid's face (tile-math.js) in a 24 in tile's pixels: a stroke of that width on the
 // tile's edge shows half on this tile and half on its neighbour, the full face where they meet
@@ -106,16 +106,6 @@ const KINDS = {
   }
 };
 
-// Metres covered by one copy of the drawing (a joint at its edge) and the size of one
-// tile or block across. Where the joints go is worked out per space (tile-math.js).
-// Sizes from docs/building-standards.md: 12 in floor tiles, a 24 in ceiling grid; blocks
-// on the metric module (0.2 × 0.4 m) so walls stay whole half blocks.
-const GRID = {
-  block: { size: 1.6, tile: 0.4, bond: true }, // running bond: courses shifted by half a block
-  linoleum: { size: 0.6096, tile: 0.3048 },
-  ceiling: { size: 0.6096, tile: 0.6096 }
-};
-
 // UVs from world positions: across the surface (x, or z for walls facing x) and up
 // (y for walls, z for floor and ceiling); block courses start at the floor. The
 // geometry is cloned first: A-Frame shares one geometry between planes of the same size.
@@ -157,9 +147,10 @@ AFRAME.registerComponent('surface', {
     repeat: { type: 'vec2', default: { x: 1, y: 1 } }, // kinds without a grid; tiled kinds use the room grid
     tint: { default: '#ffffff' }, // multiplies the drawn colours (darker paint band, etc.)
     glow: { default: false },     // a lit surface (a lamp's lens): the drawing also shapes its glow
-    // the space whose tiles this surface shares: centre x, centre z, length along x, along z
-    // (default: room 01, 3.2 × 3.2 m around the origin)
-    space: { type: 'vec4', default: { x: 0, y: 0, z: 3.2, w: 3.2 } }
+    // the space whose tiles this surface shares: centre x, centre z, length along x, along z;
+    // required for a gridded kind, and no default: one room's space as the engine's default
+    // would lay every other space's joints from that room's centre without a word
+    space: { type: 'vec4', default: { x: 0, y: 0, z: 0, w: 0 } }
   },
   init() { this.apply = this.apply.bind(this); this.el.addEventListener('object3dset', this.apply); },
   update() { this.apply(); },
@@ -168,6 +159,7 @@ AFRAME.registerComponent('surface', {
     const mesh = this.el.getObject3D('mesh');
     if (!mesh) return;
     const grid = GRID[this.data.kind];
+    if (grid && !(this.data.space.z > 0 && this.data.space.w > 0)) throw new Error(`surface ${this.data.kind}: no space given`);
     const sceneEl = this.el.sceneEl;
     // world positions are final only once the scene has loaded (merge-static runs after this)
     if (grid && !sceneEl.hasLoaded) { sceneEl.addEventListener('loaded', () => this.apply(), { once: true }); return; }

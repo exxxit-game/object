@@ -16,12 +16,15 @@ import { LEAF } from '../src/engine/door.js';
 
 const BLOCK = 0.4, COURSE = 0.2, MODULE = 0.2, MIN_GAP = 0.04, EPS = 0.002;
 // the walls things sit on, by the z of their face: the corridor's long walls (from its plan) and
-// room 01's back wall, each with the joint origin its surface uses (surface.js, space of the
-// corridor / the room), and how many door frames stand in it
+// room 01's back wall (the room's side of the corridor's north wall), each with the joint origin
+// its surface uses (surface.js, space of the corridor / the room), and how many door frames stand
+// in it; a thing fixed to a wall stands at most REACH off its face, and SKIN keeps the two faces
+// of the north wall apart
+const ROOM_FACE = PLAN.north - PLAN.thick, NORTH_FRAME = PLAN.north - PLAN.thick / 2, REACH = 0.15, SKIN = 0.01;
 const WALLS = [
-  { name: 'corridor north wall', z: [1.79, 1.95], x: [PLAN.from, PLAN.to], origin: bondOrigin(CENTRE.x, LENGTH, BLOCK), doors: DOORS.filter(d => d.wall === 'north').length },
-  { name: 'room back wall', z: [1.55, 1.79], x: [-1.6, 1.6], origin: bondOrigin(0, 3.2, BLOCK), doors: 1 },
-  { name: 'corridor south wall', z: [3.5, 3.85], x: [PLAN.from, PLAN.to], origin: bondOrigin(CENTRE.x, LENGTH, BLOCK), doors: DOORS.filter(d => d.wall === 'south').length }
+  { name: 'corridor north wall', z: [PLAN.north - SKIN, PLAN.north + REACH], x: [PLAN.from, PLAN.to], origin: bondOrigin(CENTRE.x, LENGTH, BLOCK), doors: DOORS.filter(d => d.wall === 'north').length },
+  { name: 'room back wall', z: [ROOM_FACE - REACH, PLAN.north - SKIN], x: [-1.6, 1.6], origin: bondOrigin(0, 3.2, BLOCK), doors: 1 },
+  { name: 'corridor south wall', z: [PLAN.south - REACH, PLAN.south + PLAN.thick + REACH], x: [PLAN.from, PLAN.to], origin: bondOrigin(CENTRE.x, LENGTH, BLOCK), doors: DOORS.filter(d => d.wall === 'south').length }
 ];
 // the corridor's end walls, for anything fixed to them: they run along z, their joints laid out
 // across the corridor's depth
@@ -39,8 +42,8 @@ assert.equal(jambs.length, DOORS.length * 2, 'every door of the plan, two jambs 
 // the floor course is laid whole from the origin, the next one shifted (as surface.js draws)
 assert.ok(!courseShifted(0) && courseShifted(1) && !courseShifted(2), 'running bond from a whole floor course');
 for (const wall of WALLS) {
-  // a frame goes through the whole wall (z 1.7 on the north): it counts for each wall it stands in
-  const xs = jambs.filter(j => (wallAt(j.z) === wall || (j.z === 1.7 && wall.z[1] <= 1.95)) && j.x > wall.x[0] && j.x < wall.x[1]).map(j => j.x).sort((a, b) => a - b);
+  // a frame goes through the whole wall (NORTH_FRAME on the north): it counts for each face it stands in
+  const xs = jambs.filter(j => (wallAt(j.z) === wall || (Math.abs(j.z - NORTH_FRAME) < EPS && wall.z[1] <= PLAN.north + REACH)) && j.x > wall.x[0] && j.x < wall.x[1]).map(j => j.x).sort((a, b) => a - b);
   assert.equal(xs.length, wall.doors * 2, `${wall.name}: its door frames`);
   for (let i = 0; i < xs.length; i += 2) {
     for (const edge of [xs[i] - 0.0143, xs[i + 1] + 0.0143]) {
@@ -92,16 +95,16 @@ for (const tag of items.filter(t => !/\bdoor-sign\b/.test(attr(t, 'class')))) {
 // nothing on a wall floats off it: its back rests on the wall face, within 2 mm: a box's back, or
 // a sign's, whose printed face stands on a body as deep as the face is off the wall (panel thick:
 // faces closer than 5 mm flicker in a headset); the faces are the corridor's long walls (z 1.8 and
-// 3.6, from the plan) and the inside of room 01's back wall (z 1.6)
+// 3.6, from the plan) and the inside of room 01's back wall (ROOM_FACE, z 1.6)
 for (const tag of items) {
   const [, , z] = attr(tag, 'position').split(' ').map(Number);
   const box = attr(tag, 'rounded-box'), panel = attr(tag, 'panel');
-  const faces = [[PLAN.north, 1], [PLAN.south, -1], [1.6, -1]];   // [face z, the way off it]
+  const faces = [[PLAN.north, 1], [PLAN.south, -1], [ROOM_FACE, -1]];   // [face z, the way off it]
   const [face, off] = faces.reduce((a, b) => (Math.abs(z - b[0]) < Math.abs(z - a[0]) ? b : a));
   const back = panel ? z - off * (prop(panel, 'thick') || 0) : z - off * (box ? prop(box, 'depth') : Number(attr(tag, 'depth'))) / 2;
   const gap = (back - face) * off;
   const name = attr(tag, 'id') || tag.slice(0, 50);
-  assert.ok(gap >= -0.0011 && gap <= 0.002 + 1e-9, `${name}: its back ${(gap * 1000).toFixed(1)} mm off its wall`);
+  assert.ok(gap >= -1e-9 && gap <= 0.002 + 1e-9, `${name}: its back ${(gap * 1000).toFixed(1)} mm off its wall`);
 }
 
 // every door sign is the standard's 9 × 9 in, centred 60 in above the floor (NIU installation,

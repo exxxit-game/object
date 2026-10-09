@@ -24,7 +24,7 @@ for (const t of leaves) {
 // through the whole wall
 assert.equal(new Set(leaves.map(t => Math.abs(pos(t)[2]))).size, 1, 'door leaves at different depths in their walls');
 const jambs = tags('a-box').filter(t => attr(t, 'height') === '2.2042');
-assert.ok(jambs.length === DOORS.length * 2 && jambs.every(t => attr(t, 'depth') === '0.22' && (near(pos(t)[2], 1.7) || near(pos(t)[2], 3.7))), 'every frame through the wall');
+assert.ok(jambs.length === DOORS.length * 2 && jambs.every(t => attr(t, 'depth') === '0.22' && (near(pos(t)[2], PLAN.north - PLAN.thick / 2) || near(pos(t)[2], PLAN.south + PLAN.thick / 2))), 'every frame through the wall');
 // Round knobs as in 1979, at 1.024 m (strike centreline), 2 3/4 in (70 mm) from the latch edge;
 // one on the corridor side of every door, one inside the room that opens
 const knobs = tags('a-entity').filter(t => /class="knob"/.test(t));
@@ -148,7 +148,7 @@ for (const s of sheets) {
   assert.ok(pos(s)[2] > corkZ && pos(s)[2] - corkZ <= 0.001, `${attr(s, 'id')}: ${((pos(s)[2] - corkZ) * 1000).toFixed(1)} mm off the cork`);
   assert.ok(/decal: true/.test(attr(s, 'panel')), `${attr(s, 'id')}: drawn over the cork as a decal`);
 }
-const pins = tags('a-sphere').filter((t) => near(pos(t)[0], B.x, B.w / 2) && near(pos(t)[1], B.y, B.h / 2) && pos(t)[2] > PLAN.north && pos(t)[2] < 1.9);
+const pins = tags('a-sphere').filter((t) => near(pos(t)[0], B.x, B.w / 2) && near(pos(t)[1], B.y, B.h / 2) && pos(t)[2] > corkZ && pos(t)[2] < corkZ + 0.05);
 assert.equal(pins.length, sheets.length, 'a pin in each sheet');
 for (const p of pins) assert.ok(near(pos(p)[2] - Number(attr(p, 'radius')), pos(sheets[0])[2], 0.0005), 'the head of a pin on its sheet');
 const peg = tags('a-cylinder').find((t) => near(pos(t)[1], B.hook, 1e-6) && near(pos(t)[0], B.x, 1e-6));

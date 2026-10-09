@@ -22,7 +22,8 @@ const SPARK = 0.03;   // a kick or a cut-out is near instant
 
 // steps: [time, levels (one number for every word, or { word: level }), fade s, cue]; a cue
 // ({ sound, hum, humS }, or true for a starter click) fires as the change begins; hum is a
-// share of the sign's full hum (0..1), humS the seconds it takes to get there.
+// share of the sign's full hum (0..1), humS the seconds it takes to get there; the first hum
+// cue starts the hum.
 const CLICK = { sound: 'sign-click' };
 function play(steps, from = [[0, SIGN_WORDS.map(() => 0.04)]]) {
   const keys = from.map((k) => [...k]);
@@ -35,12 +36,16 @@ function play(steps, from = [[0, SIGN_WORDS.map(() => 0.04)]]) {
 }
 
 const [[h1, k1], [h2, k2], [h3, k3]] = SIGN_TRIES;
+// When the whole sign is first lit: its hum starts, as a cue of the lamps' own clock (a window
+// timer beside them drifts apart from it after a stalled frame).
+export const SIGN_LIT_AT = k3 + SPARK;
 // To "you object" in about 18 s, each change slow enough to watch; a title needs about 5 s
 // to be read twice (19 letters: Pinnacle Studio title guidance), short words about 3 s.
 const TO_YOU_OBJECT = play([
   [h1, 0.13, SPARK, true], [k1, 0.6, SPARK, true], [k1 + 0.12, 0.05],
   [h2, 0.13, SPARK, true], [k2, 0.75, SPARK, true], [k2 + 0.14, 0.06],
   [h3, 0.13, SPARK, true], [k3, 1, SPARK, true],                     // youaretheobject.com
+  [SIGN_LIT_AT, {}, SPARK, { hum: 1 }],
   // the ".com" lamp fails: it blinks about once a second, then dies with an afterglow
   // (an end-of-life fluorescent lamp blinks about once a second: Wikipedia "Glow switch starter")
   [9.9, { '.com': 0.35 }, 0.15], [10.3, { '.com': 1 }, 0.1, true],
@@ -83,9 +88,6 @@ export function pickEnding(visits, asked) {
   if (asked && Object.hasOwn(SIGN_ENDINGS, asked)) return asked;
   return SIGN_ROUND[(Math.max(0, visits | 0)) % SIGN_ROUND.length];
 }
-
-// When the whole sign is first lit: its hum starts.
-export const SIGN_LIT_AT = k3 + SPARK;
 
 // The arrival in VR, one thing at a time. People in a new VR place spend at least the
 // first 10 seconds looking around and notice nothing else (West 2015, Unity Labs, from

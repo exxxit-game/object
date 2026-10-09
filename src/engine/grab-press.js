@@ -12,18 +12,19 @@ AFRAME.registerComponent('grab-press', {
     this.q = new THREE.Vector3();
     this.near = null;
     this.targets = [];
-    this.frame = 0;
+    this.scanned = -Infinity;
     const press = () => { if (this.near) this.near.emit('click', { cursorEl: this.el }); };
     this.el.addEventListener('triggerdown', press);
     this.el.addEventListener('gripdown', press);
   },
 
-  tick() {
+  tick(time) {
     this.el.object3D.getWorldPosition(this.p);
     let best = null;
     let bestDist = this.data.radius;
-    // the target list is refreshed about once a second, not searched every frame
-    if (this.frame++ % 72 === 0) this.targets = [...this.el.sceneEl.querySelectorAll('.grabbable')];
+    // the target list is refreshed once a second, not searched every frame; counted in time,
+    // not frames, because a headset runs at 72, 90 or 120 frames a second
+    if (time - this.scanned >= 1000) { this.scanned = time; this.targets = [...this.el.sceneEl.querySelectorAll('.grabbable')]; }
     for (const t of this.targets) {
       t.object3D.getWorldPosition(this.q);
       const d = this.p.distanceTo(this.q);

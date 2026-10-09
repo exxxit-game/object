@@ -8,8 +8,8 @@ import { rigTransform, seatedLift, placementStep, EYE } from './recenter-math.js
 // Put on the camera rig.
 AFRAME.registerComponent('recenter', {
   schema: {
-    x: { default: 0 },     // where the head should be (world metres)
-    z: { default: 0.35 },
+    x: { default: 0 },     // where the head should be (world metres); every room passes its own spot
+    z: { default: 0 },
     yaw: { default: 0 },   // which way the player should face (degrees, 0 = -Z)
     eye: { default: EYE },  // designed eye height, used only with lift
     seatedBelow: { default: 1.35 },

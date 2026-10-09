@@ -72,6 +72,13 @@ for (const [name, play] of Object.entries(SIGN_ENDINGS)) {
 }
 assert.equal(reads(SIGN_ANSWER, SIGN_ANSWER.at(-1)[0]), 'youaretheobject', 'ending b: the name comes back when the clipboard is taken');
 assert.ok(SIGN_LIT_AT > SIGN_TRIES.at(-1)[1], 'the hum starts once the sign is lit');
+// the hum starts on the lamps' own clock: in every ending the first hum cue is at SIGN_LIT_AT,
+// at full level, and the whole sign is lit then
+for (const [name, play] of Object.entries(SIGN_ENDINGS)) {
+  const first = play.find((k) => k[2] && k[2].hum !== undefined);
+  assert.ok(first && first[0] === SIGN_LIT_AT && first[2].hum === 1, `${name}: the hum's first cue is not when the sign is lit`);
+  assert.ok(first[1].every((v) => v === 1), `${name}: the hum starts before every word is lit`);
+}
 
 // The arrival is not rushed (docs/mistakes.md): the sign stays dark for the first 10 s in
 // VR (West 2015), every starter try heats the tube 0.5–2 s before its kick (DIAL), and the

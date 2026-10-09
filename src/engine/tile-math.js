@@ -16,6 +16,16 @@ function piece(x, tile) {
 // The suspended ceiling: a 24 in grid with a 15/16 in face (docs/building-standards.md, S9, S10).
 export const CEILING = { tile: 24 * 0.0254, face: 15 / 16 * 0.0254 };
 
+// The kinds of surface laid on a grid (surface.js): metres covered by one copy of the drawing
+// (a joint at its edge) and the size of one tile or block across. Sizes from
+// docs/building-standards.md: 12 in floor tiles, a 24 in ceiling grid; blocks on the metric
+// module (0.2 × 0.4 m) so walls stay whole half blocks.
+export const GRID = {
+  block: { size: 1.6, tile: 0.4, bond: true }, // running bond: courses shifted by half a block
+  linoleum: { size: 0.6096, tile: 0.3048 },
+  ceiling: { size: 0.6096, tile: 0.6096 }
+};
+
 export function jointOrigin(centre, length, tile) {
   const jointCentred = piece(length / 2, tile);
   const tileCentred = piece(length / 2 - tile / 2, tile);
