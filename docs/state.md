@@ -29,19 +29,7 @@
 - Voice: ElevenLabs key in ~/.elevenlabs-key.txt; Daniel, eleven_v3; `tools/make-voice.mjs`, `tools/check-voice.mjs`.
 
 ## Decisions with the owner
-- The corridor is the reference every room is built on: finished to the end before the first room
-  («доделать эталонный коридор, на который мы опираемся»; «доделывать до конца»). Queue order: only his word.
-- Install first, the site second («чтобы человек мог это установить себе… а сайт это уже второй шаг»).
-- Rooms are faithful re-creations of published experiments; no invented mechanics.
-- Space tiers: seated, standing, roomscale 1.8×1.8 m (base; owner's area), large (offered only, never shrunk).
-- Live players replace scripted people only where the original had real participants or
-  a design like Mori & Arai; mixed reality where the original was a real room.
-- Business (08.10): the first 5–10 rooms free, chosen to work even when the trick is known, so streamers
-  spread them; keep releasing. Then paid packs; education licences; university partners; never sell data.
-- Ethics: consent, 18+ for recording, "start without recording", quit any time, debrief,
-  anonymous data; science only after ethics approval + preregistration + separate consent.
-- Playtest: 5–10 testers from the owner's Telegram VR community; 5 approved questions.
-- Formal "вы"; no music; batch releases only on the owner's word.
+All in `docs/owner-decisions.md` (shown at every session start): settled, never asked again.
 
 ## How errors are caught (the owner cannot read code)
 - `new-room` skill; `paper-reviewer` agent; `docs/mistakes.md` (every mistake has a guard); facts in one place

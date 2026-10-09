@@ -17,7 +17,7 @@ import { withoutGitVars } from './secrets.mjs';
 import { unrelayed } from './owner-links.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const DECISIONS = '## Decisions with the owner';
+const DECISIONS = 'docs/owner-decisions.md';
 const mode = process.argv[2];
 const input = await new Promise((done) => {
   let s = '';
@@ -89,17 +89,12 @@ if (mode === 'start') {
   // re-asks what he settled, or advises against it from a general method (a risk list, "ship
   // early"), and he has to say it again in every session.
   try {
+    out.push(fs.readFileSync(path.join(HERE, DECISIONS), 'utf8').trim());
+  } catch { out.push(`WARNING: ${DECISIONS} is missing here: the owner's decisions are not in front of this session.`); }
+  try {
     const state = fs.readFileSync(path.join(HERE, 'docs/state.md'), 'utf8');
-    const section = (name) => {
-      const i = state.indexOf(`\n${name}`);
-      if (i < 0) return '';
-      const j = state.indexOf('\n## ', i + 1);
-      return state.slice(i + 1, j < 0 ? undefined : j).trim();
-    };
-    const decided = section(DECISIONS);
-    out.push(decided ? `${decided}\nThese are settled: never ask them again, never advise against them; a change comes only from the owner.` : `WARNING: docs/state.md has no "${DECISIONS}" section: the owner's decisions are not in front of this session.`);
-    const open = section('## Open items');
-    if (open) out.push(open.slice(0, 6000));
+    const open = state.slice(state.indexOf('## Open items'));
+    if (open.startsWith('## Open items')) out.push(open.slice(0, 6000));
   } catch { out.push('docs/state.md is missing here: this checkout is not the project\'s current work.'); }
   process.stdout.write(`${out.join('\n\n')}\n`);
   process.exit(0);

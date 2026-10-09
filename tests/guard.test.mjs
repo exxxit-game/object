@@ -106,7 +106,7 @@ assert.deepEqual(unrelayed(`{"content":"export const MARK = \\"${MARK}\\"; // se
 // The owner's decisions reach every session at its start and after each compaction, beside the
 // open items: a session that does not see them asks him again what he settled
 const start = spawnSync(process.execPath, ['tools/claude-guard.mjs', 'start'], { cwd: ROOT, encoding: 'utf8', input: JSON.stringify({ source: 'startup', cwd: ROOT }) });
-assert.ok(/^## Decisions with the owner\r?\n- /m.test(start.stdout) && start.stdout.includes('never ask them again') && start.stdout.includes('## Open items'),
+assert.ok(/^# The owner's decisions\r?\n/m.test(start.stdout) && /^- The corridor is the reference/m.test(start.stdout) && start.stdout.includes('## Open items'),
   `the start hook does not show the owner's decisions and the open items:\n${start.stdout.slice(0, 400)}`);
 
 console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the headset's wearer seen, links owed to the owner found, his decisions shown at start)`);
