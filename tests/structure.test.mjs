@@ -108,7 +108,8 @@ catch (e) { assert.fail(String(e.stderr || e.stdout).trim()); }
 // wrong time and without its arguments.
 const hijacked = code.filter(f => {
   const s = fs.readFileSync(f, 'utf8');
-  return /registerComponent/.test(s) && /^\s+(play|pause)\s*\(\s*\w/m.test(s);
+  // play(x), async play(x), play: function (x), play: (x) =>
+  return /registerComponent/.test(s) && /^\s+(?:async\s+)?(play|pause)\s*(?::\s*(?:async\s+)?(?:function\s*)?)?\(\s*\w/m.test(s);
 }).map(rel);
 assert.deepEqual(hijacked, [], `component methods named play/pause: ${hijacked.join(', ')}`);
 

@@ -4,9 +4,11 @@
 import assert from 'node:assert/strict';
 import { STICK, MOVE, SMOOTH, readStick, arc, inside, snapTurn, teleport, backStep, slide, smoothTurnDeg, vignetteLevel } from '../src/engine/locomotion-math.js';
 import { DIST as VIGNETTE_DIST } from '../src/engine/vignette.js';
+import { BOUNDS } from '../src/app/lobby/plan.js';
 
 const near = (a, b, e = 1e-9) => Math.abs(a - b) < e;
-const corridor = { minX: -3.1, maxX: 2.7, minZ: 2.1, maxZ: 3.35 };
+// the walking area the corridor really has, from its plan
+const corridor = BOUNDS;
 
 assert.equal(MOVE.snapDeg, 45);
 assert.equal(MOVE.backStep, 0.8);
@@ -56,7 +58,7 @@ assert.ok(a.hit[2] < 3 - 1.5 && a.hit[2] > 3 - 6, `lands ${(3 - a.hit[2]).toFixe
 assert.ok(a.points.every(p => p[1] >= -1e-6));
 assert.ok(!arc([0, 1.1, 3], [0, 1, 0]).hit, 'pointing straight up never lands');
 
-assert.ok(inside(0.6, 3.05, corridor) && !inside(0.6, 1.9, corridor) && !inside(3, 3, corridor));
+assert.ok(inside(0.6, 3.05, corridor) && !inside(0.6, 1.9, corridor) && !inside(corridor.maxX + 0.3, 3, corridor));
 
 // a turn keeps the head where it is; the rig turns by the angle
 for (const [rig, head, ang] of [[{ x: 0, z: 0, yaw: 0 }, [0.6, 3.05], 45], [{ x: 0.3, z: -0.2, yaw: 1 }, [-1, 2.5], -45]]) {
