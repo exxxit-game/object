@@ -60,17 +60,16 @@
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
 ## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
-1. Queue step 4.1 NOW. Done: causes 1-7, 9-11 (docs/audit/README.md; 7: placement to see in his next headset
-   session), plan checked twice, premortem, docs split, rules review, guards proven, Claude Code read, style
-   book matched. Waiting: his yes on the new CLAUDE.md. 1976 UBC: docs/building-standards.md S27.
-   Cause 8 (9.10, session prodolzhenie-21470b): 14 fixed (flicker: decal.js + tests/near-faces.mjs in the
-   smoke test, reviewed twice), 11 sourced, 17 headset rows moved to 4.3, 25 still need a source (batches).
-   Waiting for him: the ceiling pictures (5 troffers in the grid, S28). Pushed: claude/prodolzhenie-21470b.
-   Then the fact-checker, request and architecture auditors, then 4.1 done.
-   Open talk: the start's tone (not Portal 2 humour, "learn about yourself"), step 7. He knows nothing of git
-   or GitHub: explain (his guide https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9). Next
-   (place in the queue waits for his word, proposed right after 4.1): GitHub done fully: pull requests
-   with checks and a reviewer, a release with a version and Russian notes per live update, a build stamp.
+1. Step 4.3 NOW (his word 9.10, before 4.1 ends). The first input probe (9.10) was WASTED: the headset showed only a
+   colour, the task sat on his phone (he: "the simplest, the dumbest", said many times). FIRST: rebuild the "input"
+   step of tools/xr-probe.html so the headset itself shows ONE line of words at a time (e.g. "press the right
+   trigger"), the next once it is done, started by his press; no colours, nothing to read outside the headset; then
+   its guard + a docs/mistakes.md row; rerun with him, then the mic (fan off/on); results: docs/headset-capabilities.md.
+   4.1 left (causes: docs/audit/README.md): cause 8 (docs/audit/numbers.md: 25 need a source); his yes on the ceiling pictures
+   (docs/audit/ceiling/: 5 troffers in the grid, S28; the code is troffers.patch there, then a test that troffer
+   ends lie on joints); then the fact-checker, request and architecture auditors. Waiting: his yes on the new
+   CLAUDE.md. Open talk: the start's tone, step 7. GitHub done fully (PRs with checks, releases, a build stamp):
+   its place in the queue waits for his word. Git guide for him: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.
 2. Then 4.2, the data lever first (data stay with us, our own lab; what we need from scientists beyond
    name and ethics approval). Data protection = "the most serious of all": LINDDUN, STRIDE, OWASP ASVS, a
    break-in try on a copy, CSP, the provider must not read rows, permission rules (claude-code/C2).
