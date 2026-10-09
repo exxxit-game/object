@@ -17,9 +17,9 @@
   `node tools/check-cards.mjs`; catalog generated: `docs/catalog.md` (`node tools/build-catalog.mjs`);
   coverage closed: `docs/search-coverage.md`; ideas: `docs/ideas/`; headset abilities:
   `docs/headset-capabilities.md`; owner page: https://claude.ai/artifact/Srhwjio7Ukp4FBDQAHpZB2
-- Plan to 1M players (Russian doc for the owner, 08.10): https://claude.ai/code/artifact/71113d16-57ad-42ce-9905-87ff87dfdbd7
-  Its table "Сверка всех твоих просьб" is THE list of every owner request and its state: add new ones there.
-  Its section "Как идём дальше" is THE queue: work only on its top step, one at a time.
+- THE WORK is the one-page board `docs/board.md` (shown at every start; his yes is the only measure of progress).
+  Every owner message is logged on the laptop by the prompt hook. The big plan (archive and strategy, read only
+  when a step needs it): https://claude.ai/code/artifact/71113d16-57ad-42ce-9905-87ff87dfdbd7
 - Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS 08.10, old 60 fps bar, no log); `tools/xr-probe.html`.
   Owner plays the test copy https://exxxit-game.github.io/object-preview/ (bookmark in the headset, the
   game from GitHub): `node tools/publish-preview.mjs` before he looks; it never sends data. From 9.10 the
@@ -47,22 +47,12 @@ All in `docs/owner-decisions.md` (shown at every session start): settled, never 
 - Faithful ≠ interesting: lead with short, within-person, suspicion-proof rooms;
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
-## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
-Order (docs/owner-decisions.md): 4.3 now -> 4.4 -> rest of 4.1 -> 4.2 -> corridor items 3-9 to the end -> 4a -> step 5.
-1. Step 4.3 NOW. Done 9.10: the automatic stop (tools/review-gate.mjs; hook record, tests both ways, seen red);
-   still to see: the hook's first real record on a practice-reviewer run. Next: rebuild the probe's "input" step by
-   docs/audit/probe-review.md (ONE line of words at a time in the headset, the next once done, started by his press),
-   the ceiling (docs/audit/ceiling/troffers.patch) opened from the laptop for HIS look in the same visit (not in the
-   test copy before his yes); practice review of both; then "готово" to him (he waits); rerun with him, then the mic
-   (fan off/on); results: docs/headset-capabilities.md. Same visit: "Auto Enable Hands or Controllers", VR checks not
-   done (flicker, fps and draw calls logged, placement, sign 10 s). Background: connectors and catalog review
-   (scratchpad connectors-review.md) -> a table to him, switch off the unneeded on his yes to the list.
-2. Step 4.4 (his word «давай сейчас… Пусть оно там всем этим занимается»): GitHub done fully (PRs with checks and a
-   reviewer, releases with a version and Russian notes, a build stamp) and the research plan to a million.
-3. 4.1 left (causes: docs/audit/README.md): cause 8 (docs/audit/numbers.md: 25 need a source); fact-checker twice on his summary
-   https://claude.ai/artifact/H5ht7VG5QQPDCva7LyDwcU; the new CLAUDE.md waits for his yes; LAST (his word): an
-   independent check of our whole working system (works by measure / only on paper / built-in does it better).
-   Claude Code here is 2.1.293 (his app is the latest); prompt and agent hooks are fixed only from 2.1.294.
-4. Then 4.2 (data lever first; data protection "the most serious of all"), the corridor to the end, 4a, step 5.
-   Corridor ACCEPTED 8.10 (docs/rooms/corridor-shots/). Style book: https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH.
-   Visual designs go to him as pictures BEFORE the game. Git guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.
+## Technical notes behind the board (the board itself: docs/board.md)
+- The owner's automatic stop: VR in the headset and the test copy wait for a practice review of the files a
+  person meets (tools/review-gate.mjs); the first real review was recorded by the hook on 9.10. The rebuilt
+  controllers-and-hands probe (tools/xr-probe-input.html) follows docs/audit/probe-review.md.
+- Claude Code here is 2.1.293 (his app is the latest); prompt and agent hooks are fixed only from 2.1.294.
+- After the headset visit: metavr's server (0 tools: the plugin starts it through npx; the exe answers 38) and
+  Supabase read only; then CLAUDE.md cut to one page with a line cap in tests (his yes 9.10).
+- Earlier causes and audits: docs/audit/README.md. Corridor ACCEPTED 8.10 (docs/rooms/corridor-shots/).
+  Style book: https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH. Git guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.

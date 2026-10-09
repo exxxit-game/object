@@ -7,9 +7,10 @@
 //         the practice review record
 //   subagent-start, subagent-stop: a practice reviewer's run is recorded for the owner's automatic
 //         stop before VR in the headset and the test copy (tools/review-gate.mjs)
-//   stop: a turn does not end while npm test fails or work is unsaved or not on GitHub, or while
-//         a page only the owner can open, left by research, has not reached him (owner-links.mjs)
-//   start, prompt: the owner's decisions and the open items come back at start and after every
+//   stop: a turn does not end while npm test fails or work is unsaved or not on GitHub, while
+//         a page only the owner can open, left by research, has not reached him (owner-links.mjs),
+//         or while the board has no row for today saying what he will see (board.mjs)
+//   start, prompt: the owner's decisions and the board come back at start and after every
 //         compaction; every owner message is logged
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -19,6 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { withoutGitVars } from './secrets.mjs';
 import { unrelayed } from './owner-links.mjs';
 import { fingerprint, entries, write, REVIEWER, REPORT_END } from './review-gate.mjs';
+import { BOARD, SHOWS, shows, stalled, plannedToday } from './board.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DECISIONS = 'docs/owner-decisions.md';
@@ -89,7 +91,7 @@ const git = (...a) => { try { return execFileSync('git', a, { cwd: HERE, env: wi
 // context, so the state and the queue come back without anyone remembering to read them, and a
 // checkout made from the old live branch is named before work starts on it.
 if (mode === 'start') {
-  const out = [`Session ${event.source || 'start'}: before anything else (CLAUDE.md rule 22d) read docs/state.md, then the plan doc's queue and its open request table (link in docs/state.md); the summary is not the list.`];
+  const out = [`Session ${event.source || 'start'}: the owner's decisions and the board (${BOARD}) are below; the board is the work. First thing: if its ${SHOWS} table has no row for today, add what he will see today and tell him in your first line. docs/state.md says where things are; the big plan doc is archive and strategy, read only when a step needs it.`];
   const branch = git('rev-parse', '--abbrev-ref', 'HEAD');
   if (git('rev-parse', '--verify', '-q', 'room-polish') && git('merge-base', '--is-ancestor', 'room-polish', 'HEAD') === null) {
     out.push(`WARNING: this checkout (${branch}) lacks the latest work on room-polish; it was probably made from the old live branch. If it has no commits of its own, reset it to room-polish; otherwise merge room-polish. Say so to the owner.`);
@@ -100,20 +102,17 @@ if (mode === 'start') {
   try {
     out.push(fs.readFileSync(path.join(HERE, DECISIONS), 'utf8').trim());
   } catch { out.push(`WARNING: ${DECISIONS} is missing here: the owner's decisions are not in front of this session.`); }
+  // the board, whole: Claude Code keeps a hook's output whole only up to 10,000 characters (hooks
+  // docs), which tests/guard.test.mjs holds it to
   try {
-    const state = fs.readFileSync(path.join(HERE, 'docs/state.md'), 'utf8');
-    // Claude Code keeps a hook's output whole only up to 10,000 characters (hooks docs): the open
-    // items get what the decisions leave
-    const open = state.slice(state.indexOf('## Open items'));
-    if (open.startsWith('## Open items')) out.push(open.slice(0, Math.max(1500, 9500 - out.join('\n\n').length)));
-  } catch { out.push('docs/state.md is missing here: this checkout is not the project\'s current work.'); }
+    const board = fs.readFileSync(path.join(HERE, BOARD), 'utf8').trim();
+    if (stalled(shows(board))) out.push('STOP: two sessions in a row ended without his yes. This session does only visible work: the next item he will see, nothing on the side.');
+    out.push(board);
+  } catch { out.push(`WARNING: ${BOARD} is missing here: this checkout is not the project's current work.`); }
   process.stdout.write(`${out.join('\n\n')}\n`);
   process.exit(0);
 }
 
-// subagent-start, subagent-stop: a practice reviewer's run is recorded for the owner's automatic stop
-// (tools/review-gate.mjs) by this hook, not by the assistant. It counts only when the files a person
-// meets did not change while it read them and its report reached its last block. Never blocks.
 // the last assistant entry of a transcript (JSON lines), as text
 function lastReport(file) {
   const lines = fs.readFileSync(file, 'utf8').split('\n').filter(Boolean);
@@ -127,6 +126,10 @@ function lastReport(file) {
   }
   return '';
 }
+
+// subagent-start, subagent-stop: a practice reviewer's run is recorded for the owner's automatic stop
+// (tools/review-gate.mjs) by this hook, not by the assistant. It counts only when the files a person
+// meets did not change while it read them and its report reached its last block. Never blocks.
 if (mode === 'subagent-start' || mode === 'subagent-stop') {
   if (event.agent_type !== REVIEWER) process.exit(0);
   const print = fingerprint(HERE);
@@ -174,6 +177,10 @@ if (mode === 'stop') {
   try { record = event.transcript_path ? fs.readFileSync(event.transcript_path, 'utf8') : ''; } catch { /* no record to read */ }
   const owed = unrelayed(record);
   if (owed.length) problems.push(`pages only the owner can open, left by research: give him each link (the answer, or the plan's list of what is asked of him), with what to bring back:\n${owed.join('\n')}`);
+  // every session says what he will see today, so a session that shows him nothing is plain
+  let board = '';
+  try { board = fs.readFileSync(path.join(HERE, BOARD), 'utf8'); } catch { /* checked below */ }
+  if (!plannedToday(shows(board))) problems.push(`no row for today in the ${SHOWS} table of ${BOARD}: write what the owner will see today, commit it, and say it to him`);
   if (problems.length) stop(`NOT DONE. Before this turn ends:\n- ${problems.join('\n- ')}`);
   process.exit(0);
 }

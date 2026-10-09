@@ -9,6 +9,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { onHead } from '../tools/headset.mjs';
 import { MARK, unrelayed } from '../tools/owner-links.mjs';
+import { BOARD, SHOWS, YES, PENDING, shows, dayKey, plannedToday, stalled } from '../tools/board.mjs';
+import fs from 'node:fs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ask = (command) => {
@@ -106,8 +108,17 @@ assert.deepEqual(unrelayed(`{"content":"export const MARK = \\"${MARK}\\"; // se
 // The owner's decisions reach every session at its start and after each compaction, beside the
 // open items: a session that does not see them asks him again what he settled
 const start = spawnSync(process.execPath, ['tools/claude-guard.mjs', 'start'], { cwd: ROOT, encoding: 'utf8', input: JSON.stringify({ source: 'startup', cwd: ROOT }) });
-assert.ok(/^# The owner's decisions\r?\n/m.test(start.stdout) && /^- The corridor is the reference/m.test(start.stdout) && start.stdout.includes('## Open items'),
-  `the start hook does not show the owner's decisions and the open items:\n${start.stdout.slice(0, 400)}`);
+const boardTop = fs.readFileSync(path.join(ROOT, BOARD), 'utf8').split(/\r?\n/)[0];
+assert.ok(/^# The owner's decisions\r?\n/m.test(start.stdout) && /^- The corridor is the reference/m.test(start.stdout) && start.stdout.includes(boardTop),
+  `the start hook does not show the owner's decisions and the board:\n${start.stdout.slice(0, 400)}`);
+
+// The board's table of showings: today's row is found in the owner's date form, and two answered rows in a
+// row without his yes stop the side work; rows still waiting for his look do not count either way
+const table = (rows) => `${SHOWS}\n| a | b | c |\n|---|---|---|\n${rows.map(([w, a]) => `| ${w} | thing | ${a} |`).join('\n')}\n`;
+assert.equal(dayKey(new Date(2026, 9, 9)), '9.10', 'dates as the board writes them');
+assert.ok(plannedToday(shows(table([['9.10', PENDING]])), '9.10') && !plannedToday(shows(table([['8.10', YES]])), '9.10'), 'a row for today is found, and only for today');
+assert.ok(stalled(shows(table([['7.10', 'x'], ['8.10', 'y'], ['9.10', PENDING]]))), 'two answers without his yes stall the work');
+assert.ok(!stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]]))), 'a yes in the last two keeps the work going');
 assert.ok(start.stdout.length < 10000, `the start hook prints ${start.stdout.length} characters: over 10,000 Claude Code keeps only a preview`);
 
 console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the headset's wearer seen, links owed to the owner found, his decisions shown at start)`);
