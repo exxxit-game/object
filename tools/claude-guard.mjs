@@ -7,12 +7,12 @@
 //         the practice review record
 //   subagent-start, subagent-stop: a practice reviewer's run is recorded for the owner's automatic
 //         stop before VR in the headset and the test copy (tools/review-gate.mjs)
-//   stop: a turn does not end while npm test fails or work is unsaved or not on GitHub, while
+//   stop: a turn does not end while work is unsaved or not on GitHub (the commit hook runs the tests), while
 //         a page only the owner can open, left by research, has not reached him (owner-links.mjs),
 //         or while the board has no row for today saying what he will see (board.mjs)
 //   start, prompt: the owner's decisions and the board come back at start and after every
 //         compaction; every owner message is logged
-import { execFileSync, spawnSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -38,7 +38,7 @@ const HERE = (() => {
   try { return execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd: event.cwd || ROOT, env: withoutGitVars(), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return ROOT; }
 })();
 
-// Each refused command names the guard it would switch off (CLAUDE.md rule 8, tools/hooks). A
+// Each refused command names the guard it would switch off (CLAUDE.md "Cannot be undone", tools/hooks). A
 // program counts as run only where a command starts (the line's start, after ; & | or a newline,
 // past variables set for it and PowerShell's call operator), written in any path form the shells
 // take; a command that reads or searches the smoke test's file passes, or the guard teaches working
@@ -170,8 +170,8 @@ if (mode === 'stop') {
   const ahead = git('rev-list', '--count', '@{u}..HEAD');
   if (ahead === null) problems.push('this branch has no copy on GitHub: push it');
   else if (Number(ahead)) problems.push(`${ahead} commits not on GitHub: push the working branch`);
-  const tests = spawnSync('npm', ['test', '--silent'], { cwd: HERE, env: withoutGitVars(), encoding: 'utf8', shell: true });
-  if (tests.status !== 0) problems.push(`npm test fails:\n${`${tests.stdout}${tests.stderr}`.split('\n').filter((l) => /Error|fail|STOP/i.test(l)).slice(0, 5).join('\n')}`);
+  // npm test is not run here: the commit hook runs it before every commit, and work left uncommitted
+  // is refused above, so failing tests cannot outlast a turn; running it again cost 12-56 s a turn
   // pages only the owner can open, left by a research agent: they reach him in this turn
   let record = '';
   try { record = event.transcript_path ? fs.readFileSync(event.transcript_path, 'utf8') : ''; } catch { /* no record to read */ }

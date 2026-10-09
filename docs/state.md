@@ -53,6 +53,7 @@ All in `docs/owner-decisions.md` (shown at every session start): settled, never 
   controllers-and-hands probe (tools/xr-probe-input.html) follows docs/audit/probe-review.md.
 - Claude Code here is 2.1.293 (his app is the latest); prompt and agent hooks are fixed only from 2.1.294.
 - After the headset visit: metavr's server (0 tools: the plugin starts it through npx; the exe answers 38) and
-  Supabase read only; then CLAUDE.md cut to one page with a line cap in tests (his yes 9.10).
+  Supabase read only. CLAUDE.md is one page with a line cap (tests/structure.test.mjs); the whole-picture
+  reports behind the board's path are in the session scratchpad only (game, machinery, docs, infra, path).
 - Earlier causes and audits: docs/audit/README.md. Corridor ACCEPTED 8.10 (docs/rooms/corridor-shots/).
   Style book: https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH. Git guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.

@@ -14,7 +14,7 @@ const rel = (f) => path.relative(ROOT, f).replaceAll('\\', '/');
 const lines = (f) => fs.readFileSync(f, 'utf8').split('\n').length;
 const code = walk(path.join(ROOT, 'src')).filter(f => f.endsWith('.js'));
 
-// 1. No code file grows past 300 lines (CLAUDE.md rule 6).
+// 1. No code file grows past 300 lines (CLAUDE.md: files about 300 lines).
 const long = code.filter(f => lines(f) > 300).map(f => `${rel(f)} (${lines(f)})`);
 assert.deepEqual(long, [], `files over 300 lines: ${long.join(', ')}`);
 // and no doc either, so every doc can be read whole in one go: a longer one is split into parts
@@ -34,7 +34,7 @@ for (const f of code) {
   }
 }
 
-// 3. Russian only in the files named here (CLAUDE.md rules 4 and the language line): anywhere else
+// 3. Russian only in the files named here (CLAUDE.md: the language line): anywhere else
 // in the repository a Cyrillic letter fails, so none slips in unnoticed. A new file that needs one
 // is added here by name, with its reason.
 {
@@ -68,6 +68,11 @@ for (const room of fs.readdirSync(path.join(ROOT, 'src/rooms'))) {
 // 5. Notes stay short: the state file is replaced, not appended to.
 const STATE_MAX = 80;
 assert.ok(lines(path.join(ROOT, 'docs/state.md')) <= STATE_MAX, `docs/state.md over ${STATE_MAX} lines: rewrite it shorter`);
+// The rules every message carries stay one page: a long rules file gets lost ("Bloated CLAUDE.md
+// files cause Claude to ignore your actual instructions", code.claude.com/docs/en/best-practices);
+// a new rule goes in only in place of an old one
+const RULES_MAX = 45;
+assert.ok(lines(path.join(ROOT, 'CLAUDE.md')) <= RULES_MAX + 1, `CLAUDE.md over ${RULES_MAX} lines: a new rule replaces an old one`);
 
 // 6. No dead code: every module under src/ is imported by another file
 // (the shell main.js and room.js files are entry points).
@@ -153,7 +158,7 @@ for (const f of facing) {
   assert.ok(!cut, `${rel(f)} cuts a word short: ${cut?.[0]}`);
 }
 
-// 16. No history in code comments (CLAUDE.md rule 1): no dates, and no note of who asked or chose
+// 16. No history in code comments (CLAUDE.md: comments say why): no dates, and no note of who asked or chose
 // (a comment says why, never who or when). The pattern is built from parts so it does not match itself.
 const who = new RegExp(['owner', '\\s+(said|asked|heard|pointed|chose|wanted|liked)|chosen\\s+by\\s+the\\s+', 'owner'].join(''), 'i');
 const when = /\b20\d\d-\d\d-\d\d\b|\b[0-3]\d\.[01]\d\.(19|20)?\d\d\b/;
@@ -230,7 +235,7 @@ assert.ok(!author || author.endsWith('@users.noreply.github.com'), `git commits 
   for (const f of ['src/', ...folders('src/'), 'css/', 'tests/', 'tools/']) assert.ok(mapped.has(f), `ARCHITECTURE.md: the folder ${f} is not in the map`);
 }
 
-// 21. Styles live only in css/ (CLAUDE.md rule 3): no <style> block and no style="" attribute in a
+// 21. Styles live only in css/ (CLAUDE.md: styles only in css): no <style> block and no style="" attribute in a
 // page or in the code that builds markup.
 {
   const pages = ['index.html', 'privacy.html', ...fs.readdirSync(path.join(ROOT, 'tools')).filter((f) => f.endsWith('.html')).map((f) => `tools/${f}`)];

@@ -27,7 +27,7 @@ Do (the Chain-of-Verification way: ask, answer from the source, only then compar
 3. Classify: CONFIRMED (evidence: path:line, commit, or a quote under 15 words), CONTRADICTED
    (the evidence says otherwise: quote both), UNPROVEN (no evidence can be found: a headset
    observation with no frame or log, a fact with no source), STALE (true once, not now).
-   "In the queue" must name a real step of the plan's queue (CLAUDE.md rule 22f).
+   "In the queue" must name a real item of the board (docs/board.md).
 4. Do not judge taste or strategy, only truth. Do not guess: when you cannot reach the
    evidence (a web page, the headset), say UNPROVEN and why.
 
