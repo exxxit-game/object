@@ -69,9 +69,13 @@ const DB_WRITES = /__(apply_migration|deploy_edge_function|pause_project|restore
 // The GitHub connector writes to the repository directly, past the push hook that guards main
 // and checks for secrets: work reaches GitHub only through git push.
 const GITHUB_WRITES = /__(push_files|create_or_update_file|delete_file|merge_pull_request|update_pull_request_branch|create_repository|fork_repository)$/;
+// A SELECT still writes when it calls a function that writes: ours (submit_* add rows) and the
+// built-ins and extensions that change the server, sequences, settings, files or the outside world.
+const SQL_WRITE_CALLS = /(\b(submit_\w+|nextval|setval|set_config|pg_terminate_backend|pg_cancel_backend|pg_reload_conf|pg_rotate_logfile|pg_switch_wal|pg_promote|pg_notify|pg_advisory\w*|pg_stat_reset\w*|pg_create_\w+|pg_drop_\w+|pg_replication_\w+|pg_file_\w+|lo_\w+|dblink\w*|http\w*)\s*\(|\b(cron|vault|net|pgmq)\.\w+)/i;
 // a query that only reads: one statement, starting with a read, naming no write
 export const readOnlySql = (q) => /^\s*(select|with|explain|show)\b/i.test(q) && !/;\s*\S/.test(q)
-  && !/\b(insert|update|delete|drop|alter|create|grant|revoke|truncate|copy|call|do|merge|vacuum|comment|set|reset|lock|refresh|reindex|cluster|import|security)\b/i.test(q);
+  && !/\b(insert|update|delete|drop|alter|create|grant|revoke|truncate|copy|call|do|merge|vacuum|comment|set|reset|lock|refresh|reindex|cluster|import|security)\b/i.test(q)
+  && !SQL_WRITE_CALLS.test(q);
 
 if (mode === 'pre') {
   const tool = String(event.tool_name || '');

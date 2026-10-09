@@ -52,8 +52,12 @@ All in `docs/owner-decisions.md` (shown at every session start): settled, never 
   person meets (tools/review-gate.mjs); the first real review was recorded by the hook on 9.10. The rebuilt
   controllers-and-hands probe (tools/xr-probe-input.html) follows docs/audit/probe-review.md.
 - Claude Code here is 2.1.293 (his app is the latest); prompt and agent hooks are fixed only from 2.1.294.
-- After the headset visit: metavr's server (0 tools: the plugin starts it through npx; the exe answers 38) and
-  Supabase read only. CLAUDE.md is one page with a line cap (tests/structure.test.mjs); the whole-picture
+- metavr shows 0 tools in every session (its log: `%LOCALAPPDATA%\claude-cli-nodejs\Cache\<project>\mcp-logs-plugin-meta-vr-metavr`):
+  started through npx it answers Claude Code's new-protocol probe late (4.5 s), Claude Code then treats it as
+  new-protocol and the server refuses the tool list ("request _meta is missing"); asked directly it lists 38.
+  Recheck the log after the desktop app's Claude Code update. Supabase: the plugin's server is not signed
+  in; the claude.ai connector's writes and any SELECT that calls a writing function are refused by
+  tools/claude-guard.mjs. CLAUDE.md is one page with a line cap (tests/structure.test.mjs); the whole-picture
   reports behind the board's path are in the session scratchpad only (game, machinery, docs, infra, path).
 - Earlier causes and audits: docs/audit/README.md. Corridor ACCEPTED 8.10 (docs/rooms/corridor-shots/).
   Style book: https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH. Git guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.

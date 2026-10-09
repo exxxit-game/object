@@ -89,6 +89,7 @@ const CASES = [
   ['claude-guard pre', 'tests before done', 'a connected tool starts a browser on the laptop', () => {}, () => askGuard('pre', { tool_name: 'mcp__plugin_playwright_playwright__browser_navigate', tool_input: {} }), 'REFUSED'],
   ['claude-guard pre', 'data: read only', 'a migration applied to the live database', () => {}, () => askGuard('pre', { tool_name: 'mcp__db__apply_migration', tool_input: {} }), 'REFUSED'],
   ['claude-guard pre', 'data: read only', 'a write hidden behind a read on the live database', () => {}, () => askGuard('pre', { tool_name: 'mcp__db__execute_sql', tool_input: { query: 'select 1; delete from app.runs' } }), 'REFUSED'],
+  ['claude-guard pre', 'data: read only', 'a write called from a read on the live database', () => {}, () => askGuard('pre', { tool_name: 'mcp__db__execute_sql', tool_input: { query: "select public.submit_run('{}'::jsonb)" } }), 'REFUSED'],
   ['claude-guard pre', 'main only on the owner\'s word', 'files pushed to GitHub past the push hook', () => {}, () => askGuard('pre', { tool_name: 'mcp__gh__push_files', tool_input: { branch: 'main' } }), 'REFUSED'],
   ['claude-guard start', 'the owner\'s decisions', 'a session starts without his decisions in front of it', () => fs.rmSync(at('docs/owner-decisions.md')), test('guard.test.mjs'), 'does not show the owner\'s decisions'],
   ['review gate', 'the owner\'s automatic stop', 'VR started in the headset with no practice review', () => {},
