@@ -33,6 +33,11 @@ say(onlyHere.length ? 'WARN' : 'ok', onlyHere.length ? `only on this laptop: ${o
 say(configEmailOk() ? 'ok' : 'FAIL', configEmailOk() ? 'git signs with the private address' : `git's user.email is not ${PRIVATE_EMAIL}`);
 const guard = sh('git', ['config', 'core.hooksPath']);
 say(guard === 'tools/hooks' ? 'ok' : 'FAIL', guard === 'tools/hooks' ? 'the push guard is on' : 'the push guard is off: git config core.hooksPath tools/hooks');
+// main is the live site: on GitHub it can be neither deleted nor rewritten (the owner's yes, the
+// ruleset "main is the live site"); a setting can be switched off without a trace in the code
+const rules = sh('gh', ['api', 'repos/exxxit-game/youaretheobject/rules/branches/main', '--jq', '[.[].type] | join(" ")']);
+const guarded = rules !== null && ['deletion', 'non_fast_forward'].every((r) => rules.split(' ').includes(r));
+say(rules === null ? 'WARN' : guarded ? 'ok' : 'FAIL', rules === null ? 'could not read the rules of main on GitHub (gh)' : guarded ? 'main can be neither deleted nor rewritten on GitHub' : `main is not protected on GitHub (rules: ${rules || 'none'})`);
 const leaks = check(notPushed());
 say(leaks.length ? 'FAIL' : 'ok', leaks.length ? `private things in unpushed commits: ${leaks.join('; ')}` : 'nothing private in unpushed commits');
 
