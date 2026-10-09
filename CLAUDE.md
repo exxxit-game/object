@@ -9,8 +9,8 @@ words, short. The repo is English; Russian only where tests/structure.test.mjs a
 ## How we work
 - Progress = he saw it and said «да». Every session opens with a row in the board's «Показы» (what he will
   see today) and ends by showing it to him, in the headset or as a picture.
-- His new request goes on the board in his words; the order changes only on his word. Technical choices
-  are mine: decide, give the reason in a line; never hand him a list to choose from.
+- His new request goes on the board in his words; the order changes only on his word. A choice a source
+  settles is mine (the reason in a line); one no source settles goes to him as real options, in pictures.
 - Do exactly what was asked; ideas go at the end of the answer, not into code.
 - No new process: a new rule, guard, agent, hook or doc only when the game itself broke or something private
   leaked, and then in place of an old one. This file stays under 45 lines (tests/structure.test.mjs).
@@ -18,9 +18,9 @@ words, short. The repo is English; Russian only where tests/structure.test.mjs a
 - He is angry: act on the topic, no promises.
 
 ## Truth: we recreate («воссоздаём»)
-- Everything but our experiments and words comes from a real source (trade standards, Meta and W3C XR
-  guidelines, research, shipped games, code), named next to it (docs/decisions.md or a WHY comment).
-  A new look goes to him as pictures first.
+- Everything but our experiments and words is taken from what exists (standards, Meta/W3C XR guidelines,
+  research, shipped games; for how code draws or lays out a thing: a spec, library or published method),
+  named in a WHY comment or docs/decisions.md; our own only where nothing exists or it fails in the headset.
 - Names, numbers, quotes and pages come from the file (paper texts in C:\Users\admin\Documents\objekt-papers\,
   the code), never from memory. A fact the player sees has its source in docs/sources.md, or is not shown.
 - A test or reviewer disagrees: re-read the source and fix the cause; never bend the test. Two or three
