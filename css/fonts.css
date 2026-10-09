@@ -19,8 +19,9 @@
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
 /* The lab's seal has a face of its own, Oswald (the owner's pick of four bold faces fit for a stamp:
-   no thin serifs, which a stamp does not print), spaced as its designers spaced it. Vendored the
-   same way (vendor/fonts/, fontsource 5.3.0, OFL 1.1). */
+   no thin serifs, which a stamp does not print), its letters placed by the face's own advances and
+   kerning round the ring (src/app/seal.js). Vendored the same way (vendor/fonts/, fontsource 5.3.0,
+   OFL 1.1). */
 @font-face {
   font-family: Oswald;
   font-style: normal;

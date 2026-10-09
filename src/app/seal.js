@@ -42,17 +42,18 @@ function drawRings(g, R, ring) {
   for (const [at, line] of [[1, 0.04], [0.93, 0.012], [0.74, 0.016]]) {
     g.lineWidth = R * line; g.beginPath(); g.arc(0, 0, R * at, 0, 7); g.stroke();
   }
-  g.font = `${FACE} ${R * RING_LETTER}px ${FAMILY}`; g.textAlign = 'center'; g.textBaseline = 'middle';
-  // set as text along a line is set (SVG textPath): each letter where the face's own advances and
-  // kerning put it in the line, the arc's spare length shared out evenly as letter spacing, centred
-  // at the top
+  g.font = `${FACE} ${R * RING_LETTER}px ${FAMILY}`; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  // set as text along a line is set (SVG textPath): each letter starts where the face's advances and
+  // kerning put it, the arc's spare length shared out evenly as letter spacing, centred at the top;
+  // the capitals centred on the ring's middle line (CSS Inline 3: centre text visually between the
+  // cap height and the alphabetic baseline)
   g.fontKerning = 'normal';
   const letters = [...ring], rad = R * RING.at, room = RING.span * rad;
   const at = letters.map((_, i) => g.measureText(letters.slice(0, i).join('')).width).concat(g.measureText(ring).width);
-  const spare = (room - at[letters.length]) / letters.length;
+  const spare = (room - at[letters.length]) / letters.length, base = rad - g.measureText('H').actualBoundingBoxAscent / 2;
   letters.forEach((ch, i) => {
-    const mid = -room / 2 + (at[i] + at[i + 1]) / 2 + spare * (i + 0.5);
-    g.save(); g.rotate(mid / rad); g.fillText(ch, 0, -rad); g.restore();
+    const mid = -room / 2 + at[i] + g.measureText(ch).width / 2 + spare * (i + 0.5);
+    g.save(); g.rotate(mid / rad); g.fillText(ch, 0, -base); g.restore();
   });
   for (const a of [Math.PI - 0.16, Math.PI + 0.16]) {
     g.save(); g.rotate(a); g.translate(0, -R * RING.at); g.beginPath();
@@ -113,22 +114,27 @@ function drawBand(g, pts, idx, { w, ink, paper, thin, shade, shadeStep }) {
   g.fillStyle = paper; shape(); g.fill();
   g.save(); shape(); g.clip();
   g.strokeStyle = ink; g.lineWidth = w * 0.45;
-  // the lattice is laid along the whole body (every fifth point of it), so where the coil passes
-  // behind the globe and comes out again its diamonds run on unbroken
-  for (let k = 0; k + 5 < idx.length; k++) {
-    const i = idx[k], j = idx[k + 5];
-    if (i % 5 || pts[i].w < thin) continue;
+  // the lattice is laid along the whole body (every fifth point of it), each stretch drawing every
+  // diamond that reaches into it, so where the coil passes behind the globe and comes out again its
+  // diamonds run on unbroken
+  const first = idx[0], last = idx[idx.length - 1];
+  for (let i = Math.ceil((first - 5) / 5) * 5; i <= last; i += 5) {
+    const a = Math.max(0, i), b = Math.min(pts.length - 1, i + 5);
+    if (pts[a].w < thin || a === b) continue;
     g.beginPath();
-    g.moveTo(...edge(pts, i, 0.95)); g.lineTo(...edge(pts, j, -0.95));
-    g.moveTo(...edge(pts, i, -0.95)); g.lineTo(...edge(pts, j, 0.95));
+    g.moveTo(...edge(pts, a, 0.95)); g.lineTo(...edge(pts, b, -0.95));
+    g.moveTo(...edge(pts, a, -0.95)); g.lineTo(...edge(pts, b, 0.95));
     g.stroke();
   }
-  // the shadow on the side turned from the light, which falls from the upper left as on the globe
+  // the shadow on the side turned from the light, which falls from the upper left as on the globe;
+  // the side is judged over a short stretch, so it does not flicker from edge to edge where the body
+  // turns side-on to the light
   g.lineWidth = w * 0.5;
+  const lit = (k) => { let sum = 0; for (let m = Math.max(0, k - 6); m <= Math.min(idx.length - 1, k + 6); m++) sum += pts[idx[m]].nx * LIGHT[0] + pts[idx[m]].ny * LIGHT[1]; return sum; };
   for (let k = 0; shade && k < idx.length; k += shadeStep) {
     const i = idx[k];
     if (pts[i].w < thin) continue;
-    const away = pts[i].nx * LIGHT[0] + pts[i].ny * LIGHT[1] > 0 ? -1 : 1;
+    const away = lit(k) > 0 ? -1 : 1;
     g.beginPath(); g.moveTo(...edge(pts, i, away)); g.lineTo(...edge(pts, i, away * 0.55)); g.stroke();
   }
   g.restore();
@@ -178,14 +184,14 @@ function drawHead(g, end, R, w, ink, paper) {
   drawTongue(g, H, w, ink);
   g.fillStyle = paper; smooth(outline); g.fill();
   g.save(); smooth(outline); g.clip(); g.strokeStyle = ink; g.lineWidth = w * 0.4;
-  // round scales in rows along the head, as Heath cuts them, staggered row to row, and none over the
-  // eye, which must read
+  // long oval scales in rows along the head, as Heath cuts them, staggered row to row, above the mouth
+  // and none over the eye, which must read
   const eyeAt = H(0.68, -0.1);
-  for (let row = 0, v = -0.22; v < 0.04; v += 0.085, row++) {
+  for (let row = 0, v = -0.22; v < 0; v += 0.085, row++) {
     for (let u = 0.08 + (row % 2) * 0.055; u < 0.88; u += 0.11) {
       const c = H(u, v);
       if (Math.hypot(c[0] - eyeAt[0], c[1] - eyeAt[1]) < L * 0.14) continue;
-      g.beginPath(); g.arc(c[0], c[1], L * 0.045, turn - 1.3, turn + 1.3); g.stroke();
+      g.beginPath(); g.ellipse(c[0], c[1], L * 0.055, L * 0.032, turn, -1.4, 1.4); g.stroke();
     }
   }
   g.lineWidth = w * 0.5;
@@ -198,7 +204,7 @@ function drawHead(g, end, R, w, ink, paper) {
   const eye = H(0.68, -0.1);
   g.lineWidth = w * 1.1; smooth([[0.52, -0.2], [0.66, -0.23], [0.82, -0.18]]); g.stroke();   // the brow
   g.fillStyle = paper; g.beginPath(); g.arc(eye[0], eye[1], L * 0.075, 0, 7); g.fill(); g.lineWidth = w * 0.9; g.stroke();
-  g.fillStyle = ink; g.beginPath(); g.ellipse(eye[0], eye[1], L * 0.02, L * 0.065, turn, 0, 7); g.fill();   // the slit pupil
+  g.fillStyle = ink; g.beginPath(); g.arc(eye[0], eye[1], L * 0.035, 0, 7); g.fill();   // the round pupil, as Heath's
   const nostril = H(0.93, -0.08); g.beginPath(); g.arc(nostril[0], nostril[1], L * 0.018, 0, 7); g.fill();
   const pit = H(0.83, -0.04); g.beginPath(); g.arc(pit[0], pit[1], L * 0.022, 0, 7); g.stroke();
 }
