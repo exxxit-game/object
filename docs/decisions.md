@@ -54,7 +54,7 @@ Why: the owner wants a player who comes back to meet something new each time, as
 Consequence: tests/glow.test.mjs checks every ending and the round; ?sign=a|b|c forces one ending for checks.
 
 ## The studio's mark hangs on the experimenter's board
-The board beside door 1 carries two A4 sheets: a flyer calling for participants ("Вы подходите", tear-off strips to door 1) and the studio's poster, EXXXIT under its mark: the official ISO 7010 E001 exit sign whose doorway opens onto black space, only the sign's green and black (src/app/logo.js, src/app/lobby/board.js).
+The board beside door 1 carries two Letter sheets: a flyer calling for participants ("Вы подходите", tear-off strips to door 1) and the studio's poster, EXXXIT under its mark: the official ISO 7010 E001 exit sign whose doorway opens onto black space, only the sign's green and black (src/app/logo.js, src/app/lobby/board.js).
 Why: the owner's own mark (an exit sign, a figure stepping into space) in place of blank notices; built only from the official drawing, in his colours (green and black, no "studio": the name alone, as Playdead signs).
 Consequence: tests/logo.test.mjs keeps the figure official and nothing else drawn into the mark; sources in docs/art/credits.md. The mark may change over time (the owner's wish: a detail for those who notice).
 

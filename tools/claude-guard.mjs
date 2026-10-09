@@ -28,14 +28,22 @@ const HERE = (() => {
   try { return execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd: event.cwd || ROOT, env: withoutGitVars(), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return ROOT; }
 })();
 
-// Each refused command names the guard it would switch off (CLAUDE.md rule 8, tools/hooks). Only
-// running a guarded thing is refused: a command that reads or searches its file passes, or the
-// guard teaches working around it (tests/guard.test.mjs runs both ways).
+// Each refused command names the guard it would switch off (CLAUDE.md rule 8, tools/hooks). A
+// program counts as run only where a command starts (the line's start, after ; & | or a newline,
+// past variables set for it and PowerShell's call operator), written in any path form the shells
+// take; a command that reads or searches the smoke test's file passes, or the guard teaches working
+// around it. A git command naming the hook-skipping flag is refused wherever the flag stands, even in
+// a search. tests/guard.test.mjs runs both ways.
+const AT = String.raw`(?:^|[;&|\n])\s*(?:\w+=\S*\s+)*(?:&\s*)?`;
+const DIR = String.raw`(?:"[^"\n]*[\\/])?(?:[\w.:~\\/-]*[\\/])?`;
+const run = (body) => new RegExp(AT + DIR + body, 'i');
 export const REFUSED = [
-  [/\bgit\b[^|;&\n]*\s--no-verify\b/, 'skips the git hooks: no commit while npm test fails, no push without the secret check'],
-  [/\bgit\b[^|;&\n]*\bcommit\b[^|;&\n]*\s-[a-zA-Z]*n[a-zA-Z]*\b/, '"git commit -n" skips the git hooks'],
+  [/^(?=[\s\S]*\bgit\b)[\s\S]*(?:^|[\s'"=])--no-verify\b/, 'skips the git hooks: no commit while npm test fails, no push without the secret check'],
+  [/^(?=[\s\S]*\bgit\b[\s\S]*\bcommit\b)[\s\S]*\s-[a-zA-Z]*n[a-zA-Z]*(?=[\s'"]|$)/, '"git commit -n" skips the git hooks'],
   [/core\.hooksPath[= ]+(?!tools\/hooks\b)\S|--unset[^|;&\n]*core\.hooksPath/, 'switches the git hooks off'],
-  [/\bnpm run test:smoke\b|\bnode(\.exe)?\b[^|;&\n]*\btests[\\/]smoke\.mjs\b|\bnpx playwright\b|\bplaywright (test|install|open|codegen)\b/, 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
+  [run(String.raw`npm(?:\.cmd)?\b[^;&|\n]*\btest:smoke\b`), 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
+  [run(String.raw`node(?:\.exe)?"?\s+(?:-{1,2}[\w-]+(?:=\S+)?\s+)*["']?(?:[\w.:~-]*[\\/]+)*smoke\.mjs\b`), 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
+  [run(String.raw`(?:npx(?:\.cmd)?(?:\s+-{1,2}[\w-]+)*\s+@?playwright\b|playwright(?:\.cmd)?\s+(?:test|install|open|codegen)\b)`), 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
 ];
 
 // Connected tools that do what a refused command would: a browser started on the laptop, and
