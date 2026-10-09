@@ -65,11 +65,12 @@
    step of tools/xr-probe.html by docs/audit/probe-review.md: the headset shows ONE line at a time (e.g. "press the right
    trigger"), the next once it is done, started by his press; no colours, nothing to read outside the headset (guard:
    .claude/agents/practice-reviewer.md, run it on the rebuild); rerun with him, then the mic (fan off/on); results: docs/headset-capabilities.md.
-   4.1 left (causes: docs/audit/README.md): cause 8 (docs/audit/numbers.md: 25 need a source); his yes on the ceiling pictures
-   (docs/audit/ceiling/: 5 troffers in the grid, S28; the code is troffers.patch there, then a test that troffer
-   ends lie on joints); then the fact-checker, request and architecture auditors. Waiting: his yes on the new
-   CLAUDE.md. Open talk: the start's tone, step 7. GitHub done fully (PRs with checks, releases, a build stamp):
-   its place in the queue waits for his word. Git guide for him: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.
+   Same visit: "Auto Enable Hands or Controllers" (check over USB first) and the VR checks not done (flicker, fps and draw calls
+   with a log, placement, sign 10 s). First of all: fact-checker twice on his summary https://claude.ai/artifact/H5ht7VG5QQPDCva7LyDwcU; archive done plan rows.
+   4.1 left (causes: docs/audit/README.md): cause 8 (docs/audit/numbers.md: 25 need a source); his yes on the ceiling
+   pictures (docs/audit/ceiling/, S28; code: troffers.patch, then a test that troffer ends lie on joints); then the
+   fact-checker, request and architecture auditors. Waiting: his yes on the new CLAUDE.md. Open talk: the start's tone,
+   step 7. GitHub done fully (PRs with checks, releases, a build stamp): its place waits for his word. Git guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.
 2. Then 4.2, the data lever first (data stay with us, our own lab; what we need from scientists beyond
    name and ethics approval). Data protection = "the most serious of all": LINDDUN, STRIDE, OWASP ASVS, a
    break-in try on a copy, CSP, the provider must not read rows, permission rules (claude-code/C2).
