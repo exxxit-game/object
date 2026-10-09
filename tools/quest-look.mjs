@@ -8,7 +8,8 @@
 //                                              in the headset as its own localhost:3000
 //   node tools/quest-look.mjs sleep            give the proximity sensor back and put it to sleep
 //   node tools/quest-look.mjs reload           reload it, skipping every cache (after publish-preview)
-//   node tools/quest-look.mjs vr               enter VR, as if the VR button were pressed
+//   node tools/quest-look.mjs vr               enter VR, as if the VR button were pressed; only while
+//                                              the owner wears the headset (headset.mjs, onHead)
 //   node tools/quest-look.mjs frame out.jpg    save what the left eye sees right now (in VR)
 //   node tools/quest-look.mjs eval "<js>"      run JavaScript in the game page, print the result
 //   node tools/quest-look.mjs worn on|off      make the headset act as worn (on) or normal (off):
@@ -77,9 +78,11 @@ if (cmd === 'reload') {
   await send('Page.reload', { ignoreCache: true });
   console.log('reloaded', tab.url);
 } else if (cmd === 'vr') {
-  // a headset left alone falls asleep and then draws nothing: wake it first
-  adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP');
-  await new Promise(r => setTimeout(r, 2000));
+  // Only on the owner's head. On a table the boundary window holds the request, and once the
+  // headset sleeps under it the browser answers every later VR request with NotSupportedError until
+  // it restarts: twice the owner could not get in. No wake key either: it opens the quick menu over
+  // the browser.
+  if (!wornByPerson()) { console.log('not now: VR only while the owner wears the headset'); process.exit(1); }
   console.log(await run("document.querySelector('a-scene').enterVR().then(() => 'in VR', (e) => 'failed: ' + e.message)"));
 } else if (cmd === 'levels') {
   // every connection to the speakers is also fed to an analyser for the time of the check

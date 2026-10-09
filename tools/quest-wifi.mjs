@@ -38,9 +38,8 @@ if (!ready().includes(target)) {
   process.exit(1);
 }
 adb('-s', target, 'reverse', 'tcp:3000', 'tcp:3000'); // the game at localhost:3000 in the headset
-// "Worn" mode: the headset stays awake lying on the table, so the owner need not wear it
-// for checks. It drains the battery: keep the headset charging; undo with `off`.
-adb('-s', target, 'shell', 'am', 'broadcast', '-a', 'com.oculus.vrpowermanager.prox_close');
-console.log(`Headset on Wi-Fi at ${target}, kept awake. Unplug the cable now.`);
+// The headset is not held "worn" here: the link is for the owner's own walk, and a headset kept
+// awake on a table shows the boundary window, under which a VR request leaves the browser unable
+// to enter VR (tools/quest-look.mjs, vr). It wakes on his head and the link comes back with it.
+console.log(`Headset on Wi-Fi at ${target}. Unplug the cable now.`);
 console.log(`After a headset restart: node tools/quest-wifi.mjs ${ip}`);
-console.log(`Let it sleep again: adb -s ${target} shell am broadcast -a com.oculus.vrpowermanager.automation_disable`);

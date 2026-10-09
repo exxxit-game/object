@@ -1,15 +1,21 @@
-// Runs tools/xr-probe.html in the headset without the owner wearing it: opens the page,
-// presses its buttons over the debug link (a click sent that way counts as the user's,
-// so the browser allows VR, MR and the microphone) and prints what the headset gave.
+// Runs tools/xr-probe.html in the headset: opens the page, presses its buttons over the debug link
+// (a click sent that way counts as the user's, so the browser allows VR, MR and the microphone)
+// and prints what the headset gave. VR and MR need the owner wearing it; the microphone does not.
 // Needs the laptop's server running (the app's preview, or `npm run serve`) and the headset on
 // its cable; it is kept awake for the run and put back to sleep after (tools/headset.mjs).
 // Usage: node tools/xr-probe-run.mjs [vr ar mic]
-import { serveToHeadset, worn, sleepNow, openUrl, page } from './headset.mjs';
+import { serveToHeadset, worn, sleepNow, openUrl, page, wornByPerson } from './headset.mjs';
 
 const URL_PROBE = serveToHeadset() + 'tools/xr-probe.html';
 const steps = process.argv.slice(2).length ? process.argv.slice(2) : ['vr', 'ar', 'mic'];
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// VR and MR only on the owner's head: on a table the boundary window holds the request and the
+// browser then refuses VR until it restarts (tools/quest-look.mjs, vr)
+if (steps.some((s) => s !== 'mic') && !wornByPerson()) {
+  console.log('not now: VR and MR only while the owner wears the headset (run "mic" alone without him)');
+  process.exit(1);
+}
 worn(true);
 let probePage = await page(/localhost:3000/);
 if (!probePage) { openUrl(URL_PROBE); await sleep(4000); probePage = await page(/localhost:3000/); }
