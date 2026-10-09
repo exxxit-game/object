@@ -96,6 +96,20 @@ plates or a narrow vision light: **unverified**.
   turned down; a white gauge face in a red rim facing forward where the dial is dark blue with red
   arcs and a RANGE wedge in a chrome bezel, facing the side; no ring pin, fill valve or their chains;
   no brass coupling where the hose leaves the valve; the body's seam band under the dome to check.
+  The redrawn one against all 19 photos (practice reviewer, 10.10), still to fix: the nozzle is a short
+  brass tip held in a square stainless clip on the shell's left side, about 6 cm above the bottom (3, 10,
+  14, 18, 19; the black slotted part in 15, 17 is the siphon tube inside); the dial's red band is narrow and
+  runs from the RANGE wedge round the bottom to the other side, the wedge pale cream, the hub brass, no
+  black needle showing, the dial set back inside a raised chrome lip (5, 8); ring pin and fill valve on the
+  face opposite the gauge (2, 6, 9, 19), the pin through the valve's cast lugs about 10 mm from the axis
+  (9); the carry handle's tip 12-17 mm below the collar top, ours 33 (3, 6, 19); the lever covers the valve
+  top and pivots on cast ears with a rivet, ours floats 5 mm over it (5); the hose about 12 mm thick, ours
+  15.6, its brass ferrule fatter than the hose (3, 6, 9, 14); the label prints dark blue on silver, ours
+  grey (4); a seam about 5 cm above the bottom and a vertical weld (7, 10). The hanger: Amerex documents a
+  flat hook holding the collar from behind for this kind of unit ("To provide support at the collar of the
+  cylinder, this bracket has a flat hook", 01007, https://tigermedical.com/products/wall-hanger-fire-
+  extinguisher-flat-hook-bracket-ame01007-oo; chart https://www.amerex-fire.com/upl/downloads/library/
+  bracket-reference.pdf); no source names a fork for a water unit.
 - **ABC dry chemical, CO2 in 1979:** look and labels **unverified** in this pass.
 - **Mounting height.** The 5 ft top (units up to 40 lb), 3-1/2 ft top (heavier) and 4 in floor
   clearance are quoted from NFPA 10 1994 (1-6.10) and later [C18, search]. NFPA 10 had editions
