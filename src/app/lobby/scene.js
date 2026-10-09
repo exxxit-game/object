@@ -157,6 +157,31 @@ function lip() {
     .map(([dx, dy, w, h]) => `
     <a-box position="${r(B.x + dx)} ${r(B.y + dy)} ${z}" width="${r(w)}" height="${r(h)}" depth="${B.lip}" ${ALU}></a-box>`).join('');
 }
+// The end walls: one print of Arcimboldo's Vegetable Gardener (about 1590; Wikimedia Commons, public
+// domain, docs/art/credits.md) on each, the right way up (a face) at the west end and upside down (a
+// bowl of vegetables) at the east, with no caption: whoever walks to both ends may notice it is one
+// picture (the owner's choice; docs/research/vr/09-end-wall-pictures.md). A paper print in a thin
+// silver metal section frame (on sale from 1968, 09 Q4), its edges clear of the block joints
+// (tests/masonry.test.mjs). The print is 16 x 20 in and the frame's face 6 mm: neither has a dated
+// source yet (docs/board.md). The image fills the print's height between white margins (1024 x 1342 px).
+// The frames merge with the corridor; the prints load a texture, so they stay apart.
+const ART = 'vendor/art/arcimboldo-vegetable-gardener.jpg';
+const PRINT = { w: 0.4064, h: 0.508, face: 0.006, depth: 0.0206, lip: 0.003, y: 1.46 };
+const IMAGE = { w: r(PRINT.h * 1024 / 1342), h: PRINT.h };
+const END_PRINTS = [{ x: PLAN.from, facing: 1, turn: 0 }, { x: PLAN.to, facing: -1, turn: 180 }];
+// a print's frame and paper, every part placed in the corridor's own axes, facing along x
+function printFrame({ x, facing }) {
+  const { w, h, face, depth, lip, y } = PRINT, at = (d) => r(x + facing * d), rot = `rotation="0 ${facing * 90} 0"`;
+  const fw = r(w + 2 * face), fh = r(h + 2 * face), z = CENTRE.z;
+  const bars = [[r(y + (h + face) / 2), z, fw, face], [r(y - (h + face) / 2), z, fw, face], [y, r(z - (w + face) / 2), face, h], [y, r(z + (w + face) / 2), face, h]];
+  return `
+    <a-box class="on-wall" ${rot} position="${at(depth / 2)} ${y} ${z}" width="${fw}" height="${fh}" depth="${depth}" ${ALU}></a-box>
+    <a-plane ${rot} position="${at(depth + 0.0005)} ${y} ${z}" width="${w}" height="${h}" decal material="color: #d6d6da; roughness: 1"></a-plane>
+    ${bars.map(([by, bz, bw, bh]) => `<a-box ${rot} position="${at(depth + lip / 2)} ${by} ${bz}" width="${bw}" height="${bh}" depth="${lip}" ${ALU}></a-box>`).join('')}`;
+}
+const printImage = ({ x, facing, turn }) => `
+  <a-plane class="end-print" rotation="0 ${facing * 90} ${turn}" position="${r(x + facing * (PRINT.depth + 0.001))} ${PRINT.y} ${CENTRE.z}"
+           width="${IMAGE.w}" height="${IMAGE.h}" decal="layer: 2" material="src: ${ART}; roughness: 1"></a-plane>`;
 export const corridorHTML = `
 <a-entity id="corridor">
   <a-entity merge-static>
@@ -184,6 +209,8 @@ export const corridorHTML = `
     <a-sphere position="${pinAt(NOTES.flyer)} ${r(ON_CORK + PIN)}" radius="${PIN}" color="#2a4a8b"></a-sphere>
     <!-- a 2.5 gal water extinguisher on its wall bracket, opposite the board (S22, S23) -->
     ${extinguisher(PLAN.extinguisher, PLAN.south)}
+    <!-- the print on each end wall: its frame and paper (the pictures themselves below) -->
+    ${END_PRINTS.map(printFrame).join('')}
     <!-- the light box over room 101's door (like the "in session" boxes over lab doors): surface
          mounted, its back on the wall, as wide as the frame head it stands on (1.0224 m, door.js),
          its foot on the head's top, its top on a block joint (sign.js) -->
@@ -200,4 +227,6 @@ export const corridorHTML = `
   <!-- Letter sheets pinned beside the clipboard: the studio's poster and a flyer (board.js) -->
   <a-entity id="notePoster" class="clickable" ${note(NOTES.poster)}></a-entity>
   <a-entity id="noteFlyer" ${note(NOTES.flyer)}></a-entity>
+  <!-- the Vegetable Gardener on both end walls: a face at the west end, the bowl at the east -->
+  ${END_PRINTS.map(printImage).join('')}
 </a-entity>`;

@@ -96,13 +96,16 @@ for (const tag of items.filter(t => !/\bdoor-sign\b/.test(attr(t, 'class')))) {
 // nothing on a wall floats off it: its back rests on the wall face, within 2 mm: a box's back, or
 // a sign's, whose printed face stands on a body as deep as the face is off the wall (panel thick:
 // faces closer than 5 mm flicker in a headset); the faces are the corridor's long walls (z 1.8 and
-// 3.6, from the plan) and the inside of room 01's back wall (ROOM_FACE, z 1.6)
+// 3.6, from the plan), the inside of room 01's back wall (ROOM_FACE, z 1.6) and the end walls (x,
+// for a thing turned to face along the corridor: its depth lies along x)
 for (const tag of items) {
-  const [, , z] = attr(tag, 'position').split(' ').map(Number);
+  const [x, , z] = attr(tag, 'position').split(' ').map(Number);
   const box = attr(tag, 'rounded-box'), panel = attr(tag, 'panel');
+  const end = x <= PLAN.from + 0.05 ? [PLAN.from, 1] : x >= PLAN.to - 0.05 ? [PLAN.to, -1] : null;
   const faces = [[PLAN.north, 1], [PLAN.south, -1], [ROOM_FACE, -1]];   // [face z, the way off it]
-  const [face, off] = faces.reduce((a, b) => (Math.abs(z - b[0]) < Math.abs(z - a[0]) ? b : a));
-  const back = panel ? z - off * (prop(panel, 'thick') || 0) : z - off * (box ? prop(box, 'depth') : Number(attr(tag, 'depth'))) / 2;
+  const [face, off] = end || faces.reduce((a, b) => (Math.abs(z - b[0]) < Math.abs(z - a[0]) ? b : a));
+  const at = end ? x : z;
+  const back = panel ? at - off * (prop(panel, 'thick') || 0) : at - off * (box ? prop(box, 'depth') : Number(attr(tag, 'depth'))) / 2;
   const gap = (back - face) * off;
   const name = attr(tag, 'id') || tag.slice(0, 50);
   assert.ok(gap >= -1e-9 && gap <= 0.002 + 1e-9, `${name}: its back ${(gap * 1000).toFixed(1)} mm off its wall`);
