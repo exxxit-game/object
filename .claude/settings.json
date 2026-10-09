@@ -1,5 +1,21 @@
 {
   "worktree": { "baseRef": "head" },
+  "permissions": {
+    "allow": [
+      "Bash(node tools/quest-look.mjs)",
+      "Bash(node tools/quest-look.mjs *)",
+      "PowerShell(node tools/quest-look.mjs)",
+      "PowerShell(node tools/quest-look.mjs *)",
+      "Bash(gh run list)",
+      "Bash(gh run list *)",
+      "Bash(gh run view *)",
+      "PowerShell(gh run list)",
+      "PowerShell(gh run list *)",
+      "PowerShell(gh run view *)",
+      "Bash(node tools/publish-preview.mjs)",
+      "PowerShell(node tools/publish-preview.mjs)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
