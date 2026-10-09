@@ -1,4 +1,4 @@
-import { rigTransform, seatedLift } from './recenter-math.js';
+import { rigTransform, seatedLift, EYE } from './recenter-math.js';
 
 // Puts the player at the designed spot, facing the designed direction, in VR.
 // A headset sets its origin where the player happened to stand and look when the
@@ -11,7 +11,7 @@ AFRAME.registerComponent('recenter', {
     x: { default: 0 },     // where the head should be (world metres)
     z: { default: 0.35 },
     yaw: { default: 0 },   // which way the player should face (degrees, 0 = -Z)
-    eye: { default: 1.6 },  // designed eye height, used only with lift
+    eye: { default: EYE },  // designed eye height, used only with lift
     seatedBelow: { default: 1.35 },
     // lift: true raises a seated player to the standing eye height (rooms played standing).
     // false keeps the real height: the room puts its chair under a seated player.

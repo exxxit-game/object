@@ -1,4 +1,5 @@
 import { FONT, LINE_HEIGHT, wrap } from '../panel.js';
+import { BUTTON } from './sheet-math.js';
 
 // A column of answer buttons on a wall or on the clipboard sheet, chosen with the laser
 // (VR) or the mouse (desktop). Any number of answers; one pick, then the buttons go away.
@@ -7,9 +8,7 @@ import { FONT, LINE_HEIGHT, wrap } from '../panel.js';
 // size is the page's own and never smaller (large print: one large font across a form, CNIB 2019;
 // docs/decisions.md): a label too long for a line wraps, every button of the set grows to the
 // tallest, and the list keeps one column.
-const NORMAL = '#1d2026';
-const HOVER = '#343b47';
-const TEXT = '#f2efe8';
+const { bg: NORMAL, hover: HOVER, text: TEXT } = BUTTON;   // inside Meta's colour limits (sheet-math.js)
 // Canvas pixels per metre of button: the same on every button of a place, so a text size
 // means the same real letter height on a narrow button as on a wide one. Walls read from
 // about 2 m use this; the sheet, read from 1 m, passes twice the density so the texture

@@ -7,6 +7,7 @@
 // the entrance, and its sign is on the leaf (brand.js). Floors above hold more rooms. Pure: no
 // A-Frame, so tests read it in node.
 import { hangY, BOARD_REACH } from '../../engine/ui/sheet-math.js';
+import { EYE } from '../../engine/recenter-math.js';
 
 export const PLAN = {
   from: -6.6, to: 8.0,          // the end walls' faces (x), a whole number of 0.2 m blocks
@@ -34,6 +35,13 @@ export const CORK_Z = round(PLAN.north + PLAN.board.body + PLAN.board.cork);
 // the clipboard's home: hanging by its ring on the board's peg, its back on the cork (half a
 // millimetre off it, the back face hidden)
 export const SHEET_HOME = { pos: [PLAN.board.x, round(hangY(PLAN.board.hook, PLAN.board.peg)), round(CORK_Z + 0.0005 + BOARD_REACH.back)], yaw: 0, away: [0, 0, 1] };
+// The player arrives facing door 1, the thing to do first. The corridor is a place to
+// stand and walk: a seated player sees it from standing eye height (lift); a room whose
+// original was seated puts its chair under them instead.
+export const SPOT = { x: 0.7, z: 3.05, yaw: 0, lift: true };
+// how far the clipboard on its hook is from the eyes at the arrival spot: its hook pages are read
+// from there, so their lines are set for this distance (sheet-math.js, letterFrom)
+export const HOOK_READ = round(Math.hypot(SPOT.x - SHEET_HOME.pos[0], EYE - SHEET_HOME.pos[1], SPOT.z - SHEET_HOME.pos[2]));
 // the doors: north wall rooms in every bay; south wall rooms, with the stairs in the middle bay
 const doors = [
   ...PLAN.bays.map((k) => ({ x: round(PLAN.entrance + k * PLAN.bay), k, wall: 'north', kind: k === 0 ? 'room1' : 'soon' })),

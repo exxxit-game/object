@@ -19,7 +19,7 @@ import { paintExtinguisherLabel } from './extinguisher-label.js';
 import { showHint } from '../hint.js';
 import { leaveButton } from './exit.js';
 import { WALLS } from './scene.js';
-import { BOUNDS as AREA, SHEET_HOME } from './plan.js';
+import { BOUNDS as AREA, SHEET_HOME, SPOT, HOOK_READ } from './plan.js';
 
 export { corridorHTML } from './scene.js';
 
@@ -27,10 +27,6 @@ export { corridorHTML } from './scene.js';
 // the sign over it comes on and plays (opening.js), the player takes the clipboard from
 // the board, it welcomes them and asks the consent, and the player points at door 1. The door opens, the view fades, and the player is at the
 // table (on the chair when seated). See docs/decisions.md, "The arrival".
-// The player arrives facing door 1, the thing to do first. The corridor is a place to
-// stand and walk: a seated player sees it from standing eye height (lift); a room whose
-// original was seated puts its chair under them instead.
-export const SPOT = { x: 0.7, z: 3.05, yaw: 0, lift: true };
 const BOUNDS = `minX: ${AREA.minX}; maxX: ${AREA.maxX}; minZ: ${AREA.minZ}; maxZ: ${AREA.maxZ}`;
 // The clipboard hangs on the experimenter's board left of door 1, its back 1 cm off the cork
 // (faces at least 5 mm apart, or they flicker) and the peg (scene.js) through its clip, facing
@@ -139,7 +135,7 @@ export async function runLobby(room) {
   await signOn(scene);
   speak(LOBBY_T.takeSheet);
   sheet.el.addEventListener('taken', signAnswer, { once: true });
-  await sheet.take([...cover, { t: LOBBY_T.takeSheet, role: 'body', gap: 0.04 }]);
+  await sheet.take([...cover, { t: LOBBY_T.takeSheet, role: 'body', gap: 0.04, from: HOOK_READ }]);
   unlock();
   const spoken = speak(LOBBY_T.welcome.join(' '));
   await sheet.choose([
@@ -156,7 +152,7 @@ export async function runLobby(room) {
   const withRecording = await askConsent(sheet, { extra: room.extra });
 
   // 4. the clipboard goes back to its hook and says what to do; door 1 opens the room
-  await sheet.back([...cover, { t: LOBBY_T.chooseDoor, role: 'title', gap: 0.04 }]);
+  await sheet.back([...cover, { t: LOBBY_T.chooseDoor, role: 'title', gap: 0.04, from: HOOK_READ }]);
   await spoken;
   speak(LOBBY_T.chooseDoor);
   const door = $('#door1');

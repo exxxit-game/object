@@ -4,7 +4,7 @@ import { LOBBY_T } from './texts.ru.js';
 import { ROOM1_NUMBER } from './plan.js';
 import { PAPER_BG } from '../../engine/ui/sheet-math.js';
 
-// The two A4 sheets pinned beside the clipboard on the experimenter's board (scene.js). The
+// The two Letter sheets pinned beside the clipboard on the experimenter's board (scene.js). The
 // hallways of psychology buildings are covered with flyers calling for participants, with
 // tear-off strips at the bottom (Indiana University, Psychological and Brain Sciences): one of
 // those, and the studio's poster. Both are print on paper: drawn unlit for legibility and

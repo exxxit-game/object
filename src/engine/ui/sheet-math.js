@@ -10,10 +10,21 @@ export const READ_DIST = 1.0;
 // the clip's jaw 0.6 of the board's width over the paper's top edge, a raised middle with two
 // rivets, and the ring it hangs by standing above the board. y up from the paper's centre, z out
 // of the paper (metres).
-// The paper: a US Letter page (8.5 × 11 in) 0.56 m wide, a real page as seen in the hand, kept at
-// that angle at the reading distance; cream, not white: a large white page glares in a headset.
+// The paper: a US Letter page (LETTER, 8.5 × 11 in) 0.56 m wide, a real page as seen in the hand,
+// kept at that angle at the reading distance.
+export const LETTER = { w: 0.2159, h: 0.2794 };
 export const PAPER = { w: 0.56, h: +(0.56 * 11 / 8.5).toFixed(4) };
-export const PAPER_BG = '#e9e2cf';
+// Colours of print and controls, inside Meta's limits for text, backgrounds and all UI (Meta,
+// "Color": light no brighter than #DADADA, dark no darker than #1A1A1A; pure white and black strain
+// the eyes in a headset). The paper is white offset paper as measured (FOGRA29: ISO 12647-2 paper
+// type 4, unprinted, L* 95.71 a* 0.61 b* -2.32, D50), sRGB 242 242 247, dimmed in linear light to
+// the light limit; ink and the buttons' text at the limits (docs/research/vr/08-paper.md).
+export const LIGHT_LIMIT = '#dadada';
+export const DARK_LIMIT = '#1a1a1a';
+export const PAPER_BG = '#d6d6da';
+export const INK = DARK_LIMIT;
+export const INK_SOFT = '#4a453c';
+export const BUTTON = { bg: '#1d2026', hover: '#343b47', text: LIGHT_LIMIT };
 const IN = PAPER.w / 8.5;   // metres an inch at this scale
 const HALF = PAPER.h / 2;
 export const BOARD = { w: 9 * IN, top: HALF + 1.25 * IN, bottom: HALF + 0.25 * IN, d: 0.125 * IN, corner: 0.375 * IN };
@@ -35,6 +46,9 @@ export const DROP_DEG = 12;
 // It sets the size of everything printed on a page, never the paper (docs/decisions.md, large print).
 export const MIN_LETTER = 0.024;
 export const MIN_TARGET_DEG = 2.5;
+// The letter for a line read from `from` metres instead of from the hand (a page on its hook): the
+// smallest letter's angle from there, in whole millimetres up, never under the line's own size m.
+export const letterFrom = (m, from = READ_DIST) => Math.max(m, Math.ceil(MIN_LETTER * from / READ_DIST * 1000 - 1e-9) / 1000);
 
 // head: [x, y, z] eyes in world metres; yaw: the way the player faces (radians,
 // three.js: 0 looks along -Z). Returns the sheet centre and its three.js rotation

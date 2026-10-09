@@ -84,7 +84,7 @@ if (cmd === 'reload') {
     const { SOUND_GAIN } = await import(at('src/app/lobby/sound-list.js'));
     const { SIGN_AT } = await import(at('src/app/lobby/sign.js'));
     const { LOBBY_T } = await import(at('src/app/lobby/texts.ru.js'));
-    const { SPOT } = await import(at('src/app/lobby/lobby.js'));
+    const { SPOT } = await import(at('src/app/lobby/plan.js'));
     // the ears follow the head every frame; hold them at the spot, facing the door, while measuring
     const ears = document.querySelector('a-scene').components['sound-listener'];
     if (!ears) return { error: 'the scene has no sound-listener: sounds are not heard from the head' };

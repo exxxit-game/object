@@ -62,6 +62,18 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     if (answers.length <= 4 && new Set(answers.map(a => a.object3D.position.x.toFixed(3))).size > 1) out.push('answers in two columns');
     return out;
   }, RULES);
+  // A page on its hook is read from where the player stands: its lines for that distance
+  // (sheet-page.js, data-far-letter-mm) at least the smallest letter's angle from the eyes.
+  const hangProblems = () => page.evaluate(({ minDeg }) => {
+    const sheet = document.querySelector('.sheet');
+    if (!sheet || sheet.dataset.open) return ['the clipboard is not on its hook'];
+    if (!sheet.dataset.farLetterMm) return ['the page on the hook has no lines set for its distance'];
+    const eye = new THREE.Vector3(), p = new THREE.Vector3();
+    document.querySelector('a-scene').camera.getWorldPosition(eye);
+    sheet.object3D.getWorldPosition(p);
+    const d = p.distanceTo(eye), deg = 2 * Math.atan(Number(sheet.dataset.farLetterMm) / 2000 / d) * 180 / Math.PI;
+    return deg < minDeg - 0.03 ? [`the hook page's letters ${deg.toFixed(2)}° from ${d.toFixed(2)} m, under ${minDeg.toFixed(3)}°`] : [];
+  }, RULES);
   // Light falling on a level white card at a point (a light meter): the card is drawn alone
   // from just above, and its linear brightness is read.
   const lightAt = (p) => page.evaluate(([x, y, z]) => {
@@ -177,6 +189,7 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     }
     // corridor: the sign plays, then the clipboard is taken from the board and welcomes
     await page.waitForFunction(() => document.querySelector('.sheet[data-take]'), null, { timeout: 60000 });
+    assert.deepEqual(await hangProblems(), [], 'the "take me" page on the hook is too small to read from the arrival spot');
     const corridorLight = await lightAt([0.6, 0.01, 2.7]);   // the corridor floor, door shut
     if (leave) {
       // "leave" fades out, ends the game and says how to come back
@@ -208,6 +221,7 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     }
     // the door to room 1 opens when pointed at
     await page.waitForFunction(() => document.documentElement.dataset.lobby === 'door', null, { timeout: 30000 });
+    assert.deepEqual(await hangProblems(), [], 'the "choose a door" page on the hook is too small to read from the arrival spot');
     if (!playtest) {
       // under the leave question door 1 stays shut; after "stay" it opens
       await askLeave();

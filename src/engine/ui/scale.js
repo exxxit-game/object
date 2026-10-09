@@ -1,13 +1,16 @@
 import { createChoice } from './choice.js';
 import { FONT } from '../panel.js';
+import { BUTTON, DARK_LIMIT } from './sheet-math.js';
 
 // A 0–max rating scale (max 100 by default), like the paper scales of a questionnaire:
 // marked every `step`, three labels (left, middle, right). Point and click on the
 // bar to place the mark; "done" confirms. Works with the laser and the mouse.
-const BAR_BG = '#15171b';
-const INK = '#f2efe8';
+// colours inside Meta's limits, as the buttons' (sheet-math.js): the bar at the dark limit, the
+// mark's amber dimmed to the light limit
+const BAR_BG = DARK_LIMIT;
+const INK = BUTTON.text;
 const SOFT = '#9a968d';
-const MARK = '#f0c96a';
+const MARK = '#dab760';
 // The wall scale everything is drawn for: a 1.7 m bar, 2048 px wide, labels 54 px high.
 const WALL_W = 1.7, WALL_PX = 2048, WALL_LETTER = 54 * WALL_W / WALL_PX;
 

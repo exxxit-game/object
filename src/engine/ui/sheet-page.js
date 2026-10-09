@@ -1,5 +1,5 @@
 import { createChoice } from './choice.js';
-import { MIN_LETTER, PAPER, PAPER_BG } from './sheet-math.js';
+import { MIN_LETTER, PAPER, PAPER_BG, INK, INK_SOFT, letterFrom } from './sheet-math.js';
 import { FONT } from '../panel.js';
 import './ink.js';
 
@@ -17,11 +17,13 @@ export const UNDER_TEXT = 0.03;
 const BUTTON_H = 0.07;            // about 4 degrees at 1 m (Meta: targets at least 2.5)
 const GAP = 0.025;
 // Text roles: font size in metres at 1 m and ink, in the game's sans (FONT: a sans with a high
-// x-height, as Meta asks for text in VR).
+// x-height, as Meta asks for text in VR). A line given `from` (metres) is read from there, not from
+// the hand: a page on its hook, read from where the player stands; it grows to the smallest
+// letter's angle from that distance (letterFrom).
 const ROLES = {
-  title: { m: 0.044, color: '#1d1b17', weight: 700 },
-  body: { m: 0.028, color: '#1d1b17', weight: 500 },
-  soft: { m: MIN_LETTER, color: '#4a453c', weight: 500 }
+  title: { m: 0.044, color: INK, weight: 700 },
+  body: { m: 0.028, color: INK, weight: 500 },
+  soft: { m: MIN_LETTER, color: INK_SOFT, weight: 500 }
 };
 // A field to write in: the blank's width, from a letter's height above its line (people write
 // above the line) to a third of one below it.
@@ -41,16 +43,19 @@ export function createPage(el, paperEl) {
   let fields = [];
   const pressedInk = new WeakMap();   // a stamp's drawing turned to ink, made once
 
-  // blocks: [{ t, role: 'title' | 'body' | 'soft', gap }]; returns the local y of the text's
+  // blocks: [{ t, role: 'title' | 'body' | 'soft', gap, from }]; returns the local y of the text's
   // bottom edge (the sheet's centre is 0).
   function paint(blocks) {
     const panel = paper();
     const bottom = panel.write(blocks.map((b, i) => {
       const r = ROLES[b.role || 'body'];
-      return { t: b.t, size: r.m * DENSITY, color: r.color, weight: r.weight,
+      return { t: b.t, size: letterFrom(r.m, b.from) * DENSITY, color: r.color, weight: r.weight,
         gap: (b.gap ?? (i ? 0.012 : 0)) * DENSITY };
     }), { top: true, fit: false, align: 'left', pad: MARGIN * DENSITY, bg: PAPER_BG });
     el.dataset.letterMm = (panel.smallest / DENSITY * 1000).toFixed(1);   // as drawn
+    // the smallest of the lines read from afar, for the smoke test's check from the player's eyes
+    const far = blocks.filter((b) => b.from).map((b) => letterFrom(ROLES[b.role || 'body'].m, b.from));
+    if (far.length) el.dataset.farLetterMm = (Math.min(...far) * 1000).toFixed(1); else delete el.dataset.farLetterMm;
     const textBottom = PAPER.h / 2 - bottom;
     el.dataset.textBottom = textBottom.toFixed(3);
     if (panel.overflow) el.dataset.overflow = '1'; else delete el.dataset.overflow;

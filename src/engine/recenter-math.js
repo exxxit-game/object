@@ -11,9 +11,12 @@ export function rigTransform(px, pz, headYaw, tx, tz, targetYaw) {
   };
 }
 
+// The designed standing eye height the scenes are laid out for.
+export const EYE = 1.6;
+
 // Seated mode: a head lower than `below` metres means the player sits. Then the
 // rig is lifted so the eyes are at the designed standing height `eye`; the
 // table, its controls and the screen end up at the right place relative to the body.
-export function seatedLift(headY, eye = 1.6, below = 1.35) {
+export function seatedLift(headY, eye = EYE, below = 1.35) {
   return headY < below ? eye - headY : 0;
 }

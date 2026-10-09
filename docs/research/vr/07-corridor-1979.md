@@ -145,7 +145,7 @@ low-profile metal clip [C20, search]. 1970s clip type and finish: **unverified**
 |---|---|---|
 | Lever handles on all doors (`scene.js` door(), ADA 2010 reach in `building-standards.md`) | Round knob; Schlage lever D-Series 1989, first key-in-lever 1983 [C1, C2] | strong |
 | Exit sign: green ISO 7010 running man (`src/app/logo.js`, the EXXXIT sign) | Word EXIT, letters at least 6 in, strokes 3/4 in, lit; red in Illinois today; running man designed 1979 in Japan, ISO 1987, US code 2021 [C8, C10, C12, C14] | strong |
-| Notices on A4 (`board.js`, ISO 216) | US Letter 8.5 × 11 in [C21] | strong |
+| Notices on A4 (`board.js`, ISO 216); now Letter (`LETTER`, src/engine/ui/sheet-math.js) | US Letter 8.5 × 11 in [C21] | strong |
 | Notice text in a modern sans font (`FONT` = Segoe UI / Roboto in `src/engine/panel.js`) | Typewriter faces: Courier 72, Prestige Elite 72, Letter Gothic; or ditto purple [C22, C23] | strong for printed notices |
 | Room plaque on the wall at the latch side, 48–60 in baseline (ADA 2010) | Latch-side rule appears in ANSI A117.1-1980 / UFAS 1984 (54–66 in); 1979 rule and practice unknown [C3, C6] | the current rule is a 1980s+ rule; the 1979 answer is open |
 | Room sign heights, switch height, lever height, threshold, reach ranges taken from ADA 2010 | Late 1970s used ANSI A117.1-1961/1971 where adopted; texts not found | open |

@@ -50,9 +50,10 @@ assert.ok(bases.length >= 10 && bases.every(t => near(Number(attr(t, 'height')),
 // (docs/building-standards.md; the joints: tests/masonry.test.mjs)
 const sw = tags('a-entity').find(t => /color: #d8d2c2/.test(attr(t, 'rounded-box') || ''));
 assert.ok(sw && pos(sw)[1] >= 0.381 && pos(sw)[1] <= 1.219, 'switch within reach');
-// Notices on the board: A4, 210 × 297 mm
-const a4 = tags('a-entity').filter(t => /^note/.test(attr(t, 'id') || ''));
-assert.ok(a4.length === 2 && a4.every(t => near(prop(attr(t, 'panel'), 'w'), 0.21) && near(prop(attr(t, 'panel'), 'h'), 0.297)), 'notices A4');
+// Notices on the board: US Letter, 8.5 × 11 in (215.9 × 279.4 mm), the paper of a US university
+// in 1979 (docs/research/vr/07-corridor-1979.md, C21), not A4
+const notes = tags('a-entity').filter(t => /^note/.test(attr(t, 'id') || ''));
+assert.ok(notes.length === 2 && notes.every(t => near(prop(attr(t, 'panel'), 'w'), 0.2159, 0.0002) && near(prop(attr(t, 'panel'), 'h'), 0.2794, 0.0002)), 'notices on Letter paper');
 // Tackboard: a 44 mm aluminium trim round the cork
 const board = tags('a-box').find(t => /metalness: .6/.test(attr(t, 'material') || '') && attr(t, 'class') === 'on-wall');
 const cork = tags('a-plane').find(t => /kind: cork/.test(attr(t, 'surface') || ''));

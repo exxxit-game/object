@@ -1,9 +1,12 @@
 // The clipboard sheet appears where research puts comfortable reading: 1 m from the
 // eyes, a little below them, straight ahead, facing the player (sources in docs/decisions.md).
 import assert from 'node:assert/strict';
-import { frontPose, readingPose, letterDeg, MIN_LETTER, READ_DIST, DROP_DEG, GLIDE, glidePath, curvePoint, easeInOut, tripPose, boardCorners, within, EDGE_CLEAR, BOARD_REACH, CLIP } from '../src/engine/ui/sheet-math.js';
+import fs from 'node:fs';
+import { frontPose, readingPose, letterDeg, letterFrom, MIN_LETTER, READ_DIST, DROP_DEG, GLIDE, glidePath, curvePoint, easeInOut, tripPose, boardCorners, within, EDGE_CLEAR, BOARD_REACH, CLIP,
+  PAPER_BG, INK, INK_SOFT, BUTTON, LIGHT_LIMIT, DARK_LIMIT } from '../src/engine/ui/sheet-math.js';
+import { EYE } from '../src/engine/recenter-math.js';
 import { corridorHTML, WALLS } from '../src/app/lobby/scene.js';
-import { BOUNDS, PLAN, SHEET_HOME, CORK_Z } from '../src/app/lobby/plan.js';
+import { BOUNDS, PLAN, SHEET_HOME, CORK_Z, SPOT, HOOK_READ } from '../src/app/lobby/plan.js';
 
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 const near = (a, b, e = 1e-9) => Math.abs(a - b) < e;
@@ -93,4 +96,36 @@ assert.equal(readingPose([0.7, 1.6, 3.05], 0, wall, WALLS, BOARD_REACH).yaw, 0, 
 }
 assert.ok(easeInOut(0) === 0 && easeInOut(1) === 1 && near(easeInOut(0.5), 0.5), 'eases from start to end');
 assert.ok(easeInOut(0.1) < 0.1 && easeInOut(0.9) > 0.9, 'slow start and slow stop');
+
+// A page on its hook is read from where the player arrives: a line meant for that distance is set
+// at the smallest letter's angle from there (24 mm a metre), in whole millimetres up; read at 1 m a
+// role keeps its own size
+assert.ok(near(HOOK_READ, dist([SPOT.x, EYE, SPOT.z], SHEET_HOME.pos), 1e-4), `the hook is read from the arrival spot's eyes (${HOOK_READ} m)`);
+assert.ok(HOOK_READ > 1.5, 'the arrival spot is well away from the hook');
+for (const m of [MIN_LETTER, 0.028, 0.044]) {
+  assert.equal(letterFrom(m, READ_DIST), m, `a ${m * 1000} mm role read at 1 m keeps its size`);
+  assert.ok(letterDeg(letterFrom(m, HOOK_READ), HOOK_READ) >= letterDeg(MIN_LETTER, READ_DIST), `a ${m * 1000} mm line read from the hook is at least 1.375°`);
+}
+assert.equal(letterFrom(0.028, HOOK_READ), 0.047, 'the hook pages\' letters as shown to the owner: 47 mm');
+
+// Colours of print and controls inside Meta's limits ("Color": light no brighter than #DADADA, dark
+// no darker than #1A1A1A, for text, backgrounds and all UI), read strictly: every channel inside both;
+// text at least 4.5:1 on its ground (Meta and WCAG 2.1 AA). Every colour written in the engine's UI
+// code is inside the limits too, so a new one cannot slip past them.
+const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+const lum = (hex) => rgb(hex).map((v) => v / 255).map((c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
+  .reduce((s, c, i) => s + c * [0.2126, 0.7152, 0.0722][i], 0);
+const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+const inLimits = (hex) => rgb(hex).every((v, i) => v >= rgb(DARK_LIMIT)[i] && v <= rgb(LIGHT_LIMIT)[i]);
+assert.ok(LIGHT_LIMIT === '#dadada' && DARK_LIMIT === '#1a1a1a', 'Meta\'s limits as on its page');
+for (const c of [PAPER_BG, INK, INK_SOFT, BUTTON.bg, BUTTON.hover, BUTTON.text]) assert.ok(inLimits(c), `${c} is outside Meta's limits`);
+for (const [fg, bg] of [[INK, PAPER_BG], [INK_SOFT, PAPER_BG], [BUTTON.text, BUTTON.bg], [BUTTON.text, BUTTON.hover]]) {
+  assert.ok(contrast(fg, bg) >= 4.5, `${fg} on ${bg}: ${contrast(fg, bg).toFixed(1)}:1, under 4.5:1`);
+}
+const uiDir = new URL('../src/engine/ui/', import.meta.url);
+for (const f of fs.readdirSync(uiDir).filter((n) => n.endsWith('.js'))) {
+  for (const [c] of fs.readFileSync(new URL(f, uiDir), 'utf8').matchAll(/#[0-9a-fA-F]{6}\b/g)) {
+    assert.ok(inLimits(c.toLowerCase()), `src/engine/ui/${f}: ${c} is outside Meta's limits (#1a1a1a to #dadada each channel)`);
+  }
+}
 console.log(`sheet tests: ok (${poses.length} poses, ${trips} trips, ${spots} corridor spots, ${legs} trips there and back clear of the walls)`);

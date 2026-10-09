@@ -60,6 +60,27 @@ itch.io developer shows notes larger on a click; a reading study (VRDoc, arXiv 2
 saw people pull small-print documents closer. None of these numbers may be used until read in
 the source.
 
+## Paper colour (read)
+
+- **Meta's limits** — "For light backgrounds, use colors no brighter than #DADADA. For dark
+  backgrounds, use colors no darker than #1A1A1A", applied "to text, backgrounds, and all UI
+  elements throughout your experience"; pure white and black "can cause eye strain" — Meta,
+  "Color", updated 2026-04-19, https://developers.meta.com/horizon/design/styles_color/ — read.
+  Read strictly in our code: every channel inside both limits.
+- **White offset paper as measured** — FOGRA29, the ICC registry's characterisation data for
+  ISO 12647-2 paper type 4 ("white, uncoated, 120 g/m2"), September 2003, D50, 2°, 45/0, white
+  backing; the unprinted patch (C=M=Y=K=0): XYZ 86.44 / 89.31 / 76.37, L* 95.71, a* 0.61,
+  b* -2.32 — https://registry.color.org/cmyk-registry/fogra29 (data file FOGRA29L.txt, opened).
+  Bradford D50 to D65, then sRGB (IEC 61966-2-1): 242, 242, 247; dimmed in linear light until its
+  brightest channel is 0xDA: 214, 214, 218 (#d6d6da), the paper's colour in the game.
+- **Older paper was less blue** — in 2005 North American office paper's brightness went from about
+  84 to 92 and its CIE whiteness from about 100 to 146; "The 'new' paper made in North America is
+  much bluer" — Crable, "The Evolution of Tinting Dyes and Optical Brighteners in White Papers",
+  TAPPI PaperCon 2011, p. 1611 (opened by the research agent, not by me).
+- **Not found:** a colour measurement of a 1979 sheet. The cream the page had before (#e9e2cf,
+  about L* 90, b* +10) has no source; it was chosen so that "white would not glare", which Meta's
+  limit settles.
+
 ## Not found
 
 No large-print rule names stamps or seals; the nearest rules are "text inside pictures at body
@@ -70,3 +91,5 @@ size" and "an accurate representation of the original" (G003).
 The clipboard's page is a large-print document. Its text sets the size of everything printed on it
 (rings and labels of seals and stamps, check boxes, table rows, scale anchors); the paper only gives
 the page its shape. A document that does not fit grows in pages, nothing shrinks and nothing is cut.
+A page on its hook is read from where the player stands: its lines for that distance get the
+smallest letter's angle from there. The paper is white as measured, at Meta's light limit.
