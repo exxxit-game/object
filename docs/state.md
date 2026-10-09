@@ -60,11 +60,11 @@
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
 ## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
-1. Queue step 4.1 NOW. Done: causes 1-6, 9-11 (docs/audit/README.md; 5 on his "Делаем" 9.10, pictures
-   https://claude.ai/artifact/22VLRrRJje5dvK84Q5Jyqp), plan checked twice, premortem, docs split, rules review,
-   guards proven, Claude Code read. Cause 5 green on GitHub (smoke included) and seen in his headset walk
-   9.10 (frames, 90 fps, 130 draw calls max). Allow rules on his yes (.claude/settings.json: quest-look,
-   gh run, publish-preview). VR only on his head (quest-look vr). Waiting: his yes on the new CLAUDE.md. Next: causes 7, 8; f) the style book;
+1. Queue step 4.1 NOW. Done: causes 1-7, 9-11 (docs/audit/README.md; 5 on his "Делаем" 9.10, seen in his
+   headset walk: 90 fps, 130 draw calls max; 7: placement to see in his next session), plan checked twice,
+   premortem, docs split, rules review, guards proven, Claude Code read. Allow rules on his yes
+   (.claude/settings.json: quest-look, gh run, publish-preview); VR only on his head (quest-look vr).
+   Waiting: his yes on the new CLAUDE.md. Next: cause 8 (an inventory of the audits' numbers first); f) style book;
    then the fact-checker, request and architecture auditors. Open talk: the start's tone (his 9.10: not
    Portal 2 humour, "learn about yourself"), touches step 7.
    After his app update: onFailure "block" on the guards. His guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9
