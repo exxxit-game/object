@@ -16,7 +16,7 @@ Reusable parts. The engine never imports from `src/app/` or `src/rooms/`.
 | `audio.js` | `unlock()` (call after a click), `getContext()`, `onUnlock(fn)` (the one rule: every sound and voice line asked for before the first gesture waits for it, never lost; with no audio at all the wait still ends) |
 | `voice.js` | `loadVoice(lines, baseUrl)`, `speak(text)` → Promise, resolves when the line ends; a `voice-line` event on `window` as a line starts |
 | `sfx.js` | `loadSounds`, `playSound(name, position, volume, loop)` → handle with `stop()`, `fade(volume, seconds)`; component `sound-listener` for spatial sound |
-| `recenter.js`, `recenter-math.js` | Component `recenter`: puts the player at the table in VR, seated or standing |
+| `recenter.js`, `recenter-math.js` | Component `recenter`: puts the player at the table in VR, seated or standing, on the frame after the first tracked head pose (`placementStep`), never after a guessed delay |
 | `grab-press.js`, `haptics.js` | Press `.grabbable` things with the hand; controller vibration |
 | `blob-shadow.js` | Soft contact shadow under objects |
 | `door.js` | `doorHTML({ x, room, corridor, latch, leaf, clickable, inside, sign })`: every doorway of the lab, one way (frame through the wall, stops, threshold, leaf, kick plate on the push side, round knobs; room-side hinges and closer when `inside`); either long wall (the room on the far side of `corridor`); `CHROME`: the one hardware finish |

@@ -1,4 +1,4 @@
-import { rigTransform, seatedLift, EYE } from './recenter-math.js';
+import { rigTransform, seatedLift, placementStep, EYE } from './recenter-math.js';
 
 // Puts the player at the designed spot, facing the designed direction, in VR.
 // A headset sets its origin where the player happened to stand and look when the
@@ -21,12 +21,12 @@ AFRAME.registerComponent('recenter', {
   init() {
     this.saved = { p: this.el.object3D.position.clone(), r: this.el.object3D.rotation.y };
     this.apply = this.apply.bind(this);
+    this.wait = 'idle';   // placement: asked for, then done by the first tracked pose (tick)
     const sc = this.el.sceneEl;
     sc.addEventListener('enter-vr', () => {
-      // the first pose arrives a few frames after the session starts
-      setTimeout(this.apply, 300);
+      this.wait = 'waiting';
       const space = sc.renderer.xr.getReferenceSpace();
-      if (space && !this.space) { this.space = space; space.addEventListener('reset', () => setTimeout(this.apply, 100)); }
+      if (space && !this.space) { this.space = space; space.addEventListener('reset', () => { this.wait = 'waiting'; }); }
       // Headset taken off and put back on: the session goes hidden, then visible, and the
       // player may now sit or stand somewhere else, so they are placed again. The system
       // menu only blurs the session (visible-blurred) and must not move anyone.
@@ -34,12 +34,13 @@ AFRAME.registerComponent('recenter', {
       if (session) {
         session.addEventListener('visibilitychange', () => {
           if (session.visibilityState === 'hidden') this.wasHidden = true;
-          else if (session.visibilityState === 'visible' && this.wasHidden) { this.wasHidden = false; setTimeout(this.apply, 300); }
+          else if (session.visibilityState === 'visible' && this.wasHidden) { this.wasHidden = false; this.wait = 'waiting'; }
         });
       }
     });
     sc.addEventListener('exit-vr', () => {
       this.space = null;
+      this.wait = 'idle';
       this.seated = undefined;
       this.el.object3D.position.copy(this.saved.p);
       this.el.object3D.rotation.y = this.saved.r;
@@ -49,6 +50,13 @@ AFRAME.registerComponent('recenter', {
   // A seated player who stands up (or a standing one who sits down) is re-placed;
   // checked about once a second, with a margin so a lean does not flip it.
   tick(t) {
+    if (this.wait !== 'idle') {
+      const sc = this.el.sceneEl, space = sc.renderer.xr.getReferenceSpace();
+      const step = placementStep(this.wait, (sc.frame && space && sc.frame.getViewerPose(space)) || null);
+      this.wait = step.state;
+      if (step.place) this.apply();
+      return;
+    }
     if (this.seated === undefined || t - (this.checked || 0) < 1000) return;
     this.checked = t;
     const y = this.el.sceneEl.camera.el.object3D.position.y; // real head height above the floor
