@@ -1,17 +1,15 @@
-// End-to-end check of the default room inside a Meta Quest connected by USB.
-// Plays the whole room in the headset browser at 10× speed, then prints a report:
-// screens shown, voice lines played, page errors, frame rate, and a screenshot.
+// End-to-end check inside the owner's Quest on its cable: the corridor (the clipboard, the
+// two-page form with its seal, the age, door 1) and the default room behind it, played in the
+// headset browser at 10× speed; then a report: screens shown, voice lines played, page errors and
+// the frame rate. Pictures of what the player sees: node tools/quest-look.mjs frame (in VR).
 //
 // Usage: node tools/quest-check.mjs [url]
-//   url defaults to http://localhost:3000/ (run `npm run serve` first; adb reverse maps it).
-// Needs: adb in PATH, headset awake (for a headset lying on a table:
-//   adb shell am broadcast -a com.oculus.vrpowermanager.prox_close
-//   and afterwards: adb shell am broadcast -a com.oculus.vrpowermanager.automation_disable).
-import { execFileSync } from 'node:child_process';
-import fs from 'node:fs';
+//   url defaults to the laptop's server (the preview's port), seen by the headset as localhost:3000.
+// The headset is woken and kept awake for the run, then put back to sleep (tools/headset.mjs).
+import { serveToHeadset, awake, worn, sleepNow, openUrl, page as openPage } from './headset.mjs';
 
 // 10× speed so the whole room (40 trials) is checked in about three minutes.
-const URL_TO_TEST = process.argv[2] || 'http://localhost:3000/?speed=10';
+const URL_TO_TEST = process.argv[2] || serveToHeadset() + '?speed=10';
 const ROOM = '01-control';
 const { VOICE_LINES } = await import(new URL(`../src/rooms/${ROOM}/voice-lines.js`, import.meta.url));
 // Every line is played at least once except the repeat question's answer path;
@@ -20,41 +18,19 @@ const { VOICE_LINES } = await import(new URL(`../src/rooms/${ROOM}/voice-lines.j
 const { VOICE_LINES: LOBBY_LINES } = await import(new URL('../src/app/lobby/voice-lines.js', import.meta.url));
 const EXPECTED_VOICE_FILES = VOICE_LINES.length + LOBBY_LINES.length;
 const MIN_VOICE_PLAYS = 20;
-const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8' });
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-adb('reverse', 'tcp:3000', 'tcp:3000');
-adb('forward', 'tcp:9222', 'localabstract:chrome_devtools_remote');
-if (!/mWakefulness=Awake/.test(adb('shell', 'dumpsys', 'power'))) {
-  console.log('FAIL headset is asleep: put it on or enable worn mode (see header)');
-  process.exit(1);
-}
-
+worn(true);
+if (!awake()) openUrl(URL_TO_TEST);
 // Use the open game tab if there is one, else open the URL in the headset browser.
-let tabs = await (await fetch('http://127.0.0.1:9222/json/list')).json();
-let tab = tabs.find(t => t.type === 'page' && /object|localhost:3000/.test(t.url));
-if (!tab) {
-  adb('shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', URL_TO_TEST, 'com.oculus.browser');
-  await sleep(5000);
-  tabs = await (await fetch('http://127.0.0.1:9222/json/list')).json();
-  tab = tabs.find(t => t.type === 'page' && t.url.startsWith(URL_TO_TEST.split('?')[0]));
-}
-if (!tab) { console.log('FAIL no browser tab with the game'); process.exit(1); }
-
-const ws = new WebSocket(tab.webSocketDebuggerUrl);
-await new Promise((r, j) => { ws.onopen = r; ws.onerror = j; });
-let id = 0; const pending = new Map(); const errors = [];
-ws.onmessage = (m) => {
-  const msg = JSON.parse(m.data);
-  if (msg.id && pending.has(msg.id)) { pending.get(msg.id)(msg); pending.delete(msg.id); return; }
-  if (msg.method === 'Runtime.exceptionThrown') errors.push(msg.params.exceptionDetails.exception?.description || msg.params.exceptionDetails.text);
-  if (msg.method === 'Runtime.consoleAPICalled' && msg.params.type === 'error') errors.push(msg.params.args.map(a => a.value ?? a.description).join(' '));
-};
-const send = (method, params = {}) => new Promise(res => { const i = ++id; pending.set(i, res); ws.send(JSON.stringify({ id: i, method, params })); });
+let game = await openPage(/object|localhost:3000/);
+if (!game) { openUrl(URL_TO_TEST); await sleep(5000); game = await openPage(/object|localhost:3000/); }
+if (!game) { console.log('FAIL no browser tab with the game'); sleepNow(); process.exit(1); }
+const { send, errors } = game;
 const run = async (expression) => {
-  const r = await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true });
-  if (r.result?.exceptionDetails) throw new Error(r.result.exceptionDetails.exception?.description || 'evaluate failed');
-  return r.result?.result?.value;
+  const v = await game.run(expression, false);
+  if (v && v.error && /^page threw/.test(v.error)) throw new Error(v.error);
+  return v;
 };
 
 await send('Runtime.enable');
@@ -133,15 +109,6 @@ await run(`new Promise(r => { const t = setInterval(() => { if (document.documen
 await sleep(19000);
 const result = await run(`({ states: window.__states, played: window.__played, screens: window.__screens, drawCalls: document.querySelector('a-scene').renderer.info.render.calls })`);
 
-// Screenshot of what the headset shows, via the Quest capture service.
-let shot = 'not taken';
-try {
-  adb('shell', 'am', 'startservice', '-n', 'com.oculus.metacam/.capture.CaptureService', '-a', 'TAKE_SCREENSHOT');
-  await sleep(2500);
-  const latest = adb('shell', 'ls', '-t', '/sdcard/Oculus/Screenshots/').split(/\s+/).filter(Boolean)[0];
-  if (latest) { adb('pull', `/sdcard/Oculus/Screenshots/${latest}`, 'quest-check.jpg'); shot = 'quest-check.jpg'; }
-} catch (e) { shot = 'failed: ' + e.message.split('\n')[0]; }
-
 const checks = [
   ['tested build is the requested URL', page.url.startsWith(URL_TO_TEST.split('?')[0])],
   ['all voice recordings loaded', page.voiceFiles === EXPECTED_VOICE_FILES],
@@ -153,12 +120,13 @@ const checks = [
   ['reveal: original and replication', result.screens.some(s => s.startsWith('ОРИГИНАЛ')) && result.screens.some(s => s.startsWith('ПОВТОРЕНИЕ'))],
   ['reveal: differences with the share line', result.screens.some(s => s.startsWith('ЧЕМ ЭТА КОМНАТА') && s.includes('Не рассказывайте'))],
   ['no page errors', errors.length === 0],
-  ['frame rate at least 60', fps >= 60]
+  // Meta: at least 72 Hz on Quest 3 (the same budget as quest-look perf)
+  ['frame rate at least 72', fps >= 72]
 ];
 console.log(`URL ${page.url}\nscreen resolution ${page.screenPx}, draw calls ${result.drawCalls}, fps ${fps}`);
 console.log(`voice durations: ${result.played.join(', ') || 'none'}`);
 for (const [name, ok] of checks) console.log(`${ok ? 'PASS' : 'FAIL'} ${name}`);
 if (errors.length) console.log('errors:\n  ' + errors.join('\n  '));
-console.log('screenshot:', shot);
-ws.close();
+game.close();
+sleepNow();
 process.exit(checks.every(([, ok]) => ok) ? 0 : 1);

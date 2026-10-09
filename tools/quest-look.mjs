@@ -4,7 +4,8 @@
 // headset only slowly: wake it for a check, and end every check with "sleep".
 // Usage:
 //   node tools/quest-look.mjs open             open the test copy in the headset browser
-//   node tools/quest-look.mjs open local 3100  open the local server (port 3100) as localhost:3000
+//   node tools/quest-look.mjs open local [p]   open the laptop's server (the preview's port, or p)
+//                                              in the headset as its own localhost:3000
 //   node tools/quest-look.mjs sleep            give the proximity sensor back and put it to sleep
 //   node tools/quest-look.mjs reload           reload it, skipping every cache (after publish-preview)
 //   node tools/quest-look.mjs vr               enter VR, as if the VR button were pressed
@@ -24,8 +25,8 @@
 // a table, so "frame" reads the picture the game draws instead. The game draws only while
 // its VR session is visible: a headset that fell asleep or shows its cameras draws nothing,
 // and "frame" says so; a headset put down a moment ago keeps drawing.
-import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
+import { adb, serveToHeadset, localPort, worn, sleepNow, openUrl, page } from './headset.mjs';
 
 const PREVIEW = 'https://exxxit-game.github.io/object-preview/';
 // The mix, heard where the player stands when the sign plays (the arrival spot, at the designed
@@ -36,60 +37,29 @@ const PREVIEW = 'https://exxxit-game.github.io/object-preview/';
 // 30 dB under it, or it is gone in a quiet room. Volumes set by ear on a laptop come out wrong
 // in the headset (docs/mistakes.md).
 const LEVELS = { eventUnderVoicePeak: [0, 12], humUnderVoiceRms: [15, 30], eye: 1.6 };
-const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8', env: { ...process.env, MSYS_NO_PATHCONV: '1' } }).trim();
 const [cmd, arg] = process.argv.slice(2);
 
 if (cmd === 'open') {
-  let url = PREVIEW;
-  if (arg === 'local') {
-    // the headset reaches the laptop's server through the cable at its own localhost:3000
-    adb('reverse', 'tcp:3000', `tcp:${process.argv[4] || 3000}`);
-    url = 'http://localhost:3000/';
-  }
-  adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP');
-  adb('shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', url, 'com.oculus.browser');
+  // local: the laptop's server, seen by the headset through the cable as its own localhost:3000
+  const url = arg === 'local' ? serveToHeadset(Number(process.argv[4]) || localPort()) : PREVIEW;
+  openUrl(url);
   console.log('opened', url);
   process.exit(0);
 }
 if (cmd === 'sleep') {
-  adb('shell', 'am', 'broadcast', '-a', 'com.oculus.vrpowermanager.automation_disable');
-  adb('shell', 'input', 'keyevent', 'KEYCODE_SLEEP');
+  sleepNow();
   console.log('asleep');
   process.exit(0);
 }
 if (cmd === 'worn') {
-  // the proximity sensor is overridden only while testing; "off" gives it back
-  adb('shell', 'am', 'broadcast', '-a', `com.oculus.vrpowermanager.${arg === 'on' ? 'prox_close' : 'automation_disable'}`);
+  worn(arg === 'on');
   console.log('worn', arg === 'on' ? 'on' : 'off');
   process.exit(0);
 }
 
-adb('forward', 'tcp:9222', 'localabstract:chrome_devtools_remote');
-const tabs = await (await fetch('http://127.0.0.1:9222/json/list')).json();
-const tab = tabs.find(t => t.type === 'page' && /object-preview\/|localhost:3000/.test(t.url));
-if (!tab) { console.log('no game tab: run "node tools/quest-look.mjs open" first'); process.exit(1); }
-const ws = new WebSocket(tab.webSocketDebuggerUrl);
-await new Promise((r, j) => { ws.onopen = r; ws.onerror = j; });
-let id = 0;
-const pending = new Map();
-ws.onmessage = (m) => { const d = JSON.parse(m.data); if (pending.has(d.id)) { pending.get(d.id)(d); pending.delete(d.id); } };
-// A call the page never answers (the connection closed as the headset slept or the tab changed
-// when VR ended; the page froze) reports so, instead of leaving the tool waiting with nothing said.
-const NO_ANSWER_MS = 120000;
-const failAll = (text) => { for (const f of pending.values()) f({ result: { exceptionDetails: { text } } }); pending.clear(); };
-ws.onclose = () => failAll('the connection to the page closed');
-const send = (method, params = {}) => new Promise(r => {
-  const n = ++id;
-  const timer = setTimeout(() => { if (pending.has(n)) { pending.delete(n); r({ result: { exceptionDetails: { text: `no answer in ${NO_ANSWER_MS / 1000} s` } } }); } }, NO_ANSWER_MS);
-  pending.set(n, (d) => { clearTimeout(timer); r(d); });
-  ws.send(JSON.stringify({ id: n, method, params }));
-});
-// userGesture: the page treats the call as a press, so VR may start
-const run = async (expression) => {
-  const r = (await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true, userGesture: true })).result;
-  if (r?.exceptionDetails) return { error: 'page threw: ' + (r.exceptionDetails.exception?.description || r.exceptionDetails.text) };
-  return r?.result?.value;
-};
+const game = await page(/object-preview\/|localhost:3000/);
+if (!game) { console.log('no game tab: run "node tools/quest-look.mjs open" first'); process.exit(1); }
+const { tab, send, run } = game;
 
 if (cmd === 'reload') {
   await send('Network.enable');
@@ -223,4 +193,4 @@ if (cmd === 'reload') {
 } else {
   console.log('usage: node tools/quest-look.mjs open [local port] | sleep | reload | vr | frame out.jpg | eval "<js>" | worn on|off | levels | perf');
 }
-ws.close();
+game.close();
