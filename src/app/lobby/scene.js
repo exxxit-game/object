@@ -144,9 +144,10 @@ function extinguisher(x, wall) {
       <!-- the label, as on the 1972 model: about 98 degrees round the front (painted by
            extinguisher-label.js) -->
       <a-cylinder id="extLabel" data-dynamic decal position="${x} 1.121 ${z}" radius="${EXT.r}" height="0.254" open-ended="true" theta-start="131" theta-length="98" material="roughness: 0.6"></a-cylinder>
-      <!-- the neck, the hex collar, the cast valve body -->
+      <!-- the neck, the hex collar, the cast valve body; the collar turned so two corners reach out
+           over the fork's prongs (three.js puts a corner at +z, its flats would slip between them) -->
       <a-cylinder position="${x} ${f(Y.domeTop + EXT.neck / 2 - 0.004)} ${z}" radius="0.022" height="${EXT.neck + 0.008}" ${STEEL}></a-cylinder>
-      <a-cylinder position="${x} ${f(Y.neckTop + EXT.collar / 2)} ${z}" radius="0.026" height="${EXT.collar}" segments-radial="6" ${STEEL}></a-cylinder>
+      <a-cylinder position="${x} ${f(Y.neckTop + EXT.collar / 2)} ${z}" radius="0.026" height="${EXT.collar}" segments-radial="6" rotation="0 30 0" ${STEEL}></a-cylinder>
       <a-entity position="${x} ${f(Y.collarTop)} ${z}" lathe="points: 0 0, 0.019 0, 0.019 0.03, 0.017 0.038, 0.012 0.043, 0 0.043; ${CHROME_SHAPE}"></a-entity>
       <!-- the gauge on the valve's front: a chrome bezel round its dial -->
       <a-cylinder position="${x} ${f(gaugeY)} ${f(gaugeZ - 0.005)}" radius="0.0235" height="0.010" rotation="90 0 0" ${STEEL}></a-cylinder>
@@ -155,9 +156,10 @@ function extinguisher(x, wall) {
       <a-entity position="${x} ${f(Y.bodyTop)} ${z}" outline="points: ${LEVER}; depth: 0.016; bevel: 0.002; ${CHROME_SHAPE}"></a-entity>
       <a-entity position="${x} ${f(Y.bodyTop)} ${z}" outline="points: ${HANDLE}; depth: 0.014; bevel: 0.002; ${CHROME_SHAPE}"></a-entity>
       <a-cylinder position="${x + 0.016} ${f(Y.bodyTop + 0.002)} ${z}" radius="0.0035" height="0.022" rotation="90 0 0" ${STEEL}></a-cylinder>
-      <!-- the ring pin through lever and handle, and its chain to the valve -->
+      <!-- the ring pin through lever and handle, and its chain to the valve; the ring's wire 1.3 mm in
+           radius (A-Frame draws twice radius-tubular) -->
       <a-cylinder position="${x - 0.022} ${f(Y.bodyTop - 0.007)} ${z}" radius="0.0016" height="0.026" rotation="90 0 0" ${STEEL}></a-cylinder>
-      <a-torus position="${x - 0.022} ${f(Y.bodyTop - 0.017)} ${f(z - 0.013)}" radius="0.010" radius-tubular="0.0013" ${STEEL}></a-torus>
+      <a-torus position="${x - 0.022} ${f(Y.bodyTop - 0.017)} ${f(z - 0.013)}" radius="0.010" radius-tubular="0.00065" ${STEEL}></a-torus>
       <!-- the fill valve on the valve's right side under the lever, the ring's chain hanging to it -->
       <a-cylinder position="${f(x - 0.025)} ${f(Y.collarTop + 0.008)} ${f(z - 0.004)}" radius="0.004" height="0.012" rotation="0 0 90" ${BRASS}></a-cylinder>
       <a-entity cable="radius: 0.0007; color: #9a9ca0; points: ${x - 0.022} ${f(Y.bodyTop - 0.027)} ${f(z - 0.013)}, ${f(x - 0.026)} ${f(Y.collarTop + 0.006)} ${f(z - 0.012)}, ${f(x - 0.029)} ${f(Y.collarTop + 0.008)} ${f(z - 0.006)}"></a-entity>

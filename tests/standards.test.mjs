@@ -109,10 +109,15 @@ const bound = (t) => {
     half = [(w * Math.abs(Math.cos(a)) + h * Math.abs(Math.sin(a))) / 2, (w * Math.abs(Math.sin(a)) + h * Math.abs(Math.cos(a))) / 2, d / 2];
   } else if (kind === 'cylinder') {
     const r = Number(attr(t, 'radius')), h = Number(attr(t, 'height'));
-    half = rot[0] === 90 ? [r, r, h / 2] : rot[2] === 90 ? [h / 2, r, r] : [r, h / 2, r];
+    // a few-sided one (the hex collar) reaches r only at its corners: three.js puts corner k at
+    // 2πk/n from +z towards +x, then the entity turns it about y
+    const n = Number(attr(t, 'segments-radial')) || 0, corners = [...Array(n)].map((_, k) => 2 * Math.PI * k / n + rot[1] * Math.PI / 180);
+    const [rx, rz] = n && n < 12 ? [Math.max(...corners.map((a) => Math.abs(r * Math.sin(a)))), Math.max(...corners.map((a) => Math.abs(r * Math.cos(a))))] : [r, r];
+    half = rot[0] === 90 ? [r, r, h / 2] : rot[2] === 90 ? [h / 2, r, r] : [rx, h / 2, rz];
   } else if (kind === 'torus') {
-    const r = Number(attr(t, 'radius')) + Number(attr(t, 'radius-tubular'));
-    half = [r, r, Number(attr(t, 'radius-tubular'))];
+    // A-Frame passes twice radius-tubular to three.js as the tube's radius (vendor/aframe-1.7.1.min.js)
+    const tube = 2 * Number(attr(t, 'radius-tubular')), r = Number(attr(t, 'radius')) + tube;
+    half = [r, r, tube];
   } else if (kind === 'sphere') {
     const r = Number(attr(t, 'radius')), s = (attr(t, 'scale') || '1 1 1').split(' ').map(Number);
     half = [r * s[0], r * s[1], r * s[2]];
@@ -137,6 +142,13 @@ assert.equal(held.size, parts.length, `extinguisher parts hanging in the air: ${
 // neck or the valve (their boxes meet, overlapping by 1 mm at most; the hose's box is only its
 // path's bounds, so it is left out)
 const hanger = tagsOf.map((t, i) => /class="hanger"/.test(t) ? i : -1).filter((i) => i >= 0);
+// the hex collar rests on the fork's prongs: across x it reaches over both their inner edges by more
+// than the play above, which would pass a collar slipping through the slot
+const collar = parts[tagsOf.findIndex((t) => / segments-radial="6"/.test(t))];
+const [cx, cz] = [(collar[0][0] + collar[0][1]) / 2, (collar[2][0] + collar[2][1]) / 2];
+const prongs = hanger.map((i) => parts[i]).filter((b) => b[2][0] <= cz && cz <= b[2][1] && b[1][1] <= collar[1][0] + 0.001);
+const inner = [Math.max(...prongs.filter((b) => b[0][1] < cx).map((b) => b[0][1])), Math.min(...prongs.filter((b) => b[0][0] > cx).map((b) => b[0][0]))];
+assert.ok(collar[0][0] < inner[0] - 0.002 && collar[0][1] > inner[1] + 0.002, `the collar (${(collar[0][1] - cx).toFixed(4)} m half across) rests on the prongs (inner edges ${(inner[1] - cx).toFixed(4)} m)`);
 const overlap = (a, b) => [0, 1, 2].map((i) => Math.min(a[i][1], b[i][1]) - Math.max(a[i][0], b[i][0]));
 // a part cut from its side view (an outline) is tested by its outline's height over the other box's
 // width, not by its whole box: a curved handle's box takes in the air under its curve
