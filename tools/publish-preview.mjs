@@ -11,6 +11,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PUBLIC } from '../tests/static-server.mjs';
+import { check } from './secrets.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REPO = 'https://github.com/exxxit-game/object-preview.git';
@@ -51,6 +52,14 @@ git(dir, 'init', '-q', '-b', 'main');
 git(dir, 'add', '-A');
 git(dir, '-c', `user.name=${git(ROOT, 'config', 'user.name')}`, '-c', `user.email=${git(ROOT, 'config', 'user.email')}`,
   'commit', '-q', '-m', `Preview of ${sha}${dirty ? ' with uncommitted changes' : ''}`);
+// the copy is pushed from this folder, where git runs no hook: the same check as before every push
+const leaks = check('HEAD', dir);
+if (leaks.length) {
+  for (const p of leaks) console.log('STOP ', p);
+  fs.rmSync(dir, { recursive: true, force: true });
+  console.log('not published: something private is in the files');
+  process.exit(1);
+}
 git(dir, 'push', '-q', '--force', REPO, 'main');
 fs.rmSync(dir, { recursive: true, force: true });
 console.log(`published ${sha}${dirty ? ' (+ uncommitted changes)' : ''}: https://exxxit-game.github.io/object-preview/`);

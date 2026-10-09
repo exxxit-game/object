@@ -38,7 +38,7 @@ for (const f of code) {
     /^(privacy\.html|README\.md|tools\/xr-probe\.html)$/,             // pages people read: data, the project, the headset probe
     /^(tests\/(structure|plaque|control-reveal)\.test\.mjs|tools\/(check-voice|make-voice|quest-check)\.mjs)$/,   // checks and tools of the Russian texts
     /^(CLAUDE\.md|docs\/(state|mistakes|decisions)\.md|docs\/rooms\/01-control\.md|docs\/research\/vr\/06-science\.md|docs\/art\/corridor-plan\.svg)$/, // the owner's words and the player's text, quoted
-    /^\.claude\/(agents\/request-auditor\.md|skills\/new-room\/SKILL\.md)$/,   // the plan doc's Russian headings, quoted
+    /^\.claude\/(agents\/(request-auditor|fact-checker)\.md|skills\/new-room\/SKILL\.md)$/,   // the plan doc's Russian headings and status words, quoted
     /^docs\/cards\/agafonov-2016\.md$/                                       // a Russian paper, cited in its own language
   ];
   const skip = /^(\.git|node_modules|vendor)$|\.(mp3|wav|woff2|jpe?g|png|pdf|ico|webp)$/;

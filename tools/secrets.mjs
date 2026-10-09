@@ -1,7 +1,8 @@
 // Nothing private leaves this laptop: the commits about to go to GitHub must carry no key, token
 // or password, and no address but the account's private one (GitHub's noreply), never the owner's
 // own email. Run by git before every push (tools/hooks/pre-push; `git config core.hooksPath
-// tools/hooks` once per clone) and by the morning check. Prints what it found, never the secret.
+// tools/hooks` once per clone), by the morning check, and by tools/publish-preview.mjs on the copy it
+// pushes from a folder of its own (git runs no hook there). Prints what it found, never the secret.
 // Usage: node tools/secrets.mjs [range]   (default: the commits not on GitHub yet)
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -24,7 +25,14 @@ const KEY_FILES = [path.join(os.homedir(), '.elevenlabs-key.txt')];
 
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 1 << 28 }).trim();
 
-export function check(range) {
+// git hands GIT_DIR and its kin to a hook's children, and they win over the folder a command
+// runs in: another repository is reached only without them
+export const withoutGitVars = () => Object.fromEntries(Object.entries(process.env).filter(([k]) => !k.startsWith('GIT_')));
+
+// range: the commits to look at (git rev-list arguments); cwd: another repository they are in
+export function check(range, cwd) {
+  const opts = cwd ? { cwd, env: withoutGitVars() } : {};
+  const git = (...args) => execFileSync('git', args, { ...opts, encoding: 'utf8', maxBuffer: 1 << 28 }).trim();
   const problems = [];
   const commits = git('rev-list', ...range.split(' ')).split('\n').filter(Boolean);
   for (const c of commits) {

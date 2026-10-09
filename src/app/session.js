@@ -35,7 +35,8 @@ export function createSession(roomId, roomVersion) {
     while (canSend() && queued.length && sent < MAX_ISSUES) { sent++; sendIssue(roomId, roomVersion, queued.shift()); }
   };
   return {
-    // record: the player chose "start with recording" on the consent screen
+    // record: the player chose "start with recording" on the consent screen. A room calls this
+    // as its procedure begins: from here the player counts as having seen the experiment.
     begin(withRecording) {
       record = !!withRecording;
       first = markPlayed(roomId);

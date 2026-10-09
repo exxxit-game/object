@@ -45,8 +45,10 @@ function post(url, body) {
   }
 }
 
-// Whether this browser has finished this room before (first vs repeat runs must
-// never be mixed in the statistics). Storage may be unavailable: then "first".
+// Whether this browser has started this room's procedure before: called when the procedure
+// begins (the room's instructions), not at the consent, so a player who left in the corridor is
+// still naive and one who saw part of the experiment is not (first vs repeat runs must never be
+// mixed in the statistics). Storage may be unavailable: then "first".
 export function markPlayed(room) {
   const key = `object.played.${room}`;
   let before = false;

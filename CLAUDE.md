@@ -71,6 +71,8 @@ static page privacy.html) and README.md, which is in Russian and English.
     i. Guard: after a long stretch of work, and before saying a step is done, run the
        `request-auditor` agent (owner messages vs the plan) and the `architecture-auditor` agent
        (code and docs vs ARCHITECTURE.md and docs/target-architecture.md), and fix what they find.
+       Before the plan or a doc is relied on, the `fact-checker` agent checks every claim in it against
+       its evidence, twice, in two runs that do not see each other.
 23. We RECREATE (воссоздаём), we do not invent. Everything around the experiments (the building,
     doors, signs, furniture, objects, their sizes and proportions) is carried over from a real
     source as it is; invention goes only into the experiments we design and the words. A size or
@@ -90,7 +92,7 @@ static page privacy.html) and README.md, which is in Russian and English.
     the headset is linked; the owner judges only feel and taste, never what a tool can measure.
 
 ## Commands
-- `npm test` — pure unit tests (node, under a second). Safe to run locally.
+- `npm test` — pure unit tests (node only, about 12 s on the laptop); git runs it before every commit. Safe to run locally.
 - `npm run test:smoke` — headless Chromium; CI only (see docs/testing.md).
 - `npm run serve` — local preview at http://localhost:3000, no dependencies.
 - Deploy: push to main, GitHub Pages serves the repo root.
