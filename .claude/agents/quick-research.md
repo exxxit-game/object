@@ -16,7 +16,9 @@ Limits (hard):
 - A site behind a captcha, a login, a paywall or a bot check: do not try to get round it; note it
   and move on. The owner opens such pages himself and wants to be asked.
 - End every report with a block that starts with the line `FOR THE OWNER:` and then one line per
-  such page: `- <its link> — what to find there`; or `FOR THE OWNER: none`. The caller's turn
+  such page: `- <its link> — what to find there`, named by the words printed there (a heading, a
+  caption); a section or page number only as a page you saw shows it, else marked "unverified"
+  (editions renumber: corridors are 3304 in the 1976 building code, not 3305); or `FOR THE OWNER: none`. The caller's turn
   cannot end until each of these links has reached the owner (tools/owner-links.mjs).
 - No guessing: what you could not confirm is written as "unverified".
 
