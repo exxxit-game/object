@@ -148,6 +148,7 @@ for (const s of sheets) {
   assert.ok(pos(s)[2] > corkZ && pos(s)[2] - corkZ <= 0.001, `${attr(s, 'id')}: ${((pos(s)[2] - corkZ) * 1000).toFixed(1)} mm off the cork`);
   assert.ok(/decal: true/.test(attr(s, 'panel')), `${attr(s, 'id')}: drawn over the cork as a decal`);
 }
+// the pins: spheres over the board, in front of the cork (within 5 cm: a window to find them, not a measure)
 const pins = tags('a-sphere').filter((t) => near(pos(t)[0], B.x, B.w / 2) && near(pos(t)[1], B.y, B.h / 2) && pos(t)[2] > corkZ && pos(t)[2] < corkZ + 0.05);
 assert.equal(pins.length, sheets.length, 'a pin in each sheet');
 for (const p of pins) assert.ok(near(pos(p)[2] - Number(attr(p, 'radius')), pos(sheets[0])[2], 0.0005), 'the head of a pin on its sheet');

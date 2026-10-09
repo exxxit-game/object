@@ -5,10 +5,11 @@
 // and are left alone; transparent parts (text panels, shadows, glass) are skipped.
 const KEEP = ['position', 'normal', 'uv'];
 
+// a decal (a depth offset, decal.js) merges only with decals, so it keeps lying over its surface
 function look(m) {
   return [m.type, m.color && m.color.getHexString(), m.roughness, m.metalness,
     m.emissive && m.emissive.getHexString(), m.emissiveIntensity, m.map && m.map.uuid,
-    m.side, m.envMap && m.envMap.uuid].join('|');
+    m.side, m.envMap && m.envMap.uuid, m.polygonOffset && `${m.polygonOffsetFactor},${m.polygonOffsetUnits}`].join('|');
 }
 
 function dynamic(o, root) {

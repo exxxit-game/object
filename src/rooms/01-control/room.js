@@ -6,6 +6,7 @@ import '../../engine/blob-shadow.js';
 import '../../engine/cable.js';
 import '../../engine/surface.js';
 import '../../engine/shapes.js';
+import '../../engine/decal.js';
 import '../../engine/mirror.js';
 import '../../engine/merge-static.js';
 import '../../engine/room-bounds.js';

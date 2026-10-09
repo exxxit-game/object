@@ -34,9 +34,9 @@ export const CLIP = {
   ring: { r: 0.4 * IN, tube: 0.1 * IN, y: HALF + 1.5 * IN, z: 0.01 }
 };
 // how far the whole clipboard reaches: up to the ring's top, down to the board's foot, behind the
-// paper to the board's back (4 mm behind the paper), in front of it to the clip's hump; the wall
-// checks use it
-export const BOARD_REACH = { w: BOARD.w, top: CLIP.ring.y + CLIP.ring.r + CLIP.ring.tube, bottom: BOARD.bottom, back: BOARD.d + 0.004, front: CLIP.hump.d };
+// paper to the board's back (the paper lies on the board's face, drawn over it as a decal), in
+// front of it to the clip's hump; the wall checks use it
+export const BOARD_REACH = { w: BOARD.w, top: CLIP.ring.y + CLIP.ring.r + CLIP.ring.tube, bottom: BOARD.bottom, back: BOARD.d, front: CLIP.hump.d };
 // The height of the sheet's centre when it hangs by its ring on a peg of radius pegR at hookY: the
 // peg sits at the top inside of the ring.
 export const hangY = (hookY, pegR) => hookY - (CLIP.ring.r - CLIP.ring.tube - pegR) - CLIP.ring.y;

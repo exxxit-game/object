@@ -9,6 +9,7 @@ import { loadSounds } from '../../engine/sfx.js';
 import '../../engine/fader.js';
 import '../../engine/locomotion.js';
 import '../../engine/reflect-env.js';
+import '../../engine/decal.js';
 import { LOBBY_T } from './texts.ru.js';
 import { VOICE_LINES } from './voice-lines.js';
 import { SOUNDS } from './sound-list.js';

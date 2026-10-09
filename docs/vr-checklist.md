@@ -18,7 +18,7 @@ A-Frame docs. Status for room 01 in brackets.
 
 ## Scene build quality (walk before the owner sees it)
 - Tiles symmetric on every surface: whole tiles or equal cuts at both ends, centred on that surface. [done: tests/tiles.test.mjs; blocks on the module beside openings and flat things: tests/masonry.test.mjs]
-- No two surfaces in the same place (they flicker): keep faces at least 5 mm apart, and fill the gap so nothing floats: a sign is a plate as thick as the gap (panel `thick`); a print lying on something is a decal drawn over it (panel `decal`). [done: base and frames apart, signs and sheets (docs/mistakes.md)]
+- No two surfaces in the same place (they flicker): keep faces at least 5 mm apart, and fill the gap so nothing floats: a sign is a plate as thick as the gap (panel `thick`); a print lying on something is a decal drawn over it (panel `decal`). [done: base and frames apart, signs and sheets; thin plates, prints and shadows as decals (src/engine/decal.js); every pair scanned by tests/near-faces.mjs in the smoke test]
 - No gaps into emptiness: openings are closed or show a finished space. [done: door, frame and threshold to the standards]
 - No text crammed with its buttons: one thought per sheet, buttons never pushed onto a frame. [done: the clipboard, one thought per sheet (tests/smoke.mjs)]
 

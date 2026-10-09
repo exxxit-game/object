@@ -39,8 +39,8 @@ export function signOn(scene) {
     if (cue.hum === undefined) return;
     humLevel = cue.hum;
     if (hum) hum.fade(humLevel * SOUND_GAIN['sign-hum'], (cue.humS || 0) / SPEED);
-    // the first hum cue (the sign fully lit) starts it; on a computer the sign may light before
-    // the first click, and the hum then starts with that click at the level of the latest cue
+    // the first hum cue (the sign fully lit) starts it; should sound still be locked then, it
+    // starts once it may play (onUnlock), at the level of the latest cue
     else if (!humAsked) { humAsked = true; onUnlock(() => { hum = playSound('sign-hum', SIGN_AT, humLevel * SOUND_GAIN['sign-hum'], true); }); }
   });
   return arrival(scene)

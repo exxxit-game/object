@@ -24,6 +24,10 @@ const FACE = {
   south: { z: PLAN.south, turn: 'rotation="0 180 0" ', out: -1 }
 };
 const FRAME_OUT = 0.0112;   // a frame's outer face beyond its opening's edge
+// The paint band below the rail and the wall above it lie in one plane and meet under the rail:
+// one plane over the other, millimetres apart, flickers in a headset (docs/vr-checklist.md).
+const RAIL = 0.8, CEIL = 2.5;
+const UPPER = { y: r((RAIL + CEIL) / 2), h: r(CEIL - RAIL) };
 
 // a long wall: block between the openings, over every opening up to the ceiling, the darker band
 // below the rail, and the rail and base stopping at every frame
@@ -35,8 +39,8 @@ function longWall(wall) {
     const c = r((a + b) / 2), w = r(b - a);
     const ra = atDoor(a) ? a + FRAME_OUT : a, rb = atDoor(b) ? b - FRAME_OUT : b;
     return `
-    <a-plane ${turn}position="${c} 1.25 ${z}" width="${w}" height="2.5" ${BLOCK(PAINT.wall)}></a-plane>
-    <a-plane ${turn}position="${c} 0.4 ${r(z + out * 0.003)}" width="${w}" height="0.8" ${BLOCK(PAINT.below)}></a-plane>
+    <a-plane ${turn}position="${c} ${UPPER.y} ${z}" width="${w}" height="${UPPER.h}" ${BLOCK(PAINT.wall)}></a-plane>
+    <a-plane ${turn}position="${c} ${RAIL / 2} ${z}" width="${w}" height="${RAIL}" ${BLOCK(PAINT.below)}></a-plane>
     <a-box position="${r((ra + rb) / 2)} 0.8 ${r(z + out * 0.006)}" width="${r(rb - ra)}" height="0.025" depth="0.012" color="#4a3b2c"></a-box>
     <a-box position="${r((ra + rb) / 2)} 0.051 ${r(z + out * 0.0025)}" width="${r(rb - ra)}" height="0.102" depth="0.005" color="#2b2d29"></a-box>`;
   }).join('') + openings.map((x) => `
@@ -48,8 +52,8 @@ function longWall(wall) {
 function endWall(x, facing) {
   const turn = `rotation="0 ${facing * 90} 0"`;
   return `
-    <a-plane ${turn} position="${x} 1.25 ${CENTRE.z}" width="${WIDTH}" height="2.5" ${BLOCK(PAINT.end)}></a-plane>
-    <a-plane ${turn} position="${r(x + facing * 0.003)} 0.4 ${CENTRE.z}" width="${WIDTH}" height="0.8" ${BLOCK(PAINT.endBelow)}></a-plane>
+    <a-plane ${turn} position="${x} ${UPPER.y} ${CENTRE.z}" width="${WIDTH}" height="${UPPER.h}" ${BLOCK(PAINT.end)}></a-plane>
+    <a-plane ${turn} position="${x} ${RAIL / 2} ${CENTRE.z}" width="${WIDTH}" height="${RAIL}" ${BLOCK(PAINT.endBelow)}></a-plane>
     <a-box position="${r(x + facing * 0.006)} 0.8 ${CENTRE.z}" width="0.012" height="0.025" depth="${WIDTH}" color="#4a3b2c"></a-box>
     <a-box position="${r(x + facing * 0.0025)} 0.051 ${CENTRE.z}" width="0.005" height="0.102" depth="${WIDTH}" color="#2b2d29"></a-box>`;
 }
@@ -101,9 +105,9 @@ function extinguisher(x, wall) {
            out into a fork that takes the neck between its prongs above the round top; the valve
            rests on the prongs and their turned-up tips keep it from sliding off, so the
            extinguisher lifts straight off it -->
-      <a-box class="hanger" position="${x} 1.37 ${wall - 0.0015}" width="0.035" height="0.14" depth="0.003" color="#2b2b2b"></a-box>
-      <a-cylinder position="${x} 1.42 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" ${METAL}></a-cylinder>
-      <a-cylinder position="${x} 1.315 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" ${METAL}></a-cylinder>
+      <a-box class="hanger" decal position="${x} 1.37 ${wall - 0.0015}" width="0.035" height="0.14" depth="0.003" color="#2b2b2b"></a-box>
+      <a-cylinder position="${x} 1.42 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" decal ${METAL}></a-cylinder>
+      <a-cylinder position="${x} 1.315 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" decal ${METAL}></a-cylinder>
       <a-box class="hanger" position="${x} ${FORK.y} ${((wall + z + FORK.back) / 2).toFixed(4)}" width="${2 * FORK.out}" height="${FORK.t}" depth="${(wall - z - FORK.back).toFixed(4)}" color="#2b2b2b"></a-box>
       ${[-1, 1].map((s) => `<a-box class="hanger" position="${(x + s * (FORK.out - FORK.prong / 2)).toFixed(4)} ${FORK.y} ${(z + (FORK.back - FORK.front) / 2).toFixed(4)}" width="${FORK.prong}" height="${FORK.t}" depth="${FORK.back + FORK.front}" color="#2b2b2b"></a-box>
       <a-box class="hanger" position="${(x + s * (FORK.out - FORK.prong / 2)).toFixed(4)} ${FORK.y + FORK.rise / 2} ${(z - FORK.front + FORK.tip / 2).toFixed(4)}" width="${FORK.prong}" height="${FORK.t + FORK.rise}" depth="${FORK.tip}" color="#2b2b2b"></a-box>`).join('')}
@@ -112,11 +116,11 @@ function extinguisher(x, wall) {
       <a-cylinder position="${x} 0.861 ${z}" radius="0.0895" height="0.016" ${STEEL}></a-cylinder>
       <!-- the label, as on the 1972 model: about 98 degrees round the front, from a fifth to three
            quarters down the shell (painted by extinguisher-label.js) -->
-      <a-cylinder id="extLabel" data-dynamic position="${x} 1.121 ${z}" radius="0.0905" height="0.254" open-ended="true" theta-start="131" theta-length="98" material="roughness: 0.6"></a-cylinder>
+      <a-cylinder id="extLabel" data-dynamic decal position="${x} 1.121 ${z}" radius="0.089" height="0.254" open-ended="true" theta-start="131" theta-length="98" material="roughness: 0.6"></a-cylinder>
       <a-cylinder position="${x} 1.425 ${z}" radius="0.022" height="0.04" ${STEEL}></a-cylinder>
       <a-box position="${x} 1.455 ${z}" width="0.06" height="0.03" depth="0.045" ${STEEL}></a-box>
       <a-cylinder position="${x} 1.455 ${z - 0.028}" radius="0.019" height="0.012" rotation="90 0 0" color="#b3261e"></a-cylinder>
-      <a-cylinder position="${x} 1.455 ${z - 0.035}" radius="0.014" height="0.002" rotation="90 0 0" color="#f2f0ea"></a-cylinder>
+      <a-cylinder position="${x} 1.455 ${z - 0.035}" radius="0.014" height="0.002" rotation="90 0 0" decal color="#f2f0ea"></a-cylinder>
       <a-box position="${x - 0.085} 1.447 ${z}" width="0.12" height="0.012" depth="0.03" ${STEEL}></a-box>
       <a-box position="${x - 0.085} 1.476 ${z}" rotation="0 0 -6" width="0.12" height="0.012" depth="0.026" ${STEEL}></a-box>
       <a-cylinder position="${x - 0.03} 1.462 ${z}" radius="0.006" height="0.036" rotation="90 0 0" ${STEEL}></a-cylinder>
@@ -175,10 +179,10 @@ export const corridorHTML = `
     ${extinguisher(PLAN.extinguisher, PLAN.south)}
     <!-- the light box over room 101's door (like the "in session" boxes over lab doors): surface
          mounted, its back on the wall, as wide as the frame head it stands on (1.0224 m, door.js),
-         its foot on the head's top (2.204 m), its top on a block joint (2.4 m) -->
-    <a-box class="on-wall" position="${SIGN_AT.x} ${SIGN_AT.y} ${SIGN_BOX.z}" width="1.0224" height="0.196" depth="${SIGN_BOX.depth}" color="#2a2a2c"></a-box>
+         its foot on the head's top, its top on a block joint (sign.js) -->
+    <a-box class="on-wall" position="${SIGN_AT.x} ${SIGN_AT.y} ${SIGN_BOX.z}" width="1.0224" height="${SIGN_BOX.h}" depth="${SIGN_BOX.depth}" color="#2a2a2c"></a-box>
   </a-entity>
-  <a-entity id="signFace" panel="w: 0.94; h: 0.16; px: 1024; bg: #160f05" lightbox="light: #signLight; lightMax: 0.7"
+  <a-entity id="signFace" panel="w: 0.94; h: 0.16; px: 1024; bg: #160f05; decal: true" lightbox="light: #signLight; lightMax: 0.7"
             position="${SIGN_AT.x} ${SIGN_AT.y} ${SIGN_AT.z}"></a-entity>
   <!-- the sign's warm spill on the door and floor below it (not a hot spot on the ceiling) -->
   <a-entity id="signLight" light="type: point; color: #ffd9a0; intensity: 0; distance: 2.5; decay: 2" position="${PLAN.entrance} 1.95 2.25"></a-entity>

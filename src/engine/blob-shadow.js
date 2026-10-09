@@ -1,6 +1,9 @@
+import { DECAL_OFFSET } from './decal.js';
+
 // Soft contact shadow under an object: a flat, transparent plane with a radial
 // gradient. Real-time shadows are too expensive in a headset; this keeps objects
-// from looking like they float, at almost no cost.
+// from looking like they float, at almost no cost. It lies on the floor or the table as a decal
+// (decal.js): a few millimetres over it, it would flicker into it.
 let texture = null;
 function gradientTexture() {
   if (texture) return texture;
@@ -21,7 +24,7 @@ AFRAME.registerComponent('blob-shadow', {
   init() {
     const mesh = new THREE.Mesh(
       new THREE.PlaneGeometry(this.data.w, this.data.h),
-      new THREE.MeshBasicMaterial({ map: gradientTexture(), transparent: true, opacity: this.data.opacity, depthWrite: false })
+      new THREE.MeshBasicMaterial({ map: gradientTexture(), transparent: true, opacity: this.data.opacity, depthWrite: false, ...DECAL_OFFSET })
     );
     mesh.rotation.x = -Math.PI / 2;
     this.el.setObject3D('mesh', mesh);

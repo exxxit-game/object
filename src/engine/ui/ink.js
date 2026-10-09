@@ -1,3 +1,5 @@
+import { DECAL_OFFSET } from '../decal.js';
+
 // A field to write in by hand on the clipboard's paper (sheet-page.js puts one over every blank
 // of a form). Pressing the trigger or the mouse button on it puts the pen down where the laser or
 // the mouse points; moving draws until it is let go. The pointer's jitter (a ray held at arm's
@@ -41,7 +43,8 @@ AFRAME.registerComponent('ink', {
     this.ctx = this.c.getContext('2d');
     this.tex = new THREE.CanvasTexture(this.c);
     this.tex.colorSpace = THREE.SRGBColorSpace;
-    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(d.w, d.h), new THREE.MeshBasicMaterial({ map: this.tex, transparent: true, depthWrite: false }));
+    // the ink lies on the page as a decal (decal.js): 2 mm over it for the rays, it would flicker into it
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(d.w, d.h), new THREE.MeshBasicMaterial({ map: this.tex, transparent: true, depthWrite: false, ...DECAL_OFFSET }));
     this.el.setObject3D('mesh', mesh);
     // lasers and the mouse list what they can hit when a page is drawn, before this field has its
     // mesh: list it again now that it has one

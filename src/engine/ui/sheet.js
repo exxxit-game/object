@@ -3,6 +3,7 @@ import '../reflect-env.js';
 import { createPage, PAPER, PAPER_BG, DENSITY } from './sheet-page.js';
 import '../glide.js';
 import '../shapes.js';
+import '../decal.js';
 
 // The clipboard sheet: everything the player reads or answers, one thought per page.
 // It is read 1 m in front of the player, a little below the eyes, and stays still
@@ -26,8 +27,8 @@ export function createSheet(scene, { inside = null } = {}) {
   el.setAttribute('glide', '');
   el.setAttribute('reflect-env', 'strength: 0.4');
   el.innerHTML = `
-    <a-entity class="board" plate="width: ${BOARD.w}; height: ${BOARD.top + BOARD.bottom}; depth: ${BOARD.d}; corner: ${BOARD.corner}; color: ${HARDBOARD}; roughness: 0.55"
-              position="0 ${(BOARD.top - BOARD.bottom) / 2} ${-BOARD.d / 2 - 0.004}"></a-entity>
+    <a-entity class="board" decal="back: true" plate="width: ${BOARD.w}; height: ${BOARD.top + BOARD.bottom}; depth: ${BOARD.d}; corner: ${BOARD.corner}; color: ${HARDBOARD}; roughness: 0.55"
+              position="0 ${(BOARD.top - BOARD.bottom) / 2} ${-BOARD.d / 2}"></a-entity>
     <a-entity class="paper" panel="w: ${PAPER.w}; h: ${PAPER.h}; px: ${Math.round(PAPER.w * DENSITY)}; bg: ${PAPER_BG}"></a-entity>
     <a-entity plate="width: ${CLIP.jaw.w}; height: ${CLIP.jaw.h}; depth: ${CLIP.jaw.d}; corner: 0.004; ${METAL}" position="0 ${CLIP.jaw.y} ${CLIP.jaw.d / 2 + 0.001}"></a-entity>
     <a-entity rounded-box="width: ${CLIP.hump.w}; height: ${CLIP.hump.h}; depth: ${CLIP.hump.d}; radius: 0.008; ${METAL}" position="0 ${CLIP.hump.y} ${CLIP.hump.d / 2}"></a-entity>

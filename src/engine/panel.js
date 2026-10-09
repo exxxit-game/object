@@ -1,3 +1,5 @@
+import { DECAL_OFFSET } from './decal.js';
+
 // Text panel drawn on a canvas: canvas text shows in a headset, where the page's DOM does not.
 // The game's own face (css/fonts.css, loaded before a room starts: src/main.js); the stand-ins
 // after it only if it failed to load.
@@ -62,7 +64,7 @@ AFRAME.registerComponent('panel', {
       new THREE.PlaneGeometry(d.w, d.h),
       new THREE.MeshBasicMaterial({ map: this.tex, transparent: true })
     );
-    if (d.decal) Object.assign(mesh.material, { polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+    if (d.decal) Object.assign(mesh.material, DECAL_OFFSET);
     if (d.thick > 0) mesh.add(new THREE.Mesh(body(d.w, d.h, d.thick), new THREE.MeshStandardMaterial({ color: d.bg, roughness: 0.6 })));
     this.el.setObject3D('mesh', mesh);
     this.write([]);

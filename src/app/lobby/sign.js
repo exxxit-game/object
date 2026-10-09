@@ -9,10 +9,12 @@ import { PLAN } from './plan.js';
 export const SIGN_WORDS = ['you', 'are', 'the', 'object', '.com'];
 export const SIGN_STYLE = { size: 84, weight: 800, spacing: 4, pad: 36, bg: '#160f05', on: '#ffe7b0', off: '#3a2d1f' };
 // Where the sign's face hangs (world metres), over door 1 on the north wall (src/app/lobby/plan.js):
-// a box 0.09 m deep, its foot on the frame head's top (2.204 m) and its top on a block joint
-// (2.4 m), the face 2 mm before it. Its sounds come from here and scene.js draws it here.
-export const SIGN_AT = { x: PLAN.entrance, y: 2.302, z: +(PLAN.north + 0.092).toFixed(3) };
-export const SIGN_BOX = { depth: 0.09, z: +(PLAN.north + 0.045).toFixed(3) };
+// a box 0.09 m deep, its foot on the frame head's top (2.2042 m: door.js, the head 51 mm deep at
+// 2.1787 m) and its top on a block joint (2.4 m), the face on its front, drawn over it as a decal
+// (panel decal). Its sounds come from here and scene.js draws it here.
+const HEAD_TOP = 2.2042, JOINT = 2.4;
+export const SIGN_BOX = { depth: 0.09, h: +(JOINT - HEAD_TOP).toFixed(4), z: +(PLAN.north + 0.045).toFixed(3) };
+export const SIGN_AT = { x: PLAN.entrance, y: +((HEAD_TOP + JOINT) / 2).toFixed(4), z: +(PLAN.north + SIGN_BOX.depth).toFixed(3) };
 
 // The tubes start like old fluorescent lamps: each try heats the tube ends (a dim glow;
 // 0.5–2 s by lamp type, about 1.5 s typical: DIAL, "Starters"), then the starter kicks;

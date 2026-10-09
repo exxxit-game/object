@@ -19,7 +19,8 @@ const BLOCK = 0.4, COURSE = 0.2, MODULE = 0.2, MIN_GAP = 0.04, EPS = 0.002;
 // room 01's back wall (the room's side of the corridor's north wall), each with the joint origin
 // its surface uses (surface.js, space of the corridor / the room), and how many door frames stand
 // in it; a thing fixed to a wall stands at most REACH off its face, and SKIN keeps the two faces
-// of the north wall apart
+// of the north wall apart (both our choice: they only sort things to their wall; the check below
+// holds every back within 2 mm of its face)
 const ROOM_FACE = PLAN.north - PLAN.thick, NORTH_FRAME = PLAN.north - PLAN.thick / 2, REACH = 0.15, SKIN = 0.01;
 const WALLS = [
   { name: 'corridor north wall', z: [PLAN.north - SKIN, PLAN.north + REACH], x: [PLAN.from, PLAN.to], origin: bondOrigin(CENTRE.x, LENGTH, BLOCK), doors: DOORS.filter(d => d.wall === 'north').length },
