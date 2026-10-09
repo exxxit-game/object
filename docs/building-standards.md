@@ -18,7 +18,7 @@ marked "ours" is the game's rounding, with the reason.
 | Base | vinyl wall base 4 in (102 mm) high, 1/8 in thick [S7, S8] | 102 mm high, 5 mm thick (ours: 5 mm keeps it from flickering against the wall) |
 | Floor | vinyl composition tile 12 × 12 in (0.305 m); no edge tile under half a tile [S8, S19] | same (`src/engine/tile-math.js`) |
 | Ceiling | suspended grid 24 × 24 in (0.61 m), 15/16 in (24 mm) face [S9, S10] | same |
-| Light | fluorescent F40T12, 48 in (1.22 m) lamps [S14]; 1975 federal guidance: 50 fc at desks, 30 fc in work areas, under 10 fc in corridors [S13] | 2 × 4 ft troffers (0.61 × 1.22 m) in the grid; the corridor floor gets 0.1–0.2 of the light on a room's desk (`tests/smoke.mjs`) |
+| Light | fluorescent F40T12, 48 in (1.22 m) lamps [S14]; 1975 federal guidance: 50 fc at desks, 30 fc in work areas, under 10 fc in corridors [S13] | 2 × 4 ft troffers (0.61 × 1.22 m) in the grid; a 2-lamp F40 troffer with a pattern 12 lens spreads light evenly up to 1.25 times its height over the floor (spacing criterion 1.25 / 1.4, along / across) [S28]: 3.1 m under our 2.5 m ceiling; the corridor floor gets 0.1–0.2 of the light on a room's desk (`tests/smoke.mjs`) |
 | Troffer lens | prismatic acrylic, pattern 12, 0.125 in (3 mm), in a steel or aluminium door frame with mitred corners [S20] | lens with the lamps showing as soft bands; frame 25 mm (ours: frame width not in the sources); 2 lamps (ours) |
 | Tackboard | 1/4 in (6 mm) cork on hardboard; extruded aluminium trim about 1-3/4 in (44 mm) face [S21] | the experimenter's board in the corridor, same; 1.6 × 1.0 m (ours: its edges on the block joints, `tests/masonry.test.mjs`) |
 | Notices | US Letter paper, 8.5 × 11 in, 215.9 × 279.4 mm, the paper of a US university in 1979 (docs/research/vr/07-corridor-1979.md, C21); psychology hallways carry flyers calling for participants, with tear-off strips (Indiana University, Psychological and Brain Sciences) | two Letter sheets on the board: a flyer and the studio's poster (`src/app/lobby/board.js`, `LETTER` in `src/engine/ui/sheet-math.js`) |
@@ -29,7 +29,7 @@ marked "ours" is the game's rounding, with the reason.
 | Corridor | at least 44 in (1.118 m) in a university building [S16, S17]; the 1976 code the same, 44 in, and a clear height of at least 7 ft (2.134 m) to the lowest projection from the ceiling; trim, handrails and fully open doors take at most 7 in (0.178 m) of the required width [S27, 3304(b)-(d)] | 1.8 m |
 
 Not verified (do not present as fact): closer body position, the usual 1970s
-ceiling height, colour temperature of 1970s cool-white lamps, troffer spacing. For the ceiling
+ceiling height, colour temperature of 1970s cool-white lamps. For the ceiling
 only a minimum was read: 7 ft clear to the lowest projection [S27, 3304(c)] (California Title 8
 §3226(c) says the same); the codes set no usual height, so 2.5 m stays without a source; open
 lead: a City of Alameda handout (7'-6" for UBC 1970/1973). Read for later from the same code:
@@ -62,3 +62,4 @@ S24 Hubbell RACO masonry boxes: the mason builds to the device height and notche
 S25 Northern Illinois University, Campus Interior Signage Program: planning and purchasing guide, sign types A and E, installation (via cdb.illinois.gov) ·
 S26 US DOT / AIGA Symbol Signs, "Stairs" (1979 set, public domain; Wikimedia Commons "Aiga stairs.svg") ·
 S27 Uniform Building Code, 1976 edition (ICBO), Sec. 3304 Corridors and Exterior Exit Balconies, pp. 500-502, and Sec. 3312 Exit Signs and Illumination, p. 509 (archive.org uniformbuildingc0000unse_g4g9, borrow only; read 09.10.2026 on the owner's screenshots; 3305 there is Stairways) ·
+S28 Metalux 2G-240A, 2 × 4 recessed troffer, two F40 lamps, .095 pattern 12 acrylic lens: photometric report 105P115 (Cooper Lighting, 2020, scaled from the original data): spacing criteria 1.25 / 1.4 / 1.41 (0/90/45), efficiency 78.2 %, a coefficient of utilization table; and a 40 W F40CW lamp, 3050 lm, from report 108P124 (webtools.cooperlighting.com; read 09.10.2026) ·
