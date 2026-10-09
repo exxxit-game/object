@@ -78,9 +78,23 @@ assert.ok(xs.length >= 2 && xs.slice(1).every((x, i) => near(x - xs[i], 4 * CEIL
 const extAt = html.indexOf('class="extinguisher"');
 const ext = html.slice(extAt, html.indexOf('\n    </a-entity>', extAt));
 // each part's box in the world [min, max] per axis: boxes (turned a little about z at most),
-// cylinders upright or laid along z, flattened spheres, hoses through their points
+// cylinders upright or laid along z or x, flattened spheres, rings facing z, turned parts (lathe:
+// "radius height" pairs up from the entity), parts cut from a side view (outline: "x y" points,
+// their thickness along z), hoses through their points
+const pairs = (v) => v.split(',').map((p) => p.trim().split(/\s+/).map(Number));
 const bound = (t) => {
   const kind = t.match(/^<a-([a-z]+)/)[1];
+  if (/ lathe="/.test(t) || / outline="/.test(t)) {
+    const [x, y, z] = pos(t);
+    if (/ lathe="/.test(t)) {
+      const pts = pairs(attr(t, 'lathe').match(/points:\s*([^;"]*)/)[1]), r = Math.max(...pts.map((p) => p[0]));
+      return [[x - r, x + r], [y + Math.min(...pts.map((p) => p[1])), y + Math.max(...pts.map((p) => p[1]))], [z - r, z + r]];
+    }
+    const o = attr(t, 'outline'), pts = pairs(o.match(/points:\s*([^;"]*)/)[1]), d = prop(o, 'depth') / 2;
+    const box = [[x + Math.min(...pts.map((p) => p[0])), x + Math.max(...pts.map((p) => p[0]))], [y + Math.min(...pts.map((p) => p[1])), y + Math.max(...pts.map((p) => p[1]))], [z - d, z + d]];
+    box.outline = pts.map(([px, py]) => [x + px, y + py]);   // a curved part is more than its box
+    return box;
+  }
   if (/cable="/.test(t)) {
     const r = prop(attr(t, 'cable'), 'radius');
     const pts = attr(t, 'cable').match(/points:\s*([^"]*)/)[1].split(',').map((p) => p.trim().split(/\s+/).map(Number));
@@ -95,14 +109,17 @@ const bound = (t) => {
     half = [(w * Math.abs(Math.cos(a)) + h * Math.abs(Math.sin(a))) / 2, (w * Math.abs(Math.sin(a)) + h * Math.abs(Math.cos(a))) / 2, d / 2];
   } else if (kind === 'cylinder') {
     const r = Number(attr(t, 'radius')), h = Number(attr(t, 'height'));
-    half = rot[0] === 90 ? [r, r, h / 2] : [r, h / 2, r];
+    half = rot[0] === 90 ? [r, r, h / 2] : rot[2] === 90 ? [h / 2, r, r] : [r, h / 2, r];
+  } else if (kind === 'torus') {
+    const r = Number(attr(t, 'radius')) + Number(attr(t, 'radius-tubular'));
+    half = [r, r, Number(attr(t, 'radius-tubular'))];
   } else if (kind === 'sphere') {
     const r = Number(attr(t, 'radius')), s = (attr(t, 'scale') || '1 1 1').split(' ').map(Number);
     half = [r * s[0], r * s[1], r * s[2]];
   }
   return [[x - half[0], x + half[0]], [y - half[1], y + half[1]], [z - half[2], z + half[2]]];
 };
-const tagsOf = [...ext.matchAll(/<a-(box|cylinder|sphere|entity cable)[^>]*>/g)].map((m) => m[0]);
+const tagsOf = [...ext.matchAll(/<a-(box|cylinder|sphere|torus|entity)[^>]*>/g)].map((m) => m[0]).filter((t) => !/^<a-entity/.test(t) || / (cable|lathe|outline)="/.test(t));
 const parts = tagsOf.map(bound);
 assert.ok(parts.length > 5, 'an extinguisher in the corridor');
 const extTop = Math.max(...parts.map((b) => b[1][1])), extBottom = Math.min(...parts.map((b) => b[1][0]));
@@ -121,7 +138,26 @@ assert.equal(held.size, parts.length, `extinguisher parts hanging in the air: ${
 // path's bounds, so it is left out)
 const hanger = tagsOf.map((t, i) => /class="hanger"/.test(t) ? i : -1).filter((i) => i >= 0);
 const overlap = (a, b) => [0, 1, 2].map((i) => Math.min(a[i][1], b[i][1]) - Math.max(a[i][0], b[i][0]));
-const pierce = (a, b) => overlap(a, b).every((o) => o > 0.001);
+// a part cut from its side view (an outline) is tested by its outline's height over the other box's
+// width, not by its whole box: a curved handle's box takes in the air under its curve
+const outlineSpan = (poly, x0, x1) => {
+  const ys = [];
+  poly.forEach((p, i) => {
+    const q = poly[(i + 1) % poly.length], [a, b] = p[0] <= q[0] ? [p, q] : [q, p];
+    const lo = Math.max(a[0], x0), hi = Math.min(b[0], x1);
+    if (lo > hi) return;
+    const at = (xx) => (b[0] === a[0] ? a[1] : a[1] + (b[1] - a[1]) * (xx - a[0]) / (b[0] - a[0]));
+    ys.push(at(lo), at(hi));
+  });
+  return ys.length ? [Math.min(...ys), Math.max(...ys)] : null;
+};
+const pierce = (a, b) => {
+  if (!overlap(a, b).every((o) => o > 0.001)) return false;
+  const [c, d] = a.outline ? [a, b] : b.outline ? [b, a] : [null, null];
+  if (!c) return true;
+  const span = outlineSpan(c.outline, Math.max(c[0][0], d[0][0]), Math.min(c[0][1], d[0][1]));
+  return !!span && Math.min(span[1], d[1][1]) - Math.max(span[0], d[1][0]) > 0.001;
+};
 assert.ok(hanger.length >= 3, 'the wall hanger is marked class="hanger"');
 // its bars are bent from one strap: each meets another face to face (more than 1 mm across in two
 // directions), never along an edge only, which shows as a step instead of a bend

@@ -10,6 +10,7 @@ import '../../engine/fader.js';
 import '../../engine/locomotion.js';
 import '../../engine/reflect-env.js';
 import '../../engine/moulding.js';
+import '../../engine/shapes.js';
 import '../../engine/decal.js';
 import { LOBBY_T } from './texts.ru.js';
 import { VOICE_LINES } from './voice-lines.js';
@@ -17,7 +18,7 @@ import { SOUNDS } from './sound-list.js';
 import { signOn, signAnswer, visitsSoFar } from './opening.js';
 import { pinNotices } from './board.js';
 import { writeStairsSign } from './stairs-sign.js';
-import { paintExtinguisherLabel } from './extinguisher-label.js';
+import { paintExtinguisherLabel, paintGauge } from './extinguisher-label.js';
 import { showHint } from '../hint.js';
 import { leaveButton } from './exit.js';
 import { WALLS, printTurn } from './scene.js';
@@ -143,6 +144,7 @@ export async function runLobby(room) {
   pinNotices($('#notePoster').components.panel, $('#noteFlyer').components.panel, WALL_PRINT_LIGHT);
   hangPrints(visitsSoFar());
   paintExtinguisherLabel($('#extLabel'));
+  paintGauge($('#extGauge'));
   const cover = [{ t: LOBBY_T.participant, role: 'body' }];
   await sheet.hang(SHEET_HOME, cover, WALL_PRINT_LIGHT);
   const exitOff = leaveButton(scene, sheet);   // the studio's poster on the board

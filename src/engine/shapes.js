@@ -89,3 +89,17 @@ shapeComponent('lathe', {
   d.points.split(',').map((p) => { const [r, y] = p.trim().split(/\s+/).map(Number); return new THREE.Vector2(r, y); }),
   d.segments
 ));
+
+// outline: a part cut out of its side view and given its thickness (a cast lever, a handle), from
+// "x y" points round its outline in the entity's x-y plane, its thickness along z, centred on the
+// entity, its edges rounded by bevel
+shapeComponent('outline', {
+  points: { default: '0 0, 0.1 0, 0 0.1' }, depth: { default: 0.01 }, bevel: { default: 0.002 }
+}, (d) => {
+  const pts = d.points.split(',').map((p) => p.trim().split(/\s+/).map(Number));
+  const s = new THREE.Shape(pts.map(([x, y]) => new THREE.Vector2(x, y)));
+  const b = Math.min(d.bevel, d.depth / 2 - 1e-4);
+  const g = new THREE.ExtrudeGeometry(s, { depth: d.depth - 2 * b, bevelEnabled: b > 0, bevelThickness: b, bevelSize: b, bevelSegments: 2, curveSegments: 8 });
+  g.translate(0, 0, -(d.depth - 2 * b) / 2);
+  return g;
+});

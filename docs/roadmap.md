@@ -31,7 +31,7 @@ watching is better, living through it is the strongest form of explanation.
 - First study candidates are the open questions in `docs/ideas/` (e.g. does mixed reality
   bring VR effects back to real-room size; how much one reveal weakens the next room): by region
   `docs/ideas/europe.md`, `docs/ideas/east-europe-global-south.md`, `docs/ideas/east-asia.md`;
-  playing together by voice `docs/ideas/multiplayer-voice.md`.
+  playing together by voice `docs/ideas/multiplayer-voice.md`; the owner's own ideas `docs/ideas/owner-experiments.md`.
 
 ## Principles (from research)
 | Area | Rule | Source |
