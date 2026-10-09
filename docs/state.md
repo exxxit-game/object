@@ -62,9 +62,9 @@
 ## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
 1. Queue step 4.1 NOW. Done: causes 1-6, 9-11 (docs/audit/README.md; 5 on his "Делаем" 9.10, pictures
    https://claude.ai/artifact/22VLRrRJje5dvK84Q5Jyqp), plan checked twice, premortem, docs split, rules review,
-   guards proven, Claude Code read. Waiting: his yes on the new CLAUDE.md (docs/audit/claude-md-proposed.md)
-   and on allow rules (quest-look, gh run, publish-preview: auto mode refused the GitHub run check and the
-   headset check of cause 5). Next: causes 7, 8; f) the style book from the game (paper, ink tokens changed);
+   guards proven, Claude Code read. Cause 5 green on GitHub (smoke included); its headset check waits for
+   him: the boundary window blocks VR after sleep. Allow rules on his yes (.claude/settings.json: quest-look,
+   gh run, publish-preview). Waiting: his yes on the new CLAUDE.md. Next: causes 7, 8; f) the style book;
    then the fact-checker, request and architecture auditors. Open talk: the start's tone (his 9.10: not
    Portal 2 humour, "learn about yourself"), touches step 7.
    After his app update: onFailure "block" on the guards. His guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9
