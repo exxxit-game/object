@@ -84,6 +84,13 @@ plates or a narrow vision light: **unverified**.
 - **Stored-pressure water.** A 1972 General WS-900: 2.5 gallons, polished stainless steel, made
   in the USA [C16, search; the listing itself returned 403]. A Canadian 1970s 2-1/2 gallon pump
   tank was lacquered copper [C17, search]. Our stainless 2.5 gal water unit fits the period.
+- **A 1970 WS-900 photographed whole** (brought by the owner): Yahoo! Flea Market listing
+  https://paypayfleamarket.yahoo.co.jp/item/z636560884 (opened in the browser): 19 photos; "高さ：約62.2cm",
+  "直径：約18.3cm", "満水時重量表記：24 1/2 LBS", "1970年製", label "Chicago / Culver City Calif.". The top
+  in photos 5, 6, 8, 9: a cast chrome valve on a hex collar; a long curved squeeze lever with a turned-down
+  thumb end over a longer curved carry handle; a ring pin on a chain; a fill valve on a chain; a round
+  gauge with a chrome bezel, dark blue dial, red arcs and a "RANGE" wedge at 100 (0-200); the hose's brass
+  coupling at the valve's side. Shape reference only: the listing forbids reposting its photos.
 - **ABC dry chemical, CO2 in 1979:** look and labels **unverified** in this pass.
 - **Mounting height.** The 5 ft top (units up to 40 lb), 3-1/2 ft top (heavier) and 4 in floor
   clearance are quoted from NFPA 10 1994 (1-6.10) and later [C18, search]. NFPA 10 had editions
