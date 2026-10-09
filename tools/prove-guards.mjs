@@ -36,9 +36,17 @@ const run = (cmd, args, extra = {}) => {
   return { ok: r.status === 0, out: `${r.stdout}${r.stderr}` };
 };
 const test = (file) => () => run(process.execPath, [`tests/${file}`]);
+// Claude Code hands its hook the event as JSON on stdin (code.claude.com/docs/en/hooks)
+const askGuard = (mode, event) => {
+  const r = spawnSync(process.execPath, ['tools/claude-guard.mjs', mode], { cwd: dir, env, encoding: 'utf8', input: JSON.stringify(event) });
+  return { ok: r.status === 0, out: `${r.stdout}${r.stderr}` };
+};
 const structure = test('structure.test.mjs');
 // player's words built from their codes: Russian letters belong only in the texts files
 const ru = (...codes) => String.fromCharCode(...codes);
+// The guards read every tool, this one too: a planted name written out here whole would count as
+// "imported" or "in the code" and hide the mistake, so it is joined only when planted.
+const PLANTED = ['plan', 'ted', 'zq'].join('');
 // built from parts so this file holds no token of its own
 const token = 'ghp' + '_' + 'Zx9Q'.repeat(9);
 
@@ -50,7 +58,7 @@ const CASES = [
   ['structure 3', 'CLAUDE.md rule 4', 'a Russian word in a tool', () => append('tools/morning.mjs', `\n// ${ru(0x43f, 0x440, 0x438, 0x432, 0x435, 0x442)}\n`), structure, 'Russian outside'],
   ['structure 4', 'CLAUDE.md rule 2', 'a room without a required file', () => fs.rmSync(at('src/rooms/01-control/sound-list.js')), structure, 'has no sound-list.js'],
   ['structure 5', 'docs/state.md cap', 'docs/state.md over 80 lines', () => append('docs/state.md', `\n${many(5, 'x')}\n`), structure, 'docs/state.md over'],
-  ['structure 6', 'no dead code', 'a module nobody imports', () => fs.writeFileSync(at('src/engine/orphan.js'), 'export const x = 1;\n'), structure, 'modules nobody imports'],
+  ['structure 6', 'no dead code', 'a module nobody imports', () => fs.writeFileSync(at(`src/engine/${PLANTED}.js`), 'export const x = 1;\n'), structure, 'modules nobody imports'],
   ['structure 7', 'docs tell the truth', 'a doc names a file that does not exist', () => append('docs/roadmap.md', '\nSee `src/engine/nope.js`.\n'), structure, 'docs name files that do not exist'],
   ['structure 8', 'CLAUDE.md rule 19', 'a mistake row with no guard', () => append('docs/mistakes.md', '\n| A planted mistake | care |\n'), structure, 'mistake without a guard'],
   ['structure 8', 'CLAUDE.md rule 19', 'docs/mistakes.md over 60 lines', () => append('docs/mistakes.md', `\n${many(10, 'x')}\n`), structure, 'mistakes.md over 60'],
@@ -69,11 +77,14 @@ const CASES = [
   ['structure 20', 'ARCHITECTURE.md map', 'a tool missing from the map', () => fs.writeFileSync(at('tools/planted.mjs'), 'export const x = 1;\n'), structure, 'missing from the map'],
   ['structure 21', 'CLAUDE.md rule 3', 'an inline style', () => swap('index.html', '</body>', '<div style="color: red"></div></body>'), structure, 'styles outside css'],
   ['structure 22', 'no forgotten doc', 'a doc nothing links to', () => fs.writeFileSync(at('docs/planted.md'), '# Planted\n'), structure, 'docs nothing links to'],
-  ['structure 23', 'docs tell the truth', 'a doc names a constant the code lacks', () => append('docs/roadmap.md', '\nPLANTED_CONSTANT_NAME\n'), structure, 'constants the code does not have'],
+  ['structure 23', 'docs tell the truth', 'a doc names a constant the code lacks', () => append('docs/roadmap.md', `\n${PLANTED.toUpperCase()}_NAME\n`), structure, 'constants the code does not have'],
   ['pre-commit hook', 'CLAUDE.md rule 8', 'a commit while npm test fails', () => { git('config', 'core.hooksPath', 'tools/hooks'); append('docs/state.md', `\n${many(5, 'x')}\n`); },
     () => { const r = run('git', ['commit', '-qam', 'planted']); return { ok: r.ok, out: r.out }; }, 'npm test fails'],
   ['pre-push hook', 'main only on the owner\'s word', 'a push to main without his word', () => { git('config', 'core.hooksPath', 'tools/hooks'); git('init', '-q', '--bare', at('.planted-remote')); },
     () => run('git', ['push', '-q', at('.planted-remote'), 'HEAD:refs/heads/main'], { OBJECT_LIVE: '' }), 'main is the live site'],
+  ['claude-guard pre', 'CLAUDE.md rule 8', 'the assistant skips the git hooks', () => {}, () => askGuard('pre', { tool_name: 'Bash', tool_input: { command: 'git commit --no-verify -m x' } }), 'REFUSED'],
+  ['claude-guard pre', 'CLAUDE.md rule 8', 'the assistant runs Playwright locally', () => {}, () => askGuard('pre', { tool_name: 'PowerShell', tool_input: { command: 'npm run test:smoke' } }), 'REFUSED'],
+  ['claude-guard stop', 'CLAUDE.md rules 8, 14', 'a turn ends with unsaved work', () => append('docs/roadmap.md', '\nunsaved\n'), () => askGuard('stop', { stop_hook_active: false }), 'work not saved'],
 ];
 
 const restore = () => {

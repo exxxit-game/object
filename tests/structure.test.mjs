@@ -153,7 +153,9 @@ const when = /\b20\d\d-\d\d-\d\d\b|\b[0-3]\d\.[01]\d\.(19|20)?\d\d\b/;
 const commented = [...code, ...fs.readdirSync(path.join(ROOT, 'tools')).filter(f => /\.(m?js|cjs)$/.test(f)).map(f => path.join(ROOT, 'tools', f)),
   ...fs.readdirSync(path.join(ROOT, 'tests')).filter(f => /\.m?js$/.test(f)).map(f => path.join(ROOT, 'tests', f))];
 for (const f of new Set(commented)) {
-  for (const [i, line] of fs.readFileSync(f, 'utf8').split('\n').entries()) {
+  // split on CRLF too: git on Windows checks files out with CRLF, and a line ending in \r never
+  // matched "(.*)$", so on the laptop this guard saw no comment at all (tools/prove-guards.mjs)
+  for (const [i, line] of fs.readFileSync(f, 'utf8').split(/\r?\n/).entries()) {
     const comment = line.match(/\/\/(.*)$/)?.[1] || '';
     assert.ok(!who.test(comment) && !when.test(comment), `${rel(f)}:${i + 1} a comment tells history (who or when): ${comment.trim().slice(0, 80)}`);
   }

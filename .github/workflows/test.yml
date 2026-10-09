@@ -9,10 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the guard prover clones the repository
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm test
+      - run: node tools/prove-guards.mjs --lf   # every guard must go red on its own mistake
+      - run: node tools/prove-guards.mjs        # and with Windows line ends, as on the laptop
       - run: npm run test:smoke
