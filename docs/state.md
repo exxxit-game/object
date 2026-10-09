@@ -64,7 +64,7 @@
    headset walk: 90 fps, 130 draw calls max; 7: placement to see in his next session), plan checked twice,
    premortem, docs split, rules review, guards proven, Claude Code read. Allow rules on his yes
    (.claude/settings.json: quest-look, gh run, publish-preview); VR only on his head (quest-look vr).
-   Waiting: his yes on the new CLAUDE.md. Next: cause 8 (an inventory of the audits' numbers first); f) style book;
+   f) style book matched to the game 9.10. Waiting: his yes on the new CLAUDE.md. Now: cause 8 (docs/audit/numbers.md);
    then the fact-checker, request and architecture auditors. Open talk: the start's tone (his 9.10: not
    Portal 2 humour, "learn about yourself"), touches step 7.
    After his app update: onFailure "block" on the guards. His guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9
