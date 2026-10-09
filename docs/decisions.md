@@ -130,7 +130,7 @@ Why: a check built from a first idea wasted his headset run, and a rule in text 
 Consequence: every change to the game or the probe needs a fresh practice review before the owner meets it; no flag skips it (`tests/review-gate.test.mjs`, seen red in `tools/prove-guards.mjs`).
 
 ## The same picture on both end walls, one upside down
-Each end wall carries a print of Arcimboldo's Vegetable Gardener (about 1590, public domain) in a thin silver metal section frame: the right way up (a face) at the west end, upside down (a bowl of vegetables) at the east, with no caption (src/app/lobby/scene.js).
+Each end wall carries Arcimboldo's Vegetable Gardener (about 1590, public domain) as it hangs in its museum in Cremona, at its own width in a gilded frame after the museum's (the owner's pick from its photo): the right way up (a face) at one end, upside down (a bowl of vegetables) at the other, swapping ends with each visit, with no caption (src/app/lobby/scene.js).
 Why: the empty ends did not draw the player down the corridor; the owner chose this picture from real ones shown to him, for its meaning («Человек видит то, что хочет. Или то, что мы скажем ему видеть») and as a detail for whoever notices it is one picture («Без всяких подсказок»). What hung in 1970s psychology corridors is not documented online (docs/research/vr/09-end-wall-pictures.md).
 Consequence: the frames lie on the block module like every flat thing on a wall (tests/masonry.test.mjs, now for the end walls too); the print's size and frame face still need a dated source; the ends are the corridor's darkest part, which the light item answers.
 

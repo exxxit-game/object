@@ -3,10 +3,13 @@
 // round the corners. The profile is a list of "u h" points from the outside of the frame in to the
 // picture: u metres in from the outer edge, h metres off the wall; a rounded part is given as
 // several points. Where two neighbouring pieces of the profile meet at a slight angle the light
-// runs smoothly over them; at a sharp step it breaks, as on a real moulding. The frame lies on the
-// entity's plane, its back on it, facing +z, centred on the entity.
-// <a-entity moulding="width: 0.4; height: 0.48; profile: 0 0, 0 0.03, 0.04 0.03; color: #ffe396">
-const SMOOTH = Math.cos(THREE.MathUtils.degToRad(45));   // neighbours closer than this share their light
+// runs smoothly over them; at a sharp step it breaks, as on a real moulding. Gilding is burnished
+// bright on some parts and left matte on others: matte gives the stretch of the profile (u from, to)
+// laid matte. The frame lies on the entity's plane, its back on it, facing +z, centred on the entity.
+// <a-entity moulding="width: 0.4; height: 0.48; profile: 0 0, 0 0.03, 0.04 0.03; matte: 0.01 0.03">
+// neighbours turning less than this share their light: three.js's own crease angle, 60 degrees
+// (BufferGeometryUtils, toCreasedNormals)
+const SMOOTH = Math.cos(THREE.MathUtils.degToRad(60));
 
 AFRAME.registerComponent('moulding', {
   schema: {
@@ -15,7 +18,9 @@ AFRAME.registerComponent('moulding', {
     profile: { default: '' },
     color: { default: '#ffe396' },
     metalness: { default: 1 },
-    roughness: { default: 0.35 }
+    roughness: { default: 0.35 },
+    matte: { default: '' },
+    matteRoughness: { default: 0.7 }
   },
   update() {
     this.remove();
@@ -40,7 +45,10 @@ AFRAME.registerComponent('moulding', {
       { edge: [-W / 2, 0], inward: [1, 0], along: [0, 1], half: H / 2 },
       { edge: [W / 2, 0], inward: [-1, 0], along: [0, 1], half: H / 2 }
     ];
-    const pos = [], nor = [];
+    // the burnished parts and the matte ones, each drawn with its own finish
+    const [m0, m1] = this.data.matte ? this.data.matte.split(/\s+/).map(Number) : [Infinity, -Infinity];
+    const isMatte = (i) => { const u = (pts[i][0] + pts[i + 1][0]) / 2; return u >= m0 && u <= m1; };
+    const out = [{ pos: [], nor: [] }, { pos: [], nor: [] }];
     for (const s of sides) {
       // a point of the profile at one mitred end of this length (end: -1 or 1)
       const at = ([u, h], end) => {
@@ -57,21 +65,28 @@ AFRAME.registerComponent('moulding', {
         const tris = g[0] * want[0] + g[1] * want[1] + g[2] * want[2] >= 0
           ? [[A, n0], [B, n0], [C, n1], [A, n0], [C, n1], [D, n1]]
           : [[A, n0], [C, n1], [B, n0], [A, n0], [D, n1], [C, n1]];
-        for (const [p, n] of tris) { pos.push(...p); nor.push(...n); }
+        const into = out[isMatte(i) ? 1 : 0];
+        for (const [p, n] of tris) { into.pos.push(...p); into.nor.push(...n); }
       }
     }
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-    geo.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
-    const { color, metalness, roughness } = this.data;
-    this.mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color, metalness, roughness }));
+    geo.setAttribute('position', new THREE.Float32BufferAttribute([...out[0].pos, ...out[1].pos], 3));
+    geo.setAttribute('normal', new THREE.Float32BufferAttribute([...out[0].nor, ...out[1].nor], 3));
+    const bright = out[0].pos.length / 3, dull = out[1].pos.length / 3;
+    geo.addGroup(0, bright, 0);
+    geo.addGroup(bright, dull, 1);
+    const { color, metalness, roughness, matteRoughness } = this.data;
+    this.mesh = new THREE.Mesh(geo, [
+      new THREE.MeshStandardMaterial({ color, metalness, roughness }),
+      new THREE.MeshStandardMaterial({ color, metalness, roughness: matteRoughness })
+    ]);
     this.el.setObject3D('mesh', this.mesh);
   },
   remove() {
     if (!this.mesh) return;
     this.el.removeObject3D('mesh');
     this.mesh.geometry.dispose();
-    this.mesh.material.dispose();
+    for (const m of this.mesh.material) m.dispose();
     this.mesh = null;
   }
 });

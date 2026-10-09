@@ -162,15 +162,19 @@ function lip() {
 // vegetables) at the other, with no caption: whoever walks to both ends may notice it is one picture
 // (the owner's choice; docs/research/vr/09-end-wall-pictures.md). It hangs as in its museum (Museo
 // Civico Ala Ponzone, Cremona; Monica Rondoni's photo, Wikimedia Commons, CC BY-SA 4.0, the owner's
-// pick): at its own size, 24 cm wide (Web Gallery of Art; its height from the scan), straight in a
-// gilded frame with no mat. The frame's profile (src/engine/moulding.js) is read off that photo at
+// pick): 24 cm wide (Web Gallery of Art, which gives 36 x 24 cm; the museum 35.8 x 24.2), its height
+// from the scan, 1.33 of its width as in every reproduction (the difference is not explained),
+// straight in a gilded frame with no mat; the frame laps the panel's edge by 1/4 in, as framers lap
+// a picture (frameiteasy.com: 1/4 in, at least 1/8 in), so the panel's raw edge never shows. The frame's profile (src/engine/moulding.js) is read off that photo at
 // full size, its widths in parts of the moulding, a third of the picture's width: from the outside
 // in, a rounded outer bead, two steps down into a hollow, the broad flat band of stippled gilding, a
 // rounded ridge, a deep hollow running in, a bead, and the sight edge over the picture. The photo is
-// frontal, so how high each part stands off the wall is our estimate (PROFILE's h; docs/board.md).
-// Gold as measured (Physically Based database, "Gold": linear 1.059, 0.773, 0.307, metalness 1), its
-// roughness our estimate for old gilding; it mirrors the corridor round it (reflect-env), as the
-// extinguisher's steel does: bare metal reads as plastic. Its bottom edge lies on a block joint
+// taken from a little below, so how high each part stands off the wall is our estimate (PROFILE's h;
+// docs/board.md). Gold as measured (Physically Based database, "Gold": linear 1.059, 0.773, 0.307,
+// metalness 1); the broad band matte and the beads burnished, as the photo shows them and as frames
+// are gilded (MFA Boston: "matte and burnished areas"), how rough each is our estimate. It mirrors
+// the corridor round it (reflect-env, its picture taken 10 cm out from the wall, past the camera's
+// near limit), as the extinguisher's steel does: bare metal reads as plastic. Its bottom edge lies on a block joint
 // (tests/masonry.test.mjs). No glass is drawn: in a headset it would only mirror the troffers. The
 // picture is the Commons scan less its dark scanner edge (1024 x 1360 px), lit by the corridor's own
 // light; it is turned after load (lobby.js).
@@ -190,7 +194,7 @@ const PROFILE = [
   [0.006, 0.031], [0.010, 0.031], [0.010, 0.029], ...arc(0.013, 0.029, 0.003, 180, 270).slice(1),
   [0.0185, 0.026], ...arc(0.0185, 0.0285, 0.0025, 270, 360).slice(1), [0.053, 0.0285],
   ...arc(0.0555, 0.0285, 0.0025, 180, 0).slice(1), ...arc(0.068, 0.0285, 0.0100, 180, 270, 6).slice(1),
-  [0.070, 0.0185], ...arc(0.073, 0.0185, 0.003, 180, 0).slice(1), [0.076, 0.017], [0.080, 0.017], [0.080, BODY]
+  [0.070, 0.0185], ...arc(0.073, 0.0185, 0.003, 180, 0).slice(1), [0.076, 0.018], [r(M + 0.00635), 0.018], [r(M + 0.00635), BODY]
 ].map(([u, h]) => r(u) + ' ' + r(h)).join(', ');
 const OUTER = { w: r(PICTURE.w + 2 * M), h: r(PICTURE.h + 2 * M) };
 const PRINT_Y = r(1.2 + OUTER.h / 2);
@@ -200,10 +204,10 @@ const END_PRINTS = [{ x: PLAN.from, facing: 1, turn: 0 }, { x: PLAN.to, facing: 
 export const printTurn = (i, visits) => (END_PRINTS[i].turn + 180 * (Math.abs(visits | 0) % 2)) % 360;
 // the gilded frame and the picture in it (turned 180 degrees on one end)
 const printImage = ({ x, facing, turn }) => `
-  <a-entity class="end-frame on-wall" reflect-env position="${x} ${PRINT_Y} ${CENTRE.z}" rotation="0 ${facing * 90} 0"
-            moulding="width: ${OUTER.w}; height: ${OUTER.h}; profile: ${PROFILE}; color: #ffe396; metalness: 1; roughness: .35"></a-entity>
+  <a-entity class="end-frame on-wall" reflect-env="out: 0.1" position="${x} ${PRINT_Y} ${CENTRE.z}" rotation="0 ${facing * 90} 0"
+            moulding="width: ${OUTER.w}; height: ${OUTER.h}; profile: ${PROFILE}; color: #ffe396; metalness: 1; roughness: .35; matte: 0.021 0.053; matteRoughness: .7"></a-entity>
   <a-plane class="end-print" rotation="0 ${facing * 90} ${turn}" position="${r(x + facing * (BODY + 0.0005))} ${PRINT_Y} ${CENTRE.z}"
-           width="${PICTURE.w}" height="${PICTURE.h}" decal material="src: ${ART}; roughness: 1"></a-plane>`;
+           width="${PICTURE.w}" height="${PICTURE.h}" material="src: ${ART}; roughness: 1"></a-plane>`;
 export const corridorHTML = `
 <a-entity id="corridor">
   <a-entity merge-static>
