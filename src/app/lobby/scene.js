@@ -168,7 +168,7 @@ function lip() {
 // a picture (frameiteasy.com: 1/4 in, at least 1/8 in), the lap inside the moulding's face, so the
 // face keeps its width and the panel's raw edge lies hidden under it (Profile Products: outside size
 // = the artwork plus the moulding on both sides, minus the lip's overlap on both). The frame's profile (src/engine/moulding.js) is read off that photo at
-// full size, its widths in parts of the moulding, a third of the picture's width: from the outside
+// full size, its widths in parts of the moulding, a third of the picture it shows: from the outside
 // in, a rounded outer bead, two steps down into a hollow, the broad flat band of stippled gilding, a
 // rounded ridge, a deep hollow running in, a bead, and the sight edge over the picture. The photo is
 // taken from a little below, so how high each part stands off the wall is our estimate (PROFILE's h;
@@ -191,8 +191,8 @@ const arc = (cu, ch, rad, a, b, n = 4) => Array.from({ length: n + 1 }, (_, i) =
   return [cu + rad * Math.cos(t), ch + rad * Math.sin(t)];
 });
 // the profile, outside in, drawn for a moulding 8 cm wide and scaled to M; the widths in parts of M
-// as measured (outer bead 0-0.075, steps and hollow to 0.25, flat band to 0.66, ridge to 0.73, hollow
-// to 0.88, bead to 0.955, sight edge to 1)
+// as measured (outer bead 0-0.075, steps and hollow to 0.26, flat band to 0.66, ridge to 0.73, hollow
+// to 0.88, bead to 0.95, sight edge to 1; as drawn, within 1 mm of the photo's)
 const PROFILE = [
   [0, 0], [0, 0.033], ...arc(0.003, 0.033, 0.003, 180, 0).slice(1),
   [0.006, 0.031], [0.010, 0.031], [0.010, 0.029], ...arc(0.013, 0.029, 0.003, 180, 270).slice(1),
