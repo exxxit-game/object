@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { connected, awake, battery, localPort } from './headset.mjs';
+import { check, notPushed, configEmailOk, PRIVATE_EMAIL } from './secrets.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sh = (cmd, args) => { try { return execFileSync(cmd, args, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim(); } catch (e) { return null; } };
@@ -27,6 +28,14 @@ const KEPT_HERE = ['claude/wip-experimenter', 'ono-room-final', 'archive/ono-fai
 const onlyHere = (sh('git', ['for-each-ref', '--format=%(refname:short)', 'refs/heads', 'refs/tags']) || '').split('\n').filter(Boolean)
   .filter((r) => !remote.includes(`refs/heads/${r}`) && !remote.includes(`refs/tags/${r}`) && !KEPT_HERE.includes(r));
 say(onlyHere.length ? 'WARN' : 'ok', onlyHere.length ? `only on this laptop: ${onlyHere.join(', ')}` : `every branch and tag is on GitHub (kept here on purpose: ${KEPT_HERE.join(', ')})`);
+
+// Nothing private goes out: git signs with the private address, the push guard is on, and the
+// commits not yet pushed carry no key or own email (tools/secrets.mjs)
+say(configEmailOk() ? 'ok' : 'FAIL', configEmailOk() ? 'git signs with the private address' : `git's user.email is not ${PRIVATE_EMAIL}`);
+const guard = sh('git', ['config', 'core.hooksPath']);
+say(guard === 'tools/hooks' ? 'ok' : 'FAIL', guard === 'tools/hooks' ? 'the push guard is on' : 'the push guard is off: git config core.hooksPath tools/hooks');
+const leaks = check(notPushed());
+say(leaks.length ? 'FAIL' : 'ok', leaks.length ? `private things in unpushed commits: ${leaks.join('; ')}` : 'nothing private in unpushed commits');
 
 // 2. The last run on GitHub of what is pushed
 const runs = sh('gh', ['run', 'list', '--branch', branch, '--limit', '1', '--json', 'status,conclusion,headSha,displayTitle']);
