@@ -28,12 +28,14 @@ const HERE = (() => {
   try { return execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd: event.cwd || ROOT, env: withoutGitVars(), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return ROOT; }
 })();
 
-// Each refused command names the guard it would switch off (CLAUDE.md rule 8, tools/hooks).
+// Each refused command names the guard it would switch off (CLAUDE.md rule 8, tools/hooks). Only
+// running a guarded thing is refused: a command that reads or searches its file passes, or the
+// guard teaches working around it (tests/guard.test.mjs runs both ways).
 export const REFUSED = [
-  [/--no-verify\b/, 'skips the git hooks: no commit while npm test fails, no push without the secret check'],
+  [/\bgit\b[^|;&\n]*\s--no-verify\b/, 'skips the git hooks: no commit while npm test fails, no push without the secret check'],
   [/\bgit\b[^|;&\n]*\bcommit\b[^|;&\n]*\s-[a-zA-Z]*n[a-zA-Z]*\b/, '"git commit -n" skips the git hooks'],
   [/core\.hooksPath[= ]+(?!tools\/hooks\b)\S|--unset[^|;&\n]*core\.hooksPath/, 'switches the git hooks off'],
-  [/\bnpm run test:smoke\b|\btests\/smoke\.mjs\b|\bnpx playwright\b|\bplaywright (test|install|open|codegen)\b/, 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
+  [/\bnpm run test:smoke\b|\bnode(\.exe)?\b[^|;&\n]*\btests[\\/]smoke\.mjs\b|\bnpx playwright\b|\bplaywright (test|install|open|codegen)\b/, 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
 ];
 
 // Connected tools that do what a refused command would: a browser started on the laptop, and
