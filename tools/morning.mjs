@@ -4,6 +4,7 @@
 // Usage: npm run morning   (exits 1 when anything FAILs; WARN lines need a look, not a stop)
 import { execFileSync, execSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { connected, awake, battery, localPort } from './headset.mjs';
@@ -82,5 +83,18 @@ const lastCode = Number(sh('git', ['log', '-1', '--format=%ct', '--', 'src', 'to
 const lastAudit = Number(sh('git', ['log', '-1', '--format=%ct', '--', 'docs/audit']));
 say(lastAudit >= lastCode ? 'ok' : 'WARN', lastAudit >= lastCode ? 'the audit is newer than the code'
   : 'the code changed since the last audit: run the architecture and request auditors before the next "done"');
+
+// 7. My memory: a memory file its index does not name never loads, and an index line naming a
+// missing file points at nothing (a lesson about readable text was lost the first way)
+const mainDir = ((sh('git', ['worktree', 'list', '--porcelain']) || '').split('\n')[0] || '').slice(9);
+const memDir = path.join(os.homedir(), '.claude', 'projects', mainDir.replace(/[^A-Za-z0-9]/g, '-'), 'memory');
+if (!mainDir || !fs.existsSync(path.join(memDir, 'MEMORY.md'))) say('WARN', `no memory index at ${memDir}`);
+else {
+  const named = [...fs.readFileSync(path.join(memDir, 'MEMORY.md'), 'utf8').matchAll(/\]\(([^)]+\.md)\)/g)].map((m) => m[1]);
+  const files = fs.readdirSync(memDir).filter((f) => f.endsWith('.md') && f !== 'MEMORY.md');
+  const bad = [...files.filter((f) => !named.includes(f)).map((f) => `${f} is not in MEMORY.md`),
+    ...named.filter((f) => !files.includes(f)).map((f) => `MEMORY.md names a missing ${f}`)];
+  say(bad.length ? 'FAIL' : 'ok', bad.length ? `memory index: ${bad.join('; ')}` : `MEMORY.md names all ${files.length} memory files`);
+}
 
 process.exitCode = failed ? 1 : 0;

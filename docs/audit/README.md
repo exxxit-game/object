@@ -10,6 +10,7 @@ when it was written (their file:line may have moved since):
 - `architecture.md`: the code and docs against ARCHITECTURE.md and the target architecture.
 - `plan-check.md`: the plan doc checked twice by the fact-checker, claim by claim, and the causes.
 - `premortem.md`: the plan assumed failed in October 2027 and asked why, by two analysts on two lenses; each cause names where its guard goes.
+- `rules-review.md`: every rule, memory, skill, agent and hook checked for truth, guard, red proof and repeats, with Cosmogram's lessons; the proposed order of CLAUDE.md.
 
 | # | Cause | Fix | Guard | State |
 |---|---|---|---|---|
