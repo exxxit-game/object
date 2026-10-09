@@ -63,3 +63,19 @@ The rows of the plan named here are fixed in the plan itself; this file keeps th
 | 5 | the source's own words kept next to the number (docs/research), checked by the fact-checker |
 | 7 | the plan's facts about the project come from the code, checked by the fact-checker |
 | 8 | `tools/morning.mjs` fails when any checkout of the repository lacks the hook files |
+
+## What was fixed (9.10)
+
+- The 153 requests that were done, answered or decided moved to the plan's tab "Archive of
+  requests", their words verbatim (compared letter for letter by a script against the export); the
+  states of the 43 open ones and of the archived ones corrected (done, wrong, unproven).
+- "Where we are now", the queue, the yesterday's-causes list (now numbered as this folder's README),
+  the corridor-check section (now a fixed / left-and-where table), the owner's to-do list, the
+  player's path, the tools list, the papers list: corrected.
+- Part B: the catalog's "any" field, the headset model in records, the IP address in provider logs,
+  Valve 2016 (updated 2017; Beat Saber census 2023), LabintheWild's 2.2% and 7.6%, Fernandez-Ruiz's
+  three throws, Mottelson's 161 people with their own headsets, Lethal Company (average 107.9k in Dec
+  2023 to 12.1k in Jun 2024, checked) corrected; two checker claims were wrong after re-reading the
+  source: Steed et al. 2021 exists (arXiv 2104.05359), and the Lethal Company numbers were right.
+- Sections whose numbers have no saved source carry a "not checked" note; saving or removing them
+  is plan step 4.2.

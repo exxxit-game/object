@@ -23,7 +23,7 @@ when it was written (their file:line may have moved since):
 | 9 | Promises dropped, auditors not run | the plan doc table, the morning check's reminder | `tools/morning.mjs` warns when the code is newer than the last audit | done |
 | 10 | Work only on the laptop; stale branches | ten branches removed, two parked ones kept as tags, the main folder brought up | `tools/morning.mjs` lists what is only here | done |
 | 11 | Commits with the owner's own email; keys never checked; the test copy pushed past the check; main guarded by care alone | history searched: no key ever left; the owner judged the old email acceptable; the test copy checked before its push | `tools/secrets.mjs` before every push (`tools/hooks/pre-push`, `tools/publish-preview.mjs`) and in the morning check; pre-push stops main without the owner's word; pre-commit stops a commit while `npm test` fails; `tests/secrets.test.mjs` | done |
-| 12 | Nothing caught my own wrong claims (a number from memory, "checked" with no proof) before the owner did | every claim in the plan and docs checked against its evidence | the `fact-checker` agent, twice, before the plan or a doc is relied on (CLAUDE.md rule 22i) | in progress: the plan's first check |
+| 12 | Nothing caught my own wrong claims (a number from memory, "checked" with no proof) before the owner did | every claim in the plan and docs checked against its evidence | the `fact-checker` agent, twice, before the plan or a doc is relied on (CLAUDE.md rule 22i) | in progress: the plan checked twice and fixed (plan-check.md); a re-check of the fixes before step 4.1 is called done |
 
 ## What waits, and where it is written
 
