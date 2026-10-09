@@ -1,9 +1,9 @@
-# Project state and lessons (read this first in every new session)
+# Where things are (the work itself: docs/board.md, shown at every start)
 
 ## Where things are
 - Repo `exxxit-game/youaretheobject` (folder `C:\Users\admin\Documents\GitHub\objekt`). Site:
   https://youaretheobject.com (GitHub Pages from `main`; `main` is an OLD package). Work: `room-polish`.
-  ONE QUEUE STEP = ONE SESSION (his word 9.10). Each session works in its own worktree, made from the main
+  One board item per session. Each session works in its own worktree, made from the main
   folder's HEAD (`.claude/settings.json` worktree.baseRef head; the default was old main); at the end of a step
   fast-forward the main folder (room-polish) to the session branch. Push: his "Делай"; main: his word only.
 - Room 01 = illusion of control (Alloy & Abramson 1979), `src/rooms/01-control/`: SET ASIDE 08.10 as a lab
@@ -32,7 +32,7 @@
 All in `docs/owner-decisions.md` (shown at every session start): settled, never asked again.
 
 ## How errors are caught (the owner cannot read code)
-- `new-room` skill; `paper-reviewer` agent; `docs/mistakes.md` (every mistake has a guard); facts in one place
+- `new-room` skill; `paper-reviewer` agent; `docs/mistakes.md` (a mistake that broke the game, with the test that now catches it); facts in one place
   with a test; `tests/structure.test.mjs` (sizes, imports, no Russian outside texts, this file ≤ 80 lines).
 - Machine stops: tools/hooks (no commit while npm test fails, no push without the secret check, main only on
   his word); Claude Code hooks, `tools/claude-guard.mjs` (state at start and after compaction, owner messages

@@ -46,5 +46,5 @@ check. Do not tell the owner "done" before step 9.
    `levels` for its sounds) and `node tools/quest-check.mjs` (all PASS); an independent
    reviewer agent on the diff; fix. Only now report, with a frame from the headset, saying
    what ran and what was seen.
-10. **Lessons.** Every mistake found on the way gets a guard (test, tool or agent
-    check) and a row in `docs/mistakes.md`.
+10. **Lessons.** A mistake that broke the room gets a test that catches it
+    and a row in `docs/mistakes.md`; nothing else is added.

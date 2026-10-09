@@ -1,6 +1,6 @@
 ---
 name: architecture-auditor
-description: Independent check that the code and the docs still match the picture of the finished game (ARCHITECTURE.md, docs/target-architecture.md). Run before a step is called done and after any large change; read only.
+description: Independent check that the code and the docs still match the picture of the finished game (ARCHITECTURE.md, docs/target-architecture.md). On demand, after a large change; read only.
 tools: Read, Grep, Glob, Bash
 ---
 

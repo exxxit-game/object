@@ -36,8 +36,13 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
 - Space tiers: seated, standing, roomscale 1.8×1.8 m (base; his area), large (offered only, never shrunk).
   Live players replace scripted people only where the original had real participants or a design like
   Mori & Arai; mixed reality where the original was a real room.
-- Formal «вы»; no music; the start: a serious automatic message with rare dry jokes, not Portal comedy
-  («пару шуточек, но только таких серьезных» 9.10 13:06); the exact balance is his, by ear.
+- Formal «вы»; no music. Small dry details in print are welcome in the corridor too («шуточные мелочи, как у нас вот на
+  бумажечке, требуются добровольцы, опыт не требуется… дополняет, а не уничтожает серьезность»). Otherwise
+  humour only inside the rooms, never in the corridor's voice: the start is a serious
+  automatic message («я все-таки решаю полностью, что юмор будет только в экспериментах, в комнатах» 9.10).
+  In a room the voice is a laboratory party host («тамада, но лабораторный»): a children's-game rhythm in a
+  serious adult experiment («закройте глаза, раз, два, три, хоп… ну давайте тогда еще разок», like calling
+  «Дедушка Мороз, выходи»); the experiment's procedure itself stays as in the paper.
 
 ## Data, science, money
 - The lever stays with us; we are our own lab («Рычаг должен быть всегда у нас» 9.10 06:28; «мы сами были

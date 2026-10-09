@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { onHead } from '../tools/headset.mjs';
 import { MARK, unrelayed } from '../tools/owner-links.mjs';
-import { BOARD, SHOWS, YES, PENDING, shows, dayKey, plannedToday, stalled } from '../tools/board.mjs';
+import { BOARD, SHOWS, YES, PENDING, shows, dayKey, plannedToday, stalled, saidYes } from '../tools/board.mjs';
 import fs from 'node:fs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -118,7 +118,13 @@ const table = (rows) => `${SHOWS}\n| a | b | c |\n|---|---|---|\n${rows.map(([w,
 assert.equal(dayKey(new Date(2026, 9, 9)), '9.10', 'dates as the board writes them');
 assert.ok(plannedToday(shows(table([['9.10', PENDING]])), '9.10') && !plannedToday(shows(table([['8.10', YES]])), '9.10'), 'a row for today is found, and only for today');
 assert.ok(stalled(shows(table([['7.10', 'x'], ['8.10', 'y'], ['9.10', PENDING]]))), 'two answers without his yes stall the work');
-assert.ok(!stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]]))), 'a yes in the last two keeps the work going');
+assert.ok(!stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]])), { today: '9.10' }), 'a yes in the last two keeps the work going');
+assert.ok(stalled(shows(table([['7.10', PENDING], ['8.10', PENDING]])), { today: '9.10' }), 'rows left waiting from earlier days count as sessions without his yes');
+// a yes on the board counts only when his own message that day holds one
+const log = (day, text) => `## 2026-10-${day}T12:00:00.000Z s\n${text}\n`;
+assert.ok(saidYes(log('08', `${YES}, ok`), '8.10') && !saidYes(log('08', 'later maybe'), '8.10') && !saidYes(log('07', YES), '8.10'), 'his yes found only on its own day and as a word');
+assert.ok(stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]])), { today: '9.10', log: log('08', 'no answer from him') }), 'a yes the assistant wrote without his word does not count');
+assert.ok(!stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]])), { today: '9.10', log: log('08', YES) }), 'his own yes counts');
 assert.ok(start.stdout.length < 10000, `the start hook prints ${start.stdout.length} characters: over 10,000 Claude Code keeps only a preview`);
 
 console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the headset's wearer seen, links owed to the owner found, his decisions shown at start)`);

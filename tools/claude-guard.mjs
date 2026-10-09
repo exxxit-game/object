@@ -20,7 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { withoutGitVars } from './secrets.mjs';
 import { unrelayed } from './owner-links.mjs';
 import { fingerprint, entries, write, REVIEWER, REPORT_END } from './review-gate.mjs';
-import { BOARD, SHOWS, shows, stalled, plannedToday } from './board.mjs';
+import { BOARD, SHOWS, LOG, shows, stalled, plannedToday } from './board.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DECISIONS = 'docs/owner-decisions.md';
@@ -106,8 +106,13 @@ if (mode === 'start') {
   // docs), which tests/guard.test.mjs holds it to
   try {
     const board = fs.readFileSync(path.join(HERE, BOARD), 'utf8').trim();
-    if (stalled(shows(board))) out.push('STOP: two sessions in a row ended without his yes. This session does only visible work: the next item he will see, nothing on the side.');
-    out.push(board);
+    let log = null;
+    try { log = fs.readFileSync(path.join(os.homedir(), LOG), 'utf8'); } catch { /* no log on this machine */ }
+    if (stalled(shows(board), { log })) out.push('STOP: two sessions in a row ended without his yes (a yes counts only if his own messages that day hold it). This session does only visible work: the next item he will see, nothing on the side.');
+    // the table of showings printed to its last five rows, so the output keeps its room as it grows
+    const at = board.indexOf(SHOWS), lines = board.slice(at).split(/\r?\n/);
+    const rows = lines.filter((l) => /^\|\s*\d{1,2}\.\d{1,2}\s*\|/.test(l));
+    out.push(at < 0 ? board : `${board.slice(0, at)}${lines.filter((l) => !rows.slice(0, -5).includes(l)).join('\n')}`);
   } catch { out.push(`WARNING: ${BOARD} is missing here: this checkout is not the project's current work.`); }
   process.stdout.write(`${out.join('\n\n')}\n`);
   process.exit(0);

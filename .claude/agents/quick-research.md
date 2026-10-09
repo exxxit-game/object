@@ -1,6 +1,6 @@
 ---
 name: quick-research
-description: One narrow fact-finding question (a real object's size, a standard's number, a period photo or document), answered fast with sources. Use instead of a general agent for any "find the real source" step (CLAUDE.md rule 23). Hard limits keep it from running long. A wide question (every platform, a market, many options) goes to deep-research instead.
+description: One narrow fact-finding question (a real object's size, a standard's number, a period photo or document), answered fast with sources. Use instead of a general agent for any "find the real source" step (CLAUDE.md: we recreate). Hard limits keep it from running long. A wide question (every platform, a market, many options) goes to deep-research instead.
 tools: WebSearch, WebFetch, Read, Write, Bash
 ---
 

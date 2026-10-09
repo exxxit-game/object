@@ -2,7 +2,7 @@
 
 Purpose: every change is made knowing where it ends up, so fixing one place never breaks or
 duplicates another. This page is the picture of the end; what is built now is in
-[ARCHITECTURE.md](../ARCHITECTURE.md), the order of work in the plan doc (docs/state.md).
+[ARCHITECTURE.md](../ARCHITECTURE.md), the order of work on the board (docs/board.md).
 Files that do not exist yet are written without backticks (structure rule 7 checks the rest).
 
 ## The finished game in one picture
