@@ -104,3 +104,29 @@ export function facesSign(eye, forward) {
   const off = Math.abs(((look - to + 3 * Math.PI) % (2 * Math.PI)) - Math.PI);
   return off * 180 / Math.PI <= ARRIVAL.lookDeg;
 }
+
+// When the sign may start, as one rule the opening follows and the tests check. device:
+// { headset: a VR headset can be used here, questBrowser: this is the headset's own browser };
+// moment: 'load', 'flat-press' (a key or a press on the 3D view on the flat page) or 'enter-vr'.
+// Returns 'now', 'settle' (after the player has looked around in VR: settleArrival) or 'wait'.
+// On a computer without VR: at once. In the headset's own browser the flat page is only the door
+// to VR, and people press or drag on it to look around before they press VR: a press there never
+// starts the sign. Elsewhere (a computer with a VR runtime, a phone with AR) a player may stay
+// on the flat page, and a press there starts it.
+export function arrivalStep({ headset, questBrowser }, moment) {
+  if (!headset) return moment === 'load' ? 'now' : 'wait';
+  if (moment === 'enter-vr') return 'settle';
+  if (moment === 'flat-press') return questBrowser ? 'wait' : 'now';
+  return 'wait';
+}
+
+// The wait in VR before the sign starts: ARRIVAL.orientS of looking around first, then until the
+// player faces it, at most ARRIVAL.lookWaitS more. wait(seconds) and faces() come from the scene
+// (and from the tests, which time it).
+export async function settleArrival(wait, faces) {
+  await wait(ARRIVAL.orientS);
+  for (let waited = 0; waited < ARRIVAL.lookWaitS; waited += 0.2) {
+    if (faces()) return;
+    await wait(0.2);
+  }
+}

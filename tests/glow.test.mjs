@@ -4,7 +4,7 @@
 // darker level is below 0.80. In a headset the light can fill much of the view, so the
 // small-area exception is not used (Jordan & Vanderheiden 2024).
 import assert from 'node:assert/strict';
-import { SIGN_WORDS, SIGN_ENDINGS, SIGN_ANSWER, SIGN_ENDING_DEFAULT, SIGN_ROUND, SIGN_TRIES, SIGN_LIT_AT, ARRIVAL, SIGN_AT, facesSign, pickEnding } from '../src/app/lobby/sign.js';
+import { arrivalStep, settleArrival, SIGN_WORDS, SIGN_ENDINGS, SIGN_ANSWER, SIGN_ENDING_DEFAULT, SIGN_ROUND, SIGN_TRIES, SIGN_LIT_AT, ARRIVAL, SIGN_AT, facesSign, pickEnding } from '../src/app/lobby/sign.js';
 
 // keys: [t, level]
 function maxFlashesPerSecond(keys) {
@@ -77,6 +77,21 @@ assert.ok(SIGN_LIT_AT > SIGN_TRIES.at(-1)[1], 'the hum starts once the sign is l
 // VR (West 2015), every starter try heats the tube 0.5–2 s before its kick (DIAL), and the
 // sign shines alone before the voice.
 assert.ok(ARRIVAL.orientS >= 10, 'the sign must wait at least 10 s after entering VR');
+// The rule itself, run: in the headset's browser a press on the flat page never starts the sign,
+// only VR does, after the wait; a computer starts it at once; a computer with a VR runtime on a press.
+const quest = { headset: true, questBrowser: true }, pcVr = { headset: true, questBrowser: false }, pc = { headset: false, questBrowser: false };
+assert.deepEqual(['load', 'flat-press', 'enter-vr'].map((m) => arrivalStep(quest, m)), ['wait', 'wait', 'settle'], 'Quest: only VR starts the sign');
+assert.deepEqual(['load', 'flat-press'].map((m) => arrivalStep(pcVr, m)), ['wait', 'now'], 'a computer with a VR runtime: a press on the flat page');
+assert.equal(arrivalStep(pc, 'load'), 'now', 'a computer without VR: at once');
+// and the wait, timed with a fake clock: even a player facing the sign from the start waits orientS
+{
+  let clock = 0;
+  await settleArrival(async (s) => { clock += s; }, () => true);
+  assert.ok(clock >= 10, `the sign started ${clock} s after entering VR, under 10 s`);
+  clock = 0;
+  await settleArrival(async (s) => { clock += s; }, () => false);
+  assert.ok(clock <= ARRIVAL.orientS + ARRIVAL.lookWaitS + 0.5, 'a player who never faces it is not kept waiting past lookWaitS');
+}
 assert.ok(ARRIVAL.litPauseS > 0, 'the lit sign must shine alone before the voice and the sheet');
 assert.equal(SIGN_TRIES.length, 3, 'three starter tries');
 for (const [heat, kick] of SIGN_TRIES) assert.ok(kick - heat >= 0.5 && kick - heat <= 2, `a starter try heats ${(kick - heat).toFixed(2)} s (0.5–2 s)`);

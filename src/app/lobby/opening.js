@@ -3,7 +3,7 @@ import { onUnlock } from '../../engine/audio.js';
 import { SOUND_GAIN } from './sound-list.js';
 import { SPEED } from '../session.js';
 import '../../engine/lightbox.js';
-import { SIGN_WORDS, SIGN_STYLE, SIGN_ENDINGS, SIGN_ANSWER, SIGN_LIT_AT, SIGN_AT, ARRIVAL, facesSign, pickEnding } from './sign.js';
+import { arrivalStep, settleArrival, SIGN_WORDS, SIGN_STYLE, SIGN_ENDINGS, SIGN_ANSWER, SIGN_LIT_AT, SIGN_AT, ARRIVAL, facesSign, pickEnding } from './sign.js';
 
 // The first moments in the corridor, before any text: the light box over door 1 waits
 // until the player has looked around, then starts and plays with the game's name
@@ -41,6 +41,8 @@ export function signOn(scene) {
   });
   return arrival(scene)
     .then(() => {
+      // when the sign starts, for the checks (the smoke test, the headset tools)
+      document.documentElement.dataset.signStart = String(Math.round(performance.now()));
       ending = nextEnding();
       // on a computer the sign may light before the first click: the hum then starts with it
       delay(SIGN_LIT_AT).then(() => onUnlock(() => { hum = playSound('sign-hum', SIGN_AT, humLevel * SOUND_GAIN['sign-hum'], true); }));
@@ -54,30 +56,25 @@ export function signAnswer() {
   if (ending === 'b') $('#signFace').components.lightbox.run(fast(SIGN_ANSWER));
 }
 
-// When the sign may start. In VR: after the player has looked around and faces it
-// (ARRIVAL). On a computer: at once. Where VR or AR is offered but the player stays on the
-// flat page (a phone with AR, a computer with a VR runtime, the headset check tool): on a
-// key or a press on the 3D view itself. The VR button lies outside the view, so pressing
-// it does not start the sign: it waits until the player is inside.
+// When the sign may start: the rule is arrivalStep (sign.js), the wait in VR settleArrival.
+// The VR button lies outside the view, so pressing it is no press on the 3D view.
 function arrival(scene) {
-  if (!AFRAME.utils.device.checkHeadsetConnected()) return Promise.resolve();
+  const device = { headset: AFRAME.utils.device.checkHeadsetConnected(), questBrowser: AFRAME.utils.device.isOculusBrowser() };
+  if (arrivalStep(device, 'load') === 'now') return Promise.resolve();
   return new Promise((resolve) => {
-    const flat = () => { if (!scene.is('vr-mode')) resolve(); };
-    window.addEventListener('keydown', flat, { once: true });
-    scene.canvas.addEventListener('pointerdown', flat, { once: true });
-    const inside = () => settle(scene).then(resolve);
+    const flat = () => { if (!scene.is('vr-mode') && arrivalStep(device, 'flat-press') === 'now') resolve(); };
+    window.addEventListener('keydown', flat);
+    scene.canvas.addEventListener('pointerdown', flat);
+    const inside = () => settleArrival(delay, () => faces(scene)).then(resolve);
     if (scene.is('vr-mode')) inside(); else scene.addEventListener('enter-vr', inside, { once: true });
   });
 }
 
-async function settle(scene) {
-  await delay(ARRIVAL.orientS);
+// whether the player's head now faces the sign
+function faces(scene) {
   const head = scene.camera.el.object3D;
-  const p = new THREE.Vector3(), f = new THREE.Vector3(), q = new THREE.Quaternion();
-  for (let waited = 0; waited < ARRIVAL.lookWaitS; waited += 0.2) {
-    head.getWorldPosition(p);
-    f.set(0, 0, -1).applyQuaternion(head.getWorldQuaternion(q));
-    if (facesSign(p.toArray(), f.toArray())) return;
-    await delay(0.2);
-  }
+  const p = new THREE.Vector3(), q = new THREE.Quaternion();
+  head.getWorldPosition(p);
+  const f = new THREE.Vector3(0, 0, -1).applyQuaternion(head.getWorldQuaternion(q));
+  return facesSign(p.toArray(), f.toArray());
 }
