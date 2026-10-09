@@ -52,7 +52,8 @@ function drawRings(g, R, ring) {
   const at = letters.map((_, i) => g.measureText(letters.slice(0, i).join('')).width).concat(g.measureText(ring).width);
   const spare = (room - at[letters.length]) / letters.length, base = rad - g.measureText('H').actualBoundingBoxAscent / 2;
   letters.forEach((ch, i) => {
-    const mid = -room / 2 + at[i] + g.measureText(ch).width / 2 + spare * (i + 0.5);
+    // its midpoint: where the line has reached after it (kerning included) less half its own width
+    const mid = -room / 2 + at[i + 1] - g.measureText(ch).width / 2 + spare * (i + 0.5);
     g.save(); g.rotate(mid / rad); g.fillText(ch, 0, -base); g.restore();
   });
   for (const a of [Math.PI - 0.16, Math.PI + 0.16]) {
@@ -184,14 +185,15 @@ function drawHead(g, end, R, w, ink, paper) {
   drawTongue(g, H, w, ink);
   g.fillStyle = paper; smooth(outline); g.fill();
   g.save(); smooth(outline); g.clip(); g.strokeStyle = ink; g.lineWidth = w * 0.4;
-  // long oval scales in rows along the head, as Heath cuts them, staggered row to row, above the mouth
+  // long oval scales in rows along the head, as Heath cuts them, their closed edge toward the neck as
+  // tiles overlap, staggered row to row, above the mouth
   // and none over the eye, which must read
   const eyeAt = H(0.68, -0.1);
   for (let row = 0, v = -0.22; v < 0; v += 0.085, row++) {
     for (let u = 0.08 + (row % 2) * 0.055; u < 0.88; u += 0.11) {
       const c = H(u, v);
       if (Math.hypot(c[0] - eyeAt[0], c[1] - eyeAt[1]) < L * 0.14) continue;
-      g.beginPath(); g.ellipse(c[0], c[1], L * 0.055, L * 0.032, turn, -1.4, 1.4); g.stroke();
+      g.beginPath(); g.ellipse(c[0], c[1], L * 0.055, L * 0.032, turn, Math.PI - 1.4, Math.PI + 1.4); g.stroke();
     }
   }
   g.lineWidth = w * 0.5;
