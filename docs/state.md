@@ -60,15 +60,15 @@
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
 ## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
-1. Queue step 4.1 NOW. Done: causes 1-7, 9-11 (docs/audit/README.md; 5 on his "Делаем" 9.10, seen in his
-   headset walk: 90 fps, 130 draw calls max; 7: placement to see in his next session), plan checked twice,
-   premortem, docs split, rules review, guards proven, Claude Code read. Allow rules on his yes
-   (.claude/settings.json: quest-look, gh run, publish-preview); VR only on his head (quest-look vr).
-   f) style book matched to the game 9.10. Waiting: his yes on the new CLAUDE.md. 1976 UBC read on his photos
-   (docs/building-standards.md S27: corridor 44 in, 7 ft clear minimum; the usual height still open). NEXT SESSION: cause 8 rows by docs/audit/numbers.md (sources in batches; headset rows into
-   the 4.3 session; patches with their item); then the fact-checker, request and architecture auditors.
-   Open talk: the start's tone (his 9.10: not Portal 2 humour, "learn about yourself"), touches step 7.
-   His guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9. He knows nothing of git or GitHub: explain. Next
+1. Queue step 4.1 NOW. Done: causes 1-7, 9-11 (docs/audit/README.md; 7: placement to see in his next headset
+   session), plan checked twice, premortem, docs split, rules review, guards proven, Claude Code read, style
+   book matched. Waiting: his yes on the new CLAUDE.md. 1976 UBC: docs/building-standards.md S27.
+   Cause 8 (9.10, session prodolzhenie-21470b): 14 fixed (flicker: decal.js + tests/near-faces.mjs in the
+   smoke test, reviewed twice), 11 sourced, 17 headset rows moved to 4.3, 25 still need a source (batches).
+   Waiting for him: the ceiling pictures (5 troffers in the grid, S28), push permission (auto mode refused).
+   Then the fact-checker, request and architecture auditors, then 4.1 done.
+   Open talk: the start's tone (not Portal 2 humour, "learn about yourself"), step 7. He knows nothing of git
+   or GitHub: explain (his guide https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9). Next
    (place in the queue waits for his word, proposed right after 4.1): GitHub done fully: pull requests
    with checks and a reviewer, a release with a version and Russian notes per live update, a build stamp.
 2. Then 4.2, the data lever first (data stay with us, our own lab; what we need from scientists beyond
