@@ -114,6 +114,19 @@ if (mode === 'start') {
 // subagent-start, subagent-stop: a practice reviewer's run is recorded for the owner's automatic stop
 // (tools/review-gate.mjs) by this hook, not by the assistant. It counts only when the files a person
 // meets did not change while it read them and its report reached its last block. Never blocks.
+// the last assistant entry of a transcript (JSON lines), as text
+function lastReport(file) {
+  const lines = fs.readFileSync(file, 'utf8').split('\n').filter(Boolean);
+  for (let i = lines.length - 1; i >= 0; i--) {
+    let e;
+    try { e = JSON.parse(lines[i]); } catch { continue; }
+    if (e.type !== 'assistant') continue;
+    const parts = (e.message && e.message.content) || [];
+    const text = parts.map((p) => (p.type === 'text' ? p.text : p.type === 'tool_use' ? JSON.stringify(p.input || {}) : '')).join('\n');
+    if (text.trim()) return text;
+  }
+  return '';
+}
 if (mode === 'subagent-start' || mode === 'subagent-stop') {
   if (event.agent_type !== REVIEWER) process.exit(0);
   const print = fingerprint(HERE);
@@ -123,12 +136,14 @@ if (mode === 'subagent-start' || mode === 'subagent-stop') {
   }
   const start = entries().filter((e) => e.kind === 'start' && e.agent === event.agent_id).pop();
   // a subagent here hands its report back through a tool call, not as its last text, so the
-  // report's last block is looked for in its transcript too
+  // report is read from the transcript's last assistant entry: its text or its tool call's input.
+  // Only the reviewer's own words count, never the caller's prompt, which names the block too.
+  const ends = (text) => new RegExp(`(^|\\n|\\\\n)${REPORT_END}`).test(text);
   let report = String(event.last_assistant_message || '');
-  try { if (!report.includes(REPORT_END) && event.agent_transcript_path) report = fs.readFileSync(event.agent_transcript_path, 'utf8'); } catch { /* no transcript to read */ }
+  try { if (!ends(report) && event.agent_transcript_path) report = lastReport(event.agent_transcript_path); } catch { /* no transcript to read */ }
   const why = !start ? 'no start seen for this run'
     : start.print !== print ? 'the files changed while it read them'
-      : !report.includes(REPORT_END) ? 'its report did not reach its last block' : '';
+      : !ends(report) ? 'its report did not reach its last block' : '';
   write(why ? { kind: 'void', agent: event.agent_id, why } : { kind: 'review', agent: event.agent_id, print, root: HERE, transcript: event.agent_transcript_path || '' });
   process.exit(0);
 }

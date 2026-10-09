@@ -48,6 +48,21 @@ review('cut-1', { report: 'Findings, then the run was cut short' });
 assert.equal(reviewOf(place, record), null, 'a report that never reached its last block does not count');
 review('moved-1', { between: () => put('src/a.js', 'export const a = 3;\n') });
 assert.equal(reviewOf(place, record), null, 'files changed while it read them: no review');
+// the report comes back through a tool call, so it is read from the transcript's last assistant
+// entry; the caller's prompt names the block too and must not count
+const transcript = (name, entries) => { const f = path.join(tmp, `${name}.jsonl`); fs.writeFileSync(f, entries.map((e) => JSON.stringify(e)).join('\n')); return f; };
+const prompt = { type: 'user', message: { content: [{ type: 'text', text: `Review it and end with the ${REPORT_END} block` }] } };
+const handback = (text) => ({ type: 'assistant', message: { content: [{ type: 'tool_use', name: 'SubagentHandback', input: { message: text } }] } });
+const viaTranscript = (agent, entries) => {
+  hook('subagent-start', { agent_id: agent, agent_type: 'practice-reviewer' });
+  hook('subagent-stop', { agent_id: agent, agent_type: 'practice-reviewer', last_assistant_message: '', agent_transcript_path: transcript(agent, entries) });
+};
+viaTranscript('cut-2', [prompt, handback('Findings so far, then cut short')]);
+assert.equal(reviewOf(place, record), null, 'the block named in the prompt is no report of the reviewer\'s');
+viaTranscript('good-2', [prompt, handback(`Findings.\n${REPORT_END} none`)]);
+assert.ok(reviewOf(place, record), 'a report handed back through a tool call counts');
+put('src/a.js', 'export const a = 4;\n');
+assert.equal(reviewOf(place, record), null, 'and a change after it stops the tools again');
 review('good-1');
 assert.ok(reviewOf(place, record), 'a whole practice review of these very files lets the tools go');
 put('tools/xr-probe.html', '<p>probe, changed</p>\n');
