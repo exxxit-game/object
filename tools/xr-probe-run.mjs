@@ -3,7 +3,8 @@
 // and prints what the headset gave. VR and MR need the owner wearing it; the microphone does not.
 // Needs the laptop's server running (the app's preview, or `npm run serve`) and the headset on
 // its cable; it is kept awake for the run and put back to sleep after (tools/headset.mjs).
-// Usage: node tools/xr-probe-run.mjs [vr ar mic input]   (input: controllers, hands and body, 30 s)
+// Usage: node tools/xr-probe-run.mjs [vr ar mic input]   (input: controllers, hands and body, one task
+// at a time in the headset on its own page, tools/xr-probe-input.html; up to 6 min)
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveToHeadset, worn, sleepNow, openUrl, page, wornByPerson } from './headset.mjs';
@@ -14,7 +15,9 @@ import { requireReview } from './review-gate.mjs';
 const steps = process.argv.slice(2).length ? process.argv.slice(2) : ['vr', 'ar', 'mic'];
 // the owner's automatic stop: the probe's VR and MR steps meet a person; the microphone alone does not
 if (steps.some((s) => s !== 'mic')) requireReview(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), 'the headset probe in VR');
-const URL_PROBE = serveToHeadset(Number(process.env.OBJECT_PORT) || undefined) + 'tools/xr-probe.html';
+const BASE = serveToHeadset(Number(process.env.OBJECT_PORT) || undefined);
+const URL_PROBE = BASE + 'tools/xr-probe.html';
+const pageOf = (step) => BASE + (step === 'input' ? 'tools/xr-probe-input.html' : 'tools/xr-probe.html');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // VR and MR only on the owner's head: on a table the boundary window holds the request and the
@@ -35,15 +38,23 @@ const run = (expression, gesture = false) => probePage.run(expression, gesture);
 
 await send('Page.setWebLifecycleState', { state: 'active' });
 await send('Page.bringToFront');
-await send('Page.navigate', { url: `${URL_PROBE}?run=${Date.now()}` });
-await sleep(3000);
+// each step on its page; the results of all of them are kept in the pages' shared localStorage
+let shown = '';
+const show = async (url) => {
+  if (url === shown) return;
+  await send('Page.navigate', { url: `${url}?run=${Date.now()}` });
+  await sleep(url.endsWith('input.html') ? 6000 : 3000);   // A-Frame loads first there
+  shown = url;
+};
+await show(pageOf(steps[0]));
 await run(`localStorage.removeItem('xr-probe'), window.__probe = {}, 1`);
 
 const KEY = { vr: 'immersive-vr', ar: 'immersive-ar', mic: 'mic', input: 'input' };
 for (const step of steps) {
+  await show(pageOf(step));
   await run(`document.getElementById('${step}').click(), 1`, true);
-  // a session runs up to 5 s (input 30 s; longer when the headset lies on a table), then ends
-  for (let i = 0; i < (step === 'input' ? 100 : 60); i++) {
+  // a session runs up to 5 s (input: until he has done every task, up to 6 min), then ends
+  for (let i = 0; i < (step === 'input' ? 720 : 60); i++) {
     await sleep(500);
     const done = await run(`(() => { const r = (window.__probe || {})['${KEY[step]}']; return !!r && (r.frames !== undefined || r.error !== undefined || r.granted !== undefined); })()`);
     if (done) break;

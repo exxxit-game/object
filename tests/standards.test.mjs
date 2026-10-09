@@ -4,7 +4,8 @@
 import assert from 'node:assert/strict';
 import { sceneHTML } from '../src/rooms/01-control/scene.js';
 import { corridorHTML } from '../src/app/lobby/scene.js';
-import { DOORS, PLAN, CORK_Z } from '../src/app/lobby/plan.js';
+import { DOORS, PLAN, CORK_Z, CENTRE, LENGTH, WIDTH } from '../src/app/lobby/plan.js';
+import { jointOrigin, CEILING } from '../src/engine/tile-math.js';
 
 const html = sceneHTML + corridorHTML;
 const near = (a, b, e = 0.0015) => Math.abs(a - b) < e;
@@ -61,6 +62,17 @@ assert.ok(near((Number(attr(board, 'width')) - Number(attr(cork, 'width'))) / 2,
 // Troffers: 2 × 4 ft (0.6096 × 1.2192 m)
 const troffers = tags('a-box').filter(t => attr(t, 'color') === '#dcdcd5');
 assert.ok(troffers.length >= 2 && troffers.every(t => near(Number(attr(t, 'width')), 1.2192) && near(Number(attr(t, 'depth')), 0.6096)), 'troffers 2 × 4 ft');
+// ...lying in the ceiling grid's openings, every edge on a tee (S20), 10 ft apart (S28, inside the
+// Metalux 2G-240A spacing criterion), the grid laid from the corridor's centre as the scene draws it
+const onJoint = (v, origin) => near((v - origin) / CEILING.tile, Math.round((v - origin) / CEILING.tile), 0.002);
+const jx = jointOrigin(CENTRE.x, LENGTH, CEILING.tile), jz = jointOrigin(CENTRE.z, WIDTH, CEILING.tile);
+const hallTroffers = [...corridorHTML.matchAll(/<a-box[^>]*>/g)].map(m => m[0]).filter(t => attr(t, 'color') === '#dcdcd5');
+for (const t of hallTroffers) {
+  const [x, , z] = pos(t);
+  assert.ok(onJoint(x - 0.6096, jx) && onJoint(x + 0.6096, jx) && onJoint(z - 0.3048, jz) && onJoint(z + 0.3048, jz), `the troffer at x ${x} does not lie between the grid's tees`);
+}
+const xs = hallTroffers.map(t => pos(t)[0]).sort((a, b) => a - b);
+assert.ok(xs.length >= 2 && xs.slice(1).every((x, i) => near(x - xs[i], 5 * CEILING.tile, 0.002)), `troffers 10 ft apart: ${xs}`);
 // Fire extinguisher up to 40 lb: top at most 5 ft (1.524 m), bottom at least 4 in (102 mm)
 const extAt = html.indexOf('class="extinguisher"');
 const ext = html.slice(extAt, html.indexOf('\n    </a-entity>', extAt));
