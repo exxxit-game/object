@@ -5,10 +5,14 @@
 // play with it (a sign losing letters to say something else: TV Tropes "Signs of
 // Disrepair"; a part goes dark alone only with its own lamp: Signs of the Times).
 // The name is English in every language and is never translated.
+import { PLAN } from './plan.js';
 export const SIGN_WORDS = ['you', 'are', 'the', 'object', '.com'];
 export const SIGN_STYLE = { size: 84, weight: 800, spacing: 4, pad: 36, bg: '#160f05', on: '#ffe7b0', off: '#3a2d1f' };
-// Where the sign hangs (world metres): its sounds come from here.
-export const SIGN_AT = { x: 0.7, y: 2.3, z: 1.86 };
+// Where the sign's face hangs (world metres), over door 1 on the north wall (src/app/lobby/plan.js):
+// a box 0.09 m deep, its foot on the frame head's top (2.204 m) and its top on a block joint
+// (2.4 m), the face 2 mm before it. Its sounds come from here and scene.js draws it here.
+export const SIGN_AT = { x: PLAN.entrance, y: 2.302, z: +(PLAN.north + 0.092).toFixed(3) };
+export const SIGN_BOX = { depth: 0.09, z: +(PLAN.north + 0.045).toFixed(3) };
 
 // The tubes start like old fluorescent lamps: each try heats the tube ends (a dim glow;
 // 0.5–2 s by lamp type, about 1.5 s typical: DIAL, "Starters"), then the starter kicks;

@@ -1,5 +1,5 @@
 import { createChoice } from './choice.js';
-import { MIN_LETTER } from './sheet-math.js';
+import { MIN_LETTER, PAPER, PAPER_BG } from './sheet-math.js';
 import { FONT } from '../panel.js';
 import './ink.js';
 
@@ -10,8 +10,7 @@ import './ink.js';
 // MIN_LETTER (sheet-math.js), and the smoke test fails a page drawn smaller (data-letter-mm). The
 // page is a large-print document (docs/decisions.md): what is printed on it, a seal included, is
 // sized from that letter, never from the paper.
-export const PAPER = { w: 0.56, h: 0.72 };
-export const PAPER_BG = '#e9e2cf';       // cream, not white: a large white page glares in a headset
+export { PAPER, PAPER_BG };
 export const DENSITY = 2 * 1024 / 1.5;   // canvas px per metre: sharp when read from 1 m (choice.js)
 export const MARGIN = 0.04;
 export const UNDER_TEXT = 0.03;

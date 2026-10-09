@@ -2,13 +2,13 @@ import { drawMark, drawWordmark, LOGO } from '../logo.js';
 import { FONT } from '../../engine/panel.js';
 import { LOBBY_T } from './texts.ru.js';
 import { ROOM1_NUMBER } from './plan.js';
+import { PAPER_BG } from '../../engine/ui/sheet-math.js';
 
 // The two A4 sheets pinned beside the clipboard on the experimenter's board (scene.js). The
 // hallways of psychology buildings are covered with flyers calling for participants, with
 // tear-off strips at the bottom (Indiana University, Psychological and Brain Sciences): one of
 // those, and the studio's poster. Both are print on paper: drawn unlit for legibility and
 // dimmed to the corridor's print level (light, lobby.js).
-const PAPER = '#e9e2cf';  // the clipboard's paper (src/engine/ui/sheet.js)
 const INK = '#26241f';
 const TABS = { n: 7, h: 0.28, torn: [1, 4] };   // strips across the foot, long enough for their words; two already taken
 
@@ -41,7 +41,7 @@ function drawFlyer(panel) {
     { t: f.title, size: 64, weight: 800, color: INK, spacing: 2 },
     { t: f.body, size: 40, weight: 500, color: INK, gap: 46 },
     { t: f.punch, size: 56, weight: 800, color: LOGO.green, gap: 54 }
-  ], { bg: PAPER, top: true, pad: W * 0.08, fit: false });
+  ], { bg: PAPER_BG, top: true, pad: W * 0.08, fit: false });
   // the strips: cut lines between them, the words along each, the taken ones gone
   const tw = W / TABS.n;
   ctx.strokeStyle = 'rgba(38,36,31,.55)';

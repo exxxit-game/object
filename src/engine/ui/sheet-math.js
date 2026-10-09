@@ -5,17 +5,22 @@
 export const READ_DIST = 1.0;
 // The clipboard, as a hardboard clipboard for US Letter paper is made (9 × 12-1/2 in, 1/8 in
 // hardboard: school and office catalogs; the clip after a photo of one, Wikimedia Commons
-// "Clipboard.jpg"), scaled so its Letter-shaped paper (0.56 × 0.72 m, sheet.js) reads at 1 m: the
+// "Clipboard.jpg"), scaled so its Letter-shaped paper (PAPER) reads at 1 m: the
 // board 1/4 in wider than the paper each side, 1-1/4 in above it for the clip and 1/4 in below;
 // the clip's jaw 0.6 of the board's width over the paper's top edge, a raised middle with two
 // rivets, and the ring it hangs by standing above the board. y up from the paper's centre, z out
 // of the paper (metres).
-const IN = 0.56 / 8.5;   // metres an inch at this scale
-export const BOARD = { w: 9 * IN, top: 0.36 + 1.25 * IN, bottom: 0.36 + 0.25 * IN, d: 0.125 * IN, corner: 0.375 * IN };
+// The paper: a US Letter page (8.5 × 11 in) 0.56 m wide, a real page as seen in the hand, kept at
+// that angle at the reading distance; cream, not white: a large white page glares in a headset.
+export const PAPER = { w: 0.56, h: +(0.56 * 11 / 8.5).toFixed(4) };
+export const PAPER_BG = '#e9e2cf';
+const IN = PAPER.w / 8.5;   // metres an inch at this scale
+const HALF = PAPER.h / 2;
+export const BOARD = { w: 9 * IN, top: HALF + 1.25 * IN, bottom: HALF + 0.25 * IN, d: 0.125 * IN, corner: 0.375 * IN };
 export const CLIP = {
-  jaw: { w: 0.6 * BOARD.w, h: 0.7 * IN, y: 0.36, d: 0.005 },
-  hump: { w: 0.27 * BOARD.w, h: 1.1 * IN, y: 0.36 + 0.75 * IN, d: 0.02 },
-  ring: { r: 0.4 * IN, tube: 0.1 * IN, y: 0.36 + 1.5 * IN, z: 0.01 }
+  jaw: { w: 0.6 * BOARD.w, h: 0.7 * IN, y: HALF, d: 0.005 },
+  hump: { w: 0.27 * BOARD.w, h: 1.1 * IN, y: HALF + 0.75 * IN, d: 0.02 },
+  ring: { r: 0.4 * IN, tube: 0.1 * IN, y: HALF + 1.5 * IN, z: 0.01 }
 };
 // how far the whole clipboard reaches: up to the ring's top, down to the board's foot, behind the
 // paper to the board's back (4 mm behind the paper), in front of it to the clip's hump; the wall

@@ -8,6 +8,7 @@
 import { doorHTML, CHROME } from '../../engine/door.js';
 import { PLAN, DOORS, CENTRE, LENGTH, WIDTH, CORK_Z, toEntrance, wallRuns } from './plan.js';
 import { SIGN, SIGN_PANEL } from '../brand.js';
+import { SIGN_AT, SIGN_BOX } from './sign.js';
 
 export { WALLS } from './plan.js';
 
@@ -166,10 +167,10 @@ export const corridorHTML = `
     <!-- the light box over room 101's door (like the "in session" boxes over lab doors): surface
          mounted, its back on the wall, as wide as the frame head it stands on (1.0224 m, door.js),
          its foot on the head's top (2.204 m), its top on a block joint (2.4 m) -->
-    <a-box class="on-wall" position="${PLAN.entrance} 2.302 1.845" width="1.0224" height="0.196" depth="0.09" color="#2a2a2c"></a-box>
+    <a-box class="on-wall" position="${SIGN_AT.x} ${SIGN_AT.y} ${SIGN_BOX.z}" width="1.0224" height="0.196" depth="${SIGN_BOX.depth}" color="#2a2a2c"></a-box>
   </a-entity>
   <a-entity id="signFace" panel="w: 0.94; h: 0.16; px: 1024; bg: #160f05" lightbox="light: #signLight; lightMax: 0.7"
-            position="${PLAN.entrance} 2.302 1.892"></a-entity>
+            position="${SIGN_AT.x} ${SIGN_AT.y} ${SIGN_AT.z}"></a-entity>
   <!-- the sign's warm spill on the door and floor below it (not a hot spot on the ceiling) -->
   <a-entity id="signLight" light="type: point; color: #ffd9a0; intensity: 0; distance: 2.5; decay: 2" position="${PLAN.entrance} 1.95 2.25"></a-entity>
   <!-- the corridor's own light, dim while the player is here (lobby.js, CORRIDOR_LIGHT) -->
