@@ -179,10 +179,12 @@ primary page. Parts, each answered or marked "not found":
   https://www.dshs.wa.gov/ffa/human-research-review-section/wsirb-fees). Commercial IRBs (Advarra, BRANY) send
   fee schedules on request; BRANY's form has an "Independent Investigator/Researcher" and social-behavioral
   (SBER) option (https://www.brany.com/?p=7702, snippet only). No commercial IRB price was found published.
-- Russia: the Russian Psychological Society has an Ethics Committee (https://psyrus.ru/rpo/structure/ethics.php),
-  but the site refused connection both to the fetch tool and the browser; from search snippets only, the
-  committee handles the psychologist's ethics code and complaints (ethics@psyrus.ru) and no procedure for
-  reviewing outside research projects was found. UNVERIFIED; see FOR THE OWNER.
+- Russia: the Russian Psychological Society's Ethics Committee (https://psyrus.ru/rpo/structure/ethics.php refused
+  our tools; the owner downloaded its documents). Its Regulation (pologenie_etick_kodeks_16.10.2013.doc, read in
+  full) makes it "a standing consultative and regulating body of the RPO on the psychologist's professional ethics"
+  (1.2, our translation); its functions (2.2) are explaining the code, complaints against psychologists, sanctions
+  and changes to the code, not reviewing research projects. The other file (materiali_efpa.doc: EFPA guidance on
+  complaints and forensic work) has no project review either. So ethics approval goes to a university or an IRB.
 - EU: not reached in this pass (no central body found; national and university committees). Not found.
 
 ### 4b. Preregistration
@@ -294,4 +296,4 @@ home (Steed et al. 2016, doi:10.1109/TVCG.2016.2518135); compare conditions with
 - Not read in full: Nisbett & Wilson 1977; Hall et al. 2010 (jam and tea); Shiv et al. 2005; Westwood 2025;
   Chandler et al. 2015; Mol et al. 2020; Yee & Bailenson 2007. Not found: EU review bodies for non-university
   research; OSF preregistration details; AsPredicted price; any published commercial IRB price; the PSA projects
-  list and member count; whether the Russian Psychological Society reviews outside research projects.
+  list and member count.
