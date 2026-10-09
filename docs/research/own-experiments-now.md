@@ -4,23 +4,13 @@ Research for the owner's idea of new experiments with real players, in the prese
 Every claim has its link and a short quote from the page read. "Unverified" marks what was not confirmed on a
 primary page. Parts, each answered or marked "not found":
 
-1. What psychology runs now (2023-2026) that a home VR game could join or run
-   1a. Large multi-site studies (Many Labs, Psychological Science Accelerator), registered reports
-   1b. Citizen science and game-based research (Sea Hero Quest, LabintheWild, others)
-   1c. VR studies outside the lab (home VR, Meta Quest)
-   1d. Open questions the field says need data
-2. 8-12 candidate experiments that fit our setup (one player, VR room, 5-10 min, body and gaze data, Russian first)
-3. The owner's two-phones idea: closest published work and what our version adds
-   3a. Choice justification and confabulation (Nisbett & Wilson 1977)
-   3b. Choice blindness (Johansson et al. 2005 and later)
-   3c. Price as a quality cue, marketing placebo
-   3d. What our version would test that is new
-4. Running and publishing our own study
-   4a. Ethics review without a university (commercial IRBs in the US; EU; Russia)
-   4b. Preregistration (OSF, AsPredicted)
-   4c. Consent and data rules for an online study (GDPR special categories; Russia 152-FZ)
-   4d. Partnering with a university; costs and time
-5. Risks to data quality online and in VR (inattention, repeat players, bots, suspicion) and how studies handle them
+1. What psychology runs now (2023-2026) that a home VR game could join or run: 1a multi-site studies and registered
+   reports; 1b citizen science and game-based research; 1c VR studies outside the lab; 1d open questions.
+2. 8-12 candidate experiments for our setup (one player, 5-10 min, body and head data, Russian-speaking first).
+3. The two-phones idea: 3a confabulation (Nisbett & Wilson 1977); 3b choice blindness; 3c price as a quality cue;
+   3d what our version adds.
+4. Running and publishing: 4a ethics review without a university; 4b preregistration; 4c data rules; 4d partners.
+5. Risks to data quality (inattention, repeat players, bots, suspicion) and how studies handle them.
 
 ---
 
@@ -218,3 +208,90 @@ primary page. Parts, each answered or marked "not found":
   Consequence for us: personal data of Russian players must first land in a database in Russia; anonymous data
   that cannot identify anyone is outside the law's scope (that reading is ours: a lawyer should confirm).
 
+### 4d. Partnering with a university (examples from the pages read)
+
+- Sea Hero Quest: a company (Deutsche Telekom) and a game studio with UCL and UEA scientists (1b). LabintheWild
+  studies are run by Harvard researchers (Huber & Gajos 2020, 1b). A university IRB can also review an outside
+  investigator for a fee (USM, 4a). Grant routes exist for many-lab work (KLI, up to 9,000 euros, unverified).
+  Costs of a partnership itself: not found.
+
+## 1d. Open questions the field says need data (from the pages read; no published "agenda list" was found)
+
+- Robustness: Many Labs 2 replicated 14 of 28 (link in 1a). A VR doorway study "call[s] into question the
+  generalisability and robustness of this effect" (McFadyen et al. 2021, below). Online VR effects come out
+  smaller (Huber & Gajos 2020: d 0.34 vs 1.23).
+- Who is sampled: home Quest owners were 86% male, median age 26; "claims about generalizability should be avoided"
+  (Mottelson et al. 2021, verified in docs/research/vr/06-science.md). Cultures: the PSA runs moral-dilemma
+  judgments across countries (psysciacc.org). Russian-speaking VR players are a sample none of the papers read had.
+
+## 2. Candidate experiments for our setup (one player, 5-10 min, hands and head tracked, voice optional)
+
+Format: builds on / still unknown / what VR at scale adds / sketch. "Unknown" is from the paper where quoted,
+otherwise our reading (marked). Fit rules from 06-science.md: no high-stress or startle content unsupervised at
+home (Steed et al. 2016, doi:10.1109/TVCG.2016.2518135); compare conditions within our players only.
+
+1. Two phones (the owner's idea). Plassmann et al. 2008; Shiv et al. 2005; Nisbett & Wilson 1977 (part 3). / A
+   price cue on an object worth nothing to anyone; whether stated reasons name the price (ours). / Thousands of
+   choices, the grab itself, head-direction dwell on each phone before choosing. / Part 3d.
+2. Choice blindness with the hand. Johansson et al. 2005; Hall et al. 2012 (objekt-papers). / VR versions are
+   small conference papers only (3b, unverified); trick-aware players are the authors' own failure case. / Choice
+   by grasp, detection measured at scale, prior knowledge logged. / Pick the nicer of two objects 10 times; 2 are
+   swapped when pocketed; "why this one?"
+3. Moral action vs judgment. Francis et al. 2016, PLoS ONE 11(10):e0164374 (objekt-papers/francis-2016.txt):
+   "a greater endorsement of utilitarian responses ... when action was required" than in judgment. At home:
+   Kissel et al. 2023, Societies 13:69 (33 valid; 5 said their logged action was accidental; 06-science.md). /
+   Does the gap hold in thousands, across cultures? (ours) / Hesitation time, aborted hand movements. / Judge a
+   (non-gory) dilemma in words, then meet it with a lever; ask "was that what you meant?"
+4. Proteus effect (avatar height and bargaining). Huber & Gajos 2020 (1b): online replication with d 0.34 vs
+   1.23, only 27 headset users. / Its size with a tracked first-person body (ours). / Real embodiment, many
+   players. / Random avatar height seen in a mirror, then split 100 points with an agent.
+5. Doorway effect. McFadyen et al. (2021), "Doorways do not always cause forgetting: a multimodal investigation",
+   BMC Psychology 9:41, https://link.springer.com/article/10.1186/s40359-021-00536-3 (read in the browser): "we
+   observed no significant effect of doorways on forgetting", except under working-memory load in VR. / Whether the
+   effect exists; the paper asks "what factors contributed to the effect observed in previous studies". / Our
+   building is a corridor of doors; huge N settles a small effect. / Carry an object through a door vs the same
+   distance in one room; a memory probe halfway.
+6. Cheating with a virtual observer. Mol, van der Heijden & Potters (2020), Experimental Economics,
+   https://link.springer.com/article/10.1007/s10683-020-09644-0 (search snippet only, unverified: an active
+   watching avatar gave less cheating than a passive one, not less than no avatar). / Whether it holds with points
+   instead of money (ours). / Lying is seen only in the distribution, never per person: no one is accused. / Roll
+   a die privately, report for points; observer watching, looking away, or absent.
+7. Navigation with the body. Spiers et al. 2023 (1b): 3.9 million players, male advantage in all 63 countries. /
+   Whether phone-game scores hold when the body turns in VR (ours). / Head and body turns logged. / Study a map,
+   then reach three targets in a building.
+8. Social influence in an emergency. Kinateder & Warren 2016, doi:10.3389/frobt.2016.00043 (06-science.md): 68%
+   of VR participants thought the alarm was staged; responses smaller than real. / Plausibility when players
+   expect tricks. / Weak fit: startle at home (Steed et al.).
+9. Conformity to virtual agents. Kyrlitsias & Michael-Grigoriou 2018; Kyrlitsias et al. 2020,
+   doi:10.3389/fpsyg.2020.02254 (06-science.md): unambiguous task 1.14% wrong; ambiguous 5-s task 63% conformed
+   at least once. / What makes agents count as a group. / Ambiguous judgment after agents answer aloud.
+10. Obedience (Slater et al. 2006; Gonzalez-Franco et al. 2018, 06-science.md): obedience higher in VR. Not
+   recommended for home play: distress without a supervisor.
+
+## 5. Risks to data quality and how studies handle them
+
+- Inattention: about 13% online vs 3% in the lab; "approximate 10% ill-intended"; over-recruit and fix an
+  objective exclusion rule in advance (Mottelson et al. 2021, 1c). Hand tracking: a screening step cut bad data
+  from 27% to 8% (same).
+- Drop-out: one in-the-wild VR study kept 59 of about 400 installs, "a rate of return of 15%" (Steed et al. 2016,
+  06-science.md). Accidental one-shot choices: 5 of 33 (Kissel et al. 2023).
+- Repeat players: Chandler, Paolacci, Peer, Mueller & Ratliff (2015), Psychological Science 26(7):1131-1139,
+  doi:10.1177/0956797615585115: Many Labs tasks repeated gave smaller effects (weighted d 0.82 to 0.63), most when
+  the condition changed (search snippets of https://www.psychologicalscience.org/journals/psychological-science/0956797615585115/;
+  unverified). Handling: log first vs repeat run; analyse first runs; keep the condition per device.
+- Bots: Westwood (2025), PNAS, https://www.pnas.org/doi/10.1073/pnas.2518075122: AI agents "evade nearly all
+  existing detection methods"; "as few as 10 to 52 fake AI responses" could have flipped 2024 polls (Dartmouth,
+  https://fas.dartmouth.edu/news/2026/04/sean-westwood-wins-pnas-prize-ai-polling-study). Paper itself not read.
+  A WebXR run with tracked head and hands is harder to fake than a web form: our inference, untested.
+- Suspicion: 68% in VR thought the alarm staged (Kinateder & Warren 2016); suspicion probes miss about half
+  (Blackhart et al. 2012; both in 06-science.md); Johansson et al. expect "most participants" to spot a switch if
+  told to look (card johansson-2005.md). Handling: open-first suspicion and prior-knowledge probe before the
+  reveal, analysed as a moderator, preregistered.
+- Self-selection: 86% male, median 26 (Mottelson et al. 2021). Report "you vs other players", never "vs people".
+
+## Not reached / unverified
+
+- Not read in full: Nisbett & Wilson 1977; Hall et al. 2010 (jam and tea); Shiv et al. 2005; Westwood 2025;
+  Chandler et al. 2015; Mol et al. 2020; Yee & Bailenson 2007. Not found: EU review bodies for non-university
+  research; OSF preregistration details; AsPredicted price; any published commercial IRB price; the PSA projects
+  list and member count; whether the Russian Psychological Society reviews outside research projects.
