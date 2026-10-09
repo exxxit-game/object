@@ -1,4 +1,6 @@
-<!-- Draft for the owner's yes (plan step 4.1 c, docs/audit/rules-review.md); replaces CLAUDE.md only after it. -->
+<!-- Draft for the owner's yes (plan step 4.1 c, docs/audit/rules-review.md); replaces CLAUDE.md only after it.
+     On his yes, with it: renumber every place that cites a rule by number, a test that each cited rule
+     exists, and a ratchet that keeps CLAUDE.md from growing. -->
 # CLAUDE.md — Object
 
 Object (the game "You are the object"; the name is never translated) is a browser VR game (WebXR,

@@ -60,13 +60,13 @@
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
 ## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
-1. Queue step 4.1 NOW. Done: causes 1-4, 6, 9-11 (docs/audit/README.md), the plan checked twice, premortem,
-   docs split, c) the rules review (docs/audit/rules-review.md), all guards proven, Claude Code read in full
-   (docs/research/projects/claude-code/README.md) and its guards put in. Waiting for his yes: the new
-   CLAUDE.md (docs/audit/claude-md-proposed.md; on yes: renumber the cited rules, a test that each cited
-   rule exists, a size ratchet). Next: e) causes 5 (paper: Meta "Color" page, read 9.10, "no brighter than
-   #DADADA" for text, backgrounds and all UI; paper #e9e2cf exceeds it; notices to Letter), 7, 8;
-   f) the style book from the game; then the fact-checker, request and architecture auditors, then done.
+1. Queue step 4.1 NOW. Done: causes 1-6, 9-11 (docs/audit/README.md; 5 on his "Делаем" 9.10, pictures
+   https://claude.ai/artifact/22VLRrRJje5dvK84Q5Jyqp), plan checked twice, premortem, docs split, rules review,
+   guards proven, Claude Code read. Waiting: his yes on the new CLAUDE.md (docs/audit/claude-md-proposed.md)
+   and on allow rules (quest-look, gh run, publish-preview: auto mode refused the GitHub run check and the
+   headset check of cause 5). Next: causes 7, 8; f) the style book from the game (paper, ink tokens changed);
+   then the fact-checker, request and architecture auditors. Open talk: the start's tone (his 9.10: not
+   Portal 2 humour, "learn about yourself"), touches step 7.
    After his app update: onFailure "block" on the guards. His guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9
    His word 9.10: he knows nothing of git, GitHub or Claude Code: explain each thing he meets, plainly. Next
    (place in the queue waits for his word, proposed right after 4.1): GitHub done fully: pull requests
