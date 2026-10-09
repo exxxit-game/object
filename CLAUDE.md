@@ -10,6 +10,13 @@ Russian, plain words, no jargon. Everything in the repo is English except
 player-facing text (the texts.ru.js files in src/app, src/app/lobby and src/rooms/*, and the
 static page privacy.html) and README.md, which is in Russian and English.
 
+## The main rule: we recreate («воссоздаём»)
+What others already worked out is taken ready-made: books, trade standards and measurements,
+research, guidelines, existing games, libraries and code. Those before us spent the imagination
+and left marks on the trail; we follow the marks instead of cutting a new path. Our own
+imagination goes only where nothing exists yet: the experiments we design and the words. Every
+other rule serves this one; how it is done: rule 23.
+
 ## Rules
 1. No history in code. Comments explain WHY, never WHEN or WHO asked.
    No dates, no "owner said", no version stories. History lives in git commits.
