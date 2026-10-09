@@ -98,5 +98,9 @@ assert.deepEqual(unrelayed(report + '\n{"text":"open https://archive.org/details
 assert.deepEqual(unrelayed(report + '\n{"text":"https://archive.org/details/ubc1976 and https://shop.example.org/ubc.pdf"}'), [], 'all given: the turn may end');
 assert.deepEqual(unrelayed(`${MARK} none\\n\\nhttps://elsewhere.org/a`), [], 'a link after the block is not the owner\'s');
 assert.deepEqual(unrelayed('no research today'), [], 'no mark, nothing owed');
+// A report's block starts a line; a doc that names the mark in a sentence (docs/testing.md, read in a
+// session) is not a report, and a local address further down was once held as owed to the owner
+assert.deepEqual(unrelayed(`{"content":"    9\\t| claude-guard | left by a research agent after \`${MARK}\`, not reached him |\\n   20\\t| serve | http://localhost:3000 |"}`), [], 'the mark named in a sentence is no report');
+assert.deepEqual(unrelayed(`{"content":"export const MARK = \\"${MARK}\\"; // see https://example.org/a"}`), [], 'the mark quoted in code is no report');
 
 console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the headset's wearer seen, links owed to the owner found)`);
