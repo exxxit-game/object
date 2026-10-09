@@ -60,13 +60,13 @@
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
 ## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
-1. Step 4.3 NOW (his word 9.10, before 4.1 ends). The first input probe (9.10) was WASTED: the headset showed only a
-   colour, the task sat on his phone (he: "the simplest, the dumbest", said many times). FIRST: rebuild the "input"
-   step of tools/xr-probe.html by docs/audit/probe-review.md: the headset shows ONE line at a time (e.g. "press the right
-   trigger"), the next once it is done, started by his press; no colours, nothing to read outside the headset (guard:
-   .claude/agents/practice-reviewer.md, run it on the rebuild); rerun with him, then the mic (fan off/on); results: docs/headset-capabilities.md.
-   Same visit: "Auto Enable Hands or Controllers" (check over USB first) and the VR checks not done (flicker, fps and draw calls
-   with a log, placement, sign 10 s). First of all: fact-checker twice on his summary https://claude.ai/artifact/H5ht7VG5QQPDCva7LyDwcU; archive done plan rows.
+1. Step 4.3 NOW (his word 9.10, before 4.1 ends). FIRST, his "Давай" 9.10: an automatic stop: tools that start VR in the
+   headset (xr-probe-run, quest-look vr) or publish the test copy refuse unless a practice-reviewer run saw the current files
+   (the record written by a SubagentStop hook, not by me; claude-guard refuses my writes to it; tests both ways). Then rebuild
+   the probe's "input" step by docs/audit/probe-review.md (the first run 9.10 was WASTED: only a colour in the headset, the
+   task on his phone): ONE line of words at a time, the next once done, started by his press; rerun with him, then the mic
+   (fan off/on); results: docs/headset-capabilities.md. Same visit: "Auto Enable Hands or Controllers" (check over USB), VR
+   checks not done (flicker, fps and draw calls logged, placement, sign 10 s). Housekeeping: fact-checker twice on his summary https://claude.ai/artifact/H5ht7VG5QQPDCva7LyDwcU; archive done plan rows.
    4.1 left (causes: docs/audit/README.md): cause 8 (docs/audit/numbers.md: 25 need a source); his yes on the ceiling
    pictures (docs/audit/ceiling/, S28; code: troffers.patch, then a test that troffer ends lie on joints); then the
    fact-checker, request and architecture auditors. Waiting: his yes on the new CLAUDE.md. Open talk: the start's tone,
