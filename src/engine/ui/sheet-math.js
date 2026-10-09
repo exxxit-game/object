@@ -49,6 +49,12 @@ export const MIN_TARGET_DEG = 2.5;
 // The letter for a line read from `from` metres instead of from the hand (a page on its hook): the
 // smallest letter's angle from there, in whole millimetres up, never under the line's own size m.
 export const letterFrom = (m, from = READ_DIST) => Math.max(m, Math.ceil(MIN_LETTER * from / READ_DIST * 1000 - 1e-9) / 1000);
+// How sharp a canvas must be to use the headset's display and no more: Quest 3 shows 25 pixels a
+// degree (Meta, "Compare headsets"; Quest 3S 20, Quest 2 about 20.6), so a canvas read from d
+// metres needs PPD / (d tan 1°) pixels a metre. The paper is read from READ_DIST.
+export const PPD = 25;
+export const pxPerM = (d) => PPD / (d * Math.tan(Math.PI / 180));
+export const PAPER_DENSITY = pxPerM(READ_DIST);
 
 // head: [x, y, z] eyes in world metres; yaw: the way the player faces (radians,
 // three.js: 0 looks along -Z). Returns the sheet centre and its three.js rotation

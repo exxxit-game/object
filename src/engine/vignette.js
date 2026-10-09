@@ -8,7 +8,9 @@
 // area the two share would be narrower than minFovDeg), and one 10 m away by under 0.2°. Drawn
 // without depth, it still covers everything nearer.
 export const DIST = 10; // metres in front of the head
-const REACH = 5;        // the plane reaches tan 5 (about 79°) from the centre, past the view's edge
+// the plane reaches tan 5 (about 79°) from the centre, past the view's corner: Quest 3 sees 110° ×
+// 96° (Meta, "Compare headsets"), its corner about 61° off the centre (atan of tan 55° and tan 48°)
+const REACH = 5;
 const FEATHER = 0.6;    // the soft edge, in tangent units
 
 export function createVignette(camera, minFovDeg) {

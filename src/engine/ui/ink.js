@@ -1,4 +1,5 @@
 import { DECAL_OFFSET } from '../decal.js';
+import { PAPER_DENSITY } from './sheet-math.js';
 
 // A field to write in by hand on the clipboard's paper (sheet-page.js puts one over every blank
 // of a form). Pressing the trigger or the mouse button on it puts the pen down where the laser or
@@ -33,7 +34,7 @@ function oneEuro() {
 }
 
 AFRAME.registerComponent('ink', {
-  schema: { w: { default: 0.3 }, h: { default: 0.06 }, px: { default: 1365 } },
+  schema: { w: { default: 0.3 }, h: { default: 0.06 }, px: { default: PAPER_DENSITY } },
 
   init() {
     const d = this.data;

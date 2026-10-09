@@ -11,8 +11,8 @@ import { BUTTON } from './sheet-math.js';
 const { bg: NORMAL, hover: HOVER, text: TEXT } = BUTTON;   // inside Meta's colour limits (sheet-math.js)
 // Canvas pixels per metre of button: the same on every button of a place, so a text size
 // means the same real letter height on a narrow button as on a wide one. Walls read from
-// about 2 m use this; the sheet, read from 1 m, passes twice the density so the texture
-// stays as sharp as the headset shows it.
+// about 2 m use this: 683 px a metre is the display's own sharpness from 2.1 m (pxPerM in
+// sheet-math.js); the sheet, read from 1 m, passes its PAPER_DENSITY.
 const PX_PER_M = 1024 / 1.5;
 const PAD_M = 10 / PX_PER_M;   // inner margin, metres
 const SIZE_M = 54 / PX_PER_M;  // largest letters, metres

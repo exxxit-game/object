@@ -1,5 +1,5 @@
 import { createChoice } from './choice.js';
-import { MIN_LETTER, PAPER, PAPER_BG, INK, INK_SOFT, letterFrom } from './sheet-math.js';
+import { MIN_LETTER, PAPER, PAPER_BG, INK, INK_SOFT, letterFrom, PAPER_DENSITY } from './sheet-math.js';
 import { FONT } from '../panel.js';
 import './ink.js';
 
@@ -11,7 +11,7 @@ import './ink.js';
 // page is a large-print document (docs/decisions.md): what is printed on it, a seal included, is
 // sized from that letter, never from the paper.
 export { PAPER, PAPER_BG };
-export const DENSITY = 2 * 1024 / 1.5;   // canvas px per metre: sharp when read from 1 m (choice.js)
+export const DENSITY = PAPER_DENSITY;   // canvas px per metre: as sharp as the display from 1 m (sheet-math.js)
 export const MARGIN = 0.04;
 export const UNDER_TEXT = 0.03;
 const BUTTON_H = 0.07;            // about 4 degrees at 1 m (Meta: targets at least 2.5)
