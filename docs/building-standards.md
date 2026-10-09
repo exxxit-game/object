@@ -11,7 +11,7 @@ marked "ours" is the game's rounding, with the reason.
 | Door leaf | 3'0" × 7'0" (0.914 × 2.134 m), 1-3/4 in (45 mm) thick [S2] | same |
 | Door frame | hollow metal, 2 in (51 mm) face; gap leaf–frame 1/8 in (3.2 mm) at jambs and head, at most 3/4 in (19 mm) at the floor [S2, S3] | same; frame stops hide the gaps |
 | Hinges | 3 per leaf, 4-1/2 in (114 mm); top hinge top 9-3/4 in (248 mm) below the frame head, bottom hinge top 10-3/8 in (264 mm) above the floor, middle equally spaced [S2] | same, on the pull side |
-| Lever | strike centreline 40-5/16 in (1.024 m); operable parts 34–48 in (0.865–1.22 m); backset 2-3/4 in (70 mm) [S1, S2, S5] | same |
+| Knob | round knob (1979: levers came to Schlage's commercial locks only in 1983 and 1989); Schlage A Series Plymouth: 2-1/8 in wide, 2-5/16 in projection, rose 2-9/16 in (Allegion cut sheet, docs/decisions.md); strike centreline 40-5/16 in (1.024 m); operable parts 34–48 in (0.865–1.22 m); backset 2-3/4 in (70 mm) [S1, S2, S5] | same (src/engine/door.js) |
 | Kick plate | 10 × 34 in (254 × 864 mm), 2 in narrower than the door, on the push side [S4] | same |
 | Threshold | at most 1/2 in (13 mm) high; 5 in (127 mm) wide, aluminium [S1, S6] | same |
 | Closer | regular arm, pull side or top jamb [S18] | on the pull side |
@@ -28,7 +28,7 @@ marked "ours" is the game's rounding, with the reason.
 | Switch, outlet | switch 42 in (1.067 m), outlet 18 in (0.457 m) to centre; reach 15–48 in [S1, S15]; in a block wall the box is set as the courses are laid, notched into the block [S24] | switch at 1.1 m (ours: inside one course, so no joint runs beside the plate; within reach) |
 | Corridor | at least 44 in (1.118 m) in a university building [S16, S17] | 1.8 m |
 
-Not verified (do not present as fact): levers vs knobs in 1979, closer body position, 1970s
+Not verified (do not present as fact): closer body position, 1970s
 ceiling height, colour temperature of 1970s cool-white lamps, troffer spacing.
 
 Sources (opened 08.10.2026):

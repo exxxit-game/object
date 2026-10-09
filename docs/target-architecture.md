@@ -47,13 +47,13 @@ tests/NN-*.test.mjs; the smoke test runs every room to its end in CI
 - Room 01 onto the clipboard: it still talks through its wall screen, and its flow helpers
   (say, ask, paging the reveal, phase timing) live in its room.js; they move to src/app/ so a
   second room does not copy them, with a test listing what a room may import. Decided: a
-  questionnaire's answers are printed on the paper as lines with a box to tick (a 45-letter answer
-  as a dark button shrank under the 1.2° floor); work started on the local branch
+  questionnaire's answers are printed on the paper as lines with a box to tick, as paper forms are
+  (answer buttons on the sheet now keep the page's letter and wrap a long label); work started on the local branch
   claude/wip-experimenter, parked until the corridor is finished.
 - The reveal pager and a chart widget for "your timeline" (future src/app/reveal.js,
   src/engine/ui/timeline-chart.js).
-- "You against other players": read aggregates from the server (future src/engine/stats.js)
-  and per-room validation in submit_run.
+- "You against other players" is read for room 01 (`compareRoom`, src/engine/results.js; the word
+  "stats" stays out of file names, ad blockers block it); still to build: per-room validation in submit_run.
 - Languages: texts.en.js beside every texts.ru.js, voice per language, each language's script
   in the game's face (tests/fonts.test.mjs fails until its file is added).
 - A headset run in CI (an emulated WebXR device) beside the desktop smoke test.

@@ -68,7 +68,7 @@ trial-level predictions, not for the end-of-task rating; the depression link did
 → `questions` (experimenter back, concept reread, 4 scales, certainty, evidence, hypotheses, gender, prior knowledge)
 → `done` (reveal: what you did → the truth → original → replication → differences).
 
-## Data sent (only with consent, only at full speed, only after the privacy page exists)
+## Data sent (only with consent, only at full speed; the privacy page is privacy.html)
 The condition and the whole result of `src/rooms/01-control/report.js` (counts, percentages, actual
 control, heuristics, discrepancies, voided and stray presses, every answer with its shown position),
 plus seated, speed and first/repeat. No raw event times. The server whitelist must list these fields.

@@ -235,4 +235,19 @@ assert.ok(!author || author.endsWith('@users.noreply.github.com'), `git commits 
   }).map(rel);
   assert.deepEqual(lost, [], `docs nothing links to: ${lost.join(', ')}`);
 }
+
+// 23. A doc names no constant the code no longer has: an UPPER_SNAKE name in a doc must exist in
+// src/, tools/ or tests/ (a removed letter minimum stayed in four docs this way). Names from other
+// projects and standards are listed here by name. Snapshots (docs/audit, the other projects'
+// notes) and the experiment cards quote code as it was or elsewhere, and are left out.
+{
+  const OTHERS = ['SETTINGS_PANEL_DISTANCE', 'TURN_THRESHOLD', 'ANSI_HFES_100'];   // IWSDK's code; a standard
+  const ours = new Set([...walk(path.join(ROOT, 'src')), ...walk(path.join(ROOT, 'tools')), ...walk(path.join(ROOT, 'tests')), path.join(ROOT, 'index.html')]
+    .filter((f) => /\.(m?js|html)$/.test(f)).flatMap((f) => fs.readFileSync(f, 'utf8').match(/\b[A-Za-z_][A-Za-z0-9_]*\b/g) || []));
+  const docsToCheck = [path.join(ROOT, 'CLAUDE.md'), path.join(ROOT, 'ARCHITECTURE.md'), ...walk(path.join(ROOT, 'docs'))]
+    .filter((f) => f.endsWith('.md') && !/[\\/]docs[\\/](audit|research[\\/]projects|cards)[\\/]/.test(f));
+  const stale = docsToCheck.flatMap((f) => [...new Set(fs.readFileSync(f, 'utf8').match(/\b[A-Z][A-Z0-9]*_[A-Z0-9_]+\b/g) || [])]
+    .filter((id) => !ours.has(id) && !OTHERS.includes(id)).map((id) => `${rel(f)}: ${id}`));
+  assert.deepEqual(stale, [], `docs name constants the code does not have: ${stale.join(', ')}`);
+}
 console.log('structure tests: ok');

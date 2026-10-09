@@ -9,7 +9,7 @@ Read [docs/state.md](docs/state.md) first: decisions, lessons, where the work is
 | Layer | Folder | Job | Details |
 |---|---|---|---|
 | Shell | `index.html`, `src/main.js` | Load A-Frame and the game's face, pick the room from `?room=` (default `01-control`) | — |
-| App | `src/app/` | What every room shares: the arrival corridor (`lobby/`: sign, clipboard, board, doors), consent, session (first/repeat, sending, test speed), the studio's mark, shared texts, playtest and issue reports | [docs/decisions.md](docs/decisions.md) |
+| App | `src/app/` | What every room shares: the arrival corridor (`lobby/`: sign, clipboard, board, doors), consent (the two-page form and the lab's seal, `seal.js`), session (first/repeat, sending, test speed), the studio's mark and the sign family (`brand.js`, the font's capital height `CAP`), shared texts, playtest and issue reports | [docs/decisions.md](docs/decisions.md) |
 | Engine | `src/engine/` | Reusable parts: text panels, the clipboard sheet, answer buttons, rating scale, voice, sound, event log, VR recenter, moving, surfaces, doors, the light box | [docs/engine.md](docs/engine.md) |
 | Rooms | `src/rooms/NN-name/` | One experiment each: protocol, scene, flow, report, reveal, texts, recordings | [docs/rooms.md](docs/rooms.md) |
 | Styles | `css/` | Page chrome (the hint, the privacy page) and the game's face, Inter (`fonts.css`, files in `vendor/fonts/`). The 3D world has no CSS | — |

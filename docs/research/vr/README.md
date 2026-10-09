@@ -58,8 +58,8 @@ accuracy for WebXR on Quest Browser.
    (01, conflicts); 3:1 contrast for buttons and the laser (02, conflict 6).
 5. "Standing = Meta's 1 × 1 m": on the Store "Standing" means about 2 × 2 m (01, 02 conflict 10).
    Stationary is the real base for most players; 1.8 × 1.8 m roomscale is an offer (03).
-6. The sheet 12° below the eyes and the 1.2° letter floor have no research source of their own;
-   both sit inside the sourced ranges (03c).
+6. The sheet 12° below the eyes has no research source of its own; it sits inside the sourced
+   ranges (03c). The letter floor has one now: Google's 24 dmm (MIN_LETTER, 08-paper).
 7. The looping sign hum needs a stop or its own volume control (WCAG 1.4.2, Level A) (02, conflict 7).
 
 ## Decisions for the owner (in the plan doc)

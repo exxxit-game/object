@@ -1,5 +1,7 @@
 # Experiment selection
 
+**Superseded** by the 145 cards (`docs/cards/`) and their catalog (`docs/catalog.md`): read those. This list is kept because the research notes cite its rows (docs/research/vr/06-science.md).
+
 Which experiments become rooms, and why. Every number here needs a source in
 `sources.md` before it is shown to the player.
 

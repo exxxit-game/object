@@ -7,7 +7,7 @@ A-Frame docs. Status for room 01 in brackets.
 - No camera motion the player did not make; recenter only on VR entry, headset reset and the headset put back on. [recenter.js, all three]
 - Moving: teleport and snap turn by default, smooth moving (no acceleration, with a vignette) offered in settings, changed live and kept (Meta locomotion guidance). [corridor: teleport, 45° snap turn, back step (src/engine/locomotion.js); smooth moving and the settings: next]
 - Stable frame rate: 72 Hz = 13.7 ms, 90 Hz = 11.1 ms per frame; check the heaviest moment and Quest 2. [72 fps on Quest 3; Quest 2 not checked]
-- Everything reachable from one position, seated or standing; no forced turn over 90°. [seated mode: pending owner decision; painting behind is optional, not a task]
+- Everything reachable from one position, seated or standing; no forced turn over 90°. [seated rooms lift the eyes to 1.6 m (src/engine/recenter.js); the corridor is stood or walked]
 - Floor: `local-floor`, with a fallback for `local`. [not checked on Quest 2]
 
 ## Posture, space and arrival (decide before building, from how other games do it)
@@ -33,11 +33,11 @@ A-Frame docs. Status for room 01 in brackets.
 - Flashing only within WCAG 2.3.1: at most 3 flashes a second, no saturated red. [the sign's starter flicker: tests/glow.test.mjs; counter flash: brief colour change]
 
 ## Audio
-- Unlock audio on a user gesture. [done: start button / Space]
+- Unlock audio on a user gesture. [done: the first press anywhere (src/engine/audio.js); sounds asked for before it wait or are dropped: docs/audit/flow.md F6]
 - Subtitles for all speech, or playable without sound. [every spoken line is also on the screen]
 
 ## WebXR pitfalls
-- `requestSession` only from a real user gesture: the player presses VR; remote tools cannot.
+- `requestSession` only from a real user gesture: the player presses VR (the headset tools send theirs over the debug link as the user's: tools/quest-look.mjs vr).
 - Pause timed events when the session is `visible-blurred`/`hidden` (system menu) or the tab is hidden. [done: points wait while paused]
 - After failed session requests Quest Browser may refuse new ones until restarted: `adb shell am force-stop com.oculus.browser`.
 

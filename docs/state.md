@@ -21,8 +21,8 @@
   Its section "Как идём дальше" is THE queue: work only on its top step, one at a time.
 - Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS, 72 fps, 08.10);
   `tools/xr-probe.html` (owner presses VR/MR/mic buttons); `scrcpy` installed.
-  Owner plays the test copy https://exxxit-game.github.io/object-preview/ (bookmark in the headset; no
-  laptop or cable): `node tools/publish-preview.mjs` before he looks; it never sends data. From 9.10 the
+  Owner plays the test copy https://exxxit-game.github.io/object-preview/ (bookmark in the headset, the
+  game from GitHub): `node tools/publish-preview.mjs` before he looks; it never sends data. From 9.10 the
   headset stays on the laptop's USB cable (his choice); it charges slowly and power is cut daily: wake it
   only to check, end with `quest-look.mjs sleep`, push work often. I check in the headset myself:
   `tools/quest-look.mjs` (open [local port], reload, vr, frame, eval, sleep); opening measured: sign +10 s, 90 fps.
@@ -62,7 +62,7 @@
    anything else, in his order: 1 signature on the form (DONE, he signed in VR 9.10), 2 the lab's seal (his sign: a snake round a globe,
    ring "Лаборатория экспериментальной психологии"; drawing APPROVED 9.10, src/app/seal.js, head and tongue after Heath's Lachesis;
    two stars = the snake's bite; place: by the signature (GOST R 7.0.97-2025 5.24), he chose it; sized by the paper rule).
-   NOW (his word: no stupid decisions carried into rooms): corridor AUDIT 9.10, docs/audit/scene.md, docs/audit/paper.md, docs/audit/flow.md (~90 findings,
+   NOW (his word: no stupid decisions carried into rooms): corridor AUDIT 9.10, one list by cause with states: docs/audit/README.md (detail: docs/audit/scene.md, docs/audit/paper.md, docs/audit/flow.md, ~90 findings,
    highs checked by me), fix order in the plan doc section «Проверка коридора 9.10»; first fix = the paper rule (large print,
    docs/research/vr/08-paper.md): DONE in code 9.10 (form = 2 pages, seal pressed by the signature, reviewed, browser-checked);
    Headset check 9.10: form + seal read, 72 fps (power saving and low brightness on; re-check when he turns them off).

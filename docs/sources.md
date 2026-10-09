@@ -5,8 +5,8 @@ Status is `verified` (checked against the full text) or `UNVERIFIED` (do not sho
 Abstracts are not enough: room 01 once removed a true fact because only the
 abstract had been read.
 
-The Ono (1987) room that once was room 01 is gone from the game; its sources stay with it under
-the git tag ono-room-final.
+The Ono (1987) room that once was room 01 is gone from the game; its sources stay with it in
+commit 005c92a on GitHub (the git tag ono-room-final marks it on the owner's laptop).
 
 ## Latané & Darley (1968), JPSP 10(3), 215–221 (full text read 07.10.2026)
 Archive copy: https://web.archive.org/web/2020id_/http://pdfs.semanticscholar.org/5248/f73d3cf3ce2696ccc241d89c9b2538fd1896.pdf

@@ -54,7 +54,7 @@ Work on one phase at a time. A phase is done only when its exit check passes.
 
 ### 0. Foundation — done
 Structure, rules, tests, CI, headset check tool, voice pipeline, card method
-(`docs/cards/`, 130+ experiments read from full texts), guards in `docs/mistakes.md`.
+(`docs/cards/`, 145 experiments read from full texts), guards in `docs/mistakes.md`.
 
 ### 1. Room 01 — built, then set aside
 Built, reviewed twice against the paper, passes the headset check. The owner played it (08.10):
@@ -73,7 +73,8 @@ Pailhès, DRM); build two or three short prototypes; playtest them the same way.
 Exit check: one hook chosen on the playtest numbers.
 
 ### 4. Statistics live
-Privacy page, server whitelist per room, consent, "you vs others" read.
+Built for room 01: privacy page, server whitelist, consent, sending on, "you vs others" read.
+Still: a whitelist per new room.
 Exit check: a real run appears in the database and in the reveal.
 
 ### 5. Lobby, third room, English
