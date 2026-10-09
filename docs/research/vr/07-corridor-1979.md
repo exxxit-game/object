@@ -91,6 +91,11 @@ plates or a narrow vision light: **unverified**.
   thumb end over a longer curved carry handle; a ring pin on a chain; a fill valve on a chain; a round
   gauge with a chrome bezel, dark blue dial, red arcs and a "RANGE" wedge at 100 (0-200); the hose's brass
   coupling at the valve's side. Shape reference only: the listing forbids reposting its photos.
+  Ours against it (9.10), the top: a box for the valve where a cast chrome body sits on a hex collar;
+  flat bars for the lever and the carry handle where both are curved castings, the lever's thumb end
+  turned down; a white gauge face in a red rim facing forward where the dial is dark blue with red
+  arcs and a RANGE wedge in a chrome bezel, facing the side; no ring pin, fill valve or their chains;
+  no brass coupling where the hose leaves the valve; the body's seam band under the dome to check.
 - **ABC dry chemical, CO2 in 1979:** look and labels **unverified** in this pass.
 - **Mounting height.** The 5 ft top (units up to 40 lb), 3-1/2 ft top (heavier) and 4 in floor
   clearance are quoted from NFPA 10 1994 (1-6.10) and later [C18, search]. NFPA 10 had editions
