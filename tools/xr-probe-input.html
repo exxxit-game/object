@@ -23,7 +23,7 @@
   <a-entity meta-touch-controls="hand: right; buttonHighlightColor: #e8b84a"></a-entity>
   <a-entity hand-tracking-controls="hand: left"></a-entity>
   <a-entity hand-tracking-controls="hand: right"></a-entity>
-  <a-entity id="task" panel="w: 1; h: 0.46; px: 1432; ref: 1024; bg: #1c1c1c" visible="false"></a-entity>
+  <a-entity id="task" panel="w: 1; h: 0.54; px: 1432; ref: 1024; bg: #1c1c1c" visible="false"></a-entity>
   <a-entity light="type: ambient; intensity: 0.9"></a-entity>
   <a-entity light="type: directional; intensity: 0.7" position="0 2 1"></a-entity>
 </a-scene>
@@ -36,23 +36,30 @@ import '../src/engine/panel.js';
 // not done in WAIT_S offers a skip by the right trigger: a control that never reports is the finding.
 const WAIT_S = 12;
 const HANDS_S = 25;
-// the side in the three forms the lines need: «правый», «правого», «на правом»
-const pair = (hand, [nom, gen, loc], b) => [
+// the side in the two forms the lines need: «правого», «на правом». The buzz comes on his own press
+// and is asked about right after (Meta: a clear causal link between the action and the feedback,
+// developers.meta.com/horizon/design/haptics-best-practices/); both answers are always there.
+const pair = (hand, [gen, loc], b) => [
   { id: `${hand}-trigger`, hand, button: 0, say: `Нажмите курок на ${loc} контроллере` },
   { id: `${hand}-grip`, hand, button: 1, say: `Сожмите боковую кнопку на ${loc} (под средним пальцем)` },
   { id: `${hand}-${b[0]}`, hand, button: 4, say: `Нажмите кнопку ${b[0]} на ${loc}` },
   { id: `${hand}-${b[1]}`, hand, button: 5, say: `Нажмите кнопку ${b[1]} на ${loc}` },
   { id: `${hand}-stick`, hand, button: 3, say: `Нажмите на стик ${gen}, как на кнопку` },
   { id: `${hand}-stick-move`, hand, axis: true, say: `Отклоните стик ${gen} в любую сторону` },
-  { id: `${hand}-buzz`, hand, buzz: true, say: `Сейчас ${nom} контроллер дрогнет. Почувствовали? Да — курок, нет — кнопка ${b[1]}` }
+  { id: `${hand}-buzz`, hand, button: 0, buzz: true, say: `Нажмите курок на ${loc} — контроллер дрогнет` },
+  { id: `${hand}-felt`, hand, felt: b[1], noSkip: true, say: `Почувствовали дрожь? Да — курок на ${loc}, нет — кнопка ${b[1]}` }
 ];
+// The menu button last: Meta says it can take the user out of a WebXR session
+// (developers.meta.com/horizon/documentation/web/webxr-hands/); the hands go back and forth as in
+// Meta's own check VRC.Quest.Input.7 (controllers down, hands, controllers back).
 const TASKS = [
   { id: 'start', hand: 'right', button: 0, say: 'Нажмите курок на правом контроллере — начнём', noSkip: true },
-  ...pair('right', ['правый', 'правого', 'правом'], ['A', 'B']).slice(1),
-  ...pair('left', ['левый', 'левого', 'левом'], ['X', 'Y']),
-  { id: 'left-menu', hand: 'left', menu: true, say: 'Нажмите кнопку с тремя полосками на левом. Круглую кнопку на правом не трогайте' },
+  ...pair('right', ['правого', 'правом'], ['A', 'B']).slice(1),
+  ...pair('left', ['левого', 'левом'], ['X', 'Y']),
   { id: 'hands', hands: true, say: 'Положите оба контроллера и поднимите руки перед собой' },
   { id: 'fingers', fingers: true, say: 'Пошевелите пальцами обеих рук' },
+  { id: 'back', back: true, say: 'Возьмите оба контроллера снова' },
+  { id: 'left-menu', hand: 'left', menu: true, say: 'Последнее: нажмите кнопку с тремя полосками на левом. Если проверка закроется — так и должно быть. Круглую кнопку на правом не трогайте' },
   { id: 'end', end: true, say: 'Готово. Можно снимать очки' }
 ];
 const KNOWN = [0, 1, 3, 4, 5, 6];
@@ -81,8 +88,6 @@ const next = (result) => {
   if (step >= TASKS.length) return;
   const t = task();
   write(t.say, `${step + 1} из ${TASKS.length}`);
-  // the buzz once he has read that it comes
-  if (t.buzz) setTimeout(() => buzz(t.hand), 1500);
   if (t.end) setTimeout(() => { r.finished = new Date().toISOString(); save(); scene.exitVR(); }, 5000);
 };
 // a press is read on its rising edge after the task began, so one press never answers two tasks
@@ -110,13 +115,15 @@ AFRAME.registerComponent('probe-input', {
     const session = scene.xrSession, frame = scene.frame;
     if (!r || !session || !frame) return;
     const space = scene.renderer.xr.getReferenceSpace();
-    // the panel 1 m ahead of where he looks first, a little under eye level, facing him
+    // the panel 1 m ahead of where he looks first, a little under eye level, facing him: read from
+    // the camera itself, which carries the headset's pose wherever A-Frame applies it (as
+    // src/engine/ui/sheet.js reads it); a camera's world direction is where it looks
     if (!placed) {
-      const head = document.getElementById('head').object3D, at = new THREE.Vector3(), dir = new THREE.Vector3();
-      head.getWorldPosition(at); head.getWorldDirection(dir);
+      const at = new THREE.Vector3(), dir = new THREE.Vector3();
+      scene.camera.getWorldPosition(at); scene.camera.getWorldDirection(dir);
       dir.y = 0;
       if (at.y > 0.3 && dir.lengthSq() > 1e-4) {
-        dir.normalize().negate();
+        dir.normalize();
         panel.object3D.position.set(at.x + dir.x, at.y - 0.1, at.z + dir.z);
         panel.object3D.lookAt(at.x, at.y - 0.1, at.z);
         panel.object3D.visible = placed = true;
@@ -138,9 +145,15 @@ AFRAME.registerComponent('probe-input', {
       else if (t.fingers && s > 5) next('done');
       return;
     }
-    if (pad && t.button !== undefined && pressed(pad, t.button)) return ok();
+    if (t.back) {
+      const both = ['left', 'right'].every((h) => srcs.some((x) => x.handedness === h && x.gamepad && !x.hand));
+      if (both) return ok();
+      if (s > HANDS_S) return next('not seen');
+      return;
+    }
+    if (pad && t.button !== undefined && pressed(pad, t.button)) { if (t.buzz) buzz(t.hand); return ok(); }
     if (pad && t.axis && pad.gamepad.axes.some((a) => Math.abs(a) > 0.8)) return ok();
-    if (pad && t.buzz && s > 2) {
+    if (pad && t.felt) {
       if (pressed(pad, 0)) return next('felt');
       if (pressed(pad, 5)) return next('not felt');
     }

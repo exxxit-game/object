@@ -53,10 +53,13 @@ assert.ok(reviewOf(place, record), 'a whole practice review of these very files 
 put('tools/xr-probe.html', '<p>probe, changed</p>\n');
 assert.equal(reviewOf(place, record), null, 'the probe changed after the review: the stop holds again');
 
-// the tools refuse before they touch the headset or GitHub (an empty record: no review exists)
+// the tools refuse before they touch the headset or GitHub (an empty record: no review exists); run
+// with only node on the path, so a stop that ever broke could reach no adb, git or gh from here
 const empty = path.join(tmp, 'empty.jsonl');
-for (const args of [['tools/quest-look.mjs', 'vr'], ['tools/xr-probe-run.mjs', 'input'], ['tools/publish-preview.mjs', '--anyway']]) {
-  const r = spawnSync(process.execPath, args, { cwd: ROOT, encoding: 'utf8', env: { ...withoutGitVars(), OBJECT_REVIEW_RECORD: empty }, timeout: 20000 });
+const bare = Object.fromEntries(Object.entries(withoutGitVars()).filter(([k]) => k.toUpperCase() !== 'PATH'));
+bare.PATH = path.dirname(process.execPath);
+for (const args of [['tools/quest-look.mjs', 'vr'], ['tools/quest-look.mjs', 'eval', "document.querySelector('a-scene').enterVR()"], ['tools/xr-probe-run.mjs', 'input'], ['tools/publish-preview.mjs', '--anyway']]) {
+  const r = spawnSync(process.execPath, args, { cwd: ROOT, encoding: 'utf8', env: { ...bare, OBJECT_REVIEW_RECORD: empty }, timeout: 20000 });
   assert.ok(r.status === 1 && r.stdout.includes('waits for the practice reviewer'), `${args.join(' ')} went ahead with no review:\n${r.stdout}${r.stderr}`);
 }
 

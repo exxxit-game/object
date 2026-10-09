@@ -108,5 +108,6 @@ assert.deepEqual(unrelayed(`{"content":"export const MARK = \\"${MARK}\\"; // se
 const start = spawnSync(process.execPath, ['tools/claude-guard.mjs', 'start'], { cwd: ROOT, encoding: 'utf8', input: JSON.stringify({ source: 'startup', cwd: ROOT }) });
 assert.ok(/^# The owner's decisions\r?\n/m.test(start.stdout) && /^- The corridor is the reference/m.test(start.stdout) && start.stdout.includes('## Open items'),
   `the start hook does not show the owner's decisions and the open items:\n${start.stdout.slice(0, 400)}`);
+assert.ok(start.stdout.length < 10000, `the start hook prints ${start.stdout.length} characters: over 10,000 Claude Code keeps only a preview`);
 
 console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the headset's wearer seen, links owed to the owner found, his decisions shown at start)`);

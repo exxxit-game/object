@@ -102,8 +102,10 @@ if (mode === 'start') {
   } catch { out.push(`WARNING: ${DECISIONS} is missing here: the owner's decisions are not in front of this session.`); }
   try {
     const state = fs.readFileSync(path.join(HERE, 'docs/state.md'), 'utf8');
+    // Claude Code keeps a hook's output whole only up to 10,000 characters (hooks docs): the open
+    // items get what the decisions leave
     const open = state.slice(state.indexOf('## Open items'));
-    if (open.startsWith('## Open items')) out.push(open.slice(0, 6000));
+    if (open.startsWith('## Open items')) out.push(open.slice(0, Math.max(1500, 9500 - out.join('\n\n').length)));
   } catch { out.push('docs/state.md is missing here: this checkout is not the project\'s current work.'); }
   process.stdout.write(`${out.join('\n\n')}\n`);
   process.exit(0);
@@ -120,9 +122,13 @@ if (mode === 'subagent-start' || mode === 'subagent-stop') {
     process.exit(0);
   }
   const start = entries().filter((e) => e.kind === 'start' && e.agent === event.agent_id).pop();
+  // a subagent here hands its report back through a tool call, not as its last text, so the
+  // report's last block is looked for in its transcript too
+  let report = String(event.last_assistant_message || '');
+  try { if (!report.includes(REPORT_END) && event.agent_transcript_path) report = fs.readFileSync(event.agent_transcript_path, 'utf8'); } catch { /* no transcript to read */ }
   const why = !start ? 'no start seen for this run'
     : start.print !== print ? 'the files changed while it read them'
-      : !String(event.last_assistant_message || '').includes(REPORT_END) ? 'its report did not reach its last block' : '';
+      : !report.includes(REPORT_END) ? 'its report did not reach its last block' : '';
   write(why ? { kind: 'void', agent: event.agent_id, why } : { kind: 'review', agent: event.agent_id, print, root: HERE, transcript: event.agent_transcript_path || '' });
   process.exit(0);
 }

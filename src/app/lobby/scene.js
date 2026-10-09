@@ -80,11 +80,12 @@ function troffer(x) {
              material="color: #ffffff; emissive: #f2f6ff; emissiveIntensity: 0.95; roughness: 1" surface="kind: lens; glow: true"></a-plane>`;
 }
 // Lay-in troffers sit in the grid's openings, in place of two tiles, their ends on its tees (S20):
-// each is centred on a joint along the corridor. 10 ft (5 tiles) apart, inside the troffer's
-// spacing criterion, 1.25 times its height over the floor (Metalux 2G-240A, two F40, pattern 12
-// lens: 3.1 m at 2.5 m), from the corridor's centre, a joint, to both ends.
+// each is centred on a joint along the corridor. A 2 × 4 opening lies between two main beams 48 in
+// apart (S29), so a row steps by 4 ft: 8 ft (4 tiles) apart, inside the troffer's spacing
+// criterion, 1.25 times its height over the floor (Metalux 2G-240A, two F40, pattern 12 lens:
+// 3.1 m at 2.5 m, S28), from the corridor's centre, a joint, to both ends.
 const JOINT = jointOrigin(CENTRE.x, LENGTH, CEILING.tile);
-const TROFFERS = [-10, -5, 0, 5, 10].map((k) => r(JOINT + k * CEILING.tile));
+const TROFFERS = [-8, -4, 0, 4, 8].map((k) => r(JOINT + k * CEILING.tile));
 
 // polished stainless, as on the 1972 General WS-900 (a seller's photo of one), mirroring the
 // corridor round it (reflect-env, src/engine/reflect-env.js); left out of the corridor's merge
