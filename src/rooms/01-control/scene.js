@@ -14,7 +14,11 @@ import { plaqueX, ROOM1_NUMBER } from '../../app/lobby/plan.js';
 export const BOOTH = { minX: -1.6, maxX: 1.6, minZ: -1.6, maxZ: 1.6, ceiling: 2.5 };
 const SPACE = `space: 0 0 ${BOOTH.maxX - BOOTH.minX} ${BOOTH.maxZ - BOOTH.minZ}`;
 
-export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true" background="color: #0b0b0d"
+// No fixed foveated rendering (A-Frame's default is the most): it draws the view away from the lens
+// centre at a lower resolution, and Meta warns that "high-contrast or text-heavy scenes may make the
+// foveation artifacts more obvious" (developers.meta.com/horizon/documentation/web/webxr-ffr); with
+// it the door numbers looked blurred in the owner's headset and turned sharp without it.
+export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true; foveationLevel: 0" background="color: #0b0b0d"
          cursor="rayOrigin: mouse" raycaster="objects: .clickable; far: 8"
          vr-mode-ui="enabled: true" loading-screen="enabled: false" xr-mode-ui="enabled: true">
 
