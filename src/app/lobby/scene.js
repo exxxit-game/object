@@ -157,6 +157,26 @@ function lip() {
     .map(([dx, dy, w, h]) => `
     <a-box position="${r(B.x + dx)} ${r(B.y + dy)} ${z}" width="${r(w)}" height="${r(h)}" depth="${B.lip}" ${ALU}></a-box>`).join('');
 }
+// TRIAL LOOK for the owner's pictures, not for the game: a print on each end wall in a thin silver
+// metal section frame (period: docs/research/vr/09-end-wall-pictures.md, Q4), its edges clear of the
+// block joints (tests/masonry.test.mjs). Print size 16 x 20 in and the 6 mm frame face are not yet
+// from a dated source; the images load from Wikimedia Commons (public domain, licences in 09, Q3).
+const PRINT = { face: 0.006, depth: 0.0206, lip: 0.003, y: 1.46 };
+const END_PICTURES = [
+  { x: PLAN.from, facing: 1, w: 0.4064, h: 0.508, img: [0.3773, 0.508], src: 'https://upload.wikimedia.org/wikipedia/commons/5/56/Wilhelm_Wundt.jpg' },
+  { x: PLAN.to, facing: -1, w: 0.508, h: 0.4064, img: [0.4789, 0.4064], src: 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Kaninchen_und_Ente.png' }
+];
+function endPicture({ x, facing, w, h, img, src }) {
+  const { face, depth, lip } = PRINT, fw = r(w + 2 * face), fh = r(h + 2 * face);
+  const bars = [[0, (h + face) / 2, fw, face], [0, -(h + face) / 2, fw, face], [-(w + face) / 2, 0, face, h], [(w + face) / 2, 0, face, h]];
+  return `
+  <a-entity class="end-picture" position="${x} ${PRINT.y} ${CENTRE.z}" rotation="0 ${facing * 90} 0">
+    <a-box position="0 0 ${r(depth / 2)}" width="${fw}" height="${fh}" depth="${depth}" ${ALU}></a-box>
+    <a-plane position="0 0 ${r(depth + 0.0005)}" width="${r(w)}" height="${r(h)}" decal material="color: #d6d6da; roughness: 1"></a-plane>
+    <a-plane position="0 0 ${r(depth + 0.001)}" width="${img[0]}" height="${img[1]}" decal="layer: 2" material="src: url(${src}); roughness: 1"></a-plane>
+    ${bars.map(([dx, dy, bw, bh]) => `<a-box position="${r(dx)} ${r(dy)} ${r(depth + lip / 2)}" width="${r(bw)}" height="${r(bh)}" depth="${lip}" ${ALU}></a-box>`).join('')}
+  </a-entity>`;
+}
 export const corridorHTML = `
 <a-entity id="corridor">
   <a-entity merge-static>
@@ -200,4 +220,5 @@ export const corridorHTML = `
   <!-- Letter sheets pinned beside the clipboard: the studio's poster and a flyer (board.js) -->
   <a-entity id="notePoster" class="clickable" ${note(NOTES.poster)}></a-entity>
   <a-entity id="noteFlyer" ${note(NOTES.flyer)}></a-entity>
+  ${END_PICTURES.map(endPicture).join('')}
 </a-entity>`;
