@@ -44,6 +44,7 @@ export const REFUSED = [
   [run(String.raw`npm(?:\.cmd)?\b[^;&|\n]*\btest:smoke\b`), 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
   [run(String.raw`node(?:\.exe)?"?\s+(?:-{1,2}[\w-]+(?:=\S+)?\s+)*["']?(?:[\w.:~-]*[\\/]+)*smoke\.mjs\b`), 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
   [run(String.raw`(?:npx(?:\.cmd)?(?:\s+-{1,2}[\w-]+)*\s+@?playwright\b|playwright(?:\.cmd)?\s+(?:test|install|open|codegen)\b)`), 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
+  [run(String.raw`adb(?:\.exe)?\b[^;&|\n]*\s(?:reboot\b|shell\s+["']?(?:am\s+force-stop|reboot\b|svc\s+power\s+(?:reboot|shutdown)))`), 'restarts the headset or its browser past tools/quest-look.mjs, which first checks that the owner is not wearing it'],
 ];
 
 // Connected tools that do what a refused command would: a browser started on the laptop, and

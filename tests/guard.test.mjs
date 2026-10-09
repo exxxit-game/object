@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { onHead } from '../tools/headset.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ask = (command) => {
@@ -48,7 +49,14 @@ const refused = [
   "git commit -m \"$(cat <<'EOF'\nmessage; with | marks\nEOF\n)\" --no-verify",
   'git commit -n -m x',
   'git commit -am "a; b" -n',
-  'git commit -qnm x'
+  'git commit -qnm x',
+  // the headset or its browser restarted past the check that the owner is not wearing it
+  'adb reboot',
+  'adb -s 2G0YC5ZG reboot',
+  'adb shell am force-stop com.oculus.browser',
+  'adb shell "am force-stop com.oculus.browser"',
+  'adb shell reboot',
+  'adb shell svc power reboot'
 ];
 for (const c of refused) assert.ok(ask(c).refused, `the guard let through: ${c}`);
 
@@ -63,11 +71,22 @@ const allowed = [
   'git commit -qm "the smoke test (npm run test:smoke) runs only on GitHub"',
   'git commit --amend --no-edit',
   'npm test',
-  'node tests/guard.test.mjs'
+  'node tests/guard.test.mjs',
+  'node tools/quest-look.mjs reboot',
+  'node tools/quest-look.mjs restart-browser',
+  'adb devices',
+  'adb shell dumpsys vrpowermanager'
 ];
 for (const c of allowed) {
   const r = ask(c);
   assert.ok(!r.refused, `the guard refused a command that runs nothing it guards: ${c}\n${r.out}`);
 }
 
-console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed)`);
+// The headset tools restart nothing while the owner wears the headset: the power service's dump
+// says mounted with no override of ours (tools/headset.mjs). Dumps as the headset printed them.
+const dump = (state, virtual) => `Virtual proximity state: ${virtual}\nisAutosleepDisabled: false\nState: ${state}\n`;
+assert.ok(onHead(dump('HEADSET_MOUNTED', 'DISABLED')), 'worn by the owner reads as on his head');
+assert.ok(!onHead(dump('HEADSET_MOUNTED', 'ENABLED')), 'our own "worn on" override is not a person');
+assert.ok(!onHead(dump('HEADSET_UNMOUNTED', 'DISABLED')) && !onHead(dump('STANDBY', 'DISABLED')), 'off the head is free to restart');
+
+console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the headset's wearer seen)`);

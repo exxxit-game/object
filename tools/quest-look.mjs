@@ -16,6 +16,10 @@
 //                                              alone falls asleep, its Wi-Fi with it, and only its
 //                                              power button wakes it (a wake key press opens the
 //                                              quick menu and lets it sleep again)
+//   node tools/quest-look.mjs restart-browser  the browser restarted on the test copy: the cure when
+//                                              every VR request fails with NotSupportedError
+//   node tools/quest-look.mjs reboot           restart the headset; both refuse while it is on the
+//                                              owner's head (headset.mjs, wornByPerson)
 //   node tools/quest-look.mjs levels           play each corridor sound at its game volume and the
 //                                              voice, measure what reaches the headset's output and
 //                                              check the mix (LEVELS below); exits 1 when it is off
@@ -26,7 +30,7 @@
 // its VR session is visible: a headset that fell asleep or shows its cameras draws nothing,
 // and "frame" says so; a headset put down a moment ago keeps drawing.
 import fs from 'node:fs';
-import { adb, serveToHeadset, localPort, worn, sleepNow, openUrl, page } from './headset.mjs';
+import { adb, serveToHeadset, localPort, worn, sleepNow, openUrl, page, wornByPerson, restartBrowser } from './headset.mjs';
 
 const PREVIEW = 'https://exxxit-game.github.io/object-preview/';
 // The mix, heard where the player stands when the sign plays (the arrival spot, at the designed
@@ -54,6 +58,12 @@ if (cmd === 'sleep') {
 if (cmd === 'worn') {
   worn(arg === 'on');
   console.log('worn', arg === 'on' ? 'on' : 'off');
+  process.exit(0);
+}
+if (cmd === 'restart-browser' || cmd === 'reboot') {
+  if (wornByPerson()) { console.log('not now: the owner is wearing the headset; this would throw him out'); process.exit(1); }
+  if (cmd === 'reboot') adb('reboot'); else restartBrowser(PREVIEW);
+  console.log(cmd === 'reboot' ? 'rebooting' : 'browser restarted on the test copy');
   process.exit(0);
 }
 
@@ -191,6 +201,6 @@ if (cmd === 'reload') {
   console.log(`${ok ? 'ok  ' : 'OVER'} ${v.vr ? 'VR' : '2D'}: ${v.fps} fps, ${v.slow} frames slower than 72 Hz (worst ${v.worstMs} ms), ${v.calls} draw calls, ${v.triangles} triangles`);
   if (!ok) process.exitCode = 1;
 } else {
-  console.log('usage: node tools/quest-look.mjs open [local port] | sleep | reload | vr | frame out.jpg | eval "<js>" | worn on|off | levels | perf');
+  console.log('usage: node tools/quest-look.mjs open [local port] | sleep | reload | vr | frame out.jpg | eval "<js>" | worn on|off | restart-browser | reboot | levels | perf');
 }
 game.close();

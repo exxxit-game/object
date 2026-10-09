@@ -32,6 +32,17 @@ export function battery() {
 // Worn: the proximity sensor is overridden so the headset stays awake on a table; off gives it back.
 export const worn = (on) => adb('shell', 'am', 'broadcast', '-a', `com.oculus.vrpowermanager.${on ? 'prox_close' : 'automation_disable'}`);
 export function sleepNow() { worn(false); adb('shell', 'input', 'keyevent', 'KEYCODE_SLEEP'); }
+// On a person's head: the power service reads the headset as mounted with no override of ours
+// (`dumpsys vrpowermanager`). Restarting the browser or the headset then throws the owner out of
+// what he is doing, so those wait until he takes it off.
+export const onHead = (powerDump) => /State: HEADSET_MOUNTED/.test(powerDump) && !/Virtual proximity state: ENABLED/.test(powerDump);
+export const wornByPerson = () => onHead(adb('shell', 'dumpsys', 'vrpowermanager'));
+// The browser restarted, the game page opened again: a browser that has lost its link to the VR
+// system answers every request to enter VR with NotSupportedError, whatever the page asks for.
+export function restartBrowser(url) {
+  adb('shell', 'am', 'force-stop', 'com.oculus.browser');
+  adb('shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', url, 'com.oculus.browser');
+}
 export function openUrl(url) {
   adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP');
   adb('shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', url, 'com.oculus.browser');
