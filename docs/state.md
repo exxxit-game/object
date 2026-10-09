@@ -22,10 +22,10 @@
 - Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS, 72 fps, 08.10);
   `tools/xr-probe.html` (owner presses VR/MR/mic buttons); `scrcpy` installed.
   Owner plays the test copy https://exxxit-game.github.io/object-preview/ (bookmark in the headset; no
-  laptop or cable): `node tools/publish-preview.mjs` before he looks; it never sends data. Never make
-  him plug cables; adb over Wi-Fi (`tools/quest-wifi.mjs`) only for my own checks. I check in the
-  headset myself, without him: `tools/quest-look.mjs` (open, reload past caches, enter VR, read the
-  game's own frames, run JS); opening 08.10 measured there: sign at +10 s, 90 fps, clipboard trip 1 s.
+  laptop or cable): `node tools/publish-preview.mjs` before he looks; it never sends data. From 9.10 the
+  headset stays on the laptop's USB cable (his choice); it charges slowly and power is cut daily: wake it
+  only to check, end with `quest-look.mjs sleep`, push work often. I check in the headset myself:
+  `tools/quest-look.mjs` (open [local port], reload, vr, frame, eval, sleep); opening measured: sign +10 s, 90 fps.
 - Voice: ElevenLabs key `C:\Users\admin\.elevenlabs-key.txt`; Daniel, eleven_v3;
   `tools/make-voice.mjs`, `tools/check-voice.mjs` (speech-to-text check), `tools/make-sounds.mjs`.
 

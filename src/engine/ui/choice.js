@@ -3,7 +3,10 @@ import { FONT } from '../panel.js';
 // A column of answer buttons on a wall or on the clipboard sheet, chosen with the laser
 // (VR) or the mouse (desktop). Any number of answers; one pick, then the buttons go away.
 // All answers of one question share one text size: a smaller answer would look
-// less important and could bias the choice.
+// less important and could bias the choice. On paper (the clipboard sheet, place.letter) that
+// size is the page's own and never smaller (large print: one large font across a form, CNIB 2019;
+// docs/decisions.md): a label too long for a line wraps, every button of the set grows to the
+// tallest, and the list keeps one column.
 const NORMAL = '#1d2026';
 const HOVER = '#343b47';
 const TEXT = '#f2efe8';
@@ -14,11 +17,26 @@ const TEXT = '#f2efe8';
 const PX_PER_M = 1024 / 1.5;
 const PAD_M = 10 / PX_PER_M;   // inner margin, metres
 const SIZE_M = 54 / PX_PER_M;  // largest letters, metres
-const MIN_GAP = 0.01; // metres between buttons when a long list is squeezed into one column
+const MIN_GAP = 0.012; // metres between buttons when a long list is squeezed: Meta's 12 mm between interactables
 const WEIGHT = 600;
 const LINE_HEIGHT = 1.32; // as in panel.js
 // Buttons ignore clicks this long after they appear: no double answers from one press.
 const READY_MS = 300;
+
+// How many lines the longest label takes at size (canvas px) on a button pxW wide, wrapped
+// at spaces as panel.js wraps.
+function linesAt(labels, size, pxW, pad) {
+  const ctx = document.createElement('canvas').getContext('2d');
+  ctx.font = `${WEIGHT} ${size}px ${FONT}`;
+  return Math.max(...labels.map((t) => {
+    let lines = 1, line = '';
+    for (const word of t.split(' ')) {
+      const test = line ? line + ' ' + word : word;
+      if (ctx.measureText(test).width > pxW - pad * 2 && line) { lines++; line = word; } else line = test;
+    }
+    return lines;
+  }));
+}
 
 // The largest common size (canvas px) at which every label fits on one line of the button.
 function commonSize(labels, pxW, pxH, density) {
@@ -32,11 +50,12 @@ function commonSize(labels, pxW, pxH, density) {
 }
 
 // parent: the scene or any entity (the sheet); place is in the parent's metres:
-// { x, y (top button), z, w, h, gap, bottom (lowest edge the buttons may reach), density }
-// A list that would run below `bottom` in one column is shown in two columns,
+// { x, y (top button), z, w, h, gap, bottom (lowest edge the buttons may reach), density,
+// letter (on paper: the fixed letter size) }
+// On a wall, a list that would run below `bottom` in one column is shown in two columns,
 // read down the first column, then the second; smaller buttons would mean smaller letters.
 export function createChoice(parent, place) {
-  const { x = 0, y, z, w = 1.5, h = 0.13, gap = 0.025, bottom = null, density = PX_PER_M } = place;
+  const { x = 0, y, z, w = 1.5, h = 0.13, gap = 0.025, bottom = null, density = PX_PER_M, letter = null } = place;
   let els = [];
 
   function hide() {
@@ -45,25 +64,29 @@ export function createChoice(parent, place) {
   }
 
   // labels: strings. onPick(index) fires once. top (optional): the top edge of the
-  // first button, to start below a question of any length.
+  // first button, to start below a question of any length. Returns the lowest edge of the
+  // buttons (the parent's metres), for the caller to check they fit.
   function show(labels, onPick, top) {
-    // long lists get lower buttons so they stay on the wall screen
-    const bh = labels.length > 4 ? h * 0.8 : h;
+    const pad = Math.round(PAD_M * density);
+    const fixed = letter ? letter * density : null;
+    // on paper the buttons grow with a wrapped label; on a wall long lists get lower buttons
+    // so they stay on its screen
+    const bh = fixed ? Math.max(h, (linesAt(labels, fixed, Math.round(w * density), pad) * fixed * LINE_HEIGHT + 2 * pad) / density)
+      : labels.length > 4 ? h * 0.8 : h;
     const y0 = top == null ? y : top - bh / 2;
-    // One column if it fits, first with the usual gaps, then with gaps down to 1 cm;
-    // otherwise two columns (letters keep their size either way).
+    // One column if it fits, first with the usual gaps, then with gaps down to MIN_GAP;
+    // on a wall otherwise two columns (letters keep their size either way).
     const n = labels.length;
     const space = bottom == null ? Infinity : y0 + bh / 2 - bottom;
     const tight = n > 1 ? (space - n * bh) / (n - 1) : gap;
-    const cols = tight >= MIN_GAP ? 1 : 2;
-    const g = cols === 1 ? Math.min(gap, tight) : gap;
+    const cols = fixed || tight >= MIN_GAP ? 1 : 2;
+    const g = cols === 1 ? Math.max(MIN_GAP, Math.min(gap, tight)) : gap;
     const rows = Math.ceil(n / cols);
     const bw = cols === 1 ? w : (w - g) / 2;
     hide();
     let done = false;
     const px = Math.round(bw * density);
-    const size = commonSize(labels, px, Math.round(bh * density), density);
-    const pad = Math.round(PAD_M * density);
+    const size = fixed || commonSize(labels, px, Math.round(bh * density), density);
     const shownAt = performance.now();
     els = labels.map((text, i) => {
       const col = Math.floor(i / rows), row = i % rows;
@@ -93,6 +116,7 @@ export function createChoice(parent, place) {
       parent.appendChild(el);
       return el;
     });
+    return y0 - (rows - 1) * (bh + g) - bh / 2;
   }
 
   return { show, hide };

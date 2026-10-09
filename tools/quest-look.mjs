@@ -1,8 +1,11 @@
-// Looks at the game in the owner's headset without the owner: the headset only has to be
-// on and linked over Wi-Fi (tools/quest-wifi.mjs). Works on the game tab of the test copy
-// (exxxit-game.github.io/object-preview) or of the local server.
+// Looks at the game in the owner's headset without the owner: the headset stays on the laptop's
+// USB cable (or is linked over Wi-Fi, tools/quest-wifi.mjs). Works on the game tab of the test
+// copy (exxxit-game.github.io/object-preview) or of the local server. The laptop charges the
+// headset only slowly: wake it for a check, and end every check with "sleep".
 // Usage:
 //   node tools/quest-look.mjs open             open the test copy in the headset browser
+//   node tools/quest-look.mjs open local 3100  open the local server (port 3100) as localhost:3000
+//   node tools/quest-look.mjs sleep            give the proximity sensor back and put it to sleep
 //   node tools/quest-look.mjs reload           reload it, skipping every cache (after publish-preview)
 //   node tools/quest-look.mjs vr               enter VR, as if the VR button were pressed
 //   node tools/quest-look.mjs frame out.jpg    save what the left eye sees right now (in VR)
@@ -37,8 +40,21 @@ const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8', env: { ..
 const [cmd, arg] = process.argv.slice(2);
 
 if (cmd === 'open') {
-  adb('shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', PREVIEW, 'com.oculus.browser');
-  console.log('opened', PREVIEW);
+  let url = PREVIEW;
+  if (arg === 'local') {
+    // the headset reaches the laptop's server through the cable at its own localhost:3000
+    adb('reverse', 'tcp:3000', `tcp:${process.argv[4] || 3000}`);
+    url = 'http://localhost:3000/';
+  }
+  adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP');
+  adb('shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', url, 'com.oculus.browser');
+  console.log('opened', url);
+  process.exit(0);
+}
+if (cmd === 'sleep') {
+  adb('shell', 'am', 'broadcast', '-a', 'com.oculus.vrpowermanager.automation_disable');
+  adb('shell', 'input', 'keyevent', 'KEYCODE_SLEEP');
+  console.log('asleep');
   process.exit(0);
 }
 if (cmd === 'worn') {
@@ -205,6 +221,6 @@ if (cmd === 'reload') {
   console.log(`${ok ? 'ok  ' : 'OVER'} ${v.vr ? 'VR' : '2D'}: ${v.fps} fps, ${v.slow} frames slower than 72 Hz (worst ${v.worstMs} ms), ${v.calls} draw calls, ${v.triangles} triangles`);
   if (!ok) process.exitCode = 1;
 } else {
-  console.log('usage: node tools/quest-look.mjs open | reload | vr | frame out.jpg | eval "<js>" | worn on|off | levels | perf');
+  console.log('usage: node tools/quest-look.mjs open [local port] | sleep | reload | vr | frame out.jpg | eval "<js>" | worn on|off | levels | perf');
 }
 ws.close();

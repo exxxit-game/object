@@ -37,7 +37,7 @@ export function createPage(el, paperEl) {
   const paper = () => paperEl.components.panel;
   const choice = createChoice(el, {
     x: 0, y: 0, z: 0.005, w: PAPER.w - 2 * MARGIN, h: BUTTON_H, gap: GAP,
-    bottom: -PAPER.h / 2 + MARGIN, density: DENSITY
+    bottom: -PAPER.h / 2 + MARGIN, density: DENSITY, letter: ROLES.body.m
   });
   let fields = [];
   const pressedInk = new WeakMap();   // a stamp's drawing turned to ink, made once
@@ -145,9 +145,7 @@ export function createPage(el, paperEl) {
       if (note) top = paint([...blocks, { t: note, role: 'soft', gap: UNDER_TEXT }]) - UNDER_TEXT;
     }
     if (labels) {
-      const needed = labels.length * BUTTON_H + (labels.length - 1) * GAP;
-      if (top - needed < -PAPER.h / 2 + MARGIN) el.dataset.overflow = '1';
-      choice.show(labels, onPick, top);
+      if (choice.show(labels, onPick, top) < -PAPER.h / 2 + MARGIN - 1e-6) el.dataset.overflow = '1';
     } else choice.hide();
     if (form) showFields(); else hideFields();
     return top;
