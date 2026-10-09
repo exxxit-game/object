@@ -1,5 +1,16 @@
 {
   "worktree": { "baseRef": "head" },
+  "enabledPlugins": {
+    "data@inline": false, "data@synced": false,
+    "marketing@inline": false, "marketing@synced": false,
+    "design@inline": false, "design@synced": false,
+    "customer-research@inline": false, "customer-research@synced": false,
+    "canva@inline": false, "canva@synced": false,
+    "adobe-for-creativity@inline": false, "adobe-for-creativity@synced": false,
+    "figma@inline": false, "figma@synced": false,
+    "hookify@claude-plugins-official": false, "hookify@inline": false,
+    "github@claude-plugins-official": false, "github@inline": false
+  },
   "permissions": {
     "allow": [
       "Bash(node tools/quest-look.mjs)",
