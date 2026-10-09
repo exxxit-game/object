@@ -9,7 +9,7 @@ where its guard goes; nothing here is built yet unless it says so.
 
 | # | Cause | Earliest sign | Goes to |
 |---|---|---|---|
-| 1 | The first room keeps sliding behind infrastructure steps (4.1-4.3, 4a, corridor 3-5 all put ahead of step 5) | most recent commits touch no `src/rooms/`; no date for "a stranger finishes a prototype" | the owner's decision (queue order, a date); the morning check could print the days since the last change to a room |
+| 1 | The first room keeps sliding behind infrastructure steps (4.1-4.3, 4a, corridor 3-5 all put ahead of step 5) | most recent commits touch no `src/rooms/`; no date for "a stranger finishes a prototype" | decided by the owner: the corridor is the reference every room is built on, so it is finished first, then step 5; the morning check could print the days since the last change to a room |
 | 2 | Guard inflation, Cosmogram's failure again: CLAUDE.md grew from 1.7 to 7.8 KB in three days with no cap; every step needs several checkers | rules and guards only ever added | step 4.1 c: a cap on CLAUDE.md, a "guard" line per rule, a guard counts only once shown failing |
 | 3 | Stale records: the same status written in the plan, state.md, the audit, the roadmap | rows a later commit has closed | step 4.1 c: one place per status, others link; the request auditor reports stale rows and the live tab's size |
 | 4 | The owner burns out as the only approver, player and headset operator | asks that wait for days | step 4.1 c: few open asks, each dated; the age of the oldest in every status |

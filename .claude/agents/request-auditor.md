@@ -33,7 +33,12 @@ Do:
    that the transcript shows were not kept, and its own questions to him that got no
    answer and are not in "Что нужно от тебя".
 4. Check rule 22f: every "в очереди" in the plan points to a real step of the queue.
-5. Report the live tab's size (characters, request rows) and every row in the live table whose
+5. Find every question to the owner (the plan's "Что нужно от тебя", the assistant's messages in
+   the transcript) and every piece of advice the assistant gave him that reopens or goes against a
+   decision he already made (his words in the plan, the archive tab, docs/state.md "Decisions with
+   the owner", or the transcript), for example a reorder against his "finish it first". Quote both:
+   this is WRONG, not an open question. A risk list or method is no reason to ask him again.
+6. Report the live tab's size (characters, request rows) and every row in the live table whose
    status says done: it belongs in the archive tab (a list that only grows rots, as Cosmogram's did).
 
 Report in English, plain words, under 900 words: the counts first; then a table of only the
