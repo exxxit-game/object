@@ -84,6 +84,10 @@ const CASES = [
     () => run('git', ['push', '-q', at('.planted-remote'), 'HEAD:refs/heads/main'], { OBJECT_LIVE: '' }), 'main is the live site'],
   ['claude-guard pre', 'CLAUDE.md rule 8', 'the assistant skips the git hooks', () => {}, () => askGuard('pre', { tool_name: 'Bash', tool_input: { command: 'git commit --no-verify -m x' } }), 'REFUSED'],
   ['claude-guard pre', 'CLAUDE.md rule 8', 'the assistant runs Playwright locally', () => {}, () => askGuard('pre', { tool_name: 'PowerShell', tool_input: { command: 'npm run test:smoke' } }), 'REFUSED'],
+  ['claude-guard pre', 'CLAUDE.md rule 8', 'a connected tool starts a browser on the laptop', () => {}, () => askGuard('pre', { tool_name: 'mcp__plugin_playwright_playwright__browser_navigate', tool_input: {} }), 'REFUSED'],
+  ['claude-guard pre', 'data: read only', 'a migration applied to the live database', () => {}, () => askGuard('pre', { tool_name: 'mcp__db__apply_migration', tool_input: {} }), 'REFUSED'],
+  ['claude-guard pre', 'data: read only', 'a write hidden behind a read on the live database', () => {}, () => askGuard('pre', { tool_name: 'mcp__db__execute_sql', tool_input: { query: 'select 1; delete from app.runs' } }), 'REFUSED'],
+  ['claude-guard pre', 'main only on the owner\'s word', 'files pushed to GitHub past the push hook', () => {}, () => askGuard('pre', { tool_name: 'mcp__gh__push_files', tool_input: { branch: 'main' } }), 'REFUSED'],
   ['claude-guard stop', 'CLAUDE.md rules 8, 14', 'a turn ends with unsaved work', () => append('docs/roadmap.md', '\nunsaved\n'), () => askGuard('stop', { stop_hook_active: false }), 'work not saved'],
 ];
 

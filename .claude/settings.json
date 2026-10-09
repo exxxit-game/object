@@ -1,8 +1,29 @@
 {
+  "worktree": { "baseRef": "head" },
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" start", "timeout": 20 }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" prompt", "timeout": 10 }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash|PowerShell",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" pre", "timeout": 10 }
+        ]
+      },
+      {
+        "matcher": "mcp__.*",
         "hooks": [
           { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" pre", "timeout": 10 }
         ]
