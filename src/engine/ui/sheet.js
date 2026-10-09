@@ -77,11 +77,13 @@ export function createSheet(scene, { inside = null } = {}) {
     el.object3D.rotation.set(p.pitch, p.yaw, 0, 'YXZ');
   }
   // the player was placed again (VR entry, recenter, headset put back on) or moved with the
-  // thumbsticks: follow them; a sheet on its way to them goes to their new place once it arrives
+  // thumbsticks: follow them; a sheet on its way to them goes to their new place once it arrives.
+  // At once: reading the camera's world place updates its parents' matrices first (three.js
+  // getWorldPosition), so the rig's new place is already in it.
   let movedOnTheWay = false;
   const follow = () => {
     if (!isOpen) return;
-    if (el.components.glide.trip) movedOnTheWay = true; else setTimeout(place, 50);
+    if (el.components.glide.trip) movedOnTheWay = true; else place();
   };
   scene.addEventListener('recentered', follow);
   scene.addEventListener('player-moved', follow);
@@ -204,7 +206,7 @@ export function createSheet(scene, { inside = null } = {}) {
     await ready;
     if (busy()) return null;
     asking = true;
-    while (el.components.glide.trip) await new Promise((r) => setTimeout(r, 100));
+    while (el.components.glide.trip) await el.components.glide.trip.arrived;
     saved = { ...page, was: isOpen ? 'open' : home ? 'hanging' : 'closed' };
     if (saved.was === 'hanging') {
       clickable(false);

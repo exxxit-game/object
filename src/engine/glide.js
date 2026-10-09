@@ -6,7 +6,8 @@ import { tripPose, easeInOut } from './ui/sheet-math.js';
 // path's wall check measures.
 // el.components.glide.go({ to: [x, y, z], ctrl: [x, y, z], rotation: [pitch, yaw, 0] (radians,
 // order YXZ), ms, step }) → Promise when it arrives; step(e), if given, gets the eased
-// progress (0..1) every frame, for anything that changes along the way.
+// progress (0..1) every frame, for anything that changes along the way. trip.arrived is the
+// same promise, for whoever must wait for a trip already under way.
 AFRAME.registerComponent('glide', {
   init() {
     this.trip = null;
@@ -20,7 +21,8 @@ AFRAME.registerComponent('glide', {
       to: { pos: to, pitch: rotation[0], yaw: rotation[1] },
       ctrl, ms, step, started: null
     };
-    return new Promise((resolve) => { this.trip.done = resolve; });
+    this.trip.arrived = new Promise((resolve) => { this.trip.done = resolve; });
+    return this.trip.arrived;
   },
 
   tick(t) {
