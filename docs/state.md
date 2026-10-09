@@ -62,9 +62,9 @@
 ## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
 1. Step 4.3 NOW (his word 9.10, before 4.1 ends). The first input probe (9.10) was WASTED: the headset showed only a
    colour, the task sat on his phone (he: "the simplest, the dumbest", said many times). FIRST: rebuild the "input"
-   step of tools/xr-probe.html so the headset itself shows ONE line of words at a time (e.g. "press the right
-   trigger"), the next once it is done, started by his press; no colours, nothing to read outside the headset; then
-   its guard + a docs/mistakes.md row; rerun with him, then the mic (fan off/on); results: docs/headset-capabilities.md.
+   step of tools/xr-probe.html by docs/audit/probe-review.md: the headset shows ONE line at a time (e.g. "press the right
+   trigger"), the next once it is done, started by his press; no colours, nothing to read outside the headset (guard:
+   .claude/agents/practice-reviewer.md, run it on the rebuild); rerun with him, then the mic (fan off/on); results: docs/headset-capabilities.md.
    4.1 left (causes: docs/audit/README.md): cause 8 (docs/audit/numbers.md: 25 need a source); his yes on the ceiling pictures
    (docs/audit/ceiling/: 5 troffers in the grid, S28; the code is troffers.patch there, then a test that troffer
    ends lie on joints); then the fact-checker, request and architecture auditors. Waiting: his yes on the new

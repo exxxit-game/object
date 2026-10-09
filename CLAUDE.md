@@ -88,7 +88,8 @@ serves this one; how it is done: rule 23.
     source as it is; invention goes only into the experiments we design and the words. A size or
     shape without a source is a mistake, even when it looks fine. A choice a standard answers never
     goes to the owner as taste. Knowledge first, then thinking: before building or changing anything
-    (a scene part, a UI element, a mechanic, a flow), find how it is normally done and read it: trade standards and
+    a person sees or does (a scene part, a UI element, a mechanic, a flow; in the game and in our own
+    tools and checks for the owner alike), find how it is normally done and read it: trade standards and
     measurements (doors, trim, tiling, furniture), Meta and W3C XR guidelines, research, and
     existing games or code that solved it. Write the source next to the decision (decisions.md,
     the plan doc or a WHY comment). Only then design the rest. Nothing is invented from scratch
@@ -97,7 +98,8 @@ serves this one; how it is done: rule 23.
     the owner as pictures before it goes into the game.
 24. Every piece goes: research (rule 23) → build → my own check in the browser and in the
     headset (`tools/quest-look.mjs`: enter VR, read the game's frames, time each step, measure
-    the frame rate) → an independent reviewer agent on the diff → fix → only then show the
+    the frame rate) → the `practice-reviewer` agent (the normal way; a walk-through as the person)
+    and an independent reviewer agent on the diff → fix → only then run it with or show the
     owner, with a frame from the headset. I never stop at "not checked in the headset" while
     the headset is linked; the owner judges only feel and taste, never what a tool can measure.
 25. A barrier I cannot pass myself (a login, a captcha, a paywall, a site that blocks tools, a
