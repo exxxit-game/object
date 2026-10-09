@@ -242,3 +242,12 @@ a 1970s US psychology department corridor. What was found, by strength:
 - Northwestern McCormick Library and University Archives, specialcollections@northwestern.edu
   (https://www.library.northwestern.edu/libraries-collections/distinctive-special-collections/mccormick-library/):
   ask for 1970s interior photos of Swift Hall (psychology) corridors.
+
+## Brought by the owner (pages that refuse tools)
+- **Nielsen metal section frame, Style 11** (Dick Blick product page, its dimension drawing; the owner's
+  screenshot): face 9/32 in (7.1 mm), profile depth 13/16 in (20.6 mm), rabbet 13/32 in (10.3 mm); sold
+  in pairs of sections by whole inches. For a metal-framed print or notice elsewhere in the building.
+- **NEDCC Preservation Leaflet 4.10, "Matting and Framing for Works on Paper and Photographs"** (2019;
+  the owner's PDF): the window mat is "the standard mount for works on paper"; glazing "is an essential
+  component of the frame package for works on paper"; no mat border widths are given.
+- Neither is used for the end walls: the owner chose the painting's museum frame (no mat), see scene.js.
