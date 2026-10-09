@@ -66,9 +66,9 @@ const items = [...html.matchAll(/<a-[a-z]+[^>]*class="[^"]*\bon-wall\b[^"]*"[^>]
 assert.ok(items.length >= 3, `${items.length} things on walls`);
 for (const tag of items.filter(t => !/\bdoor-sign\b/.test(attr(t, 'class')))) {
   const [x, y, z] = attr(tag, 'position').split(' ').map(Number);
-  const panel = attr(tag, 'panel'), box = attr(tag, 'rounded-box');
-  const w = panel ? prop(panel, 'w') : box ? prop(box, 'width') : Number(attr(tag, 'width'));
-  const h = panel ? prop(panel, 'h') : box ? prop(box, 'height') : Number(attr(tag, 'height'));
+  const panel = attr(tag, 'panel'), box = attr(tag, 'rounded-box'), frame = attr(tag, 'moulding');
+  const w = panel ? prop(panel, 'w') : box ? prop(box, 'width') : frame ? prop(frame, 'width') : Number(attr(tag, 'width'));
+  const h = panel ? prop(panel, 'h') : box ? prop(box, 'height') : frame ? prop(frame, 'height') : Number(attr(tag, 'height'));
   const wall = x <= PLAN.from + 0.05 || x >= PLAN.to - 0.05 ? END : wallAt(z);
   assert.ok(wall, `no wall at z ${z}`);
   const across = wall === END ? z : x;
@@ -100,12 +100,13 @@ for (const tag of items.filter(t => !/\bdoor-sign\b/.test(attr(t, 'class')))) {
 // for a thing turned to face along the corridor: its depth lies along x)
 for (const tag of items) {
   const [x, , z] = attr(tag, 'position').split(' ').map(Number);
-  const box = attr(tag, 'rounded-box'), panel = attr(tag, 'panel');
+  const box = attr(tag, 'rounded-box'), panel = attr(tag, 'panel'), frame = attr(tag, 'moulding');
   const end = x <= PLAN.from + 0.05 ? [PLAN.from, 1] : x >= PLAN.to - 0.05 ? [PLAN.to, -1] : null;
   const faces = [[PLAN.north, 1], [PLAN.south, -1], [ROOM_FACE, -1]];   // [face z, the way off it]
   const [face, off] = end || faces.reduce((a, b) => (Math.abs(z - b[0]) < Math.abs(z - a[0]) ? b : a));
   const at = end ? x : z;
-  const back = panel ? at - off * (prop(panel, 'thick') || 0) : at - off * (box ? prop(box, 'depth') : Number(attr(tag, 'depth'))) / 2;
+  // a moulding's back lies on its entity's plane (src/engine/moulding.js)
+  const back = frame ? at : panel ? at - off * (prop(panel, 'thick') || 0) : at - off * (box ? prop(box, 'depth') : Number(attr(tag, 'depth'))) / 2;
   const gap = (back - face) * off;
   const name = attr(tag, 'id') || tag.slice(0, 50);
   assert.ok(gap >= -1e-9 && gap <= 0.002 + 1e-9, `${name}: its back ${(gap * 1000).toFixed(1)} mm off its wall`);

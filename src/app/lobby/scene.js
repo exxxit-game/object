@@ -177,7 +177,7 @@ function lip() {
 const ART = 'vendor/art/arcimboldo-vegetable-gardener.jpg';
 const PICTURE = { w: 0.24, h: r(0.24 * 1360 / 1024) };
 const M = 0.08;            // the moulding's width, a third of the picture's
-const BODY = 0.012;        // the frame's back board under the picture, in its rebate
+const BODY = 0.012;        // the picture's back off the wall, in the frame's rebate
 // points round an arc in the profile's plane (u in, h off the wall), from angle a to b in degrees
 const arc = (cu, ch, rad, a, b, n = 4) => Array.from({ length: n + 1 }, (_, i) => {
   const t = (a + (b - a) * i / n) * Math.PI / 180;
@@ -198,12 +198,9 @@ const END_PRINTS = [{ x: PLAN.from, facing: 1, turn: 0 }, { x: PLAN.to, facing: 
 // Each new visit the two swap ends, for whoever notices (the owner's detail): the picture's turn
 // on end i (0 west, 1 east), visits counted from 0 (opening.js, visitsSoFar)
 export const printTurn = (i, visits) => (END_PRINTS[i].turn + 180 * (Math.abs(visits | 0) % 2)) % 360;
-// the frame's back on the wall, as every flat thing on a wall lies on the block module
-const printBack = ({ x, facing }) => `
-    <a-box class="on-wall" rotation="0 ${facing * 90} 0" position="${r(x + facing * BODY / 2)} ${PRINT_Y} ${CENTRE.z}" width="${OUTER.w}" height="${OUTER.h}" depth="${BODY}" color="#3b2a17"></a-box>`;
 // the gilded frame and the picture in it (turned 180 degrees on one end)
 const printImage = ({ x, facing, turn }) => `
-  <a-entity class="end-frame" reflect-env position="${x} ${PRINT_Y} ${CENTRE.z}" rotation="0 ${facing * 90} 0"
+  <a-entity class="end-frame on-wall" reflect-env position="${x} ${PRINT_Y} ${CENTRE.z}" rotation="0 ${facing * 90} 0"
             moulding="width: ${OUTER.w}; height: ${OUTER.h}; profile: ${PROFILE}; color: #ffe396; metalness: 1; roughness: .35"></a-entity>
   <a-plane class="end-print" rotation="0 ${facing * 90} ${turn}" position="${r(x + facing * (BODY + 0.0005))} ${PRINT_Y} ${CENTRE.z}"
            width="${PICTURE.w}" height="${PICTURE.h}" decal material="src: ${ART}; roughness: 1"></a-plane>`;
@@ -234,8 +231,6 @@ export const corridorHTML = `
     <a-sphere position="${pinAt(NOTES.flyer)} ${r(ON_CORK + PIN)}" radius="${PIN}" color="#2a4a8b"></a-sphere>
     <!-- a 2.5 gal water extinguisher on its wall bracket, opposite the board (S22, S23) -->
     ${extinguisher(PLAN.extinguisher, PLAN.south)}
-    <!-- the back of the frame on each end wall (the frame and picture below) -->
-    ${END_PRINTS.map(printBack).join('')}
     <!-- the light box over room 101's door (like the "in session" boxes over lab doors): surface
          mounted, its back on the wall, as wide as the frame head it stands on (1.0224 m, door.js),
          its foot on the head's top, its top on a block joint (sign.js) -->
