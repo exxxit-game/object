@@ -21,9 +21,12 @@ sh('git', ['fetch', '--quiet', 'origin']);
 const ahead = sh('git', ['rev-list', '--count', `origin/${branch}..HEAD`]);
 say(ahead === null ? 'FAIL' : Number(ahead) ? 'FAIL' : 'ok', ahead === null ? `${branch} is not on GitHub` : Number(ahead) ? `${ahead} commits not pushed` : 'every commit is on GitHub');
 const remote = sh('git', ['ls-remote', '--heads', '--tags', 'origin']) || '';
+// kept on this laptop on purpose: raw work, not for a public repo yet (the experimenter, the last
+// Ono room), and two parked branches whose commits carry an old private email GitHub refuses to publish
+const KEPT_HERE = ['claude/wip-experimenter', 'ono-room-final', 'archive/ono-faithful-wip', 'archive/test-firefox'];
 const onlyHere = (sh('git', ['for-each-ref', '--format=%(refname:short)', 'refs/heads', 'refs/tags']) || '').split('\n').filter(Boolean)
-  .filter((r) => !remote.includes(`refs/heads/${r}`) && !remote.includes(`refs/tags/${r}`));
-say(onlyHere.length ? 'WARN' : 'ok', onlyHere.length ? `only on this laptop: ${onlyHere.join(', ')}` : 'every branch and tag is on GitHub');
+  .filter((r) => !remote.includes(`refs/heads/${r}`) && !remote.includes(`refs/tags/${r}`) && !KEPT_HERE.includes(r));
+say(onlyHere.length ? 'WARN' : 'ok', onlyHere.length ? `only on this laptop: ${onlyHere.join(', ')}` : `every branch and tag is on GitHub (kept here on purpose: ${KEPT_HERE.join(', ')})`);
 
 // 2. The last run on GitHub of what is pushed
 const runs = sh('gh', ['run', 'list', '--branch', branch, '--limit', '1', '--json', 'status,conclusion,headSha,displayTitle']);
