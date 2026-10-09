@@ -21,6 +21,12 @@ const input = await new Promise((done) => {
 });
 const event = (() => { try { return JSON.parse(input || '{}'); } catch { return {}; } })();
 const stop = (why) => { process.stderr.write(`${why}\n`); process.exit(2); };
+// The checkout the session works in: Claude Code runs this script from the folder the session was
+// opened in (the main folder), while the work sits in the session's own worktree, named by the
+// event's cwd. Checked there, or the guard would judge the main folder instead of the work.
+const HERE = (() => {
+  try { return execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd: event.cwd || ROOT, env: withoutGitVars(), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return ROOT; }
+})();
 
 // Each refused command names the guard it would switch off (CLAUDE.md rule 8, tools/hooks).
 export const REFUSED = [
@@ -53,7 +59,7 @@ if (mode === 'pre') {
   process.exit(0);
 }
 
-const git = (...a) => { try { return execFileSync('git', a, { cwd: ROOT, env: withoutGitVars(), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return null; } };
+const git = (...a) => { try { return execFileSync('git', a, { cwd: HERE, env: withoutGitVars(), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return null; } };
 
 // start: at startup, resume and after every compaction Claude Code adds this output to the
 // context, so the state and the queue come back without anyone remembering to read them, and a
@@ -65,7 +71,7 @@ if (mode === 'start') {
     out.push(`WARNING: this checkout (${branch}) lacks the latest work on room-polish; it was probably made from the old live branch. If it has no commits of its own, reset it to room-polish; otherwise merge room-polish. Say so to the owner.`);
   }
   try {
-    const state = fs.readFileSync(path.join(ROOT, 'docs/state.md'), 'utf8');
+    const state = fs.readFileSync(path.join(HERE, 'docs/state.md'), 'utf8');
     const open = state.slice(state.indexOf('## Open items'));
     if (open.startsWith('## Open items')) out.push(open.slice(0, 6000));
   } catch { out.push('docs/state.md is missing here: this checkout is not the project\'s current work.'); }
@@ -92,7 +98,7 @@ if (mode === 'stop') {
   const ahead = git('rev-list', '--count', '@{u}..HEAD');
   if (ahead === null) problems.push('this branch has no copy on GitHub: push it');
   else if (Number(ahead)) problems.push(`${ahead} commits not on GitHub: push the working branch`);
-  const tests = spawnSync('npm', ['test', '--silent'], { cwd: ROOT, env: withoutGitVars(), encoding: 'utf8', shell: true });
+  const tests = spawnSync('npm', ['test', '--silent'], { cwd: HERE, env: withoutGitVars(), encoding: 'utf8', shell: true });
   if (tests.status !== 0) problems.push(`npm test fails:\n${`${tests.stdout}${tests.stderr}`.split('\n').filter((l) => /Error|fail|STOP/i.test(l)).slice(0, 5).join('\n')}`);
   if (problems.length) stop(`NOT DONE. Before this turn ends:\n- ${problems.join('\n- ')}`);
   process.exit(0);

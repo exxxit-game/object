@@ -47,7 +47,10 @@ for (const f of code) {
     /^docs\/cards\/agafonov-2016\.md$/                                       // a Russian paper, cited in its own language
   ];
   const skip = /^(\.git|node_modules|vendor)$|\.(mp3|wav|woff2|jpe?g|png|pdf|ico|webp)$/;
-  const tree = (dir) => fs.readdirSync(dir, { withFileTypes: true }).filter((e) => !skip.test(e.name))
+  // the sessions' own checkouts live inside the main folder (.claude/worktrees): each is a whole
+  // other copy, checked by its own run, and read from the main folder it failed every test there
+  const worktrees = path.join(ROOT, '.claude', 'worktrees');
+  const tree = (dir) => fs.readdirSync(dir, { withFileTypes: true }).filter((e) => !skip.test(e.name) && path.join(dir, e.name) !== worktrees)
     .flatMap((e) => (e.isDirectory() ? tree(path.join(dir, e.name)) : [path.join(dir, e.name)]));
   const cyr = tree(ROOT).map(rel).filter((f) => !RUSSIAN.some((r) => r.test(f)) && /[\u0400-\u04FF]/.test(fs.readFileSync(path.join(ROOT, f), 'utf8')));
   assert.deepEqual(cyr, [], `Russian outside the files allowed to hold it: ${cyr.join(', ')}`);
