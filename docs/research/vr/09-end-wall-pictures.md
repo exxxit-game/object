@@ -163,6 +163,15 @@ a 1970s US psychology department corridor. What was found, by strength:
   "Digital reproductions are intended only for personal use. Additional licensing fees are
   required for any academic or commercial use". So their photos cannot go into the game without a
   licence; they could still answer *what kind* of thing hung (a person must ask).
+- **1979 was the centennial of experimental psychology, dated from Wundt's Leipzig laboratory:**
+  "At the 1979 annual meeting of the American Psychological Association a special series of
+  twenty-two symposia and lectures was devoted to the theme of 'A Century of Psychology as Science:
+  Retrospections and Assessments'" (Leary, D. E., "One hundred years of experimental psychology: An
+  American perspective", Psychological Research 42, 175-189, 1980, doi:10.1007/BF00308701; abstract
+  page https://scholarship.richmond.edu/psychology-faculty-publications/117 — **opened**). The
+  founding was dated to the winter of 1879-80 and the year itself was argued (search results only:
+  Springer doi:10.1007/BF00308688; Boring 1965). For us: a portrait of Wundt has a period reason in
+  a 1979 experimental psychology laboratory, which no other kind here has.
 - Kinds with **no evidence found** (plausible, not shown): prints of perceptual illusions, APA or
   conference posters, Psychology Today posters, art reproductions, framed photos of apparatus,
   diplomas in corridors, maps. Treat any choice among them as **unverified for 1979 corridors**.
