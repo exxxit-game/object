@@ -16,8 +16,10 @@ Inputs (the caller gives the paths):
   system reminders, task notifications, agent hand-backs and compaction summaries. The file
   is large: stream it with node; never print it whole.
 - The plan doc as plain text (the caller exports it). Its table "Сверка всех твоих просьб"
-  should hold every request; the queue "Как идём дальше", "Что нужно от тебя", "Где мы
-  сейчас" and the other sections may hold one too.
+  should hold every open request; the queue "Как идём дальше", "Что нужно от тебя", "Где мы
+  сейчас" and the other sections may hold one too. Done requests move, word for word, to the
+  plan's second tab «Архив просьб» (ask the caller for it too): a request found there is
+  RECORDED, not MISSING.
 - docs/state.md and CLAUDE.md (rule 22: how requests are recorded).
 
 Do:
@@ -31,6 +33,8 @@ Do:
    that the transcript shows were not kept, and its own questions to him that got no
    answer and are not in "Что нужно от тебя".
 4. Check rule 22f: every "в очереди" in the plan points to a real step of the queue.
+5. Report the live tab's size (characters, request rows) and every row in the live table whose
+   status says done: it belongs in the archive tab (a list that only grows rots, as Cosmogram's did).
 
 Report in English, plain words, under 900 words: the counts first; then a table of only the
 MISSING, STALE, WRONG and unkept items (a short quote of the owner in Russian, time, what is
