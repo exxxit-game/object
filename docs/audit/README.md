@@ -9,6 +9,7 @@ when it was written (their file:line may have moved since):
 - `inventory.md`: every tool, agent, doc, branch and setting, kept, updated, removed or to start using.
 - `architecture.md`: the code and docs against ARCHITECTURE.md and the target architecture.
 - `plan-check.md`: the plan doc checked twice by the fact-checker, claim by claim, and the causes.
+- `premortem.md`: the plan assumed failed in October 2027 and asked why, by two analysts on two lenses; each cause names where its guard goes.
 
 | # | Cause | Fix | Guard | State |
 |---|---|---|---|---|

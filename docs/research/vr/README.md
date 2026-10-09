@@ -15,7 +15,7 @@ in full are in `C:\Users\admin\Documents\objekt-papers\` (PDF and text).
 | `03b-sickness.md` | how many get sick, sex and IPD, age, time course, the SSQ |
 | `03c-viewing-text.md` | head rotation, distances, focus conflict, letter and target sizes |
 | `04-mr.md` | mixed reality in Quest Browser, A-Frame and AR, Meta MR rules, MR apps, MR research |
-| `05-wow.md` | presence and plausibility, first minutes, attention, reveals, curiosity, comedy, what breaks the science |
+| `05-wow.md` | what fits experiment rooms and what breaks the science, top 15, sources; the findings in `05a-presence-onboarding.md` (presence, first minutes), `05b-attention-reveals.md` (attention, UI, reveals, curiosity), `05c-awe-body-comedy-pacing.md` (awe, body, comedy, pacing), `05d-puzzles-sharing-avoid.md` (escape rooms, sharing, what to avoid) |
 | `06-science.md` | VR as an experiment platform: methods, replications, home studies, ethics, debrief, measurement |
 | `07-corridor-1979.md` | a US university lab corridor of 1979: doors, signs, extinguishers, notices, typewriters |
 | `08-paper.md` | paper in the headset: large-print documents (UKAAF, CNIB), text inside pictures, forms that grow in pages |
@@ -72,4 +72,4 @@ accuracy for WebXR on Quest Browser.
 ## To check on the headset
 
 The left Menu button in a page; one `immersive-ar` session for corridor and room; hit test without a
-room scan; the light box's clicks heard before its first flash (05 §3).
+room scan; the light box's clicks heard before its first flash (05b §3).

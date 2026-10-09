@@ -31,7 +31,7 @@ export const BOARD_REACH = { w: BOARD.w, top: CLIP.ring.y + CLIP.ring.r + CLIP.r
 export const hangY = (hookY, pegR) => hookY - (CLIP.ring.r - CLIP.ring.tube - pegR) - CLIP.ring.y;
 export const DROP_DEG = 12;
 // The smallest letter on any paper, as font size at the reading distance: 24 dmm, Google's
-// comfortably readable body text (McKenzie & Glazier 2017, docs/research/vr/03-data.md), 1.375°.
+// comfortably readable body text (McKenzie & Glazier 2017, docs/research/vr/03c-viewing-text.md), 1.375°.
 // It sets the size of everything printed on a page, never the paper (docs/decisions.md, large print).
 export const MIN_LETTER = 0.024;
 export const MIN_TARGET_DEG = 2.5;

@@ -17,6 +17,11 @@ const code = walk(path.join(ROOT, 'src')).filter(f => f.endsWith('.js'));
 // 1. No code file grows past 300 lines (CLAUDE.md rule 6).
 const long = code.filter(f => lines(f) > 300).map(f => `${rel(f)} (${lines(f)})`);
 assert.deepEqual(long, [], `files over 300 lines: ${long.join(', ')}`);
+// and no doc either, so every doc can be read whole in one go: a longer one is split into parts
+// that an index names (docs/research/vr/05-wow.md), never left to grow
+const docsMd = execFileSync('git', ['ls-files', '*.md'], { cwd: ROOT, encoding: 'utf8' }).split('\n').filter(Boolean).map((f) => path.join(ROOT, f));
+const longDocs = docsMd.filter((f) => lines(f) > 300).map((f) => `${rel(f)} (${lines(f)})`);
+assert.deepEqual(longDocs, [], `docs over 300 lines (split them, an index names the parts): ${longDocs.join(', ')}`);
 
 // 2. The engine never imports the app or a room; the app never imports a room.
 const imports = (f) => [...fs.readFileSync(f, 'utf8').matchAll(/from\s+'([^']+)'|import\('([^']+)'\)|import\s+'([^']+)'/g)]
