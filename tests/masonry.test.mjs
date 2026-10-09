@@ -11,7 +11,7 @@ import { sceneHTML } from '../src/rooms/01-control/scene.js';
 import { corridorHTML } from '../src/app/lobby/scene.js';
 import { bondOrigin, courseShifted } from '../src/engine/tile-math.js';
 import { PLAN, DOORS, CENTRE, LENGTH, WIDTH } from '../src/app/lobby/plan.js';
-import { SIGN } from '../src/app/brand.js';
+import { SIGN, CAP } from '../src/app/brand.js';
 import { LEAF } from '../src/engine/door.js';
 
 const BLOCK = 0.4, COURSE = 0.2, MODULE = 0.2, MIN_GAP = 0.04, EPS = 0.002;
@@ -110,8 +110,11 @@ for (const tag of items) {
 const signs = [...html.matchAll(/<a-entity[^>]*class="[^"]*\bdoor-sign\b[^"]*"[^>]*>/g)].map(m => m[0]);
 assert.equal(signs.length, DOORS.length + 1, 'a sign at every door and inside room 01');
 assert.ok(SIGN.w === 0.2286 && SIGN.y === 1.524 && SIGN.fromFrame === 0.1016, 'the sign family in inches: 9 in square, 60 in up, 4 in from the frame');
-// the room number as large as the rules allow, 2 in (ADA 2010 703.2.5): it only ever grows
-assert.equal(SIGN.number, Math.round(0.0508 * SIGN.px / 0.7), 'a room number 2 in high');
+// the room number as large as the rules allow, 2 in (ADA 2010 703.2.5), measured on its capitals
+// (CAP, the font's own): never more, and not a pixel short of it
+const capM = (size) => size * CAP / SIGN.px;
+assert.ok(capM(SIGN.number) <= 0.0508 && capM(SIGN.number + 1) > 0.0508, `a room number's capitals 2 in high, never more (${(capM(SIGN.number) * 1000).toFixed(1)} mm)`);
+assert.ok(capM(SIGN.letters) <= 0.01905 && capM(SIGN.letters + 1) > 0.01905, 'the stairs word in 3/4 in capitals, never more');
 for (const tag of signs) {
   const y = Number(attr(tag, 'position').split(' ')[1]);
   const name = attr(tag, 'id') || attr(tag, 'data-number');

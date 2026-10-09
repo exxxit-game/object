@@ -14,11 +14,14 @@ export const BRAND = {
 // and 2 in high, the most ADA 2010 703.2.5 allows, so it reads across the corridor; the stairs' 4 1/2
 // in symbol centred over the word, 3/4 in, in capitals (NIU Type E). A sign on a wall, as inside
 // room 01, hangs at the latch side 4 in from the frame (NIU installation). Drawn at 2560 px a
-// metre, where a capital is about 0.7 of the font size.
+// metre. A capital of Inter is 1490 of its 2048 units (sCapHeight in the font's OS/2 table;
+// tests/fonts.test.mjs reads it from the files in vendor/fonts), so a font size gives capitals CAP
+// of it; sizes are rounded down, so a capital never passes the height the rules allow.
+export const CAP = 1490 / 2048;
 const inch = (n) => +(n * 0.0254).toFixed(4);
 export const SIGN = { w: inch(9), y: inch(60), fromFrame: inch(4), px: 2560 };
-SIGN.number = Math.round(inch(2) * SIGN.px / 0.7);
-SIGN.letters = Math.round(inch(0.75) * SIGN.px / 0.7);
+SIGN.number = Math.floor(2 * 0.0254 * SIGN.px / CAP);
+SIGN.letters = Math.floor(0.75 * 0.0254 * SIGN.px / CAP);
 // the panel of a sign at a door: one size for every kind, a plate as thick as its face stands off
 // the door or wall it is fixed on (door.js, SIGN_GAP)
 export const SIGN_PANEL = `panel="w: ${SIGN.w}; h: ${SIGN.w}; px: ${Math.round(SIGN.w * SIGN.px)}; bg: ${BRAND.plate}; thick: ${SIGN_GAP}"`;

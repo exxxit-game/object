@@ -6,6 +6,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import zlib from 'node:zlib';
+import { CAP } from '../src/app/brand.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const css = fs.readFileSync(path.join(ROOT, 'css/fonts.css'), 'utf8');
@@ -49,4 +51,31 @@ for (const file of texts) {
   }
   count += chars.size;
 }
-console.log(`fonts tests: ok (${families.join(', ')}: ${faces.length} files; ${count} characters in ${texts.length} text files covered)`);
+// The capital height the sign sizes rest on (src/app/brand.js, CAP) is the font's own: read from
+// each Inter file's OS/2 table (a woff2 file: a table directory, then the tables in one brotli stream).
+function os2(file) {
+  const buf = fs.readFileSync(file);
+  const KNOWN = ['cmap', 'head', 'hhea', 'hmtx', 'maxp', 'name', 'OS/2', 'post', 'cvt ', 'fpgm', 'glyf', 'loca', 'prep', 'CFF ', 'VORG', 'EBDT', 'EBLC', 'gasp', 'hdmx', 'kern', 'LTSH', 'PCLT', 'VDMX', 'vhea', 'vmtx', 'BASE', 'GDEF', 'GPOS', 'GSUB', 'EBSC', 'JSTF', 'MATH', 'CBDT', 'CBLC', 'COLR', 'CPAL', 'SVG ', 'sbix', 'acnt', 'avar', 'bdat', 'bloc', 'bsln', 'cvar', 'fdsc', 'feat', 'fmtx', 'fvar', 'gvar', 'hsty', 'just', 'lcar', 'mort', 'morx', 'opbd', 'prop', 'trak', 'Zapf', 'Silf', 'Glat', 'Gloc', 'Feat', 'Sill'];
+  let off = 48;
+  const base128 = () => { let v = 0; for (let i = 0; i < 5; i++) { const b = buf[off++]; v = (v << 7) | (b & 0x7f); if (!(b & 0x80)) return v; } return v; };
+  const tables = [];
+  for (let i = 0; i < buf.readUInt16BE(12); i++) {
+    const flags = buf[off++], idx = flags & 0x3f;
+    let tag = KNOWN[idx];
+    if (idx === 63) { tag = buf.toString('latin1', off, off + 4); off += 4; }
+    const xform = (flags >> 6) & 3;
+    let len = base128();
+    if ((tag === 'glyf' || tag === 'loca') ? xform === 0 : xform !== 0) len = base128();
+    tables.push({ tag, len });
+  }
+  const data = zlib.brotliDecompressSync(buf.subarray(off, off + buf.readUInt32BE(20)));
+  let p = 0;
+  const at = {};
+  for (const t of tables) { at[t.tag] = p; p += t.len; }
+  return { upm: data.readUInt16BE(at.head + 18), cap: data.readInt16BE(at['OS/2'] + 88) };
+}
+for (const f of faces.filter((x) => x.family === 'Inter')) {
+  const { upm, cap } = os2(path.join(ROOT, 'css', f.file));
+  assert.equal(cap / upm, CAP, `${f.file}: Inter's capitals are ${cap}/${upm} of the size, the signs assume ${CAP}`);
+}
+console.log(`fonts tests: ok (${families.join(', ')}: ${faces.length} files; ${count} characters in ${texts.length} text files covered; capitals ${CAP.toFixed(4)})`);
