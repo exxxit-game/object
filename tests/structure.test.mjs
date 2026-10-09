@@ -95,12 +95,13 @@ assert.deepEqual(missing, [], `docs name files that do not exist: ${missing.join
 // which rule 7 checks).
 const mistakes = fs.readFileSync(path.join(ROOT, 'docs/mistakes.md'), 'utf8').split('\n');
 assert.ok(mistakes.length <= 60, 'docs/mistakes.md over 60 lines: merge rows');
-// tools/prove-guards.mjs plants a two-line row here; with no room left it goes red on the cap,
-// not on the missing guard, so the proof fails on GitHub after a green commit.
-assert.ok(mistakes.length + 2 <= 60, 'docs/mistakes.md leaves no room for the planted row: merge rows');
 for (const row of mistakes.filter(l => l.startsWith('| ') && !/^\| (Mistake|---)/.test(l))) {
   assert.ok(/`(src|tests|tools|docs|\.claude|\.github)\/[^`]+`/.test(row.split('|')[2] || ''), `mistake without a guard: ${row.slice(0, 80)}`);
 }
+// tools/prove-guards.mjs plants a two-line row here; with no room left it goes red on the cap,
+// not on the missing guard, so the proof fails on GitHub after a green commit. Checked after the
+// rows, so the planted row still fails on its missing guard first.
+assert.ok(mistakes.length + 2 <= 60, 'docs/mistakes.md leaves no room for the planted row: merge rows');
 
 // 9. Every script parses: a shell heredoc can change backslashes silently.
 const scripts = [...code, ...walk(path.join(ROOT, 'tests')), ...walk(path.join(ROOT, 'tools'))]
