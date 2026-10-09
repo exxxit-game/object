@@ -14,8 +14,11 @@ static page privacy.html) and README.md, which is in Russian and English.
 What others already worked out is taken ready-made: books, trade standards and measurements,
 research, guidelines, existing games, libraries and code. Those before us spent the imagination
 and left marks on the trail; we follow the marks instead of cutting a new path. Our own
-imagination goes only where nothing exists yet: the experiments we design and the words. Every
-other rule serves this one; how it is done: rule 23.
+imagination goes only where nothing exists yet: the experiments we design and the words. One
+exception: comfort in the headset. Where the faithful copy is hard to use in VR (text too small to
+read, and the like), a point fix for comfort goes in, itself taken from a standard (large print,
+Meta's guidelines) and written next to it as a deviation from the original. Every other rule
+serves this one; how it is done: rule 23.
 
 ## Rules
 1. No history in code. Comments explain WHY, never WHEN or WHO asked.

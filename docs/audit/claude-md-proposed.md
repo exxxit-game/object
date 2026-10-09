@@ -20,7 +20,9 @@ For anything (a scene part, a size, code, a tool, a process, security, science) 
 is normally done: a trade standard or measurement, Meta and W3C XR guidelines, research, an
 existing game, library or method; the owner's taste is input, research decides. Write
 its source next to the decision (docs/decisions.md, the plan, a WHY comment). Invent only where
-nothing exists, and say so. Every other rule serves this one. «Воссоздаём»: the building, doors, signs, furniture and objects are
+nothing exists, and say so. Comfort in the headset is the one exception: where the faithful copy
+is hard to use in VR (text too small, and the like), a point fix taken from a standard (large
+print, Meta's guidelines), written next to it as a deviation. Every other rule serves this one. «Воссоздаём»: the building, doors, signs, furniture and objects are
 carried over from real sources as they are; only the experiments we design and the words are ours.
 A choice a standard answers never goes to the owner as taste; a new look goes to him as pictures
 before it goes in. Guard: tests/standards.test.mjs for scene sizes; elsewhere the fact-checker.
