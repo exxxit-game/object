@@ -59,21 +59,21 @@
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
 ## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
-1. Queue step 4.1 NOW (his word 9.10: fix yesterday's mistakes for good, a plan checked twice, control
-   that does not rest on my memory). Done: causes 1-4, 6, 9-11 (docs/audit/README.md); hooks and the
-   GitHub rule on main; the plan checked twice by the fact-checker and fixed (docs/audit/plan-check.md),
-   done requests moved verbatim (machine-compared) to the plan tab «Архив просьб». Next, in order:
-   b) premortem of the plan; c) review of every rule, memory, skill and agent with Cosmogram's lessons
-   (docs/research/projects/cosmogram.md), rule 23 first and for everything, the new set to him for "да";
-   d) the two long research files into cards, a size guard; e) causes 5 (paper, pictures to him),
-   7 (behaviour), 8 (numbers without a source); f) update the style book (Design System) from the game.
-2. Then 4.2: best solution for every part + the data design from entering the game to the yearly report
-   + protection (OWASP; bots), against "secret extraction" (Zuboff, NYT 12.11.2021, his word). Then 4.3:
+1. Queue step 4.1 NOW (his word 9.10: yesterday's mistakes fixed for good, control not resting on my
+   memory). Done: causes 1-4, 6, 9-11 (docs/audit/README.md), hooks, the GitHub rule on main, the plan
+   checked twice and fixed (docs/audit/plan-check.md), done requests in the tab «Архив просьб», premortem
+   (docs/audit/premortem.md), docs split under a 300-line test. Next: c) review of every rule, memory,
+   skill and agent with Cosmogram's lessons (docs/research/projects/cosmogram.md), rule 23 first, to him
+   for "да"; e) causes 5, 7, 8; f) the style book (Design System) from the game.
+2. Then 4.2, the data lever first (data stay with us, our own lab; study what we need from scientists
+   beyond name and ethics approval, how our conditions differ from a lab). Data protection = "the most
+   serious of all" (his word 9.10): LINDDUN, STRIDE, OWASP ASVS, a break-in try on a copy, CSP, the
+   provider must not read rows, my server access read-only (2 rows in app.runs, advisors clean, 9.10);
+   against "secret extraction" (Zuboff, NYT 12.11.2021). Then 4.3:
    the headset and his gear, with logged measures. Then the corridor: 3 end-wall pictures and a lively
    opening, 4 floor directory, 5 lighting (lights on the ceiling grid). Then room 01 onto the experimenter
    (parked on claude/wip-experimenter), then the first room (step 5).
 3. Corridor: ACCEPTED 8.10 (docs/rooms/corridor-shots/); consent form signed by hand and sealed (2 pages,
    seal by the signature, GOST R 7.0.97-2025 5.24, approved 9.10). Style book (THE whole picture):
    https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH. Visual designs go to him as pictures BEFORE the game.
-4. Headset on the USB cable: `quest-look.mjs worn on` for a check, `quest-look.mjs sleep` after; frames
-   render only while the VR session is visible. Waiting on him: plan «Что нужно от тебя».
+4. Headset on USB: `quest-look.mjs worn on`, check, `sleep`. Waiting on him: plan «Что нужно от тебя».
