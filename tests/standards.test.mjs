@@ -3,7 +3,7 @@
 // them (an invented size shows up here before the owner sees it in the headset).
 import assert from 'node:assert/strict';
 import { sceneHTML } from '../src/rooms/01-control/scene.js';
-import { corridorHTML } from '../src/app/lobby/scene.js';
+import { corridorHTML, printTurn } from '../src/app/lobby/scene.js';
 import { DOORS, PLAN, CORK_Z, CENTRE, LENGTH, WIDTH } from '../src/app/lobby/plan.js';
 import { jointOrigin, CEILING } from '../src/engine/tile-math.js';
 
@@ -167,4 +167,7 @@ assert.equal(pins.length, sheets.length, 'a pin in each sheet');
 for (const p of pins) assert.ok(near(pos(p)[2] - Number(attr(p, 'radius')), pos(sheets[0])[2], 0.0005), 'the head of a pin on its sheet');
 const peg = tags('a-cylinder').find((t) => near(pos(t)[1], B.hook, 1e-6) && near(pos(t)[0], B.x, 1e-6));
 assert.ok(peg && near(pos(peg)[2] - Number(attr(peg, 'height')) / 2, corkZ, 0.0005), 'the peg comes out of the cork');
+// the end walls' picture: one end upside down, and the two swap ends with each visit (the owner's detail)
+assert.deepEqual([0, 1, 2, 3].map((v) => [printTurn(0, v), printTurn(1, v)]), [[0, 180], [180, 0], [0, 180], [180, 0]], 'the prints swap ends each visit');
+assert.deepEqual([printTurn(0, NaN), printTurn(1, -1)], [0, 0], 'a broken visit count keeps one end upside down');
 console.log(`standards tests: ok (${leaves.length} doors, ${bases.length} base runs, extinguisher ${extBottom.toFixed(2)}–${extTop.toFixed(2)} m)`);

@@ -15,12 +15,13 @@ const delay = (s) => new Promise((r) => setTimeout(r, s * 1000 / SPEED));
 const VISITS_KEY = 'object.signVisits';
 const forced = new URLSearchParams(location.search).get('sign');
 let ending = null;
+// how many earlier visits this device has seen (the end walls' prints read it too, lobby.js)
+export function visitsSoFar() {
+  try { return Number(localStorage.getItem(VISITS_KEY)) || 0; } catch (e) { return 0; }
+}
 function nextEnding() {
-  let visits = 0;
-  try {
-    visits = Number(localStorage.getItem(VISITS_KEY)) || 0;
-    if (!forced) localStorage.setItem(VISITS_KEY, String(visits + 1));
-  } catch (e) { /* private mode */ }
+  const visits = visitsSoFar();
+  try { if (!forced) localStorage.setItem(VISITS_KEY, String(visits + 1)); } catch (e) { /* private mode */ }
   return pickEnding(visits, forced);
 }
 const fast = (keys) => keys.map(([t, levels, cue]) => [t / SPEED, levels, cue]);

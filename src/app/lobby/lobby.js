@@ -13,13 +13,13 @@ import '../../engine/decal.js';
 import { LOBBY_T } from './texts.ru.js';
 import { VOICE_LINES } from './voice-lines.js';
 import { SOUNDS } from './sound-list.js';
-import { signOn, signAnswer } from './opening.js';
+import { signOn, signAnswer, visitsSoFar } from './opening.js';
 import { pinNotices } from './board.js';
 import { writeStairsSign } from './stairs-sign.js';
 import { paintExtinguisherLabel } from './extinguisher-label.js';
 import { showHint } from '../hint.js';
 import { leaveButton } from './exit.js';
-import { WALLS } from './scene.js';
+import { WALLS, printTurn } from './scene.js';
 import { BOUNDS as AREA, SHEET_HOME, SPOT, HOOK_READ } from './plan.js';
 
 export { corridorHTML } from './scene.js';
@@ -110,6 +110,18 @@ function lightCorridor() {
   };
 }
 
+// The end walls' picture (scene.js): which end shows it upside down changes with each visit, for
+// whoever notices (the owner's detail); seen at a slant it stays as sharp as the game's other
+// textures (panel.js: anisotropy 8).
+function hangPrints(visits) {
+  document.querySelectorAll('.end-print').forEach((el, i) => {
+    el.setAttribute('rotation', { ...el.getAttribute('rotation'), z: printTurn(i, visits) });
+    const sharpen = () => { const map = el.getObject3D('mesh')?.material.map; if (map) { map.anisotropy = 8; map.needsUpdate = true; } };
+    sharpen();
+    el.addEventListener('materialtextureloaded', sharpen);
+  });
+}
+
 // room: { id, debrief, seat: { x, z, yaw }, bounds, extra, real }
 // Resolves with true when the player chose to start with recording, once inside the room.
 export async function runLobby(room) {
@@ -128,6 +140,7 @@ export async function runLobby(room) {
   writeStairsSign($('#plaqueStairs').components.panel, LOBBY_T.stairs);
   for (const el of document.querySelectorAll('#plaqueStairs, .room-plaque')) el.getObject3D('mesh').material.color.setScalar(WALL_PRINT_LIGHT);
   pinNotices($('#notePoster').components.panel, $('#noteFlyer').components.panel, WALL_PRINT_LIGHT);
+  hangPrints(visitsSoFar());
   paintExtinguisherLabel($('#extLabel'));
   const cover = [{ t: LOBBY_T.participant, role: 'body' }];
   await sheet.hang(SHEET_HOME, cover, WALL_PRINT_LIGHT);
