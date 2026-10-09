@@ -4,13 +4,15 @@
 // each other in a headset (docs/vr-checklist.md, docs/decisions.md). Prints on a canvas use the
 // panel's decal, which takes the same offset. Where several prints lie on one surface at their own
 // depths (the clipboard's board under its page, its ink and its buttons), the surface is pushed
-// back instead (back: true), so the prints keep their order among themselves.
-// <a-box decal ...></a-box>  <a-entity plate="..." decal="back: true">
+// back instead (back: true), so the prints keep their order among themselves. A thing lying on a
+// decal (a screw head on a strap) is one layer up: pulled forward twice as far, since two equal
+// offsets cancel and leave the pair as close as before (layer: 2).
+// <a-box decal ...></a-box>  <a-cylinder decal="layer: 2" ...>  <a-entity plate="..." decal="back: true">
 export const DECAL_OFFSET = { polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 };
 const BACK_OFFSET = { polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 2 };
 
 AFRAME.registerComponent('decal', {
-  schema: { back: { default: false } },
+  schema: { back: { default: false }, layer: { default: 1 } },
   // the material component may set its material after this one starts: offset it again then
   init() {
     this.apply = this.apply.bind(this);
@@ -28,6 +30,8 @@ AFRAME.registerComponent('decal', {
   apply() {
     const mesh = this.el.getObject3D('mesh');
     if (!mesh) return;
-    for (const m of [].concat(mesh.material)) { Object.assign(m, this.data.back ? BACK_OFFSET : DECAL_OFFSET); m.needsUpdate = true; }
+    const pull = DECAL_OFFSET.polygonOffsetFactor * this.data.layer;
+    const offset = this.data.back ? BACK_OFFSET : { polygonOffset: true, polygonOffsetFactor: pull, polygonOffsetUnits: pull };
+    for (const m of [].concat(mesh.material)) { Object.assign(m, offset); m.needsUpdate = true; }
   }
 });

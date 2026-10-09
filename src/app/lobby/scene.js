@@ -106,8 +106,8 @@ function extinguisher(x, wall) {
            rests on the prongs and their turned-up tips keep it from sliding off, so the
            extinguisher lifts straight off it -->
       <a-box class="hanger" decal position="${x} 1.37 ${wall - 0.0015}" width="0.035" height="0.14" depth="0.003" color="#2b2b2b"></a-box>
-      <a-cylinder position="${x} 1.42 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" decal ${METAL}></a-cylinder>
-      <a-cylinder position="${x} 1.315 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" decal ${METAL}></a-cylinder>
+      <a-cylinder position="${x} 1.42 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" decal="layer: 2" ${METAL}></a-cylinder>
+      <a-cylinder position="${x} 1.315 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" decal="layer: 2" ${METAL}></a-cylinder>
       <a-box class="hanger" position="${x} ${FORK.y} ${((wall + z + FORK.back) / 2).toFixed(4)}" width="${2 * FORK.out}" height="${FORK.t}" depth="${(wall - z - FORK.back).toFixed(4)}" color="#2b2b2b"></a-box>
       ${[-1, 1].map((s) => `<a-box class="hanger" position="${(x + s * (FORK.out - FORK.prong / 2)).toFixed(4)} ${FORK.y} ${(z + (FORK.back - FORK.front) / 2).toFixed(4)}" width="${FORK.prong}" height="${FORK.t}" depth="${FORK.back + FORK.front}" color="#2b2b2b"></a-box>
       <a-box class="hanger" position="${(x + s * (FORK.out - FORK.prong / 2)).toFixed(4)} ${FORK.y + FORK.rise / 2} ${(z - FORK.front + FORK.tip / 2).toFixed(4)}" width="${FORK.prong}" height="${FORK.t + FORK.rise}" depth="${FORK.tip}" color="#2b2b2b"></a-box>`).join('')}
