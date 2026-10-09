@@ -1,4 +1,4 @@
-import { getContext } from './audio.js';
+import { getContext, onUnlock } from './audio.js';
 
 // Experimenter voice from pre-recorded files. Quest Browser has no speech
 // synthesis at all, so recorded audio is the only voice that works in a headset.
@@ -16,12 +16,17 @@ export function loadVoice(lines, baseUrl) {
   }
 }
 
-// Plays the recording for this exact text, stopping the previous one.
-// Resolves when the line has finished, or at once when there is no recording or
-// audio is not unlocked yet (the caller decides how long the text stays up).
+// Plays the recording for this exact text, stopping the previous one. Asked for before the
+// player's first gesture, it waits for it (audio.js, onUnlock). Resolves when the line has
+// finished, at once when there is no recording, and unheard (false) on a device with no audio.
 export function speak(text) {
+  if (!raw.has(text)) return Promise.resolve(false);
+  return new Promise((resolve) => onUnlock(() => resolve(play(text))));
+}
+
+function play(text) {
   const ctx = getContext();
-  if (!ctx || !raw.has(text)) return Promise.resolve(false);
+  if (!ctx) return Promise.resolve(false);
   if (!decoded.has(text)) {
     decoded.set(text, raw.get(text)
       .then(buf => (buf ? ctx.decodeAudioData(buf.slice(0)) : null))

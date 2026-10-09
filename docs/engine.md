@@ -13,7 +13,7 @@ Reusable parts. The engine never imports from `src/app/` or `src/rooms/`.
 | `surface.js`, `tile-math.js` | Component `surface`: block, linoleum, ceiling, cork, lens, wood; `glow` for a lamp's lens; tiles laid out per space (`space: cx cz lx lz`) by the trade rules |
 | `log.js` | `eventLog`: `reset()`, `begin()`, `end()`, `add(kind, value)`, `entries`. Accepts events only between `begin()` and `end()` |
 | `locomotion.js`, `locomotion-math.js`, `vignette.js` | Component `locomotion` on the rig: thumbstick teleport (arc to the floor, release to go, click to cancel), 45° snap turn, 80 cm back step; or `move: smooth` (left stick walks at 1.4 m/s) and `turn: smooth`, with a vignette while moving smoothly; only inside its bounds; emits `player-moved` |
-| `audio.js` | `unlock()` (call after a click), `getContext()`, `onUnlock(fn)` (a timed sound waits for the first gesture) |
+| `audio.js` | `unlock()` (call after a click), `getContext()`, `onUnlock(fn)` (the one rule: every sound and voice line asked for before the first gesture waits for it, never lost; with no audio at all the wait still ends) |
 | `voice.js` | `loadVoice(lines, baseUrl)`, `speak(text)` → Promise, resolves when the line ends; a `voice-line` event on `window` as a line starts |
 | `sfx.js` | `loadSounds`, `playSound(name, position, volume, loop)` → handle with `stop()`, `fade(volume, seconds)`; component `sound-listener` for spatial sound |
 | `recenter.js`, `recenter-math.js` | Component `recenter`: puts the player at the table in VR, seated or standing |

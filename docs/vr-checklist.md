@@ -33,7 +33,7 @@ A-Frame docs. Status for room 01 in brackets.
 - Flashing only within WCAG 2.3.1: at most 3 flashes a second, no saturated red. [the sign's starter flicker: tests/glow.test.mjs; counter flash: brief colour change]
 
 ## Audio
-- Unlock audio on a user gesture. [done: the first press anywhere (src/engine/audio.js); sounds asked for before it wait or are dropped: docs/audit/flow.md F6]
+- Unlock audio on a user gesture. [done: the first press anywhere, the listener set first thing in the corridor (src/app/lobby/lobby.js); one rule: every sound or voice line asked for before it waits for it, never lost (src/engine/audio.js onUnlock; tests/voice.test.mjs)]
 - Subtitles for all speech, or playable without sound. [every spoken line is also on the screen]
 
 ## WebXR pitfalls

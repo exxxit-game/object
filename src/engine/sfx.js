@@ -1,4 +1,4 @@
-import { getContext } from './audio.js';
+import { getContext, onUnlock } from './audio.js';
 
 // Recorded sound effects that come from a place in the room (HRTF panning), with
 // the listener following the player's head, in a headset and on desktop.
@@ -27,19 +27,26 @@ function setPannerPosition(panner, p) {
 
 // Plays a sound at a world position {x, y, z} in metres, or everywhere when pos is
 // null. Returns a handle with stop() and fade(volume, seconds) (a straight ramp, e.g. a
-// hum dying with its lamps). Silent before audio is unlocked.
+// hum dying with its lamps). Asked for before the player's first gesture, it waits for it
+// (audio.js, onUnlock); stopped before it starts, it never starts.
 export function playSound(name, pos, volume = 1, loop = false) {
-  let target = volume;
-  const handle = { stop() {}, fade(v) { target = v; } };
-  const ctx = getContext();
-  if (!ctx) return handle;
+  let target = volume, stopped = false;
+  const handle = { stop() { stopped = true; }, fade(v) { target = v; } };
+  onUnlock(() => {
+    const ctx = getContext();
+    if (ctx && !stopped) start(ctx, handle, name, pos, loop, () => target, () => stopped);
+  });
+  return handle;
+}
+
+function start(ctx, handle, name, pos, loop, target, stopped) {
   buffer(ctx, name).then((buf) => {
-    if (!buf) return;
+    if (!buf || stopped()) return;
     const src = ctx.createBufferSource();
     src.buffer = buf;
     src.loop = loop;
     const gain = ctx.createGain();
-    gain.gain.value = target;
+    gain.gain.value = target();   // a fade asked for while it waited is its level now
     handle.fade = (v, seconds = 0) => {
       const t = ctx.currentTime;
       gain.gain.cancelScheduledValues(t);
@@ -60,7 +67,6 @@ export function playSound(name, pos, volume = 1, loop = false) {
     src.start();
     handle.stop = () => { try { src.stop(); } catch (e) { /* already stopped */ } };
   });
-  return handle;
 }
 
 // Put on <a-scene>: keeps the audio listener at the player's head every frame.

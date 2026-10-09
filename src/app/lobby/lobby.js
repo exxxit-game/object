@@ -113,6 +113,9 @@ function lightCorridor() {
 // Resolves with true when the player chose to start with recording, once inside the room.
 export async function runLobby(room) {
   const scene = $('a-scene');
+  // first, before anything waits: a press of the VR button while the clipboard is still being
+  // hung would otherwise be missed, and every sound would wait for the next one
+  onFirstGesture(() => {});
   const sheet = createSheet(scene, { inside: WALLS });
   const light = lightCorridor();
   placePlayer(SPOT, BOUNDS);
@@ -128,7 +131,6 @@ export async function runLobby(room) {
   const cover = [{ t: LOBBY_T.participant, role: 'body' }];
   await sheet.hang(SHEET_HOME, cover, WALL_PRINT_LIGHT);
   const exitOff = leaveButton(scene, sheet);   // the studio's poster on the board
-  onFirstGesture(() => {});
 
   // 0. the sign comes on and plays; 1. the voice points to the clipboard on the board, the
   // player takes it, and it welcomes them: the promise first, read aloud

@@ -101,14 +101,16 @@ export function createSheet(scene, { inside = null } = {}) {
     if (movedOnTheWay) { movedOnTheWay = false; place(); }
   }
 
+  // The sheet only ever comes from its hook: shown from nowhere it popped up in front of the eyes,
+  // which frightens in VR (docs/mistakes.md; docs/decisions.md, "The opening is calm"). A room that
+  // shows a page before hanging the sheet fails here, and the smoke test fails on the error.
   function open() {
     if (isOpen) return;
+    if (!home) throw new Error('the clipboard has no hook: hang it (sheet.hang) before showing a page');
     isOpen = true;
     el.setAttribute('visible', true);
     el.dataset.open = '1';
-    if (home) { comeToPlayer(); return; }
-    place();
-    el.setAttribute('animation', { property: 'scale', from: '0.94 0.94 0.94', to: '1 1 1', dur: 150 });
+    comeToPlayer();
   }
 
   function close() {
