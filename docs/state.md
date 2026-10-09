@@ -12,7 +12,9 @@
   `runs` via `submit_run` (room 01 whitelist), `playtests` via `submit_playtest`; both
   insert-only for anon, verified. Sending is ON in code with consent; privacy page `privacy.html`
   (contact t.me/exxxit). Tests pin client fields to the SQL (`tests/results.test.mjs`, `tests/playtest.test.mjs`).
-- Papers (PDF + text, not in repo): `C:\Users\admin\Documents\objekt-papers\`; still missing:
+- Papers (PDF + text, not in repo): `C:\Users\admin\Documents\objekt-papers\`, copied to `F:\objekt-papers-backup`
+  and Dropbox `/objekt-papers` (516 files checked 9.10; a new paper goes into both by hand: the Dropbox
+  connector writes text only, so a PDF needs the owner's drag on dropbox.com); still missing:
   `docs/papers-needed.md`. 145 cards from full texts: `docs/cards/`, checked by
   `node tools/check-cards.mjs`; catalog generated: `docs/catalog.md` (`node tools/build-catalog.mjs`);
   coverage closed: `docs/search-coverage.md`; ideas: `docs/ideas/`; headset abilities:
