@@ -3,10 +3,12 @@
 // and prints what the headset gave. VR and MR need the owner wearing it; the microphone does not.
 // Needs the laptop's server running (the app's preview, or `npm run serve`) and the headset on
 // its cable; it is kept awake for the run and put back to sleep after (tools/headset.mjs).
-// Usage: node tools/xr-probe-run.mjs [vr ar mic]
+// Usage: node tools/xr-probe-run.mjs [vr ar mic input]   (input: controllers, hands and body, 30 s)
 import { serveToHeadset, worn, sleepNow, openUrl, page, wornByPerson } from './headset.mjs';
 
-const URL_PROBE = serveToHeadset() + 'tools/xr-probe.html';
+// the laptop's server: the preview's port from .claude/launch.json, or OBJECT_PORT when the preview
+// took another (autoPort)
+const URL_PROBE = serveToHeadset(Number(process.env.OBJECT_PORT) || undefined) + 'tools/xr-probe.html';
 const steps = process.argv.slice(2).length ? process.argv.slice(2) : ['vr', 'ar', 'mic'];
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -32,11 +34,11 @@ await send('Page.navigate', { url: `${URL_PROBE}?run=${Date.now()}` });
 await sleep(3000);
 await run(`localStorage.removeItem('xr-probe'), window.__probe = {}, 1`);
 
-const KEY = { vr: 'immersive-vr', ar: 'immersive-ar', mic: 'mic' };
+const KEY = { vr: 'immersive-vr', ar: 'immersive-ar', mic: 'mic', input: 'input' };
 for (const step of steps) {
   await run(`document.getElementById('${step}').click(), 1`, true);
-  // a session runs up to 5 s (longer when the headset lies on a table), then ends
-  for (let i = 0; i < 60; i++) {
+  // a session runs up to 5 s (input 30 s; longer when the headset lies on a table), then ends
+  for (let i = 0; i < (step === 'input' ? 100 : 60); i++) {
     await sleep(500);
     const done = await run(`(() => { const r = (window.__probe || {})['${KEY[step]}']; return !!r && (r.frames !== undefined || r.error !== undefined || r.granted !== undefined); })()`);
     if (done) break;

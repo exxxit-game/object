@@ -13,9 +13,11 @@
      sent that way counts as the user's); the result is kept in window.__probe, in the
      page and in localStorage, and is read over USB or Wi-Fi (CDP) afterwards. -->
 <p>Проверка шлема. Нажмите все три кнопки по очереди. Проверки VR и MR длятся по 5 секунд, потом шлем сам вернётся сюда. Для микрофона разрешите доступ и скажите что-нибудь: ничего не записывается и не отправляется.</p>
+<p>Контроллеры и руки (30 секунд): пока всё зелёное, нажимайте по очереди все кнопки и стики на обоих контроллерах; когда станет синим, положите контроллеры, поднимите обе руки и пошевелите пальцами. В начале и при смене цвета контроллеры дрогнут.</p>
 <button id="vr">Проверить VR</button>
 <button id="ar">Проверить MR</button>
 <button id="mic">Проверить микрофон</button>
+<button id="input">Проверить контроллеры и руки</button>
 <pre id="out">Результатов пока нет.</pre>
 <script>
 // No 'layers': together with the normal base layer the session fails (docs/headset-capabilities.md).
@@ -71,6 +73,77 @@ async function probe(mode) {
   }
   show();
 }
+// Controllers, hands and body: what each gives a page, read in one VR session of two phases shown
+// by colour (green: press every button and stick; blue: controllers down, hands up). Buttons by
+// index of the xr-standard mapping (Meta: "Buttons 0 to 5 are defined the same as the complex
+// xr-standard mapping", webxr-pro-controller); hands as 25 joints (WebXR Hand Input); the body as
+// XRBody, 83 joints (W3C WebXR Body Tracking, draft of 5 Sep 2025). A buzz marks each phase.
+const PHASE_S = 15;
+async function probeInput() {
+  const r = { mode: 'input', started: new Date().toISOString(), sources: {}, hands: {}, events: {}, haptics: [] };
+  window.__probe.input = r;
+  try {
+    const session = await navigator.xr.requestSession('immersive-vr', { optionalFeatures: ['local-floor', 'hand-tracking', 'body-tracking'] });
+    r.enabledFeatures = session.enabledFeatures ? [...session.enabledFeatures] : 'not reported';
+    const gl = document.createElement('canvas').getContext('webgl2', { xrCompatible: true });
+    const layer = new XRWebGLLayer(session, gl);
+    session.updateRenderState({ baseLayer: layer });
+    const space = await session.requestReferenceSpace('local-floor').catch(() => session.requestReferenceSpace('local'));
+    for (const ev of ['selectstart', 'select', 'squeezestart', 'squeeze']) session.addEventListener(ev, (e) => { const k = `${ev}-${e.inputSource.handedness}`; r.events[k] = (r.events[k] || 0) + 1; });
+    const buzz = async (label) => {
+      for (const src of session.inputSources) {
+        const pad = src.gamepad, act = pad && pad.hapticActuators && pad.hapticActuators[0];
+        if (!act) { if (pad) r.haptics.push(`${label} ${src.handedness}: no actuator`); continue; }
+        try { await act.pulse(0.8, 300); r.haptics.push(`${label} ${src.handedness}: pulse ok`); }
+        catch (e) { r.haptics.push(`${label} ${src.handedness}: ${e.name}`); }
+      }
+    };
+    let frames = 0;
+    const t0 = performance.now();
+    await new Promise((resolve) => {
+      const onFrame = (t, frame) => {
+        frames++;
+        const s = (performance.now() - t0) / 1000;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, layer.framebuffer);
+        if (s < PHASE_S) gl.clearColor(0, 0.35, 0, 1); else gl.clearColor(0, 0, 0.45, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        for (const src of session.inputSources) {
+          const k = src.handedness + (src.hand ? ' hand' : ' controller');
+          const pad = src.gamepad;
+          const e = r.sources[k] || (r.sources[k] = { profiles: [...src.profiles], mapping: pad ? pad.mapping : null, buttons: pad ? pad.buttons.length : 0, axes: pad ? pad.axes.length : 0, pressed: [], touched: [], axesMax: [] });
+          if (pad) {
+            pad.buttons.forEach((b, i) => { if (b.pressed && !e.pressed.includes(i)) e.pressed.push(i); if (b.touched && !e.touched.includes(i)) e.touched.push(i); });
+            pad.axes.forEach((a, i) => { e.axesMax[i] = +Math.max(e.axesMax[i] || 0, Math.abs(a)).toFixed(2); });
+          }
+          if (src.hand && frame.getJointPose) {
+            let seen = 0;
+            for (const joint of src.hand.values()) if (frame.getJointPose(joint, space)) seen++;
+            const h = r.hands[src.handedness] || (r.hands[src.handedness] = { joints: src.hand.size, trackedMost: 0, framesTracked: 0 });
+            h.trackedMost = Math.max(h.trackedMost, seen);
+            if (seen) h.framesTracked++;
+          }
+        }
+        if (frame.body) {
+          let seen = 0;
+          for (const joint of frame.body.values()) { try { if (frame.getPose(joint, space)) seen++; } catch (err) { /* a joint the browser does not pose */ } }
+          r.body = { joints: frame.body.size, trackedMost: Math.max((r.body && r.body.trackedMost) || 0, seen) };
+        }
+        if (s < 2 * PHASE_S) session.requestAnimationFrame(onFrame); else resolve();
+      };
+      session.requestAnimationFrame(onFrame);
+      setTimeout(() => buzz('start'), 500);
+      setTimeout(() => buzz('blue'), PHASE_S * 1000);
+      setTimeout(resolve, (2 * PHASE_S + 10) * 1000);
+    });
+    if (!('body' in r)) r.body = 'none in any frame';
+    r.frames = frames;
+    await session.end();
+  } catch (e) {
+    r.error = e.name + ': ' + e.message;
+  }
+  show();
+}
+document.getElementById('input').onclick = probeInput;
 document.getElementById('vr').onclick = () => probe('immersive-vr');
 document.getElementById('ar').onclick = () => probe('immersive-ar');
 // Microphone: permission and a one-second level reading; nothing is recorded or sent.
