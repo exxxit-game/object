@@ -89,6 +89,7 @@ const CASES = [
   ['claude-guard pre', 'data: read only', 'a migration applied to the live database', () => {}, () => askGuard('pre', { tool_name: 'mcp__db__apply_migration', tool_input: {} }), 'REFUSED'],
   ['claude-guard pre', 'data: read only', 'a write hidden behind a read on the live database', () => {}, () => askGuard('pre', { tool_name: 'mcp__db__execute_sql', tool_input: { query: 'select 1; delete from app.runs' } }), 'REFUSED'],
   ['claude-guard pre', 'main only on the owner\'s word', 'files pushed to GitHub past the push hook', () => {}, () => askGuard('pre', { tool_name: 'mcp__gh__push_files', tool_input: { branch: 'main' } }), 'REFUSED'],
+  ['claude-guard start', 'the owner\'s decisions', 'a session starts without his decisions in front of it', () => swap('docs/state.md', '## Decisions with the owner', '## Decided'), test('guard.test.mjs'), 'does not show the owner\'s decisions'],
   ['claude-guard stop', 'CLAUDE.md rules 8, 14', 'a turn ends with unsaved work', () => append('docs/roadmap.md', '\nunsaved\n'), () => askGuard('stop', { stop_hook_active: false }), 'work not saved'],
   ['claude-guard stop', 'ask the owner at a barrier', 'a turn ends with a page only the owner can open not given to him', () => fs.writeFileSync(`${dir}-record.jsonl`, `{"content":"${MARK}\\n- https://archive.example.org/locked - the page\\n\\n"}\n`),
     () => askGuard('stop', { stop_hook_active: false, transcript_path: `${dir}-record.jsonl` }), 'pages only the owner can open'],

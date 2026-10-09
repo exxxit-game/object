@@ -29,6 +29,9 @@
 - Voice: ElevenLabs key in ~/.elevenlabs-key.txt; Daniel, eleven_v3; `tools/make-voice.mjs`, `tools/check-voice.mjs`.
 
 ## Decisions with the owner
+- The corridor is the reference every room is built on: finished to the end before the first room
+  («доделать эталонный коридор, на который мы опираемся»; «доделывать до конца»). Queue order: only his word.
+- Install first, the site second («чтобы человек мог это установить себе… а сайт это уже второй шаг»).
 - Rooms are faithful re-creations of published experiments; no invented mechanics.
 - Space tiers: seated, standing, roomscale 1.8×1.8 m (base; owner's area), large (offered only, never shrunk).
 - Live players replace scripted people only where the original had real participants or
@@ -41,11 +44,8 @@
 - Formal "вы"; no music; batch releases only on the owner's word.
 
 ## How errors are caught (the owner cannot read code)
-- `new-room` skill; `paper-reviewer` agent; `docs/mistakes.md` (every mistake has a guard).
-- Facts live in one place with a test; cards need quotes the checker finds in the paper.
-- `tests/structure.test.mjs`: file sizes, import direction, no Russian outside texts,
-  no dead modules, docs name real files, this file ≤ 80 lines, syntax, catalog current.
-- Answers say what was run and seen; otherwise "not verified". Owner sees CI light.
+- `new-room` skill; `paper-reviewer` agent; `docs/mistakes.md` (every mistake has a guard); facts in one place
+  with a test; `tests/structure.test.mjs` (sizes, imports, no Russian outside texts, this file ≤ 80 lines).
 - Machine stops: tools/hooks (no commit while npm test fails, no push without the secret check, main only on
   his word); Claude Code hooks, `tools/claude-guard.mjs` (state at start and after compaction, owner messages
   logged, no skipping hooks, no browser on the laptop, the live DB read only, no GitHub connector writes, no
