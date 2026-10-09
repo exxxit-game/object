@@ -90,6 +90,11 @@ static page privacy.html) and README.md, which is in Russian and English.
     the frame rate) → an independent reviewer agent on the diff → fix → only then show the
     owner, with a frame from the headset. I never stop at "not checked in the headset" while
     the headset is linked; the owner judges only feel and taste, never what a tool can measure.
+25. A barrier I cannot pass myself (a login, a captcha, a paywall, a site that blocks tools, a
+    photo only a person can take): ask the owner at once, in the same answer, with the link and
+    what to bring back; never work round it with a weaker invented substitute. Research agents
+    end with a `FOR THE OWNER:` block, and the stop hook does not end a turn until each of its
+    links has reached him (tools/owner-links.mjs).
 
 ## Commands
 - `npm test` — pure unit tests (node only, about 12 s on the laptop); git runs it before every commit. Safe to run locally.

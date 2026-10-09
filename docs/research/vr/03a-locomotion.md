@@ -104,6 +104,18 @@ How many quit:
 
 Speed: 1.4 m/s is the walking pace these studies used and lies near the mean onset threshold (about 1.2 m/s, Terenzi). No read paper tested instant start against a short ramp in an HMD.
 
+## Fade on a scene change (read)
+
+- **No platform gives a duration**: Meta, "Locomotion best practices" (updated 2025-12-17, opened):
+  only "Keep acceleration events brief and infrequent" and sound "to aid orientation during
+  transitions"; Unity XRI's vignette has an "Ease In Time" setting with no default stated; Google
+  Daydream Elements (2017): after "an instant jump or a fade to black, you need a few seconds to get
+  your bearings again", no duration.
+- **Preferred fade about 0.3 s** — Wölwer & Zielasko 2024, arXiv 2406.19895 (opened), a teleport
+  prestudy with 9 people: "M=0.31 s, SD=0.13 s, Md=0.30 s, Min=0.10 s, Max=0.70 s"; three preferred
+  0 s; "a too-long animation uncomfortable because it triggers blinking". A weak source: small, and
+  a teleport rather than a door. Our door passage fades in 0.45 s, inside that range.
+
 ## Check of our values
 
 | Our value | Cited source | What the paper says | Agrees |

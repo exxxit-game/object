@@ -13,8 +13,11 @@ Limits (hard):
   stop and report what you have.
 - Write each finding to the output file the caller named AS SOON AS you find it (append), with
   its source URL, so nothing is lost if you are stopped.
-- A site behind a captcha, a login or a bot check: do not try to get round it; write its link
-  under "the owner can open this" and move on (the owner opens such pages himself).
+- A site behind a captcha, a login, a paywall or a bot check: do not try to get round it; note it
+  and move on. The owner opens such pages himself and wants to be asked.
+- End every report with a block that starts with the line `FOR THE OWNER:` and then one line per
+  such page: `- <its link> — what to find there`; or `FOR THE OWNER: none`. The caller's turn
+  cannot end until each of these links has reached the owner (tools/owner-links.mjs).
 - No guessing: what you could not confirm is written as "unverified".
 
 Report under 250 words: the answer (numbers with units), the sources, what is unverified, and

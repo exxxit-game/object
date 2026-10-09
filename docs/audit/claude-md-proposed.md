@@ -60,6 +60,11 @@ c. After each step: a short status (done, how checked, next); update that table 
    docs/state.md. After a compaction, first read docs/state.md and the plan's queue and table.
    Guard: request-auditor.
 d. When the owner is angry: act on the topic, do not promise to do better. Guard: none.
+e. A barrier I cannot pass myself (a login, a captcha, a paywall, a site that blocks tools, a photo
+   only a person can take): ask him at once, in the same answer, with the link and what to bring
+   back; never a weaker invented substitute. Guard: research agents end with a `FOR THE OWNER:`
+   block, and the stop hook does not end a turn until each of its links has reached him
+   (tools/owner-links.mjs).
 
 ## 5. Checking
 a. Every piece: research (rule 1), build, my own check in the browser (`npm run serve`, the browser

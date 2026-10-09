@@ -4,7 +4,8 @@
 // exit 2 keeps the turn going, and Claude Code ends it anyway after 8 blocks in a row).
 //   pre:  a shell command that skips the git hooks or runs Playwright on the laptop is refused, and
 //         so are a connected browser tool and any write to the live database
-//   stop: a turn does not end while npm test fails or work is unsaved or not on GitHub
+//   stop: a turn does not end while npm test fails or work is unsaved or not on GitHub, or while
+//         a page only the owner can open, left by research, has not reached him (owner-links.mjs)
 //   start, prompt: the state comes back after every compaction; every owner message is logged
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -12,6 +13,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { withoutGitVars } from './secrets.mjs';
+import { unrelayed } from './owner-links.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const mode = process.argv[2];
@@ -111,6 +113,11 @@ if (mode === 'stop') {
   else if (Number(ahead)) problems.push(`${ahead} commits not on GitHub: push the working branch`);
   const tests = spawnSync('npm', ['test', '--silent'], { cwd: HERE, env: withoutGitVars(), encoding: 'utf8', shell: true });
   if (tests.status !== 0) problems.push(`npm test fails:\n${`${tests.stdout}${tests.stderr}`.split('\n').filter((l) => /Error|fail|STOP/i.test(l)).slice(0, 5).join('\n')}`);
+  // pages only the owner can open, left by a research agent: they reach him in this turn
+  let record = '';
+  try { record = event.transcript_path ? fs.readFileSync(event.transcript_path, 'utf8') : ''; } catch { /* no record to read */ }
+  const owed = unrelayed(record);
+  if (owed.length) problems.push(`pages only the owner can open, left by research: give him each link (the answer, or the plan's list of what is asked of him), with what to bring back:\n${owed.join('\n')}`);
   if (problems.length) stop(`NOT DONE. Before this turn ends:\n- ${problems.join('\n- ')}`);
   process.exit(0);
 }

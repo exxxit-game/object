@@ -81,6 +81,19 @@ the source.
   about L* 90, b* +10) has no source; it was chosen so that "white would not glare", which Meta's
   limit settles.
 
+## Layout numbers (read)
+
+- **No number for headings, paragraph space, margins or form fields** in UKAAF G003 (2012, PDF
+  opened): headings "may need to be in larger text to differentiate them from body text" (p. 11,
+  3.4); "Use a minimum of single line spacing" (p. 12, 5.7); "Leave space between paragraphs"
+  (p. 12, 5.8), "a blank line between them" (p. 28); "Have adequate margins" (p. 13, 5.14); forms:
+  nothing beyond "is their handwriting very large" (p. 51).
+- **Leading at least 25 to 30 per cent of the point size** — CNIB, "Clear Print Accessibility
+  Guidelines", July 2020, p. 10 (PDF opened). Our line pitch, 1.32 of the letter size, meets it
+  either way it is read (as the gap or as the whole pitch).
+- So the title's size over the body (44 and 28 mm), the gaps, the margin and the writing fields are
+  our choices inside these rules, to be judged by reading in the headset, not sourced numbers.
+
 ## Not found
 
 No large-print rule names stamps or seals; the nearest rules are "text inside pictures at body

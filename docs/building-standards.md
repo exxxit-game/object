@@ -29,7 +29,10 @@ marked "ours" is the game's rounding, with the reason.
 | Corridor | at least 44 in (1.118 m) in a university building [S16, S17] | 1.8 m |
 
 Not verified (do not present as fact): closer body position, 1970s
-ceiling height, colour temperature of 1970s cool-white lamps, troffer spacing.
+ceiling height, colour temperature of 1970s cool-white lamps, troffer spacing. For the ceiling
+only a minimum was read: California Title 8 §3226(c), corridors at least 7 ft clear (current text,
+filed 1975; seen as a paraphrase); unopened leads: a City of Alameda handout (7'-6" for UBC
+1970/1973) and the 1976 UBC on archive.org (borrow only, needs a login).
 
 Sources (opened 08.10.2026):
 S1 ADA 2010 Standards, ada.gov/assets/pdfs/2010-design-standards.pdf ·
