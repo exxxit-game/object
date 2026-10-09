@@ -1,7 +1,7 @@
 // The clipboard sheet appears where research puts comfortable reading: 1 m from the
 // eyes, a little below them, straight ahead, facing the player (sources in docs/decisions.md).
 import assert from 'node:assert/strict';
-import { frontPose, readingPose, letterDeg, READ_DIST, DROP_DEG, GLIDE, glidePath, curvePoint, easeInOut, tripPose, boardCorners, within, EDGE_CLEAR, BOARD_REACH, CLIP } from '../src/engine/ui/sheet-math.js';
+import { frontPose, readingPose, letterDeg, MIN_LETTER, READ_DIST, DROP_DEG, GLIDE, glidePath, curvePoint, easeInOut, tripPose, boardCorners, within, EDGE_CLEAR, BOARD_REACH, CLIP } from '../src/engine/ui/sheet-math.js';
 import { corridorHTML, WALLS } from '../src/app/lobby/scene.js';
 import { BOUNDS, PLAN, SHEET_HOME, CORK_Z } from '../src/app/lobby/plan.js';
 
@@ -23,7 +23,7 @@ for (const [head, yaw] of poses) {
   const toEyes = head.map((h, i) => (h - p.pos[i]) / READ_DIST);
   assert.ok(near(n[0], toEyes[0]) && near(n[1], toEyes[1]) && near(n[2], toEyes[2]), 'faces the eyes');
 }
-assert.ok(near(letterDeg(0.021, 1), 1.2, 0.01), '21 mm at 1 m is about 1.2 degrees');
+assert.ok(near(letterDeg(MIN_LETTER, READ_DIST), 1.375, 0.01), 'the smallest letter, 24 mm at 1 m, is Google\'s 1.375 degrees');
 
 // The clipboard's trip from its hook to the reading spot and back (docs/mistakes.md):
 // slow enough, eased, swinging out from the wall and down, never nearer than

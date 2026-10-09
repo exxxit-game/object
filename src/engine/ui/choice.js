@@ -1,4 +1,4 @@
-import { FONT } from '../panel.js';
+import { FONT, LINE_HEIGHT, wrap } from '../panel.js';
 
 // A column of answer buttons on a wall or on the clipboard sheet, chosen with the laser
 // (VR) or the mouse (desktop). Any number of answers; one pick, then the buttons go away.
@@ -19,23 +19,14 @@ const PAD_M = 10 / PX_PER_M;   // inner margin, metres
 const SIZE_M = 54 / PX_PER_M;  // largest letters, metres
 const MIN_GAP = 0.012; // metres between buttons when a long list is squeezed: Meta's 12 mm between interactables
 const WEIGHT = 600;
-const LINE_HEIGHT = 1.32; // as in panel.js
 // Buttons ignore clicks this long after they appear: no double answers from one press.
 const READY_MS = 300;
 
-// How many lines the longest label takes at size (canvas px) on a button pxW wide, wrapped
-// at spaces as panel.js wraps.
+// How many lines the longest label takes at size (canvas px) on a button pxW wide.
 function linesAt(labels, size, pxW, pad) {
   const ctx = document.createElement('canvas').getContext('2d');
   ctx.font = `${WEIGHT} ${size}px ${FONT}`;
-  return Math.max(...labels.map((t) => {
-    let lines = 1, line = '';
-    for (const word of t.split(' ')) {
-      const test = line ? line + ' ' + word : word;
-      if (ctx.measureText(test).width > pxW - pad * 2 && line) { lines++; line = word; } else line = test;
-    }
-    return lines;
-  }));
+  return Math.max(...labels.map((t) => wrap(ctx, t, pxW - pad * 2).length));
 }
 
 // The largest common size (canvas px) at which every label fits on one line of the button.
@@ -71,7 +62,7 @@ export function createChoice(parent, place) {
     const fixed = letter ? letter * density : null;
     // on paper the buttons grow with a wrapped label; on a wall long lists get lower buttons
     // so they stay on its screen
-    const bh = fixed ? Math.max(h, (linesAt(labels, fixed, Math.round(w * density), pad) * fixed * LINE_HEIGHT + 2 * pad) / density)
+    const bh = fixed ? Math.max(h, Math.ceil(linesAt(labels, fixed, Math.round(w * density), pad) * fixed * LINE_HEIGHT + 2 * pad) / density)
       : labels.length > 4 ? h * 0.8 : h;
     const y0 = top == null ? y : top - bh / 2;
     // One column if it fits, first with the usual gaps, then with gaps down to MIN_GAP;
@@ -96,13 +87,17 @@ export function createChoice(parent, place) {
       el.classList.add('clickable', 'answer');
       el.dataset.index = i;
       el.dataset.size = size;
-      el.dataset.letterMm = (size / density * 1000).toFixed(1);
+      el.dataset.letterMm = (size / density * 1000).toFixed(1);   // replaced by the drawn size once painted
       setTimeout(() => { el.dataset.ready = '1'; }, READY_MS);
       // A button removed right after it appeared can still fire 'loaded' before its panel
       // has a canvas: draw only once the canvas exists.
       const paint = (bg) => {
         const panel = el.components.panel;
-        if (panel && panel.c) panel.write([{ t: text, size, weight: WEIGHT, color: TEXT }], { bg, pad });
+        if (!panel || !panel.c) return;
+        // on paper a label never shrinks (the button was made tall enough); on a wall it may
+        panel.write([{ t: text, size, weight: WEIGHT, color: TEXT }], { bg, pad, fit: !fixed });
+        el.dataset.letterMm = (panel.smallest / density * 1000).toFixed(1);
+        if (panel.overflow) el.dataset.overflow = '1';
       };
       el.addEventListener('loaded', () => paint(NORMAL));
       el.addEventListener('mouseenter', () => paint(HOVER));

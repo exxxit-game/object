@@ -3,7 +3,22 @@
 // after it only if it failed to load.
 export const FONT = 'Inter, "Segoe UI", Roboto, Arial, sans-serif';
 
-const LINE_HEIGHT = 1.32;
+export const LINE_HEIGHT = 1.32;
+
+// A paragraph's lines at the font set on ctx, broken at spaces to fit maxW (the one place text is
+// wrapped: panels and answer buttons).
+export function wrap(ctx, text, maxW) {
+  const lines = [];
+  for (const para of String(text).split('\n')) {
+    let line = '';
+    for (const word of para.split(' ')) {
+      const test = line ? line + ' ' + word : word;
+      if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = word; } else line = test;
+    }
+    lines.push(line);
+  }
+  return lines;
+}
 
 // A plate's body behind its printed face: a box without its front, which would lie on the print
 // and flicker with it; one material, so the bodies in a merged part of a scene become one mesh.
@@ -60,15 +75,7 @@ AFRAME.registerComponent('panel', {
       const size = (b.size || 40) * scale;
       ctx.font = `${b.weight || 400} ${size}px ${FONT}`;
       ctx.letterSpacing = `${(b.spacing || 0) * scale}px`;
-      const lines = [];
-      for (const para of String(b.t).split('\n')) {
-        let line = '';
-        for (const word of para.split(' ')) {
-          const test = line ? line + ' ' + word : word;
-          if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = word; } else line = test;
-        }
-        lines.push(line);
-      }
+      const lines = wrap(ctx, b.t, maxW);
       const gap = (b.gap ?? (b.size || 40) * 0.6) * scale;
       return { b, size, gap, lines };
     });
@@ -99,6 +106,8 @@ AFRAME.registerComponent('panel', {
       laid = this.layout(blocks, scale, maxW);
     }
     this.overflow = height(laid) > H - pad * 2;
+    // the smallest font size as drawn (canvas px), after any shrinking: what the tests measure
+    this.smallest = Math.min(...laid.map((l) => l.size));
     // a blank to fill in (a run of underscores) wrapped away from the words it belongs to
     this.orphan = laid.some((l) => l.lines.some((ln) => /^_+[,.:]?$/.test(ln.trim())));
 

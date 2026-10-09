@@ -6,6 +6,10 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import { startServer } from './static-server.mjs';
+import { MIN_LETTER, READ_DIST, MIN_TARGET_DEG, letterDeg } from '../src/engine/ui/sheet-math.js';
+
+// the reading rules, from the code that sets them: the smallest letter and the smallest target
+const RULES = { minMm: MIN_LETTER * 1000, minDeg: letterDeg(MIN_LETTER, READ_DIST), targetDeg: MIN_TARGET_DEG };
 
 const server = await startServer(0);
 const base = `http://localhost:${server.address().port}/?speed=20`;
@@ -37,7 +41,7 @@ async function playRoom(url, playtest, { leave = false } = {}) {
   // nothing runs off the paper, every letter (text, answers, a seal's ring) at least the smallest
   // letter (24 mm at 1 m, 1.375° of view) and buttons at least 2.5° of view from the eyes, and up
   // to four answers in one column.
-  const sheetProblems = () => page.evaluate(() => {
+  const sheetProblems = () => page.evaluate(({ minMm, minDeg, targetDeg }) => {
     const sheet = document.querySelector('.sheet[data-open]');
     if (!sheet) return [];
     const eye = new THREE.Vector3(), p = new THREE.Vector3();
@@ -46,17 +50,18 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     const answers = [...sheet.querySelectorAll('.answer')];
     const out = sheet.dataset.overflow ? ['the page does not fit the sheet'] : [];
     if (sheet.dataset.orphan) out.push('a blank to fill in stands on a line of its own');
-    if (Number(sheet.dataset.letterMm) < 24) out.push(`text ${sheet.dataset.letterMm} mm, under 24 mm`);
-    if (sheet.dataset.stampLetterMm && Number(sheet.dataset.stampLetterMm) < 24) out.push(`the seal's letters ${sheet.dataset.stampLetterMm} mm, under 24 mm`);
+    if (Number(sheet.dataset.letterMm) < minMm - 0.5) out.push(`text ${sheet.dataset.letterMm} mm, under ${minMm} mm`);
+    if (sheet.dataset.stampLetterMm && Number(sheet.dataset.stampLetterMm) < minMm - 0.5) out.push(`the seal's letters ${sheet.dataset.stampLetterMm} mm, under ${minMm} mm`);
     for (const a of answers) {
       a.object3D.getWorldPosition(p);
       const d = p.distanceTo(eye);
-      if (deg(a.dataset.letterMm / 1000, d) < 1.375) out.push(`answer letters ${deg(a.dataset.letterMm / 1000, d).toFixed(2)}° < 1.375°`);
-      if (deg(a.getAttribute('panel').h, d) < 2.5) out.push(`button ${deg(a.getAttribute('panel').h, d).toFixed(2)}° < 2.5°`);
+      if (deg(a.dataset.letterMm / 1000, d) < minDeg - 0.03) out.push(`answer letters ${deg(a.dataset.letterMm / 1000, d).toFixed(2)}° < ${minDeg.toFixed(3)}°`);
+      if (a.dataset.overflow) out.push(`answer "${a.dataset.index}" runs off its button`);
+      if (deg(a.getAttribute('panel').h, d) < targetDeg) out.push(`button ${deg(a.getAttribute('panel').h, d).toFixed(2)}° < ${targetDeg}°`);
     }
     if (answers.length <= 4 && new Set(answers.map(a => a.object3D.position.x.toFixed(3))).size > 1) out.push('answers in two columns');
     return out;
-  });
+  }, RULES);
   // Light falling on a level white card at a point (a light meter): the card is drawn alone
   // from just above, and its linear brightness is read.
   const lightAt = (p) => page.evaluate(([x, y, z]) => {

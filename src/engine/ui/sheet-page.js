@@ -51,7 +51,7 @@ export function createPage(el, paperEl) {
       return { t: b.t, size: r.m * DENSITY, color: r.color, weight: r.weight,
         gap: (b.gap ?? (i ? 0.012 : 0)) * DENSITY };
     }), { top: true, fit: false, align: 'left', pad: MARGIN * DENSITY, bg: PAPER_BG });
-    el.dataset.letterMm = (Math.min(...blocks.map((b) => ROLES[b.role || 'body'].m)) * 1000).toFixed(1);
+    el.dataset.letterMm = (panel.smallest / DENSITY * 1000).toFixed(1);   // as drawn
     const textBottom = PAPER.h / 2 - bottom;
     el.dataset.textBottom = textBottom.toFixed(3);
     if (panel.overflow) el.dataset.overflow = '1'; else delete el.dataset.overflow;
