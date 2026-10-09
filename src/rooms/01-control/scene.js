@@ -9,8 +9,10 @@ import { doorHTML } from '../../engine/door.js';
 import { SIGN, SIGN_PANEL } from '../../app/brand.js';
 import { plaqueX, ROOM1_NUMBER } from '../../app/lobby/plan.js';
 
-// the booth's floor space, 3.2 × 3.2 m round the origin: its tiles and blocks are laid from it
-const SPACE = 'space: 0 0 3.2 3.2';
+// the booth's walls' inside faces and its ceiling, 3.2 × 3.2 m round the origin: its tiles and
+// blocks are laid from that space (and the tests read where an eye can be in it)
+export const BOOTH = { minX: -1.6, maxX: 1.6, minZ: -1.6, maxZ: 1.6, ceiling: 2.5 };
+const SPACE = `space: 0 0 ${BOOTH.maxX - BOOTH.minX} ${BOOTH.maxZ - BOOTH.minZ}`;
 
 export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true" background="color: #0b0b0d"
          cursor="rayOrigin: mouse" raycaster="objects: .clickable; far: 8"

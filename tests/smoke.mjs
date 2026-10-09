@@ -7,6 +7,8 @@ import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import { startServer } from './static-server.mjs';
 import { nearFaces } from './near-faces.mjs';
+import { WALLS, CEIL } from '../src/app/lobby/scene.js';
+import { BOOTH } from '../src/rooms/01-control/scene.js';
 import { MIN_LETTER, READ_DIST, MIN_TARGET_DEG, letterDeg } from '../src/engine/ui/sheet-math.js';
 
 // the reading rules, from the code that sets them: the smallest letter and the smallest target
@@ -15,6 +17,13 @@ const RULES = { minMm: MIN_LETTER * 1000, minDeg: letterDeg(MIN_LETTER, READ_DIS
 const server = await startServer(0);
 const base = `http://localhost:${server.address().port}/?speed=20`;
 const browser = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
+
+// where an eye can be: anywhere inside a place's walls, floor and ceiling (a headset walks freely),
+// but not nearer to them than the camera's near plane (A-Frame's camera, 5 mm), inside which
+// nothing is drawn: the back of a thing lying on a wall is never seen
+const NEAR = 0.005;
+const inside = (w, top) => [[w.minX + NEAR, NEAR, w.minZ + NEAR], [w.maxX - NEAR, top - NEAR, w.maxZ - NEAR]];
+const CORRIDOR = { eyes: [inside(WALLS, CEIL)] }, ROOM = { eyes: [inside(BOOTH, BOOTH.ceiling)] };
 
 async function playRoom(url, playtest, { leave = false } = {}) {
   const page = await browser.newPage();
@@ -153,7 +162,7 @@ async function playRoom(url, playtest, { leave = false } = {}) {
       assert.equal(s.stamped, '1', 'the seal is not pressed once the form is signed');
       assert.ok(s.top <= s.field, `the seal reaches into the signature's field (${s.top} above ${s.field.toFixed(3)})`);
     }
-    assert.deepEqual(await page.evaluate(nearFaces), [], 'faces that flicker on the signed form');
+    assert.deepEqual(await page.evaluate(nearFaces, CORRIDOR), [], 'faces that flicker on the signed form');
     await pick(0);
   };
   const signForm = async () => { await signPage(false); await signPage(true); };
@@ -197,7 +206,7 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     assert.deepEqual(await hangProblems(), [], 'the "take me" page on the hook is too small to read from the arrival spot');
     const corridorLight = await lightAt([0.6, 0.01, 2.7]);   // the corridor floor, door shut
     // no two faces that face one way under 5 mm apart (they flicker in a headset: near-faces.mjs)
-    assert.deepEqual(await page.evaluate(nearFaces), [], 'faces that flicker in the corridor');
+    assert.deepEqual(await page.evaluate(nearFaces, CORRIDOR), [], 'faces that flicker in the corridor');
     if (leave) {
       // "leave" fades out, ends the game and says how to come back
       await askLeave();
@@ -249,7 +258,7 @@ async function playRoom(url, playtest, { leave = false } = {}) {
       await page.waitForFunction(() => document.querySelectorAll('.answer').length === 0, null, { timeout: 30000 });
     }
     await waitState('run');
-    assert.deepEqual(await page.evaluate(nearFaces), [], 'faces that flicker in the room');
+    assert.deepEqual(await page.evaluate(nearFaces, ROOM), [], 'faces that flicker in the room');
     // Corridors under 10 fc, desks 50 fc (docs/building-standards.md, S13): the corridor
     // floor gets at most a fifth of the light on the room's desk, and is not left dark (the
     // 0.1 floor is our choice, so the corridor stays visible).

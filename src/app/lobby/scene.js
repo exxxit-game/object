@@ -26,7 +26,8 @@ const FACE = {
 const FRAME_OUT = 0.0112;   // a frame's outer face beyond its opening's edge
 // The paint band below the rail and the wall above it lie in one plane and meet under the rail:
 // one plane over the other, millimetres apart, flickers in a headset (docs/vr-checklist.md).
-const RAIL = 0.8, CEIL = 2.5;
+const RAIL = 0.8;
+export const CEIL = 2.5;
 const UPPER = { y: r((RAIL + CEIL) / 2), h: r(CEIL - RAIL) };
 
 // a long wall: block between the openings, over every opening up to the ceiling, the darker band
