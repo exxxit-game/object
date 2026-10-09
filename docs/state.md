@@ -3,8 +3,9 @@
 ## Where things are
 - Repo `exxxit-game/youaretheobject` (folder `C:\Users\admin\Documents\GitHub\objekt`). Site:
   https://youaretheobject.com (GitHub Pages from `main`; `main` is an OLD package). Work: `room-polish`.
-  Session in a worktree (branch `claude/workflow-testing-plan-96f413` on top of room-polish); the main folder is
-  fast-forwarded to it on the owner's word (last 9.10). Push of the branch: his "Делай"; main (the live site): his word.
+  ONE QUEUE STEP = ONE SESSION (his word 9.10). Each session works in its own worktree, made from the main
+  folder's HEAD (`.claude/settings.json` worktree.baseRef head; the default was old main); at the end of a step
+  fast-forward the main folder (room-polish) to the session branch. Push: his "Делай"; main: his word only.
 - Room 01 = illusion of control (Alloy & Abramson 1979), `src/rooms/01-control/`: SET ASIDE 08.10 as a lab
   room (16–20 min of waiting, owner found it unbearably boring). Playtest `?playtest=1`, speed `?speed=N`.
 - Supabase `objekt` (`rkvdwzlymmewsxjysgma`, eu-west-1 Ireland), private schema `app`:
@@ -19,15 +20,13 @@
 - Plan to 1M players (Russian doc for the owner, 08.10): https://claude.ai/code/artifact/71113d16-57ad-42ce-9905-87ff87dfdbd7
   Its table "Сверка всех твоих просьб" is THE list of every owner request and its state: add new ones there.
   Its section "Как идём дальше" is THE queue: work only on its top step, one at a time.
-- Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS 08.10 at the old 60 fps bar, no saved log);
-  `tools/xr-probe.html` (owner presses VR/MR/mic buttons); `scrcpy` installed.
+- Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS 08.10, old 60 fps bar, no log); `tools/xr-probe.html`.
   Owner plays the test copy https://exxxit-game.github.io/object-preview/ (bookmark in the headset, the
   game from GitHub): `node tools/publish-preview.mjs` before he looks; it never sends data. From 9.10 the
   headset stays on the laptop's USB cable (his choice); it charges slowly and power is cut daily: wake it
   only to check, end with `quest-look.mjs sleep`, push work often. I check in the headset myself:
   `tools/quest-look.mjs` (open [local port], reload, vr, frame, eval, sleep); opening 8.10: sign +10 s, 90 fps (no saved log: re-measure with a log, plan step 4.3).
-- Voice: ElevenLabs key `C:\Users\admin\.elevenlabs-key.txt`; Daniel, eleven_v3;
-  `tools/make-voice.mjs`, `tools/check-voice.mjs` (speech-to-text check), `tools/make-sounds.mjs`.
+- Voice: ElevenLabs key in ~/.elevenlabs-key.txt; Daniel, eleven_v3; `tools/make-voice.mjs`, `tools/check-voice.mjs`.
 
 ## Decisions with the owner
 - Rooms are faithful re-creations of published experiments; no invented mechanics.
@@ -47,8 +46,10 @@
 - `tests/structure.test.mjs`: file sizes, import direction, no Russian outside texts,
   no dead modules, docs name real files, this file ≤ 80 lines, syntax, catalog current.
 - Answers say what was run and seen; otherwise "not verified". Owner sees CI light.
-- Machine stops (tools/hooks): no commit while npm test fails; no push without the secret check; main only
-  on his word; on GitHub main can be neither deleted nor rewritten. `fact-checker` agent: every claim, twice.
+- Machine stops: tools/hooks (no commit while npm test fails, no push without the secret check, main only on
+  his word); Claude Code hooks, `tools/claude-guard.mjs` (state at start and after compaction, owner messages
+  logged, no skipping hooks, no browser on the laptop, the live DB read only, no GitHub connector writes, no
+  turn ends red or unsaved); every guard seen red by `tools/prove-guards.mjs` on GitHub at every push.
 
 ## Lessons (do not repeat)
 - Read the full paper before recommending or designing (summaries overstated effects twice).
@@ -59,21 +60,20 @@
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
 ## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
-1. Queue step 4.1 NOW (his word 9.10: yesterday's mistakes fixed for good, control not resting on my
-   memory). Done: causes 1-4, 6, 9-11 (docs/audit/README.md), hooks, the GitHub rule on main, the plan
-   checked twice and fixed (docs/audit/plan-check.md), done requests in the tab «Архив просьб», premortem
-   (docs/audit/premortem.md), docs split under a 300-line test. Next: c) review of every rule, memory,
-   skill and agent with Cosmogram's lessons (docs/research/projects/cosmogram.md), rule 23 first, to him
-   for "да"; e) causes 5, 7, 8; f) the style book (Design System) from the game.
-2. Then 4.2, the data lever first (data stay with us, our own lab; study what we need from scientists
-   beyond name and ethics approval, how our conditions differ from a lab). Data protection = "the most
-   serious of all" (his word 9.10): LINDDUN, STRIDE, OWASP ASVS, a break-in try on a copy, CSP, the
-   provider must not read rows, my server access read-only (2 rows in app.runs, advisors clean, 9.10);
-   against "secret extraction" (Zuboff, NYT 12.11.2021). Then 4.3:
-   the headset and his gear, with logged measures. Then the corridor: 3 end-wall pictures and a lively
-   opening, 4 floor directory, 5 lighting (lights on the ceiling grid). Then room 01 onto the experimenter
-   (parked on claude/wip-experimenter), then the first room (step 5).
-3. Corridor: ACCEPTED 8.10 (docs/rooms/corridor-shots/); consent form signed by hand and sealed (2 pages,
-   seal by the signature, GOST R 7.0.97-2025 5.24, approved 9.10). Style book (THE whole picture):
-   https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH. Visual designs go to him as pictures BEFORE the game.
-4. Headset on USB: `quest-look.mjs worn on`, check, `sleep`. Waiting on him: plan «Что нужно от тебя».
+1. Queue step 4.1 NOW. Done: causes 1-4, 6, 9-11 (docs/audit/README.md), the plan checked twice, premortem,
+   docs split, c) the rules review (docs/audit/rules-review.md), all guards proven, Claude Code read in full
+   (docs/research/projects/claude-code/README.md) and its guards put in. Waiting for his yes: the new
+   CLAUDE.md (docs/audit/claude-md-proposed.md; on yes: renumber the cited rules, a test that each cited
+   rule exists, a size ratchet). Next: e) causes 5 (paper: Meta "Color" page, read 9.10, "no brighter than
+   #DADADA" for text, backgrounds and all UI; paper #e9e2cf exceeds it; notices to Letter), 7, 8;
+   f) the style book from the game; then the fact-checker, request and architecture auditors, then done.
+   After his app update: onFailure "block" on the guards. His guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9
+   His word 9.10: he knows nothing of git, GitHub or Claude Code: explain each thing he meets, plainly. Next
+   (place in the queue waits for his word, proposed right after 4.1): GitHub done fully: pull requests
+   with checks and a reviewer, a release with a version and Russian notes per live update, a build stamp.
+2. Then 4.2, the data lever first (data stay with us, our own lab; what we need from scientists beyond
+   name and ethics approval). Data protection = "the most serious of all": LINDDUN, STRIDE, OWASP ASVS, a
+   break-in try on a copy, CSP, the provider must not read rows, permission rules (claude-code/C2).
+   Then 4.3 (headset, logged measures; meta-vr plugin), the corridor items 3-5, 4a, step 5.
+3. Corridor ACCEPTED 8.10 (docs/rooms/corridor-shots/). Style book: https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH.
+   Visual designs go to him as pictures BEFORE the game. Headset on USB: quest-look worn on, check, sleep.
