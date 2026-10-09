@@ -65,7 +65,7 @@
    book matched. Waiting: his yes on the new CLAUDE.md. 1976 UBC: docs/building-standards.md S27.
    Cause 8 (9.10, session prodolzhenie-21470b): 14 fixed (flicker: decal.js + tests/near-faces.mjs in the
    smoke test, reviewed twice), 11 sourced, 17 headset rows moved to 4.3, 25 still need a source (batches).
-   Waiting for him: the ceiling pictures (5 troffers in the grid, S28), push permission (auto mode refused).
+   Waiting for him: the ceiling pictures (5 troffers in the grid, S28). Pushed: claude/prodolzhenie-21470b.
    Then the fact-checker, request and architecture auditors, then 4.1 done.
    Open talk: the start's tone (not Portal 2 humour, "learn about yourself"), step 7. He knows nothing of git
    or GitHub: explain (his guide https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9). Next
