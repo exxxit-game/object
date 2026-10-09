@@ -64,8 +64,8 @@
    headset walk: 90 fps, 130 draw calls max; 7: placement to see in his next session), plan checked twice,
    premortem, docs split, rules review, guards proven, Claude Code read. Allow rules on his yes
    (.claude/settings.json: quest-look, gh run, publish-preview); VR only on his head (quest-look vr).
-   f) style book matched to the game 9.10. Waiting: his yes on the new CLAUDE.md; the 1976 UBC §3304 photo
-   (corridors, pp. 500-501; 3305 is stairs). NEXT SESSION: cause 8 rows by docs/audit/numbers.md (sources in batches; headset rows into
+   f) style book matched to the game 9.10. Waiting: his yes on the new CLAUDE.md. 1976 UBC read on his photos
+   (docs/building-standards.md S27: corridor 44 in, 7 ft clear minimum; the usual height still open). NEXT SESSION: cause 8 rows by docs/audit/numbers.md (sources in batches; headset rows into
    the 4.3 session; patches with their item); then the fact-checker, request and architecture auditors.
    Open talk: the start's tone (his 9.10: not Portal 2 humour, "learn about yourself"), touches step 7.
    His guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9. He knows nothing of git or GitHub: explain. Next

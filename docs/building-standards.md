@@ -26,15 +26,16 @@ marked "ours" is the game's rounding, with the reason.
 | Room sign | on the wall at the latch side; lowest letter baseline at least 48 in (1.22 m), highest at most 60 in (1.525 m) [S1, 703.4.1]; allowed on the push side of a door with a closer [S1, 703.4.2]; characters 5/8 to 2 in [S1, 703.2.5] | one sign family [S25]: 9 × 9 in, centred 60 in up, on the leaf's corridor (push) face; a room's number centred, 2 in; the stairs' symbol [S26] 4 1/2 in over the word 3/4 in; a wall sign (inside room 01) 4 in from the frame (`SIGN` in `src/app/brand.js`, `tests/masonry.test.mjs`) |
 | Light box over a door | (ours) as wide as the masonry opening, 1.0 × 0.2 m, on the joints | the sign over door 1 |
 | Switch, outlet | switch 42 in (1.067 m), outlet 18 in (0.457 m) to centre; reach 15–48 in [S1, S15]; in a block wall the box is set as the courses are laid, notched into the block [S24] | switch at 1.1 m (ours: inside one course, so no joint runs beside the plate; within reach) |
-| Corridor | at least 44 in (1.118 m) in a university building [S16, S17] | 1.8 m |
+| Corridor | at least 44 in (1.118 m) in a university building [S16, S17]; the 1976 code the same, 44 in, and a clear height of at least 7 ft (2.134 m) to the lowest projection from the ceiling; trim, handrails and fully open doors take at most 7 in (0.178 m) of the required width [S27, 3304(b)-(d)] | 1.8 m |
 
-Not verified (do not present as fact): closer body position, 1970s
+Not verified (do not present as fact): closer body position, the usual 1970s
 ceiling height, colour temperature of 1970s cool-white lamps, troffer spacing. For the ceiling
-only a minimum was read: California Title 8 §3226(c), corridors at least 7 ft clear (current text,
-filed 1975; seen as a paraphrase); unopened leads: a City of Alameda handout (7'-6" for UBC
-1970/1973) and the 1976 UBC on archive.org (borrow only, needs a login): corridors are Sec. 3304
-"Corridors and Exterior Exit Balconies", pages 500-502 (3305 is Stairways; seen on the owner's
-screenshots of pages 502-507, the 500-501 spread still to read).
+only a minimum was read: 7 ft clear to the lowest projection [S27, 3304(c)] (California Title 8
+§3226(c) says the same); the codes set no usual height, so 2.5 m stays without a source; open
+lead: a City of Alameda handout (7'-6" for UBC 1970/1973). Read for later from the same code:
+exit signs with letters at least 6 in (152 mm) high and strokes at least 3/4 in (19 mm) wide, lit
+by two lamps of at least 15 W each; exits lit with at least one footcandle (10.8 lx) at the floor
+[S27, 3312(a)-(c)].
 
 Sources (opened 08.10.2026):
 S1 ADA 2010 Standards, ada.gov/assets/pdfs/2010-design-standards.pdf ·
@@ -60,3 +61,4 @@ S23 Kidde Pro 2.5 W-1 (466403) and Amerex 240 product listings ·
 S24 Hubbell RACO masonry boxes: the mason builds to the device height and notches the block round the box (hubbell.com) ·
 S25 Northern Illinois University, Campus Interior Signage Program: planning and purchasing guide, sign types A and E, installation (via cdb.illinois.gov) ·
 S26 US DOT / AIGA Symbol Signs, "Stairs" (1979 set, public domain; Wikimedia Commons "Aiga stairs.svg") ·
+S27 Uniform Building Code, 1976 edition (ICBO), Sec. 3304 Corridors and Exterior Exit Balconies, pp. 500-502, and Sec. 3312 Exit Signs and Illumination, p. 509 (archive.org uniformbuildingc0000unse_g4g9, borrow only; read 09.10.2026 on the owner's screenshots; 3305 there is Stairways) ·
