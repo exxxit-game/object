@@ -1,4 +1,4 @@
-import { jointOrigin, bondOrigin, courseShifted } from './tile-math.js';
+import { jointOrigin, bondOrigin, courseShifted, CEILING } from './tile-math.js';
 
 // Surfaces drawn once on a canvas (no image files to load): painted block wall,
 // linoleum tiles, acoustic ceiling tiles, cork, a lamp's lens, wood. Each kind is drawn once
@@ -10,6 +10,9 @@ import { jointOrigin, bondOrigin, courseShifted } from './tile-math.js';
 // Cork, lens and wood (no grid) only repeat.
 // <a-plane surface="kind: linoleum"></a-plane>  <a-entity surface="kind: wood; repeat: 1 1">
 const SIZE = 512;
+// the ceiling grid's face (tile-math.js) in a 24 in tile's pixels: a stroke of that width on the
+// tile's edge shows half on this tile and half on its neighbour, the full face where they meet
+const GRID_FACE = CEILING.face / CEILING.tile * SIZE;
 const cache = {};
 
 // The same speckle every load: rooms must look identical for every player.
@@ -58,13 +61,14 @@ const KINDS = {
     ctx.strokeRect(0, 0, SIZE, SIZE);
     ctx.beginPath(); ctx.moveTo(half, 0); ctx.lineTo(half, SIZE); ctx.moveTo(0, half); ctx.lineTo(SIZE, half); ctx.stroke();
   },
-  // acoustic ceiling tile 24 in with pinholes, framed by the metal grid
+  // acoustic ceiling tile 24 in with pinholes, framed by the metal grid: a 15/16 in face
+  // (docs/building-standards.md), half of it drawn on each of the two tiles that meet there
   ceiling(ctx, rand) {
     ctx.fillStyle = '#cfcbc0';
     ctx.fillRect(0, 0, SIZE, SIZE);
     speckle(ctx, rand, 2600, 3, ['rgba(60,55,45,.35)', 'rgba(60,55,45,.2)']);
     ctx.strokeStyle = '#9d9a92';
-    ctx.lineWidth = 10;
+    ctx.lineWidth = GRID_FACE;
     ctx.strokeRect(0, 0, SIZE, SIZE);
   },
   // cork tackboard: tan granules of several shades (docs/building-standards.md, S21)

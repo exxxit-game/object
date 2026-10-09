@@ -1,7 +1,7 @@
 // Tile layout follows the trade rule (Ceramic Tile Education Foundation; UFGS 09 65 00):
 // centre and balance the field, equal cuts on opposite sides, no edge tile under half a tile.
 import assert from 'node:assert/strict';
-import { jointOrigin, endCut, bondOrigin } from '../src/engine/tile-math.js';
+import { jointOrigin, endCut, bondOrigin, CEILING as GRID } from '../src/engine/tile-math.js';
 
 const near = (a, b) => Math.abs(a - b) < 1e-9;
 const FLOOR = 0.3048, CEILING = 0.6096; // 12 in tiles, 24 in grid (docs/building-standards.md)
@@ -35,3 +35,5 @@ for (const [centre, length] of walls) {
 // the room's walls keep whole blocks at the floor course
 assert.ok(near(((bondOrigin(0, 3.2, 0.4) % 0.4) + 0.4) % 0.4, 0));
 console.log(`tiles tests: ok (${cases.length} surfaces, ${walls.length} walls)`);
+// the ceiling grid as the standard has it: 24 in tiles, a 15/16 in face (it was drawn at half)
+assert.ok(Math.abs(GRID.tile - CEILING) < 1e-9 && Math.abs(GRID.face - 0.0238125) < 1e-9, 'ceiling grid 24 in, face 15/16 in');

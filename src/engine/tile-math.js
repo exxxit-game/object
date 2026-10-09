@@ -13,6 +13,9 @@ function piece(x, tile) {
 }
 
 // A coordinate where a joint lies, for a space with this centre and length.
+// The suspended ceiling: a 24 in grid with a 15/16 in face (docs/building-standards.md, S9, S10).
+export const CEILING = { tile: 24 * 0.0254, face: 15 / 16 * 0.0254 };
+
 export function jointOrigin(centre, length, tile) {
   const jointCentred = piece(length / 2, tile);
   const tileCentred = piece(length / 2 - tile / 2, tile);
