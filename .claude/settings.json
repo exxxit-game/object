@@ -49,6 +49,28 @@
         "hooks": [
           { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" pre", "timeout": 10 }
         ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" pre", "timeout": 10 }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "practice-reviewer",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" subagent-start", "timeout": 60 }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "practice-reviewer",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" subagent-stop", "timeout": 60 }
+        ]
       }
     ],
     "Stop": [

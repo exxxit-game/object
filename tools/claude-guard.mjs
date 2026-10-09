@@ -3,7 +3,10 @@
 // the assistant why (code.claude.com/docs/en/hooks: PreToolUse exit 2 blocks the tool call; Stop
 // exit 2 keeps the turn going, and Claude Code ends it anyway after 8 blocks in a row).
 //   pre:  a shell command that skips the git hooks or runs Playwright on the laptop is refused, and
-//         so are a connected browser tool and any write to the live database
+//         so are a connected browser tool, any write to the live database and any write of mine to
+//         the practice review record
+//   subagent-start, subagent-stop: a practice reviewer's run is recorded for the owner's automatic
+//         stop before VR in the headset and the test copy (tools/review-gate.mjs)
 //   stop: a turn does not end while npm test fails or work is unsaved or not on GitHub, or while
 //         a page only the owner can open, left by research, has not reached him (owner-links.mjs)
 //   start, prompt: the owner's decisions and the open items come back at start and after every
@@ -15,6 +18,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { withoutGitVars } from './secrets.mjs';
 import { unrelayed } from './owner-links.mjs';
+import { fingerprint, entries, write, REVIEWER, REPORT_END } from './review-gate.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DECISIONS = 'docs/owner-decisions.md';
@@ -49,7 +53,11 @@ export const REFUSED = [
   [run(String.raw`node(?:\.exe)?"?\s+(?:-{1,2}[\w-]+(?:=\S+)?\s+)*["']?(?:[\w.:~-]*[\\/]+)*smoke\.mjs\b`), 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
   [run(String.raw`(?:npx(?:\.cmd)?(?:\s+-{1,2}[\w-]+)*\s+@?playwright\b|playwright(?:\.cmd)?\s+(?:test|install|open|codegen)\b)`), 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
   [run(String.raw`adb(?:\.exe)?\b[^;&|\n]*\s(?:reboot\b|shell\s+["']?(?:am\s+force-stop|reboot\b|svc\s+power\s+(?:reboot|shutdown)))`), 'restarts the headset or its browser past tools/quest-look.mjs, which first checks that the owner is not wearing it'],
+  // the practice review record (tools/review-gate.mjs): only this hook writes it, when a reviewer run ends
+  [/^(?=[\s\S]*practice-reviews)(?=[\s\S]*(?:>|\btee\b|Out-File|Set-Content|Add-Content|\bcp\b|\bmv\b|\bcopy\b|Copy-Item|Move-Item|\brm\b|Remove-Item|\bdel\b|writeFile|appendFile|\btouch\b|New-Item|sed\s+-i|truncate))/i, 'writes the practice review record, which only Claude Code\'s hook writes when a reviewer run ends'],
+  [/(?:^|[\s;&|])(?:export\s+|set\s+)?(?:\$env:)?OBJECT_REVIEW_RECORD\s*=/i, 'points the headset tools at another practice review record'],
 ];
+const RECORD_FILE = /practice-reviews/i;
 
 // Connected tools that do what a refused command would: a browser started on the laptop, and
 // writes to the live database (the owner: the assistant's access to the server is read only;
@@ -69,6 +77,7 @@ if (mode === 'pre') {
   if (DB_WRITES.test(tool)) stop('REFUSED: the live database is read-only for the assistant; a change goes into supabase/migrations and reaches the server only on the owner\'s word.');
   if (GITHUB_WRITES.test(tool)) stop('REFUSED: this connector writes to GitHub past the push hook (main only on the owner\'s word, the secret check); commit and git push instead.');
   if (/__execute_sql$/.test(tool) && !readOnlySql(String(event.tool_input?.query || ''))) stop('REFUSED: only a single read-only query (SELECT) may run on the live database.');
+  if (/^(Write|Edit|MultiEdit|NotebookEdit)$/.test(tool) && RECORD_FILE.test(String(event.tool_input?.file_path || event.tool_input?.notebook_path || ''))) stop('REFUSED: the practice review record is written only by Claude Code\'s hook when a reviewer run ends; run the practice-reviewer agent instead.');
   const command = String(event.tool_input?.command || '');
   for (const [pattern, why] of REFUSED) if (pattern.test(command)) stop(`REFUSED: this command ${why}. Do the work so the guard passes instead.`);
   process.exit(0);
@@ -97,6 +106,24 @@ if (mode === 'start') {
     if (open.startsWith('## Open items')) out.push(open.slice(0, 6000));
   } catch { out.push('docs/state.md is missing here: this checkout is not the project\'s current work.'); }
   process.stdout.write(`${out.join('\n\n')}\n`);
+  process.exit(0);
+}
+
+// subagent-start, subagent-stop: a practice reviewer's run is recorded for the owner's automatic stop
+// (tools/review-gate.mjs) by this hook, not by the assistant. It counts only when the files a person
+// meets did not change while it read them and its report reached its last block. Never blocks.
+if (mode === 'subagent-start' || mode === 'subagent-stop') {
+  if (event.agent_type !== REVIEWER) process.exit(0);
+  const print = fingerprint(HERE);
+  if (mode === 'subagent-start') {
+    write({ kind: 'start', agent: event.agent_id, print, root: HERE });
+    process.exit(0);
+  }
+  const start = entries().filter((e) => e.kind === 'start' && e.agent === event.agent_id).pop();
+  const why = !start ? 'no start seen for this run'
+    : start.print !== print ? 'the files changed while it read them'
+      : !String(event.last_assistant_message || '').includes(REPORT_END) ? 'its report did not reach its last block' : '';
+  write(why ? { kind: 'void', agent: event.agent_id, why } : { kind: 'review', agent: event.agent_id, print, root: HERE, transcript: event.agent_transcript_path || '' });
   process.exit(0);
 }
 

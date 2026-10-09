@@ -4,12 +4,17 @@
 // Needs the laptop's server running (the app's preview, or `npm run serve`) and the headset on
 // its cable; it is kept awake for the run and put back to sleep after (tools/headset.mjs).
 // Usage: node tools/xr-probe-run.mjs [vr ar mic input]   (input: controllers, hands and body, 30 s)
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { serveToHeadset, worn, sleepNow, openUrl, page, wornByPerson } from './headset.mjs';
+import { requireReview } from './review-gate.mjs';
 
 // the laptop's server: the preview's port from .claude/launch.json, or OBJECT_PORT when the preview
 // took another (autoPort)
-const URL_PROBE = serveToHeadset(Number(process.env.OBJECT_PORT) || undefined) + 'tools/xr-probe.html';
 const steps = process.argv.slice(2).length ? process.argv.slice(2) : ['vr', 'ar', 'mic'];
+// the owner's automatic stop: the probe's VR and MR steps meet a person; the microphone alone does not
+if (steps.some((s) => s !== 'mic')) requireReview(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), 'the headset probe in VR');
+const URL_PROBE = serveToHeadset(Number(process.env.OBJECT_PORT) || undefined) + 'tools/xr-probe.html';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // VR and MR only on the owner's head: on a table the boundary window holds the request and the

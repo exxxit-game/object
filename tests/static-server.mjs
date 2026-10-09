@@ -9,7 +9,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // public link (a Cloudflare tunnel for the headset), which must never show the repo's
 // history (.git), notes, tests or tools.
 export const PUBLIC = ['index.html', 'privacy.html', 'src/', 'css/', 'vendor/', 'tools/xr-probe.html'];
-const isPublic = (rel) => !rel.split('/').some(s => s.startsWith('.'))
+export const isPublic = (rel) => !rel.split('/').some(s => s.startsWith('.'))
   && PUBLIC.some(p => (p.endsWith('/') ? rel.startsWith(p) : rel === p));
 const TYPES = {
   '.html': 'text/html; charset=utf-8',

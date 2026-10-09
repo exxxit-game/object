@@ -48,20 +48,21 @@ All in `docs/owner-decisions.md` (shown at every session start): settled, never 
   personal result + "you vs others" is what brings people (LabintheWild 556k vs 1.1k).
 
 ## Open items (9.10). ONE step at a time, a short status after each. Every request: plan doc table.
-1. Step 4.3 NOW (his word 9.10, before 4.1 ends). FIRST, his "Давай" 9.10: an automatic stop: tools that start VR in the
-   headset (xr-probe-run, quest-look vr) or publish the test copy refuse unless a practice-reviewer run saw the current files
-   (the record written by a SubagentStop hook, not by me; claude-guard refuses my writes to it; tests both ways). Then rebuild
-   the probe's "input" step by docs/audit/probe-review.md (the first run 9.10 was WASTED: only a colour in the headset, the
-   task on his phone): ONE line of words at a time, the next once done, started by his press; rerun with him, then the mic
-   (fan off/on); results: docs/headset-capabilities.md. Same visit: "Auto Enable Hands or Controllers" (check over USB), VR
-   checks not done (flicker, fps and draw calls logged, placement, sign 10 s). Housekeeping: fact-checker twice on his summary https://claude.ai/artifact/H5ht7VG5QQPDCva7LyDwcU; archive done plan rows.
-   4.1 left (causes: docs/audit/README.md): cause 8 (docs/audit/numbers.md: 25 need a source); his yes on the ceiling
-   pictures (docs/audit/ceiling/, S28; code: troffers.patch, then a test that troffer ends lie on joints); then the
-   fact-checker, request and architecture auditors. Waiting: his yes on the new CLAUDE.md. Open talk: the start's tone,
-   step 7. GitHub done fully (PRs with checks, releases, a build stamp): its place waits for his word. Git guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.
-2. Then 4.2, the data lever first (data stay with us, our own lab; what we need from scientists beyond
-   name and ethics approval). Data protection = "the most serious of all": LINDDUN, STRIDE, OWASP ASVS, a
-   break-in try on a copy, CSP, the provider must not read rows, permission rules (claude-code/C2).
-   Then 4.3 (walking, sitting, hands, objects: checklist to him first), corridor items 3-7, 4a, step 5.
-3. Corridor ACCEPTED 8.10 (docs/rooms/corridor-shots/). Style book: https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH.
-   Visual designs go to him as pictures BEFORE the game. Headset: his walks over Wi-Fi (quest-wifi), I watch.
+Order (docs/owner-decisions.md): 4.3 now -> 4.4 -> rest of 4.1 -> 4.2 -> corridor items 3-9 to the end -> 4a -> step 5.
+1. Step 4.3 NOW. Done 9.10: the automatic stop (tools/review-gate.mjs; hook record, tests both ways, seen red);
+   still to see: the hook's first real record on a practice-reviewer run. Next: rebuild the probe's "input" step by
+   docs/audit/probe-review.md (ONE line of words at a time in the headset, the next once done, started by his press),
+   the ceiling (docs/audit/ceiling/troffers.patch) opened from the laptop for HIS look in the same visit (not in the
+   test copy before his yes); practice review of both; then "готово" to him (he waits); rerun with him, then the mic
+   (fan off/on); results: docs/headset-capabilities.md. Same visit: "Auto Enable Hands or Controllers", VR checks not
+   done (flicker, fps and draw calls logged, placement, sign 10 s). Background: connectors and catalog review
+   (scratchpad connectors-review.md) -> a table to him, switch off the unneeded on his yes to the list.
+2. Step 4.4 (his word «давай сейчас… Пусть оно там всем этим занимается»): GitHub done fully (PRs with checks and a
+   reviewer, releases with a version and Russian notes, a build stamp) and the research plan to a million.
+3. 4.1 left (causes: docs/audit/README.md): cause 8 (docs/audit/numbers.md: 25 need a source); fact-checker twice on his summary
+   https://claude.ai/artifact/H5ht7VG5QQPDCva7LyDwcU; the new CLAUDE.md waits for his yes; LAST (his word): an
+   independent check of our whole working system (works by measure / only on paper / built-in does it better).
+   Claude Code here is 2.1.293 (his app is the latest); prompt and agent hooks are fixed only from 2.1.294.
+4. Then 4.2 (data lever first; data protection "the most serious of all"), the corridor to the end, 4a, step 5.
+   Corridor ACCEPTED 8.10 (docs/rooms/corridor-shots/). Style book: https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH.
+   Visual designs go to him as pictures BEFORE the game. Git guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.

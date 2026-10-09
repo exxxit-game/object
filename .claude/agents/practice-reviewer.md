@@ -25,6 +25,11 @@ person is (in the headset, at the laptop, on the phone) and which files hold it.
    simpler form does the same job (one task at a time, in words, where the person is), name it
    with its source.
 
+Your run is what lets VR start in the headset and the test copy go out (tools/review-gate.mjs):
+Claude Code's hook records it only if the files a person meets did not change while you read them
+and your report ends with its last block. Review what the caller names, but read the files as they
+stand; never edit anything.
+
 Report (under 400 words): findings, most serious first, each with what the person meets, why it
 fails and the source of the normal way; then "checked and fine" with the sources read. "No
 findings" only with the examples you opened. End with a block that starts with the line
