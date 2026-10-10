@@ -117,7 +117,11 @@ plates or a narrow vision light: **unverified**.
   Amerex sells a fork too, also "for collar support", but for aluminium-valve cylinders of 1 to 10 lb
   (01521, https://tigermedical.com/products/wall-hanger-fire-extinguisher-fork-bracket-ame01521-oo); the
   flat hook 01007 lists models 270 and 272 among its fits. How a flat hook meets a collar no source
-  shows: the hanger stays a fork until the owner picks between the two, shown as pictures.
+  shows. Then photo 16 of the listing showed a rectangular loop on the back of the dome, and Best Fire Co.
+  sells a wall hook for water units "with slotted mounting bracket on the extinguisher"
+  (https://bestfireco.com/product/bracket-wall-mount-water-and-k-class-extinguisher): the hanger is now a
+  flat J hook through that loop (src/app/lobby/extinguisher.js); whether the loop lies flat or rises
+  is not in a photo.
 - **ABC dry chemical, CO2 in 1979:** look and labels **unverified** in this pass.
 - **Mounting height.** The 5 ft top (units up to 40 lb), 3-1/2 ft top (heavier) and 4 in floor
   clearance are quoted from NFPA 10 1994 (1-6.10) and later [C18, search]. NFPA 10 had editions

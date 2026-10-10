@@ -18,12 +18,11 @@ const SPACE = `space: 0 0 ${BOOTH.maxX - BOOTH.minX} ${BOOTH.maxZ - BOOTH.minZ}`
 // centre at a lower resolution, and Meta warns that "high-contrast or text-heavy scenes may make the
 // foveation artifacts more obvious" (developers.meta.com/horizon/documentation/web/webxr-ffr); with
 // it the door numbers looked blurred in the owner's headset and turned sharp without it.
-// Both eyes in one pass (multiview, A-Frame's multiviewStereo, OCULUS_multiview on Quest): each draw
-// call once instead of once per eye, "a CPU usage reduction of 25% - 50%" (Meta, "WebXR multiview",
-// developers.meta.com/horizon/documentation/web/web-multiview); the corridor drew 124 calls a frame
-// in the headset, and Quest 2, the weakest headset whose budget we keep, wants fewer than 100
-// (docs/research/vr/01-meta.md). Meta calls it experimental: checked in the headset.
-export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true; foveationLevel: 0; multiviewStereo: true" background="color: #0b0b0d"
+// No multiview (both eyes in one pass): A-Frame 1.7.1's renderer builds its XR manager without the
+// flag (vendor/aframe-1.7.1.min.js: "new Rm(E,xt)", the manager reads its fourth argument), so
+// multiviewStereo does nothing here, and where it is passed (1.8.0) textures first used in VR stay
+// black, the deferred uploads never run (supermedium/three.js PR #25). Each eye draws its own calls.
+export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true; foveationLevel: 0" background="color: #0b0b0d"
          cursor="rayOrigin: mouse" raycaster="objects: .clickable; far: 8"
          vr-mode-ui="enabled: true" loading-screen="enabled: false" xr-mode-ui="enabled: true">
 

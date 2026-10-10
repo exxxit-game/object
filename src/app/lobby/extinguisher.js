@@ -28,7 +28,8 @@ const BRASS = 'material="color: #b08d4a; metalness: 1; roughness: .3"';
 // 2.5 gal water unit the flat hook 01007; Sylprotec's hook for "2.5 gal water" units, 1.5 x 3 x 3 in,
 // goes up through a slotted lug on the shell's top back) through a rectangular steel loop standing out
 // from the back of the shell at the foot of its dome (photo 16). The loop: w across, d out from the
-// shell, its bars bar wide and t thick, y its middle. The hook: a strap w wide and h tall on the wall,
+// shell, of round rod of radius rod (flat bars on the hook's flat plate would lie under 5 mm apart and
+// flicker: tests/near-faces.mjs), y its middle. The hook: a strap w wide and h tall on the wall,
 // bent out under the loop's far bar and up inside the loop as its lip, t thick; how big the WS-900's
 // own loop and bracket (MB-100, photos 4 and 13) were no source gives: sized to the photo and to
 // Sylprotec's hook.
@@ -37,7 +38,7 @@ const EXT_Y = (() => {
   const shellTop = EXT.foot + EXT.footH + EXT.shell, domeTop = shellTop + EXT.dome;
   return { shellTop, domeTop, neckTop: domeTop + EXT.neck, collarTop: domeTop + EXT.neck + EXT.collar, bodyTop: domeTop + EXT.neck + EXT.collar + EXT.body };
 })();
-const LUG = { w: 0.046, d: 0.022, bar: 0.006, t: 0.004, y: EXT_Y.shellTop + 0.008 };
+const LUG = { w: 0.046, d: 0.022, rod: 0.003, y: EXT_Y.shellTop + 0.008 };
 const HOOK = { w: 0.032, h: 0.076, t: 0.003, lip: 0.016 };
 // the nozzle's clip, a square steel box on the shell's left side (+x) across the seam 5 cm over the
 // bottom, from 4.5 to 7 cm (photos 3, 7, 18): sticking out d, h tall; the hose's tip runs down its
@@ -54,8 +55,8 @@ export function extinguisher(x, wall) {
   const gaugeY = Y.bodyTop - 0.021, gaugeZ = z - 0.019;
   // the loop on the dome's back: where the dome's surface is at its height, its far bar, the hook's lip
   // in the middle of its opening, and the hook's bottom just under the loop
-  const back = z + EXT.r * Math.sqrt(1 - ((LUG.y - Y.shellTop) / EXT.dome) ** 2), far = back + LUG.d - LUG.bar / 2;
-  const lipZ = back + (LUG.d - LUG.bar) / 2, hookY = LUG.y - LUG.t / 2 - HOOK.t;
+  const back = z + EXT.r * Math.sqrt(1 - ((LUG.y - Y.shellTop) / EXT.dome) ** 2), far = back + LUG.d - LUG.rod;
+  const lipZ = back + LUG.d / 2 - LUG.rod, hookY = LUG.y - LUG.rod - HOOK.t;
   return `
     <a-entity class="extinguisher" data-dynamic merge-static reflect-env>
       <!-- the wall hook: a steel strap screwed to the wall, bent out under the loop's far bar and up
@@ -71,8 +72,8 @@ export function extinguisher(x, wall) {
       <a-cylinder position="${x} ${f(Y.shellTop)} ${z}" radius="${EXT.r + 0.0015}" height="0.006" ${STEEL}></a-cylinder>
       <a-sphere position="${x} ${f(Y.shellTop)} ${z}" radius="${EXT.r}" scale="1 ${f(EXT.dome / EXT.r)} 1" ${STEEL}></a-sphere>
       <!-- the hanging loop on the dome's back (photo 16): two side bars from the shell and the far bar -->
-      ${[-1, 1].map((s) => `<a-box class="lug" position="${f(x + s * (LUG.w - LUG.bar) / 2)} ${f(LUG.y)} ${f(back + (LUG.d - 0.003) / 2)}" width="${LUG.bar}" height="${LUG.t}" depth="${LUG.d + 0.003}" ${STEEL}></a-box>`).join('')}
-      <a-box class="lug" position="${x} ${f(LUG.y)} ${f(far)}" width="${LUG.w}" height="${LUG.t}" depth="${LUG.bar}" ${STEEL}></a-box>
+      ${[-1, 1].map((s) => `<a-cylinder class="lug" position="${f(x + s * (LUG.w / 2 - LUG.rod))} ${f(LUG.y)} ${f(back + (LUG.d - 0.003) / 2)}" radius="${LUG.rod}" height="${LUG.d + 0.003}" rotation="90 0 0" ${STEEL}></a-cylinder>`).join('')}
+      <a-cylinder class="lug" position="${x} ${f(LUG.y)} ${f(far)}" radius="${LUG.rod}" height="${LUG.w}" rotation="0 0 90" ${STEEL}></a-cylinder>
       <!-- the label, as on the 1972 model: about 98 degrees round the front (painted by
            extinguisher-label.js) -->
       <a-cylinder id="extLabel" data-dynamic decal position="${x} 1.121 ${z}" radius="${EXT.r}" height="0.254" open-ended="true" theta-start="131" theta-length="98" material="roughness: 0.6"></a-cylinder>

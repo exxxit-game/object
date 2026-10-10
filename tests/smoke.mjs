@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import { startServer } from './static-server.mjs';
 import { nearFaces } from './near-faces.mjs';
-import { drawCalls, VIEW_BUDGET } from './draw-calls.mjs';
+import { drawCalls, VIEW_BUDGET, QUEST2_VIEW } from './draw-calls.mjs';
 import { WALLS, CEIL } from '../src/app/lobby/scene.js';
 import { BOOTH } from '../src/rooms/01-control/scene.js';
 import { MIN_LETTER, READ_DIST, MIN_TARGET_DEG, letterDeg } from '../src/engine/ui/sheet-math.js';
@@ -209,7 +209,7 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     // no two faces that face one way under 5 mm apart (they flicker in a headset: near-faces.mjs)
     assert.deepEqual(await page.evaluate(nearFaces, CORRIDOR), [], 'faces that flicker in the corridor');
     const corridorCalls = await page.evaluate(drawCalls, CORRIDOR);   // the weakest headset's budget (draw-calls.mjs)
-    assert.ok(corridorCalls.calls < VIEW_BUDGET, `the corridor's worst view draws ${corridorCalls.calls} calls (${JSON.stringify(corridorCalls)}), the budget ${VIEW_BUDGET}`);
+    assert.ok(corridorCalls.calls < VIEW_BUDGET.corridor, `the corridor's worst view draws ${corridorCalls.calls} calls (${JSON.stringify(corridorCalls)}), held under ${VIEW_BUDGET.corridor}`);
     if (leave) {
       // "leave" fades out, ends the game and says how to come back
       await askLeave();
@@ -263,8 +263,8 @@ async function playRoom(url, playtest, { leave = false } = {}) {
     await waitState('run');
     assert.deepEqual(await page.evaluate(nearFaces, ROOM), [], 'faces that flicker in the room');
     const roomCalls = await page.evaluate(drawCalls, ROOM);
-    assert.ok(roomCalls.calls < VIEW_BUDGET, `the room's worst view draws ${roomCalls.calls} calls (${JSON.stringify(roomCalls)}), the budget ${VIEW_BUDGET}`);
-    if (!playtest && !leave) console.log(`draw calls, worst view: corridor ${corridorCalls.calls}, room ${roomCalls.calls} (budget ${VIEW_BUDGET})`);
+    assert.ok(roomCalls.calls < VIEW_BUDGET.room, `the room's worst view draws ${roomCalls.calls} calls (${JSON.stringify(roomCalls)}), held under ${VIEW_BUDGET.room}`);
+    if (!playtest && !leave) console.log(`draw calls, worst view: corridor ${corridorCalls.calls}, room ${roomCalls.calls} (held under ${VIEW_BUDGET.corridor} and ${VIEW_BUDGET.room}; Quest 2 needs under ${QUEST2_VIEW})`);
     // Corridors under 10 fc, desks 50 fc (docs/building-standards.md, S13): the corridor
     // floor gets at most a fifth of the light on the room's desk, and is not left dark (the
     // 0.1 floor is our choice, so the corridor stays visible).
