@@ -2,7 +2,11 @@
 
 Research for the owner's idea of new experiments with real players, in the present (docs/ideas/owner-experiments.md).
 Every claim has its link and a short quote from the page read. "Unverified" marks what was not confirmed on a
-primary page. Parts, each answered or marked "not found":
+primary page. Parts 4 (running and publishing), 5 (data-quality risks) and the list of what is still open are in
+[own-experiments-now-2.md](own-experiments-now-2.md). How working labs run studies outside the lab, lab by lab:
+[field-labs-1.md](field-labs-1.md), [field-labs-2.md](field-labs-2.md); ethics review and data law for a team without a
+university: [ethics-law.md](ethics-law.md); how a lab runs a study, step by step, applied to a room:
+[study-methods.md](study-methods.md). Parts, each answered or marked "not found":
 
 1. What psychology runs now (2023-2026) that a home VR game could join or run: 1a multi-site studies and registered
    reports; 1b citizen science and game-based research; 1c VR studies outside the lab; 1d open questions.
@@ -23,10 +27,12 @@ primary page. Parts, each answered or marked "not found":
   https://ueaeprints.uea.ac.uk/id/eprint/86715 — the game was used to "test 3.9 million people on their navigation
   ability", players "from 18 to 99 years of age", analysis over "all countries sufficiently sampled (N = 63)";
   "All countries showed a male advantage"; city upbringing linked to worse navigation.
-- Origin and cost argument (CNRS News): Deutsche Telekom approached UCL and UEA in 2015; a professional studio
-  (Glitchers) built it; released May 2016; data sent "with the participant's consent"; Coutrot estimated a
-  classic study of that size would cost about $10 billion and take 10,000 years. https://news.cnrs.fr/print/1460
-  (read via search snippet only; unverified on the page itself).
+- Origin (CNRS News, read): Koppe, "A Video Game for Detecting Alzheimer's Disease", 27 May 2019,
+  https://news.cnrs.fr/print/1460 — "The initiative came in 2015 from the company Deutsche Telekom, which contacted
+  University College London"; "called on a professional developer, Glitchers"; "released in May 2016"; data sent
+  "with the participant's consent"; "four million players". CORRECTED: the page gives no cost or time figure; the
+  "$10 billion" was found nowhere. A CNRS press release (https://www.cnrs.fr/en/press/video-game-aids-research-alzheimers-disease)
+  is listed in search as equating the data to "10,000 years" of lab data (search listing only: unverified).
 - Lesson for us: a game made by a studio with a university partner, data with consent, published in top venues.
 
 ### 1c. VR studies run outside the lab, on players' own headsets
@@ -56,8 +62,10 @@ primary page. Parts, each answered or marked "not found":
 - LabintheWild home page lists 19 current online tests (self-image, Eastern vs Western perception, peripheral
   vision, multitasking, decision-making style, reading emotions from eyes, comparing your values with a chatbot's,
   and more); the reward is a comparison of yourself with others: "Find out how the image you have of yourself
-  compares to other people across the globe". https://www.labinthewild.org/ (who runs it and the participant
-  count are not on that page: unverified there).
+  compares to other people across the globe". https://www.labinthewild.org/
+- Who runs it (read): University of Washington, https://wildlab.cs.washington.edu/Project_LabintheWild.html —
+  built "in 2012 (together with Krzysztof Gajos at Harvard)" by Katharina Reinecke's lab; "visited by more than 5
+  million volunteer participants" from "more than 200 countries"; "more than 50 peer-reviewed publications".
 - Huber & Gajos (2020), PLoS One 15(1):e0227629, "Conducting online virtual environment experiments with
   uncompensated, unsupervised samples" (Harvard), run on LabintheWild. https://pmc.ncbi.nlm.nih.gov/articles/PMC6992162/
   - Study 1 (maze navigation): 311 completers; "Our results replicate findings previously obtained in conventional
@@ -72,21 +80,24 @@ primary page. Parts, each answered or marked "not found":
 ### 1a. Large multi-site studies and registered reports
 
 - Psychological Science Accelerator: "a globally distributed network of researchers that pool intellectual and
-  material resources to accelerate the accumulation of rigorous knowledge in psychological science"; "12+
-  projects" in its portfolio (moral dilemma judgments across cultures; COVID-19 framing; stereotype threat);
-  proposals by open call ("How to Submit"). https://psysciacc.org/ (lab and country counts not on the page:
-  unverified; its projects page was not read).
+  material resources to accelerate the accumulation of rigorous knowledge in psychological science"; proposals by
+  open call. https://psysciacc.org/ — About (read, https://psysciacc.org/about.html): "The PSA began in August
+  2017"; "100 labs signed up for the consortium one month after the post went live". No current lab or country
+  count on either page (the home page's member dashboard loads by script: not read).
+- PSA projects (read, https://psysciacc.org/projects.html): 15 projects, PSA001-009, PSA-CR 001-003, PSA-JTF1-3;
+  e.g. PSA001 Face Perception "11 world regions, 41 countries and 11,570 participants"; PSA006 Trolley Problem
+  "in 45 countries"; PSA-CR 003 "n = 25,718 from 89 countries". No VR study on the page.
 - Many Labs 2 (APS Observer, 28 Dec 2018): 28 classic and contemporary findings, "more than 60 labs across 36
   nations and territories", 14 of 28 replicated; population characteristics had "little to no bearing on the
   failure of a finding to replicate".
   https://www.psychologicalscience.org/observer/replications-dont-hinge-on-sample-and-setting-differences-multilab-project-shows
-- Small grants exist for many-lab collaborations, e.g. the Kurt Lewin Institute Many Labs grant (April 2025),
-  maximum 9,000 euros (search snippet of
-  https://kurtlewininstituut.nl/wp-content/uploads/sites/426/2025/04/KLI-Many-Labs-grant-information.pdf; unverified
-  on the page, and KLI is a Dutch graduate school, so likely for its members only: unverified).
+- Kurt Lewin Institute Many Labs grant (read, April 2025 PDF,
+  https://kurtlewininstituut.nl/wp-content/uploads/sites/426/2025/04/KLI-Many-Labs-grant-information.pdf): "The
+  maximum amount of the grant is 9.000 euros"; it invites "all KLI members" (a Dutch graduate school) and expects at
+  least two university/lab groups; deadline May 15, 2025. Confirmed: members only, not open to us.
 - What it means for us: the field's current answer to the replication crisis is many sites, big samples and plans
   fixed in advance. A game with thousands of players is "one site, very many people"; joining the PSA as a member
-  lab, or offering a VR version of a PSA study, is the route in (no PSA VR study was found).
+  lab, or offering a VR version of a PSA study, is the route in (no PSA VR study exists on its projects page).
 
 ## 3. The owner's two-phones idea: closest published work
 
@@ -94,19 +105,27 @@ primary page. Parts, each answered or marked "not found":
 
 - Nisbett, R. E. & Wilson, T. D. (1977). Telling more than we can know: Verbal reports on mental processes.
   Psychological Review 84, 231-259. Record: https://deepblue.lib.umich.edu/handle/2027.42/92167?show=full
-  (citation confirmed there). The full text was NOT read: the scanned PDF found
-  (https://web.math.princeton.edu/~sswang/literature_general_unsorted/Nisbett-Wilson-PsychologicalReview1977.pdf)
-  has a garbled text layer. The stocking study details (four identical pairs, a right-hand position effect,
-  shoppers naming knit or sheerness, never position) come from secondary summaries only: UNVERIFIED until the
-  paper text is in objekt-papers.
-- Its reach: Johansson et al. (2006) call it "perhaps the most cited article in the recent history of
-  consciousness studies" while "no empirical research program currently exists" that continues it (search
-  snippet of https://www.lucs.lu.se/fileadmin/user_upload/lucs/2011/01/Johansson-et-al.-2006-How-Something-Can-Be-Said-About-Telling-More-Than-We-Can-Know.pdf;
-  unverified on the page).
-- Critique: Newell & Shanks (2014) argue position need not be the cause (a left-to-right "keep if as good"
-  strategy) (search snippet of their review,
-  https://carlsonschool-d8.prd.umn.edu/sites/carlsonschool.umn.edu/files/2019-04/newell_shanks_2014_unconscious_influences_on_decision_making_critical_review.pdf_0_0.pdf;
-  unverified on the page).
+  READ pp. 243-244 from the page images of the scan (its text layer is garbled):
+  https://web.math.princeton.edu/~sswang/literature_general_unsorted/Nisbett-Wilson-PsychologicalReview1977.pdf
+  (excerpt saved: objekt-papers/nisbett-1977.txt). Two studies in shops, "under the guise of a consumer survey":
+  "four different nightgowns in one study (378 subjects) and four identical pairs of nylon stockings in the other
+  (52 subjects)"; asked which was "the best quality"; "the right-most stockings being preferred over the left-most
+  by a factor of almost four to one"; "no subject ever mentioned spontaneously the position"; asked directly,
+  "virtually all subjects denied it". Their guess: the shopper's habit of "shopping around".
+- CORRECTED: the paper names no reasons; "knit" or "sheerness" are not in it. Newell & Shanks say "more details
+  of the original experiments are given in Wilson & Nisbett 1978" (Social Psychology 41:118-131,
+  https://hdl.handle.net/2027.42/92172, "Access restricted to U-M campus"): per-position shares and the reasons
+  shoppers gave stay unverified until that paper is read (owner).
+- Its reach (read, objekt-papers/johansson-2006.txt): Johansson, Hall, Sikström, Tärning & Lind (2006),
+  Consciousness and Cognition 15:673-692, https://www.lucs.lu.se/fileadmin/user_upload/lucs/2011/01/Johansson-et-al.-2006-How-Something-Can-Be-Said-About-Telling-More-Than-We-Can-Know.pdf
+  — "perhaps the most cited article in the recent history of consciousness studies, yet no empirical research
+  program currently exists" that continues it. Their own data: 80 participants, 15 face pairs, 4 s each, 480
+  reasons; reasons for swapped and real choices showed "very few differences".
+- Critique (read, objekt-papers/newell-2014.txt): Newell & Shanks (2014), Behavioral and Brain Sciences
+  37(1):1-19, preprint https://discovery.ucl.ac.uk/id/eprint/1419217/ — asking about position "fails the relevance
+  criterion"; a rule "if the current item is no worse in terms of quality than the previous item, then prefer the
+  current item" yields the right-most pick without position causing it. CORRECTED: the umn.edu PDF cited before is
+  a page of BBS commentaries on their article, not the review itself.
 
 ### 3b. Choice blindness (Johansson, Hall and colleagues; read from objekt-papers)
 
@@ -118,16 +137,31 @@ primary page. Parts, each answered or marked "not found":
   Self-Transforming Survey", PLoS ONE (text: objekt-papers/hall-2012.txt). 160 volunteers; "a full 69% of the
   participants failed to detect at least one of two changes"; people "often constructed coherent and unequivocal
   arguments supporting the opposite of their original position".
-- Hall, Johansson, Tärning, Sikström & Deutgen (2010), "Magic at the marketplace: Choice blindness for the taste
-  of jam and the smell of tea", Cognition 117:54-61 (cited as ref. 22 in hall-2012.txt). This is the nearest to
-  products on a table; NOT read (not in objekt-papers): its numbers are unverified.
-- Still open and recent (from search listings, not read, unverified): a preregistered study where changed answers
-  shifted a week later even in a no-deception arm; an online study of 498; choice blindness in pension choices
-  (Dec 2024); in autistic and non-autistic people (J. Cognitive Psychology, 2024); religious attitudes (2025,
-  https://www.tandfonline.com/doi/full/10.1080/2153599X.2025.2557482). VR versions exist only as small conference
-  papers: "Virtual Blindness" with a virtual experimenter (2015,
-  https://link.springer.com/chapter/10.1007/978-3-319-21996-7_47) found fewer and later detections in high
-  immersion; a 2019 UIST adjunct VR paper reported 92% missed a mismatch (both unverified, not read).
+- Hall, Johansson, Tärning, Sikström & Deutgen (2010), "Magic at the marketplace", Cognition 117(1):54-61 (READ,
+  objekt-papers/hall-2010.txt; https://www.lucs.lu.se/fileadmin/user_upload/lucs/2011/01/Hall-et-al.-2010-Magic-at-the-Marketplace-Choice-Blindness-for-the-Taste-of-Jam-and-the-Smell-of-Tea.pdf):
+  "180 consumers (118 female) at a supermarket in Lund, Sweden", ages 16-80, posing as quality surveyors; 3 jam and
+  3 tea pairs, "30 M and 30 NM trials" per pair; a two-sided jar turned over secretly. "In total, 33.3% of the
+  manipulated jam trials, and 32.2% of the manipulated tea trials were detected" (concurrently 14.4% and 13.8%).
+  Half were promised the chosen item as a gift: tea detection was 19.6% with the gift vs 46.3% without.
+- Recent work. Read on PubMed (titles only, https://pubmed.ncbi.nlm.nih.gov/?term=%22choice+blindness%22&sort=date):
+  "Choice Blindness in a Military Setting" (Patterson, Hum Factors, Sep 2026, PMID 42041049); pupillometry
+  "evidence of covert detection" (Grassi, Front Psychol, Dec 2025, PMID 41426389); "Social cues for experimenter
+  incompetence influence choice blindness" (Marchant, Conscious Cogn, Jul 2025, PMID 40381527).
+  From search listings only (unverified): autistic vs non-autistic adults, Remington et al., J. Cognitive
+  Psychology 2024, doi:10.1080/20445911.2024.2356283, 16 vs 21 adults, equal rates (open PDF at
+  https://discovery.ucl.ac.uk/10192819/, not read); a preregistered no-deception arm with a one-week retest is
+  likely Olson et al. (BIAL grant 347/20 reports, 145 and 147 students, https://www.fundacaobial.com/media/4353/2020-open-label-choice-blindness.pdf);
+  religious attitudes (2025, https://www.tandfonline.com/doi/full/10.1080/2153599X.2025.2557482, not read).
+  CORRECTED: no 2024 pension study was found; the pension study found is McLaughlin & Somerville (2013), Judgment
+  and Decision Making 8(5):577-588 (listing: 100 people, at most 37.2% detected). The "online study of 498" was not
+  found (an online paper with 955 people, Strandberg et al. 2020, was listed instead): not found.
+- VR versions (both read). Lingonblad et al., "Virtual Blindness", IVA 2015, LNCS 9238:442-451 (Lund record
+  https://lup.lub.lu.se/search/publication/282f44a7-04a9-4755-b818-2388a93809cd; Springer's page needs a login):
+  38 participants, a virtual experimenter, 16 portrait pairs, 4 swapped; more and earlier detections in the
+  low-immersion condition; head-mounted displays named only as future work (CORRECTED: not a headset study).
+  Arora, Gupta & Parnami, UIST 2019 Adjunct, pp. 84-86 (poster, free, https://dl.acm.org/doi/10.1145/3332167.3357123):
+  racial-bias choices; "92% of subjects failed to notice a mismatch in their choices, while 75% exhibited choice
+  blindness"; N not given in the abstract.
 
 ### 3c. Price as a cue to quality: marketing placebo (read)
 
@@ -143,9 +177,11 @@ primary page. Parts, each answered or marked "not found":
     cheaper wine tastes better" (experimenter demand). Subjects "were not debriefed" (Caltech's small pool): we
     would debrief everyone.
 - Shiv, Carmon & Ariely (2005), "Placebo effects of marketing actions: Consumers may get what they pay for",
-  Journal of Marketing Research 42(4):383-393, DOI 10.1509/jmkr.2005.42.4.383: people who paid a discounted price
-  for an energy drink solved fewer puzzles. Full text NOT read; the drink and prices ($1.89 vs $0.89) come from
-  secondary summaries: UNVERIFIED. https://fds.duke.edu/db/aas/Economics/faculty/dan.ariely/publications/265982
+  Journal of Marketing Research 42(4):383-393, DOI 10.1509/jmkr.2005.42.4.383. Abstract (Duke record, read,
+  https://scholars.duke.edu/publication/861346): "marketing actions, such as pricing, can alter the actual efficacy
+  of products"; people who paid a discounted price for an energy drink solved fewer puzzles. No open full text
+  (SAGE paywall; Duke lists no PDF): the drink, prices ($1.89 vs $0.89 in retellings) and puzzle counts stay
+  UNVERIFIED (owner).
 
 ### 3d. What our version would test that is new (our design reasoning, not a published finding)
 
@@ -156,66 +192,15 @@ primary page. Parts, each answered or marked "not found":
   gain; (2) whether the reasons name the price or invent features ("calls better"), coded from the player's own
   words, which is Nisbett & Wilson's question asked of thousands; (3) a Plassmann-style quality test inside VR:
   both phones play the SAME call audio and the player rates the sound; does the "$10,000" phone sound better?
-  (4) left/right position counterbalanced, so the position effect is measured on the side.
+  (4) left/right position counterbalanced, so the position effect is measured on the side; head data give the
+  order the phones were looked at, the very thing Newell & Shanks say position stands in for (ours).
+- Hall et al. 2010 found fewer detections when the chosen item was a gift (19.6% vs 46.3%): a free "take it" may
+  matter (ours, from 3b).
 - Sketch: two identical phones, labels $10,000 / $10 (sides random) → "take one" (grab with hand) → "why?"
   (voice optional, else pick from reasons incl. "the price") → "call someone" on each, same audio, rate sound →
   reveal: same phone, same sound, your reason, and the share of players who said the same.
-- Before design: read Nisbett & Wilson 1977 and Hall et al. 2010 in full (rule 16); both are missing from
-  objekt-papers.
-
-## 4. Running and publishing our own study
-
-### 4a. Ethics review without our own university
-
-- US, a university IRB reviewing outsiders for a fee. University of Southern Maine (schedule "Updated
-  06/30/2026"), reviews "non-USM research projects as a service to the general community" for any "institution or
-  individual investigator who needs a review by a federally registered IRB with a Federalwide Assurance":
-  "Exempt determination: $500.00"; "Expedited IRB review: $750.00"; "Full Board convened IRB review: $1,500.00";
-  exempt renewal "$250.00" at least every 3 years.
-  https://usm.maine.edu/orio/wp-content/uploads/sites/361/2022/07/IRB-External-Reviews-Fee-Schedule.pdf
-  (read from the PDF text).
-- Other public fee lists seen only in search snippets (unverified): Rutgers exempt $250 for unaffiliated PIs
-  (2020, https://research.rutgers.edu/node/5291); Washington State IRB $2,000 expedited (2015,
-  https://www.dshs.wa.gov/ffa/human-research-review-section/wsirb-fees). Commercial IRBs (Advarra, BRANY) send
-  fee schedules on request; BRANY's form has an "Independent Investigator/Researcher" and social-behavioral
-  (SBER) option (https://www.brany.com/?p=7702, snippet only). No commercial IRB price was found published.
-- Russia: the Russian Psychological Society's Ethics Committee (https://psyrus.ru/rpo/structure/ethics.php refused
-  our tools; the owner downloaded its documents). Its Regulation (pologenie_etick_kodeks_16.10.2013.doc, read in
-  full) makes it "a standing consultative and regulating body of the RPO on the psychologist's professional ethics"
-  (1.2, our translation); its functions (2.2) are explaining the code, complaints against psychologists, sanctions
-  and changes to the code, not reviewing research projects. The other file (materiali_efpa.doc: EFPA guidance on
-  complaints and forensic work) has no project review either. So ethics approval goes to a university or an IRB.
-- EU: not reached in this pass (no central body found; national and university committees). Not found.
-
-### 4b. Preregistration
-
-- AsPredicted: pre-registrations are time-stamped single-page PDFs; "Pre-registration remains private until an
-  author makes it public"; linked to CredLab at Wharton (UPenn). Price and question count not on the home page
-  (unverified). https://aspredicted.org/
-- OSF: not read in this pass (unverified).
-
-### 4c. Data rules
-
-- GDPR Art. 9(1): special categories include biometric data processed "for the purpose of uniquely identifying a
-  natural person" and "data concerning health"; Art. 9(2)(a) allows them with "explicit consent ... for one or
-  more specified purposes"; 9(2)(j) allows research use only when based on Union or Member State law.
-  https://gdpr-info.eu/art-9-gdpr/ — so head and hand motion, voice and gaze become special-category data the
-  moment they are used to recognise a person; kept for behaviour only, the line is a legal question (unverified).
-- Russia, 152-FZ Art. 11(1): biometric data are data on physiological and biological features "on the basis of
-  which his identity can be established" (our translation); when used to identify, they "may be processed only with
-  the written consent of the data subject" (our translation). https://www.consultant.ru/document/cons_doc_LAW_61801/7336c78762a98b5f4f698b8c3800dca1111acc16/
-- Russia, 152-FZ Art. 18(5) (as amended by 23-FZ of 28.02.2025): collecting data of Russian citizens, including
-  over the internet, "using databases located outside the territory of the Russian Federation is not allowed"
-  (our translation; except listed cases). https://www.consultant.ru/document/cons_doc_LAW_61801/cbf4e15b7c330f9372e876cdf2bc928bad7950ef/
-  Consequence for us: personal data of Russian players must first land in a database in Russia; anonymous data
-  that cannot identify anyone is outside the law's scope (that reading is ours: a lawyer should confirm).
-
-### 4d. Partnering with a university (examples from the pages read)
-
-- Sea Hero Quest: a company (Deutsche Telekom) and a game studio with UCL and UEA scientists (1b). LabintheWild
-  studies are run by Harvard researchers (Huber & Gajos 2020, 1b). A university IRB can also review an outside
-  investigator for a fee (USM, 4a). Grant routes exist for many-lab work (KLI, up to 9,000 euros, unverified).
-  Costs of a partnership itself: not found.
+- Before design (rule 16): Nisbett & Wilson 1977 (pp. 243-244) and Hall et al. 2010 are now in objekt-papers;
+  still missing: Wilson & Nisbett 1978 (stocking details) and Shiv et al. 2005 (both behind logins: owner).
 
 ## 1d. Open questions the field says need data (from the pages read; no published "agenda list" was found)
 
@@ -224,7 +209,8 @@ primary page. Parts, each answered or marked "not found":
   smaller (Huber & Gajos 2020: d 0.34 vs 1.23).
 - Who is sampled: home Quest owners were 86% male, median age 26; "claims about generalizability should be avoided"
   (Mottelson et al. 2021, verified in docs/research/vr/06-science.md). Cultures: the PSA runs moral-dilemma
-  judgments across countries (psysciacc.org). Russian-speaking VR players are a sample none of the papers read had.
+  judgments across countries (PSA006, 45 countries). Russian-speaking VR players are a sample none of the papers
+  read had.
 
 ## 2. Candidate experiments for our setup (one player, 5-10 min, hands and head tracked, voice optional)
 
@@ -235,8 +221,8 @@ home (Steed et al. 2016, doi:10.1109/TVCG.2016.2518135); compare conditions with
 1. Two phones (the owner's idea). Plassmann et al. 2008; Shiv et al. 2005; Nisbett & Wilson 1977 (part 3). / A
    price cue on an object worth nothing to anyone; whether stated reasons name the price (ours). / Thousands of
    choices, the grab itself, head-direction dwell on each phone before choosing. / Part 3d.
-2. Choice blindness with the hand. Johansson et al. 2005; Hall et al. 2012 (objekt-papers). / VR versions are
-   small conference papers only (3b, unverified); trick-aware players are the authors' own failure case. / Choice
+2. Choice blindness with the hand. Johansson et al. 2005; Hall et al. 2010, 2012 (objekt-papers). / VR versions:
+   one screen study (38 people) and one poster (3b); trick-aware players are the authors' own failure case. / Choice
    by grasp, detection measured at scale, prior knowledge logged. / Pick the nicer of two objects 10 times; 2 are
    swapped when pocketed; "why this one?"
 3. Moral action vs judgment. Francis et al. 2016, PLoS ONE 11(10):e0164374 (objekt-papers/francis-2016.txt):
@@ -245,19 +231,24 @@ home (Steed et al. 2016, doi:10.1109/TVCG.2016.2518135); compare conditions with
    Does the gap hold in thousands, across cultures? (ours) / Hesitation time, aborted hand movements. / Judge a
    (non-gory) dilemma in words, then meet it with a lever; ask "was that what you meant?"
 4. Proteus effect (avatar height and bargaining). Huber & Gajos 2020 (1b): online replication with d 0.34 vs
-   1.23, only 27 headset users. / Its size with a tracked first-person body (ours). / Real embodiment, many
-   players. / Random avatar height seen in a mirror, then split 100 points with an agent.
+   1.23, only 27 headset users; the original, Yee & Bailenson 2007 (Human Communication Research 33:271-290), not
+   read (search listing: taller avatars "behaved more confidently in a negotiation task": unverified). / Its size
+   with a tracked first-person body (ours). / Real embodiment, many players. / Random avatar height seen in a
+   mirror, then split 100 points with an agent.
 5. Doorway effect. McFadyen et al. (2021), "Doorways do not always cause forgetting: a multimodal investigation",
-   BMC Psychology 9:41, https://link.springer.com/article/10.1186/s40359-021-00536-3 (read in the browser): "we
-   observed no significant effect of doorways on forgetting", except under working-memory load in VR. / Whether the
-   effect exists; the paper asks "what factors contributed to the effect observed in previous studies". / Our
-   building is a corridor of doors; huge N settles a small effect. / Carry an object through a door vs the same
-   distance in one room; a memory probe halfway.
+   BMC Psychology 9:41, https://link.springer.com/article/10.1186/s40359-021-00536-3 (read in the browser, earlier
+   pass; open copy https://pmc.ncbi.nlm.nih.gov/articles/PMC7938580): "we observed no significant effect of doorways
+   on forgetting", except under working-memory load in VR. Sample sizes per experiment: not re-read in this pass
+   (unverified). / Whether the effect exists; the paper asks "what factors contributed to the effect observed in
+   previous studies". / Our building is a corridor of doors; huge N settles a small effect. / Carry an object
+   through a door vs the same distance in one room; a memory probe halfway.
 6. Cheating with a virtual observer. Mol, van der Heijden & Potters (2020), Experimental Economics,
-   https://link.springer.com/article/10.1007/s10683-020-09644-0 (search snippet only, unverified: an active
-   watching avatar gave less cheating than a passive one, not less than no avatar). / Whether it holds with points
-   instead of money (ours). / Lying is seen only in the distribution, never per person: no one is accused. / Roll
-   a die privately, report for points; observer watching, looking away, or absent.
+   https://doi.org/10.1007/s10683-020-09644-0 (READ, objekt-papers/mol-2020.txt): 118 analysed, 30 rounds of a
+   slot-machine "mind game", one round paid in euros; "60% (71/118)" cheated beyond chance; cheating rate Passive
+   0.74 > No avatar 0.71 > Active 0.66; only Passive vs Active differed (p = 0.029): "not less cheating than in a
+   control condition without an avatar". / Whether it holds with points instead of money (ours). / Lying is seen
+   only in the distribution, never per person: no one is accused. / A private pick, then report it for points;
+   observer watching, looking at a phone, or absent.
 7. Navigation with the body. Spiers et al. 2023 (1b): 3.9 million players, male advantage in all 63 countries. /
    Whether phone-game scores hold when the body turns in VR (ours). / Head and body turns logged. / Study a map,
    then reach three targets in a building.
@@ -269,31 +260,3 @@ home (Steed et al. 2016, doi:10.1109/TVCG.2016.2518135); compare conditions with
    at least once. / What makes agents count as a group. / Ambiguous judgment after agents answer aloud.
 10. Obedience (Slater et al. 2006; Gonzalez-Franco et al. 2018, 06-science.md): obedience higher in VR. Not
    recommended for home play: distress without a supervisor.
-
-## 5. Risks to data quality and how studies handle them
-
-- Inattention: about 13% online vs 3% in the lab; "approximate 10% ill-intended"; over-recruit and fix an
-  objective exclusion rule in advance (Mottelson et al. 2021, 1c). Hand tracking: a screening step cut bad data
-  from 27% to 8% (same).
-- Drop-out: one in-the-wild VR study kept 59 of about 400 installs, "a rate of return of 15%" (Steed et al. 2016,
-  06-science.md). Accidental one-shot choices: 5 of 33 (Kissel et al. 2023).
-- Repeat players: Chandler, Paolacci, Peer, Mueller & Ratliff (2015), Psychological Science 26(7):1131-1139,
-  doi:10.1177/0956797615585115: Many Labs tasks repeated gave smaller effects (weighted d 0.82 to 0.63), most when
-  the condition changed (search snippets of https://www.psychologicalscience.org/journals/psychological-science/0956797615585115/;
-  unverified). Handling: log first vs repeat run; analyse first runs; keep the condition per device.
-- Bots: Westwood (2025), PNAS, https://www.pnas.org/doi/10.1073/pnas.2518075122: AI agents "evade nearly all
-  existing detection methods"; "as few as 10 to 52 fake AI responses" could have flipped 2024 polls (Dartmouth,
-  https://fas.dartmouth.edu/news/2026/04/sean-westwood-wins-pnas-prize-ai-polling-study). Paper itself not read.
-  A WebXR run with tracked head and hands is harder to fake than a web form: our inference, untested.
-- Suspicion: 68% in VR thought the alarm staged (Kinateder & Warren 2016); suspicion probes miss about half
-  (Blackhart et al. 2012; both in 06-science.md); Johansson et al. expect "most participants" to spot a switch if
-  told to look (card johansson-2005.md). Handling: open-first suspicion and prior-knowledge probe before the
-  reveal, analysed as a moderator, preregistered.
-- Self-selection: 86% male, median 26 (Mottelson et al. 2021). Report "you vs other players", never "vs people".
-
-## Not reached / unverified
-
-- Not read in full: Nisbett & Wilson 1977; Hall et al. 2010 (jam and tea); Shiv et al. 2005; Westwood 2025;
-  Chandler et al. 2015; Mol et al. 2020; Yee & Bailenson 2007. Not found: EU review bodies for non-university
-  research; OSF preregistration details; AsPredicted price; any published commercial IRB price; the PSA projects
-  list and member count.
