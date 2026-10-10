@@ -28,11 +28,11 @@ if (!email.endsWith('@users.noreply.github.com')) {
   process.exit(1);
 }
 // A failing check on GitHub must not wait unseen while the owner tries the copy: the last
-// finished run of this branch's tests (.github/workflows/test.yml) has to have passed (needs the
-// GitHub CLI, signed in); --anyway publishes all the same, saying so.
+// finished run of the tests (.github/workflows/test.yml) has to have passed (needs the GitHub CLI,
+// signed in); --anyway publishes all the same, saying so. The tests run on room-polish, where
+// every session's commits go, not on the session branch.
 try {
-  const branch = git(ROOT, 'rev-parse', '--abbrev-ref', 'HEAD');
-  const [run] = JSON.parse(execFileSync('gh', ['run', 'list', '--branch', branch, '--status', 'completed', '--limit', '1', '--json', 'headSha,conclusion,url'], { cwd: ROOT, encoding: 'utf8' }));
+  const [run] = JSON.parse(execFileSync('gh', ['run', 'list', '--branch', 'room-polish', '--status', 'completed', '--limit', '1', '--json', 'headSha,conclusion,url'], { cwd: ROOT, encoding: 'utf8' }));
   if (run && run.conclusion !== 'success') {
     console.log(`the tests on GitHub ${run.conclusion} for ${run.headSha.slice(0, 7)}: ${run.url}`);
     if (!process.argv.includes('--anyway')) { console.log('not published: fix that first (or publish with --anyway)'); process.exit(1); }

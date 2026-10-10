@@ -7,28 +7,29 @@
 //         the practice review record
 //   subagent-start, subagent-stop: a practice reviewer's run is recorded for the owner's automatic
 //         stop before VR in the headset and the test copy (tools/review-gate.mjs)
-//   stop: a turn does not end while work is unsaved or not on GitHub (the commit hook runs the tests), while
-//         a page only the owner can open, left by research, has not reached him (owner-links.mjs),
+//   stop: a turn does not end while work is unsaved or not on GitHub, while a page only the owner
+//         can open, left by research since his last message, has not reached him (owner-links.mjs),
 //         or while the board has no row for today saying what he will see (board.mjs)
-//   start, prompt: the owner's decisions and the board come back at start and after every
-//         compaction; every owner message is logged
+//   start, prompt: the board comes back at start and after every compaction; every owner message
+//         is logged
+// Imported with no mode (tests/guard.test.mjs), it only defines refusal() and readOnlySql().
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { withoutGitVars } from './secrets.mjs';
-import { unrelayed } from './owner-links.mjs';
-import { fingerprint, entries, write, REVIEWER, REPORT_END } from './review-gate.mjs';
+import { unrelayed, sinceOwner } from './owner-links.mjs';
+import { scan, named, entries, write, lastReport, REVIEWER, REPORT_END } from './review-gate.mjs';
 import { BOARD, SHOWS, LOG, shows, stalled, plannedToday } from './board.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DECISIONS = 'docs/owner-decisions.md';
 const mode = process.argv[2];
-const input = await new Promise((done) => {
+const input = mode ? await new Promise((done) => {
   let s = '';
   process.stdin.on('data', (c) => { s += c; }).on('end', () => done(s));
-});
+}) : '';
 const event = (() => { try { return JSON.parse(input || '{}'); } catch { return {}; } })();
 const stop = (why) => { process.stderr.write(`${why}\n`); process.exit(2); };
 // The checkout the session works in: Claude Code runs this script from the folder the session was
@@ -38,27 +39,251 @@ const HERE = (() => {
   try { return execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd: event.cwd || ROOT, env: withoutGitVars(), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return ROOT; }
 })();
 
-// Each refused command names the guard it would switch off (CLAUDE.md "Cannot be undone", tools/hooks). A
-// program counts as run only where a command starts (the line's start, after ; & | or a newline,
-// past variables set for it and PowerShell's call operator), written in any path form the shells
-// take; a command that reads or searches the smoke test's file passes, or the guard teaches working
-// around it. A git command naming the hook-skipping flag is refused wherever the flag stands, even in
-// a search. tests/guard.test.mjs runs both ways.
-const AT = String.raw`(?:^|[;&|\n])\s*(?:\w+=\S*\s+)*(?:&\s*)?`;
-const DIR = String.raw`(?:"[^"\n]*[\\/])?(?:[\w.:~\\/-]*[\\/])?`;
-const run = (body) => new RegExp(AT + DIR + body, 'i');
-export const REFUSED = [
-  [/^(?=[\s\S]*\bgit\b)[\s\S]*(?:^|[\s'"=])--no-verify\b/, 'skips the git hooks: no commit while npm test fails, no push without the secret check'],
-  [/^(?=[\s\S]*\bgit\b[\s\S]*\bcommit\b)[\s\S]*\s-[a-zA-Z]*n[a-zA-Z]*(?=[\s'"]|$)/, '"git commit -n" skips the git hooks'],
-  [/core\.hooksPath[= ]+(?!tools\/hooks\b)\S|--unset[^|;&\n]*core\.hooksPath/, 'switches the git hooks off'],
-  [run(String.raw`npm(?:\.cmd)?\b[^;&|\n]*\btest:smoke\b`), 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
-  [run(String.raw`node(?:\.exe)?"?\s+(?:-{1,2}[\w-]+(?:=\S+)?\s+)*["']?(?:[\w.:~-]*[\\/]+)*smoke\.mjs\b`), 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
-  [run(String.raw`(?:npx(?:\.cmd)?(?:\s+-{1,2}[\w-]+)*\s+@?playwright\b|playwright(?:\.cmd)?\s+(?:test|install|open|codegen)\b)`), 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free'],
-  [run(String.raw`adb(?:\.exe)?\b[^;&|\n]*\s(?:reboot\b|shell\s+["']?(?:am\s+force-stop|reboot\b|svc\s+power\s+(?:reboot|shutdown)))`), 'restarts the headset or its browser past tools/quest-look.mjs, which first checks that the owner is not wearing it'],
-  // the practice review record (tools/review-gate.mjs): only this hook writes it, when a reviewer run ends
-  [/^(?=[\s\S]*practice-reviews)(?=[\s\S]*(?:>|\btee\b|Out-File|Set-Content|Add-Content|\bcp\b|\bmv\b|\bcopy\b|Copy-Item|Move-Item|\brm\b|Remove-Item|\bdel\b|writeFile|appendFile|\btouch\b|New-Item|sed\s+-i|truncate))/i, 'writes the practice review record, which only Claude Code\'s hook writes when a reviewer run ends'],
-  [/(?:^|[\s;&|])(?:export\s+|set\s+)?(?:\$env:)?OBJECT_REVIEW_RECORD\s*=/i, 'points the headset tools at another practice review record'],
-];
+// A command line read the way the shell reads it (POSIX sh; PowerShell where it differs: backtick
+// escapes, '' inside single quotes, @'...'@ here-strings): the simple commands it runs, split on
+// ; & && || | ( ) { } and newlines, each with its words (quotes removed), its redirections and
+// the text fed to it (heredoc bodies, here-strings). Separators inside quotes or heredoc bodies
+// split nothing, so text that only names a command is no command; $(...) and `...` do run, so
+// their commands are listed too. A backslash before a letter stays (a Windows path).
+export function commands(line, ps = false) {
+  const out = [];
+  let i = 0;
+  const list = (end) => {
+    let depth = 0, cmd, word, op, pending = [];
+    const fresh = () => { cmd = { words: [], redirs: [], stdin: [] }; word = null; op = null; };
+    const add = (s) => { word = (word ?? '') + s; };
+    const endWord = () => {
+      if (word === null) return;
+      if (op === '<<' || op === '<<-') pending.push({ delim: word, strip: op === '<<-', cmd });
+      else if (op === '<<<') cmd.stdin.push(word);
+      else if (op) cmd.redirs.push({ op, target: word });
+      else cmd.words.push(word);
+      word = null; op = null;
+    };
+    const endCmd = () => { endWord(); if (cmd.words.length || cmd.redirs.length || cmd.stdin.length) out.push(cmd); fresh(); };
+    // heredoc bodies start on the line after their operator and end at the delimiter's own line
+    const bodies = () => {
+      for (const h of pending) {
+        const lines = [];
+        while (i < line.length) {
+          const eol = line.indexOf('\n', i) < 0 ? line.length : line.indexOf('\n', i);
+          const l = line.slice(i, eol).replace(/\r$/, '');
+          i = eol + 1;
+          if ((h.strip ? l.replace(/^\t+/, '') : l) === h.delim) break;
+          lines.push(l);
+        }
+        h.cmd.stdin.push(lines.join('\n'));
+      }
+      pending = [];
+    };
+    const nested = (close) => { list(close); add('$(...)'); };
+    const quoted = (q) => {
+      add('');
+      while (i < line.length) {
+        const c = line[i], n = line[i + 1];
+        if (c === q && ps && n === q) { add(q); i += 2; continue; }
+        if (c === q) { i++; return; }
+        if (q === '"' && !ps && c === '\\' && '$`"\\\n'.includes(n)) { add(n === '\n' ? '' : n); i += 2; continue; }
+        if (q === '"' && ps && c === '`') { add(n ?? ''); i += 2; continue; }
+        if (q === '"' && c === '$' && n === '(') { i += 2; nested(')'); continue; }
+        if (q === '"' && !ps && c === '`') { i++; nested('`'); continue; }
+        add(c); i++;
+      }
+    };
+    fresh();
+    while (i < line.length) {
+      const c = line[i], n = line[i + 1];
+      if (c === end && (end !== ')' || depth === 0)) { i++; endCmd(); return; }
+      if (c === ' ' || c === '\t' || c === '\r') { endWord(); i++; continue; }
+      if (c === '\n') { endCmd(); i++; bodies(); continue; }
+      if (c === ';' || c === '|' || (c === '&' && n !== '>')) { endCmd(); i += c !== ';' && n === c ? 2 : 1; continue; }
+      if (c === '$' && n === '(') { i += 2; nested(')'); continue; }
+      if (c === '$' && n === '{') { const e = line.indexOf('}', i); add(line.slice(i, e < 0 ? line.length : e + 1)); i = e < 0 ? line.length : e + 1; continue; }
+      if (c === '(') { depth++; endCmd(); i++; continue; }
+      if (c === ')') { if (depth) depth--; endCmd(); i++; continue; }
+      if ((c === '{' && word === null) || c === '}') { endCmd(); i++; continue; }
+      if (c === '#' && word === null) { while (i < line.length && line[i] !== '\n') i++; continue; }
+      if (ps && c === '<' && n === '#' && word === null) { const e = line.indexOf('#>', i); i = e < 0 ? line.length : e + 2; continue; }
+      if (c === '>' || c === '<' || c === '&') {
+        // digits (or PowerShell's *) right before it name a stream, not a word
+        if (word !== null && /^(\d+|\*)$/.test(word)) word = null; else endWord();
+        if (n === '(') { i += 2; nested(')'); continue; }   // <( ) and >( ) run their commands
+        const m = line.slice(i).match(/^(?:&>>?|<<<|<<-|<<|<>|<&|>>|>\||>&|<|>)/)[0];
+        i += m.length; op = m;
+        continue;
+      }
+      if (c === '"' || c === "'") { i++; quoted(c); continue; }
+      if (ps && c === '@' && word === null && (n === "'" || n === '"') && /^[ \t]*\r?\n/.test(line.slice(i + 2))) {
+        const from = line.indexOf('\n', i) + 1, e = line.indexOf(`\n${n}@`, from);
+        add(line.slice(from, e < 0 ? line.length : e).replace(/\r$/, '')); i = e < 0 ? line.length : e + 3; continue;
+      }
+      if (!ps && c === '\\') { if (n === '\n') { i += 2; continue; } if (n !== undefined && /[\s"'\\;&|<>()$`{}#*?[\]~!]/.test(n)) { add(n); i += 2; continue; } }
+      if (ps && c === '`') { i += n === '\r' && line[i + 2] === '\n' ? 3 : 2; if (n !== '\n' && n !== '\r') add(n ?? ''); continue; }
+      if (!ps && c === '`') { i++; nested('`'); continue; }
+      add(c); i++;
+    }
+    endCmd(); bodies();
+  };
+  list(null);
+  return out;
+}
+
+// Each refusal names the guard it would switch off (CLAUDE.md "Cannot be undone", tools/hooks)
+const WHY = {
+  verify: 'skips the git hooks: no commit past the commit check, no push without the secret check',
+  commitN: '"git commit -n" skips the git hooks',
+  hooks: 'switches the git hooks off',
+  browser: 'runs Playwright or Chromium, which run only on GitHub: the owner\'s laptop stays free',
+  headset: 'restarts the headset or its browser past tools/quest-look.mjs, which first checks that the owner is not wearing it',
+  record: 'writes the practice review record, which only Claude Code\'s hook writes when a reviewer run ends',
+  recordEnv: 'points the headset tools at another practice review record',
+};
+// a program by its name, in any path form the shells take
+const base = (w = '') => w.replace(/^.*[\\/]/, '').toLowerCase().replace(/\.(exe|cmd|bat|ps1)$/, '');
+const RECORD = /practice-reviews|OBJECT_REVIEW_RECORD/i;
+// git takes any unambiguous start of a long option; --no-ver could also be --no-verbose
+const NO_VERIFY = /^--no-veri(f|fy)?$/;
+const hooksAt = (v = '') => v.replace(/\\/g, '/').replace(/^\.\//, '').replace(/\/+$/, '').toLowerCase() === 'tools/hooks';
+const playwright = (a) => a.some((v) => /^(@playwright\/test|playwright)(@\S*)?$/.test(v));
+// code handed to an interpreter that writes the record (or calls review-gate.mjs's write())
+const WRITE_CALL = /\b(?:writeFile|appendFile|createWriteStream|copyFile|cpSync|rename|unlink|truncate|rm|remove|write_text|write_bytes)\w*\s*\(|(?<!std(?:out|err)\.)\bwrite(?:Sync)?\s*\(|\bopen(?:Sync)?\s*\([^)]*['"][wa+]/;
+const writesRecord = (code) => (/practice-reviews|review-gate|OBJECT_REVIEW_RECORD/i.test(code) && WRITE_CALL.test(code) ? WHY.record : null);
+// programs that run another command given after their own options (option: the ones taking a value)
+const WRAPPERS = { env: /^-[uCS]$/, sudo: /^-[ugCDhpRrTt]$/, nohup: null, time: null, command: null, builtin: null, exec: /^-a$/, nice: /^-n$/, timeout: /^-[sk]$/, stdbuf: null, xargs: /^-[IiLlnPdEsa]$/ };
+const KEYWORDS = new Set(['if', 'then', 'else', 'elif', 'fi', 'do', 'done', 'while', 'until', '!', 'case', 'esac']);
+const WRITERS = /^(tee|tee-object|rm|del|erase|rd|rmdir|ri|remove-item|unlink|shred|truncate|touch|mv|move|mi|move-item|ren|rename|rni|rename-item|set-content|sc|add-content|ac|clear-content|clc|out-file|new-item|ni|ln|install)$/;
+const COPIERS = /^(cp|copy|cpi|copy-item|xcopy|robocopy|rsync|scp)$/;
+const NODE_VALUE = /^(-r|--require|--import|--loader|--experimental-loader|-C|--conditions|--input-type|--env-file|--title|--inspect-port|--redirect-warnings)$/;
+
+function git(a) {
+  let k = 0;
+  for (; k < a.length && a[k].startsWith('-'); k++) {
+    if (/^(-C|--git-dir|--work-tree|--namespace|--super-prefix)$/.test(a[k])) k++;
+    else if (/^--config-env=core\.hookspath=/i.test(a[k])) return WHY.hooks;
+    else if (a[k] === '-c' || a[k] === '--config-env') {
+      const [key, ...value] = (a[++k] ?? '').split('=');
+      if (key.toLowerCase() === 'core.hookspath' && (a[k - 1] !== '-c' || !hooksAt(value.join('=')))) return WHY.hooks;
+    }
+  }
+  const sub = a[k], rest = a.slice(k + 1);
+  for (let j = 0; j < rest.length && (sub === 'commit' || sub === 'push'); j++) {
+    const x = rest[j];
+    if (x === '--') break;
+    if (NO_VERIFY.test(x)) return WHY.verify;
+    if (sub === 'push') continue;
+    if (/^--(message|file|reuse-message|reedit-message|fixup|squash|author|date|template|cleanup|trailer|pathspec-from-file)$/.test(x)) j++;
+    // a cluster of short options: -n is the skip; m F C c t take the rest or the next word
+    if (/^-[^-]/.test(x)) {
+      for (let q = 1; q < x.length; q++) {
+        if (x[q] === 'n') return WHY.commitN;
+        if ('mFCct'.includes(x[q])) { if (q === x.length - 1) j++; break; }
+        if ('uS'.includes(x[q])) break;
+      }
+    }
+  }
+  if (sub === 'config') {
+    const at = rest.findIndex((x) => x.toLowerCase() === 'core.hookspath');
+    if (rest.some((x, j) => /^-?-?remove-section$/.test(x) && /^core$/i.test(rest[j + 1] ?? ''))) return WHY.hooks;
+    if (at < 0 || rest.some((x) => /^(--get(-all|-regexp|-urlmatch)?|get|--list|-l|list)$/.test(x))) return null;
+    if (rest.some((x) => /^(--unset(-all)?|unset)$/.test(x))) return WHY.hooks;
+    if (rest[at + 1] !== undefined && !hooksAt(rest[at + 1])) return WHY.hooks;
+  }
+  return null;
+}
+
+// a command on the headset's own shell (adb shell) that restarts it or its browser
+function restarts(w) {
+  const p = base(w[0]), rest = w.slice(1).join(' ');
+  if (p === 'su' && w.includes('-c')) return commands(w[w.indexOf('-c') + 1] ?? '').some((c) => restarts(c.words));
+  return p === 'reboot' || ((p === 'am' || p === 'cmd') && w.includes('force-stop'))
+    || (p === 'svc' && /^power (reboot|shutdown)/.test(rest)) || (p === 'setprop' && w[1] === 'sys.powerctl');
+}
+
+function judge(words, stdin, ps) {
+  const w = [...words];
+  // variables set for the command, and the shell's own words before it
+  while (w.length) {
+    if (/^(\$env:)?OBJECT_REVIEW_RECORD(=|$)/i.test(w[0]) && (w[0].includes('=') || /^=/.test(w[1] ?? ''))) return WHY.recordEnv;
+    if (/^[A-Za-z_]\w*=/.test(w[0]) || KEYWORDS.has(w[0])) w.shift(); else break;
+  }
+  const p = base(w[0]), a = w.slice(1);
+  if (!p) return null;
+  if (/^(export|set|setx|declare|typeset|local|readonly|set-item|si)$/.test(p) && a.some((x) => /^(env:)?OBJECT_REVIEW_RECORD(=|$)/i.test(x))) return WHY.recordEnv;
+  if (Object.hasOwn(WRAPPERS, p)) {
+    let k = 0;
+    while (k < a.length && a[k].startsWith('-')) k += WRAPPERS[p]?.test(a[k]) ? 2 : 1;
+    return judge(a.slice(k + (p === 'timeout' ? 1 : 0)), stdin, ps);
+  }
+  // shells handed a command as text, or fed one on their input
+  if (/^(sh|bash|zsh|dash|ksh)$/.test(p)) {
+    const c = a.findIndex((x) => /^-[a-z]*c[a-z]*$/.test(x));
+    if (c >= 0) return refusal(a[c + 1] ?? '', false);
+    if (!a.some((x) => !x.startsWith('-'))) return stdin.map((s) => refusal(s, false)).find(Boolean) ?? null;
+  }
+  if (/^(powershell|pwsh)$/.test(p)) { const c = a.findIndex((x) => /^-(c|command)$/i.test(x)); if (c >= 0) return refusal(a.slice(c + 1).join(' '), true); }
+  if (p === 'cmd') { const c = a.findIndex((x) => /^\/[ck]$/i.test(x)); if (c >= 0) return refusal(a.slice(c + 1).join(' '), false); }
+  if (p === 'invoke-expression' || p === 'iex') return refusal(a.join(' '), true);
+  if (p === 'git') return git(a);
+  // the smoke test and Playwright: only on GitHub
+  if (/^(npm|pnpm|yarn|bun)$/.test(p)) {
+    const x = a.findIndex((v) => /^(exec|x|dlx)$/.test(v));
+    if (a.includes('test:smoke') || (x >= 0 && playwright(a.slice(x + 1)))) return WHY.browser;
+  }
+  if ((/^(npx|pnpx|bunx)$/.test(p) && playwright(a)) || p === 'playwright') return WHY.browser;
+  if (p === 'node') {
+    let code = null, test = false, check = false;
+    const files = [];
+    for (let j = 0; j < a.length && code === null; j++) {
+      const x = a[j];
+      if (files.length && !test) break;
+      if (!x.startsWith('-') || x === '-') { files.push(x); continue; }
+      if (/^(-e|--eval|-p|--print|-pe)$/.test(x)) code = a[++j] ?? '';
+      else if (/^--(eval|print)=/.test(x)) code = x.slice(x.indexOf('=') + 1);
+      else if (NODE_VALUE.test(x)) j++;
+      test ||= x === '--test';
+      check ||= x === '--check' || x === '-c';
+    }
+    if (code !== null) return writesRecord(code);
+    if (!check && files.some((f) => /(^|[\\/])smoke\.mjs$/i.test(f) || /(^|[\\/])@?playwright([\\/]|$)/i.test(f))) return WHY.browser;
+    if (!files.length || files[0] === '-') return writesRecord(stdin.join('\n'));
+  }
+  if (/^(python3?|py|perl|ruby)$/.test(p)) {
+    const c = a.findIndex((x) => /^-[A-Za-z]*[ce]$/.test(x));
+    if (c >= 0 && writesRecord(a[c + 1] ?? '')) return WHY.record;
+  }
+  // the headset restarted past the check that the owner is not wearing it
+  if (p === 'adb') {
+    let k = 0;
+    while (k < a.length && a[k].startsWith('-')) k += /^-[stHPL]$/.test(a[k]) ? 2 : 1;
+    if (a[k] === 'reboot') return WHY.headset;
+    if (a[k] === 'shell' || a[k] === 'exec-out') {
+      let s = k + 1;
+      while (s < a.length && /^-[ntTx]$/.test(a[s])) s++;
+      if ([a.slice(s).join(' '), ...stdin].some((d) => commands(d).some((c) => restarts(c.words)))) return WHY.headset;
+    }
+  }
+  // the practice review record, written by Claude Code's hook alone
+  if (WRITERS.test(p) && a.some((x) => RECORD.test(x))) return WHY.record;
+  if ((p === 'sed' || p === 'perl') && a.some((x) => /^(-[a-zA-Z]*i|--in-place)/.test(x)) && a.some((x) => RECORD.test(x))) return WHY.record;
+  if (p === 'dd' && a.some((x) => /^of=/.test(x) && RECORD.test(x))) return WHY.record;
+  if (p === 'find' && a.some((x) => RECORD.test(x)) && a.some((x, j) => x === '-delete' || (/^-(exec|execdir|ok)$/.test(x) && WRITERS.test(base(a[j + 1]))))) return WHY.record;
+  if (COPIERS.test(p)) {
+    const to = a.findIndex((x) => /^(-destination|-t|--target-directory)$/i.test(x)), places = a.filter((x) => !x.startsWith('-'));
+    if (RECORD.test(to >= 0 ? a[to + 1] ?? '' : places[places.length - 1] ?? '')) return WHY.record;
+  }
+  return null;
+}
+
+// Why this command line may not run, or null: each command it runs is judged by its program and
+// arguments, never by words that only stand in it. tests/guard.test.mjs runs both ways.
+export function refusal(line, ps = false) {
+  for (const c of commands(line, ps)) {
+    if (c.redirs.some((r) => r.op.includes('>') && RECORD.test(r.target))) return WHY.record;
+    const why = judge(c.words, c.stdin, ps);
+    if (why) return why;
+  }
+  return null;
+}
 const RECORD_FILE = /practice-reviews/i;
 
 // Connected tools that do what a refused command would: a browser started on the laptop, and
@@ -84,20 +309,20 @@ if (mode === 'pre') {
   if (GITHUB_WRITES.test(tool)) stop('REFUSED: this connector writes to GitHub past the push hook (main only on the owner\'s word, the secret check); commit and git push instead.');
   if (/__execute_sql$/.test(tool) && !readOnlySql(String(event.tool_input?.query || ''))) stop('REFUSED: only a single read-only query (SELECT) may run on the live database.');
   if (/^(Write|Edit|MultiEdit|NotebookEdit)$/.test(tool) && RECORD_FILE.test(String(event.tool_input?.file_path || event.tool_input?.notebook_path || ''))) stop('REFUSED: the practice review record is written only by Claude Code\'s hook when a reviewer run ends; run the practice-reviewer agent instead.');
-  const command = String(event.tool_input?.command || '');
-  for (const [pattern, why] of REFUSED) if (pattern.test(command)) stop(`REFUSED: this command ${why}. Do the work so the guard passes instead.`);
+  const why = refusal(String(event.tool_input?.command || ''), tool === 'PowerShell');
+  if (why) stop(`REFUSED: this command ${why}. Do the work so the guard passes instead.`);
   process.exit(0);
 }
 
-const git = (...a) => { try { return execFileSync('git', a, { cwd: HERE, env: withoutGitVars(), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return null; } };
+const gitHere = (...a) => { try { return execFileSync('git', a, { cwd: HERE, env: withoutGitVars(), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return null; } };
 
 // start: at startup, resume and after every compaction Claude Code adds this output to the
 // context, so the state and the queue come back without anyone remembering to read them, and a
 // checkout made from the old live branch is named before work starts on it.
 if (mode === 'start') {
   const out = [`Session ${event.source || 'start'}: the board (${BOARD}) is below; the board is the work; the owner's decisions come with CLAUDE.md. First thing: if its ${SHOWS} table has no row for today, add what he will see today and tell him in your first line. docs/state.md says where things are; the big plan doc is archive and strategy, read only when a step needs it.`];
-  const branch = git('rev-parse', '--abbrev-ref', 'HEAD');
-  if (git('rev-parse', '--verify', '-q', 'room-polish') && git('merge-base', '--is-ancestor', 'room-polish', 'HEAD') === null) {
+  const branch = gitHere('rev-parse', '--abbrev-ref', 'HEAD');
+  if (gitHere('rev-parse', '--verify', '-q', 'room-polish') && gitHere('merge-base', '--is-ancestor', 'room-polish', 'HEAD') === null) {
     out.push(`WARNING: this checkout (${branch}) lacks the latest work on room-polish; it was probably made from the old live branch. If it has no commits of its own, reset it to room-polish; otherwise merge room-polish. Say so to the owner.`);
   }
   // The owner's decisions are imported by CLAUDE.md, which Claude Code loads at every start and
@@ -124,26 +349,12 @@ if (mode === 'start') {
   process.exit(0);
 }
 
-// the last assistant entry of a transcript (JSON lines), as text
-function lastReport(file) {
-  const lines = fs.readFileSync(file, 'utf8').split('\n').filter(Boolean);
-  for (let i = lines.length - 1; i >= 0; i--) {
-    let e;
-    try { e = JSON.parse(lines[i]); } catch { continue; }
-    if (e.type !== 'assistant') continue;
-    const parts = (e.message && e.message.content) || [];
-    const text = parts.map((p) => (p.type === 'text' ? p.text : p.type === 'tool_use' ? JSON.stringify(p.input || {}) : '')).join('\n');
-    if (text.trim()) return text;
-  }
-  return '';
-}
-
 // subagent-start, subagent-stop: a practice reviewer's run is recorded for the owner's automatic stop
 // (tools/review-gate.mjs) by this hook, not by the assistant. It counts only when the files a person
 // meets did not change while it read them and its report reached its last block. Never blocks.
 if (mode === 'subagent-start' || mode === 'subagent-stop') {
   if (event.agent_type !== REVIEWER) process.exit(0);
-  const print = fingerprint(HERE);
+  const { print, files } = scan(HERE);
   if (mode === 'subagent-start') {
     write({ kind: 'start', agent: event.agent_id, print, root: HERE });
     process.exit(0);
@@ -158,7 +369,7 @@ if (mode === 'subagent-start' || mode === 'subagent-stop') {
   const why = !start ? 'no start seen for this run'
     : start.print !== print ? 'the files changed while it read them'
       : !ends(report) ? 'its report did not reach its last block' : '';
-  write(why ? { kind: 'void', agent: event.agent_id, why } : { kind: 'review', agent: event.agent_id, print, root: HERE, transcript: event.agent_transcript_path || '' });
+  write(why ? { kind: 'void', agent: event.agent_id, why } : { kind: 'review', agent: event.agent_id, print, files, named: named(report), root: HERE, transcript: event.agent_transcript_path || '' });
   process.exit(0);
 }
 
@@ -181,23 +392,24 @@ if (mode === 'prompt') {
 
 if (mode === 'stop') {
   const problems = [];
-  const dirty = git('status', '--porcelain');
+  const dirty = gitHere('status', '--porcelain');
   if (dirty) problems.push(`work not saved (power is cut daily):\n${dirty}`);
-  const ahead = git('rev-list', '--count', '@{u}..HEAD');
+  const ahead = gitHere('rev-list', '--count', '@{u}..HEAD');
   if (ahead === null) problems.push('this branch has no copy on GitHub: push it');
   else if (Number(ahead)) problems.push(`${ahead} commits not on GitHub: push the working branch`);
   // the next window's checkout is made from the main folder's HEAD, room-polish (.claude/settings.json
   // worktree.baseRef head): work pushed on this branch alone is missing from the next session, and a
   // written rule to bring it over at the end of a step does not hold when a session ends mid-step
-  if (git('rev-parse', '--verify', '-q', 'room-polish') && git('merge-base', '--is-ancestor', 'HEAD', 'room-polish') === null) {
-    const branch = git('rev-parse', '--abbrev-ref', 'HEAD');
-    problems.push(`the main folder (room-polish, where the next window starts) lacks ${git('rev-list', '--count', 'room-polish..HEAD')} commits of this branch: in it run git merge --ff-only ${branch}, then git push origin room-polish`);
+  if (gitHere('rev-parse', '--verify', '-q', 'room-polish') && gitHere('merge-base', '--is-ancestor', 'HEAD', 'room-polish') === null) {
+    const branch = gitHere('rev-parse', '--abbrev-ref', 'HEAD');
+    problems.push(`the main folder (room-polish, where the next window starts) lacks ${gitHere('rev-list', '--count', 'room-polish..HEAD')} commits of this branch: in it run git merge --ff-only ${branch}, then git push origin room-polish`);
   }
-  // npm test is not run here: the commit hook runs it before every commit, and work left uncommitted
-  // is refused above, so failing tests cannot outlast a turn; running it again cost 12-56 s a turn
-  // pages only the owner can open, left by a research agent: they reach him in this turn
+  // npm test is not run here: it runs before "done" and on GitHub, and the commit hook's quick check
+  // before every commit; running the whole suite again cost 12-56 s a turn
+  // pages only the owner can open, left by research since his last message: they reach him in this
+  // turn. Only that part of the session record is read, not the whole (tens of MB) every turn
   let record = '';
-  try { record = event.transcript_path ? fs.readFileSync(event.transcript_path, 'utf8') : ''; } catch { /* no record to read */ }
+  try { record = event.transcript_path ? sinceOwner(event.transcript_path) : ''; } catch { /* no record to read */ }
   const owed = unrelayed(record);
   if (owed.length) problems.push(`pages only the owner can open, left by research: give him each link (the answer, or the plan's list of what is asked of him), with what to bring back:\n${owed.join('\n')}`);
   // every session says what he will see today, so a session that shows him nothing is plain

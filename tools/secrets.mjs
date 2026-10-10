@@ -4,6 +4,7 @@
 // tools/hooks` once per clone), by the morning check, and by tools/publish-preview.mjs on the copy it
 // pushes from a folder of its own (git runs no hook there). Prints what it found, never the secret.
 // Usage: node tools/secrets.mjs [range]   (default: the commits not on GitHub yet)
+//        node tools/secrets.mjs --staged  (what the next commit adds: the commit hook, tools/hooks)
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -49,11 +50,25 @@ export function check(range, cwd) {
   return problems;
 }
 
-export const notPushed = () => 'HEAD --not --remotes=origin';
+// the lines the next commit adds (the commit hook), by the same shapes and the kept key's own
+// value; the address is checked by configEmailOk below
+export function checkStaged(cwd) {
+  const opts = cwd ? { cwd, env: withoutGitVars() } : {};
+  const diff = execFileSync('git', ['diff', '--cached', '--no-color', '-U0'], { ...opts, encoding: 'utf8', maxBuffer: 1 << 28 });
+  const added = diff.split('\n').filter((l) => l.startsWith('+') && !l.startsWith('+++')).join('\n');
+  const problems = Object.entries(PATTERNS).filter(([, re]) => re.test(added)).map(([name]) => `a ${name} in the staged changes`);
+  for (const f of KEY_FILES) {
+    const key = fs.existsSync(f) ? fs.readFileSync(f, 'utf8').trim() : '';
+    if (key.length > 8 && added.includes(key)) problems.push(`the key kept in ${path.basename(f)} is in the staged changes`);
+  }
+  return problems;
+}
+
+export const notPushed =() => 'HEAD --not --remotes=origin';
 export const configEmailOk = () => git('config', 'user.email') === PRIVATE_EMAIL;
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  const problems = check(process.argv[2] || notPushed());
+  const problems = process.argv[2] === '--staged' ? checkStaged() : check(process.argv[2] || notPushed());
   if (!configEmailOk()) problems.unshift(`git's user.email is not the private address (${PRIVATE_EMAIL})`);
   for (const p of problems) console.log('STOP ', p);
   if (!problems.length) console.log('ok    nothing private in the commits');

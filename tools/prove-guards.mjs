@@ -11,7 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PRIVATE_EMAIL, withoutGitVars } from './secrets.mjs';
 import { MARK } from './owner-links.mjs';
-import { fingerprint, write } from './review-gate.mjs';
+import { fingerprint, scan, write } from './review-gate.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LF = process.argv.includes('--lf');
@@ -38,6 +38,12 @@ const run = (cmd, args, extra = {}) => {
   return { ok: r.status === 0, out: `${r.stdout}${r.stderr}` };
 };
 const test = (file) => () => run(process.execPath, [`tests/${file}`]);
+// a headset tool run with only node on the path: were its stop blind, it could reach no adb
+const headsetTool = (args, record) => {
+  const bare = Object.fromEntries(Object.entries(env).filter(([k]) => k.toUpperCase() !== 'PATH'));
+  const r = spawnSync(process.execPath, args, { cwd: dir, env: { ...bare, PATH: path.dirname(process.execPath), OBJECT_REVIEW_RECORD: record }, encoding: 'utf8', timeout: 20000 });
+  return { ok: r.status === 0, out: `${r.stdout}${r.stderr}` };
+};
 // Claude Code hands its hook the event as JSON on stdin (code.claude.com/docs/en/hooks)
 const askGuard = (mode, event) => {
   const r = spawnSync(process.execPath, ['tools/claude-guard.mjs', mode], { cwd: dir, env, encoding: 'utf8', input: JSON.stringify(event) });
@@ -63,7 +69,7 @@ const CASES = [
   ['structure 6', 'no dead code', 'a module nobody imports', () => fs.writeFileSync(at(`src/engine/${PLANTED}.js`), 'export const x = 1;\n'), structure, 'modules nobody imports'],
   ['structure 7', 'docs tell the truth', 'a doc names a file that does not exist', () => append('docs/roadmap.md', '\nSee `src/engine/nope.js`.\n'), structure, 'docs name files that do not exist'],
   ['structure 8', 'mistakes list', 'a mistake row with no guard', () => append('docs/mistakes.md', '\n| A planted mistake | care |\n'), structure, 'mistake without a guard'],
-  ['structure 8', 'mistakes list', 'docs/mistakes.md over 60 lines', () => append('docs/mistakes.md', `\n${many(10, 'x')}\n`), structure, 'mistakes.md over 60'],
+  ['structure 8', 'mistakes list', 'a mistake row naming words its test lacks', () => append('docs/mistakes.md', `\n| A planted mistake | \`tests/names.test.mjs\` "${PLANTED} words" |\n`), structure, 'mistake names words its test does not have'],
   ['structure 9', 'heredoc damage', 'a tool that no longer parses', () => append('tools/morning.mjs', '\nconst = ;\n'), structure, 'syntax error'],
   ['structure 10', 'catalog current', 'the catalog edited by hand', () => append('docs/catalog.md', '\n| x | planted |\n'), structure, 'catalog'],
   ['structure 11', 'A-Frame play/pause', 'a component method play(x)', () => append('src/engine/fader.js', '\nconst planted = {\n  play(arg) { return arg; }\n};\n'), structure, 'play/pause'],
@@ -80,11 +86,16 @@ const CASES = [
   ['structure 21', 'styles in css', 'an inline style', () => swap('index.html', '</body>', '<div style="color: red"></div></body>'), structure, 'styles outside css'],
   ['structure 22', 'no forgotten doc', 'a doc nothing links to', () => fs.writeFileSync(at('docs/planted.md'), '# Planted\n'), structure, 'docs nothing links to'],
   ['structure 23', 'docs tell the truth', 'a doc names a constant the code lacks', () => append('docs/roadmap.md', `\n${PLANTED.toUpperCase()}_NAME\n`), structure, 'constants the code does not have'],
-  ['pre-commit hook', 'tests before done', 'a commit while npm test fails', () => { git('config', 'core.hooksPath', 'tools/hooks'); append('docs/state.md', `\n${many(81, 'x')}\n`); },
-    () => { const r = run('git', ['commit', '-qam', 'planted']); return { ok: r.ok, out: r.out }; }, 'npm test fails'],
+  ['pre-commit hook', 'tests before done', 'a commit of a script that does not parse', () => { git('config', 'core.hooksPath', 'tools/hooks'); append('tools/morning.mjs', '\nconst = ;\n'); },
+    () => run('git', ['commit', '-qam', 'planted']), 'tools/morning.mjs does not parse'],
+  ['pre-commit hook', 'tests before done', 'a commit while a quick test fails', () => { git('config', 'core.hooksPath', 'tools/hooks'); fs.writeFileSync(at('src/engine/tracker.js'), 'export const x = 1;\n'); append('docs/roadmap.md', '\nplanted\n'); },
+    () => run('git', ['commit', '-qam', 'planted']), 'tests/names.test.mjs fails'],
+  ['pre-commit hook', 'no keys', 'a commit with a token staged', () => { git('config', 'core.hooksPath', 'tools/hooks'); append('docs/roadmap.md', `\n${token}\n`); },
+    () => run('git', ['commit', '-qam', 'planted']), 'something private is staged'],
   ['pre-push hook', 'main only on the owner\'s word', 'a push to main without his word', () => { git('config', 'core.hooksPath', 'tools/hooks'); git('init', '-q', '--bare', at('.planted-remote')); },
     () => run('git', ['push', '-q', at('.planted-remote'), 'HEAD:refs/heads/main'], { OBJECT_LIVE: '' }), 'main is the live site'],
   ['claude-guard pre', 'tests before done', 'the assistant skips the git hooks', () => {}, () => askGuard('pre', { tool_name: 'Bash', tool_input: { command: 'git commit --no-verify -m x' } }), 'REFUSED'],
+  ['claude-guard pre', 'tests before done', 'the assistant hides a hook-skipping commit in a shell\'s command text', () => {}, () => askGuard('pre', { tool_name: 'Bash', tool_input: { command: 'bash -c "git commit -n -m x"' } }), 'REFUSED'],
   ['claude-guard pre', 'tests before done', 'the assistant runs Playwright locally', () => {}, () => askGuard('pre', { tool_name: 'PowerShell', tool_input: { command: 'npm run test:smoke' } }), 'REFUSED'],
   ['claude-guard pre', 'tests before done', 'a connected tool starts a browser on the laptop', () => {}, () => askGuard('pre', { tool_name: 'mcp__plugin_playwright_playwright__browser_navigate', tool_input: {} }), 'REFUSED'],
   ['claude-guard pre', 'data: read only', 'a migration applied to the live database', () => {}, () => askGuard('pre', { tool_name: 'mcp__db__apply_migration', tool_input: {} }), 'REFUSED'],
@@ -93,7 +104,10 @@ const CASES = [
   ['claude-guard pre', 'main only on the owner\'s word', 'files pushed to GitHub past the push hook', () => {}, () => askGuard('pre', { tool_name: 'mcp__gh__push_files', tool_input: { branch: 'main' } }), 'REFUSED'],
   ['claude-guard start', 'the owner\'s decisions', 'a session starts without his decisions in front of it', () => fs.rmSync(at('docs/owner-decisions.md')), test('guard.test.mjs'), 'does not show the owner\'s decisions'],
   ['review gate', 'the owner\'s automatic stop', 'VR started in the headset with no practice review', () => {},
-    () => run(process.execPath, ['tools/quest-look.mjs', 'vr'], { OBJECT_REVIEW_RECORD: `${dir}-reviews.jsonl` }), 'waits for the practice reviewer'],
+    () => headsetTool(['tools/quest-look.mjs', 'vr'], `${dir}-reviews.jsonl`), 'waits for the practice reviewer'],
+  ['review gate', 'the owner\'s automatic stop', 'my own VR look after a change to a file the review did not name',
+    () => { write({ kind: 'review', agent: 'planted', ...scan(dir), named: ['src/engine/sfx.js'] }, `${dir}-look.jsonl`); append('src/engine/fader.js', '\n// changed after the review\n'); },
+    () => headsetTool(['tools/quest-look.mjs', 'vr'], `${dir}-look.jsonl`), 'waits for the practice reviewer'],
   ['review gate', 'the owner\'s automatic stop', 'the probe run in VR after the game changed since its review',
     () => { write({ kind: 'review', agent: 'planted', print: fingerprint(dir) }, `${dir}-reviews.jsonl`); append('src/engine/sfx.js', '\n// changed after the review\n'); },
     // the probe, not the test copy: were the stop blind, the copy would really be published
@@ -136,7 +150,7 @@ for (const [guard, rule, mistake, plant, check, words] of CASES) {
   console.log(`${caught ? 'CAUGHT' : 'BLIND '}  ${guard.padEnd(16)} ${mistake}${why ? ` (${why})` : ''}`);
 }
 fs.rmSync(dir, { recursive: true, force: true });
-fs.rmSync(`${dir}-reviews.jsonl`, { force: true });
+for (const f of ['reviews', 'look', 'record']) fs.rmSync(`${dir}-${f}.jsonl`, { force: true });
 const blind = rows.filter((r) => !r.caught);
 console.log(blind.length ? `\n${blind.length} of ${rows.length} guards did not see their mistake` : `\nall ${rows.length} guards saw their mistake`);
 process.exitCode = blind.length ? 1 : 0;

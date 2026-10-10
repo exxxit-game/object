@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { check, PRIVATE_EMAIL, withoutGitVars } from '../tools/secrets.mjs';
+import { check, checkStaged, PRIVATE_EMAIL, withoutGitVars } from '../tools/secrets.mjs';
 
 // Run by the commit hook, this test gets the GIT_DIR git sets for hooks: its scratch repositories
 // must never reach the real one through it (a "git init" there once turned it bare). So the test
@@ -39,6 +39,15 @@ dir = repo({ 'config.js': `export const KEY = '${token}';` }, PRIVATE_EMAIL);
 assert.ok(check('HEAD', dir).some((p) => p.includes('GitHub token')), 'a token in the files is stopped');
 clean(dir);
 
+// what the next commit adds (the commit hook): a staged token stops it, a clean change passes
+dir = repo({ 'index.html': '<p>hello</p>' }, PRIVATE_EMAIL);
+const stage = (name, text) => { fs.writeFileSync(path.join(dir, name), text); execFileSync('git', ['add', '-A'], { cwd: dir, env: withoutGitVars(), stdio: 'pipe' }); };
+stage('notes.md', 'nothing secret\n');
+assert.deepEqual(checkStaged(dir), [], 'a clean staged change passes');
+stage('config.js', `export const KEY = '${token}';\n`);
+assert.ok(checkStaged(dir).some((p) => p.includes('GitHub token')), 'a staged token is stopped before the commit');
+clean(dir);
+
 dir = repo({ 'index.html': '<p>hello</p>' }, 'someone@example.com');
 assert.ok(check('HEAD', dir).some((p) => p.includes('not the private one')), 'a commit with another address is stopped');
 clean(dir);
@@ -48,10 +57,13 @@ const publisher = fs.readFileSync(new URL('../tools/publish-preview.mjs', import
 const checked = publisher.indexOf("check('HEAD', dir)"), pushed = publisher.indexOf("'push'");
 assert.ok(checked > 0 && pushed > checked, 'tools/publish-preview.mjs must run check() on its copy before the push');
 
-// the hooks: no commit with a broken test; a push to main (the live site) stops without the
+// the hooks: no commit past the quick check (a staged secret, a script that does not parse, a quick
+// test failing; the whole suite runs on GitHub); a push to main (the live site) stops without the
 // owner's word, a deletion too. Run where a shell is (GitHub's machines always; Git Bash here).
 const hook = (name) => fileURLToPath(new URL(`../tools/hooks/${name}`, import.meta.url));
-assert.match(fs.readFileSync(hook('pre-commit'), 'utf8'), /npm test/, 'the pre-commit hook must run npm test');
+const commitHook = fs.readFileSync(hook('pre-commit'), 'utf8');
+assert.ok(/node tools\/secrets\.mjs --staged/.test(commitHook) && /node --check/.test(commitHook) && /package\.json/.test(commitHook),
+  'the pre-commit hook must check the staged changes for secrets, parse the staged scripts and run the quick tests');
 const push = (line, env = {}) => spawnSync('sh', [hook('pre-push')], { input: line + '\n', env: { ...process.env, OBJECT_LIVE: '', ...env }, encoding: 'utf8' });
 const [one, zero] = ['1'.repeat(40), '0'.repeat(40)];
 const probe = push(`refs/heads/main ${one} refs/heads/main ${one}`);

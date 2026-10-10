@@ -1,31 +1,34 @@
 // The guard Claude Code runs before each shell command (tools/claude-guard.mjs) is run here on real
 // commands both ways: what it exists to stop must be refused in every form a shell writes it, and a
-// command that only reads or searches the smoke test's file must pass, or the assistant learns to
-// work around the guard. A git command that names the hook-skipping flag is refused even when it
-// only searches: searching goes through the editor's own search tool.
+// command that only reads, searches or names those words (in quotes, a message, a heredoc) must
+// pass, or the assistant learns to work around the guard. The guard reads the command as the shell
+// does and judges each program by its arguments; refusal() is called directly, and a few commands
+// go through the hook itself as Claude Code calls it.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { refusal } from '../tools/claude-guard.mjs';
 import { onHead } from '../tools/headset.mjs';
-import { MARK, unrelayed } from '../tools/owner-links.mjs';
+import { MARK, unrelayed, sinceOwner } from '../tools/owner-links.mjs';
 import { BOARD, SHOWS, YES, PENDING, shows, dayKey, plannedToday, stalled, saidYes } from '../tools/board.mjs';
-import fs from 'node:fs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ask = (command) => {
-  const event = { tool_name: 'Bash', tool_input: { command }, cwd: ROOT };
-  const r = spawnSync(process.execPath, ['tools/claude-guard.mjs', 'pre'], { cwd: ROOT, encoding: 'utf8', input: JSON.stringify(event) });
-  return { refused: r.status === 2, out: `${r.stdout}${r.stderr}` };
-};
+const PS = 'PowerShell';
+// [command, shell]: Bash unless named
+const cases = (list) => list.map((c) => (Array.isArray(c) ? c : [c, 'Bash']));
+const record = '~/Documents/objekt-notes/practice-reviews.jsonl';
 
-const refused = [
+const refused = cases([
   // the smoke test (Playwright and Chromium) started on the laptop
   'npm run test:smoke',
   'npm.cmd run test:smoke',
   'npm run-script test:smoke',
   'npm --silent run test:smoke',
   'cd x; npm run test:smoke',
+  'if true; then npm run test:smoke; fi',
   'node tests/smoke.mjs',
   'node ./tests/smoke.mjs',
   'node tests\\smoke.mjs',
@@ -33,14 +36,18 @@ const refused = [
   'node.exe tests/smoke.mjs',
   '& node tests\\smoke.mjs',
   '& "C:\\Program Files\\nodejs\\node.exe" tests\\smoke.mjs',
+  ['& "C:\\Program Files\\nodejs\\node.exe" tests\\smoke.mjs', PS],
   'cd tests && node smoke.mjs',
+  '(cd tests && node smoke.mjs)',
   'cd x && node tests/smoke.mjs --speed 20',
   'OBJECT_X=1 node tests/smoke.mjs',
   'npx playwright test',
   'npx.cmd playwright install',
   'npx playwright --version',
   'npx -y @playwright/test test',
+  'npm exec playwright test',
   'playwright codegen',
+  'node node_modules/@playwright/test/cli.js test',
   // the git hooks skipped
   'git commit --no-verify -m x',
   'git push --no-verify origin x',
@@ -50,20 +57,41 @@ const refused = [
   'git commit "--no-verify" -m x',
   "git commit '--no-verify' -m x",
   "git commit -m \"$(cat <<'EOF'\nmessage; with | marks\nEOF\n)\" --no-verify",
+  'git commit --no-veri -m x',
   'git commit -n -m x',
   'git commit -am "a; b" -n',
   'git commit -qnm x',
+  'echo $(git commit -n -m x)',
+  'bash -c "git commit --no-verify -m x"',
+  "sh <<'EOF'\ngit push --no-verify origin x\nEOF",
+  ['git commit -m x; if ($?) { git push --no-verify }', PS],
+  ['git commit -m x `\n  --no-verify', PS],
+  'git -c core.hooksPath=/dev/null commit -m x',
+  'git config core.hooksPath .git/hooks',
+  'git config --unset core.hooksPath',
   // the headset or its browser restarted past the check that the owner is not wearing it
   'adb reboot',
   'adb -s 2G0YC5ZG reboot',
   'adb shell am force-stop com.oculus.browser',
   'adb shell "am force-stop com.oculus.browser"',
+  'adb exec-out am force-stop com.oculus.browser',
   'adb shell reboot',
-  'adb shell svc power reboot'
-];
-for (const c of refused) assert.ok(ask(c).refused, `the guard let through: ${c}`);
+  'adb shell su -c reboot',
+  'adb shell svc power reboot',
+  // the practice review record, written only by Claude Code's hook
+  `tee -a ${record}`,
+  `cp /tmp/fake.jsonl ${record}`,
+  `rm ${record}`,
+  `sed -i 1d ${record}`,
+  `cat <<'EOF' > ${record}\n{}\nEOF`,
+  ['Get-Content x | Out-File $HOME\\Documents\\objekt-notes\\practice-reviews.jsonl', PS],
+  "node -e \"import('./tools/review-gate.mjs').then((m) => m.write({ kind: 'review' }))\"",
+  'env OBJECT_REVIEW_RECORD=/tmp/x.jsonl node tools/quest-look.mjs vr',
+  'export OBJECT_REVIEW_RECORD=/tmp/x.jsonl',
+]);
+for (const [c, shell] of refused) assert.ok(refusal(c, shell === PS), `the guard let through: ${c}`);
 
-const allowed = [
+const allowed = cases([
   'grep -n camera tests/smoke.mjs',
   'grep -n node tests/smoke.mjs',
   'sed -n 1,40p tests/smoke.mjs',
@@ -71,6 +99,7 @@ const allowed = [
   'git diff tests/smoke.mjs',
   'grep -n -- "--no-verify" docs/mistakes.md',
   'grep -n test:smoke package.json',
+  'node --check tests/smoke.mjs',
   'git commit -qm "the smoke test (npm run test:smoke) runs only on GitHub"',
   'git commit --amend --no-edit',
   'npm test',
@@ -78,12 +107,43 @@ const allowed = [
   'node tools/quest-look.mjs reboot',
   'node tools/quest-look.mjs restart-browser',
   'adb devices',
-  'adb shell dumpsys vrpowermanager'
-];
-for (const c of allowed) {
-  const r = ask(c);
-  assert.ok(!r.refused, `the guard refused a command that runs nothing it guards: ${c}\n${r.out}`);
+  'adb shell dumpsys vrpowermanager',
+  'echo "adb reboot" # npm run test:smoke',
+  // searches, reads and messages that only name the guarded words
+  'grep -rn "git commit" docs/',
+  'cat docs/mistakes.md | grep -n "git commit"',
+  'find . -name "*.md" | xargs grep -l "git commit"',
+  'git log --format=commit -n 5',
+  'git log | grep -- --no-verify',
+  'git commit -m x && git log --oneline -n 3',
+  ['Write-Host -NoNewline', PS],
+  ['git commit -m x; Write-Host -NoNewline "done"', PS],
+  ['git commit -m x; Get-Content f -Encoding utf8', PS],
+  'git commit -m "sed -n prints a range"',
+  'git commit -m "the guard refuses git commit --no-verify and -n"',
+  ["git commit -m @'\nrefuses --no-verify, -n and sed -n\n'@", PS],
+  "git commit -F - <<'EOF'\nnpm run test:smoke stays on GitHub; adb reboot is refused\nEOF",
+  "cat > /tmp/t.mjs <<'EOF'\nrun('git commit --no-verify -m x');\nEOF",
+  'git config core.hooksPath',
+  'git config --get core.hooksPath',
+  'git -c core.hooksPath=tools/hooks commit -m x',
+  // the record read, never written
+  `tail -5 ${record} 2>/dev/null`,
+  `cat ${record} > /tmp/copy.jsonl`,
+  `cp ${record} /tmp/copy.jsonl`,
+  "node -e \"const fs = require('fs'); const rows = fs.readFileSync(require('os').homedir() + '/Documents/objekt-notes/practice-reviews.jsonl', 'utf8').split('\\n').filter(Boolean).map((l) => JSON.parse(l)); process.stdout.write(rows.length + '\\n')\"",
+  'grep -n OBJECT_REVIEW_RECORD tools/review-gate.mjs',
+]);
+for (const [c, shell] of allowed) {
+  const why = refusal(c, shell === PS);
+  assert.ok(!why, `the guard refused a command that runs nothing it guards: ${c}\n${why}`);
 }
+
+// the hook itself, as Claude Code calls it: the event as JSON on stdin, exit 2 refuses
+const ask = (tool_name, command) => spawnSync(process.execPath, ['tools/claude-guard.mjs', 'pre'], { cwd: ROOT, encoding: 'utf8', input: JSON.stringify({ tool_name, tool_input: { command }, cwd: ROOT }) }).status;
+assert.equal(ask('Bash', 'git commit -n -m x'), 2, 'the hook let a hook-skipping commit through');
+assert.equal(ask(PS, 'npm run test:smoke'), 2, 'the hook let the smoke test run in PowerShell');
+assert.equal(ask('Bash', 'grep -rn "git commit --no-verify" docs/'), 0, 'the hook refused a search');
 
 // The headset tools restart nothing while the owner wears the headset: the power service's dump
 // says mounted with no override of ours (tools/headset.mjs). Dumps as the headset printed them.
@@ -104,16 +164,35 @@ assert.deepEqual(unrelayed('no research today'), [], 'no mark, nothing owed');
 // session) is not a report, and a local address further down was once held as owed to the owner
 assert.deepEqual(unrelayed(`{"content":"    9\\t| claude-guard | left by a research agent after \`${MARK}\`, not reached him |\\n   20\\t| serve | http://localhost:3000 |"}`), [], 'the mark named in a sentence is no report');
 assert.deepEqual(unrelayed(`{"content":"export const MARK = \\"${MARK}\\"; // see https://example.org/a"}`), [], 'the mark quoted in code is no report');
+// The stop hook reads the record only from his last message on (a session's record grows to tens
+// of MB): a helper's report or a notice is no message of his, in records with and without the mark
+// Claude Code puts on what a person typed
+const said = (text, origin) => ({ type: 'user', ...(origin ? { origin: { kind: origin } } : {}), ...(origin === 'peer' ? { isMeta: true } : {}), message: { role: 'user', content: text } });
+const found = (url) => ({ type: 'assistant', message: { content: [{ type: 'text', text: `${MARK}\n- ${url}\n\n` }] } });
+const recordFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'guard-test-')), 'session.jsonl');
+for (const origin of ['human', null]) {
+  const lines = [found('https://old.example.org/a'), said('carry on', origin), said(`a helper's report\n${MARK}\n- https://new.example.org/b\n\n`, 'peer'),
+    { type: 'user', message: { content: [{ type: 'tool_result', content: 'tool output' }] } }];
+  fs.writeFileSync(recordFile, `${'{"type":"progress"}\n'.repeat(500)}${lines.map((l) => JSON.stringify(l)).join('\n')}\n`);
+  for (const block of [1 << 20, 64]) {
+    assert.deepEqual(unrelayed(sinceOwner(recordFile, block)), ['https://new.example.org/b'], `only links left since his last message are owed (${origin || 'no mark'}, blocks of ${block})`);
+  }
+}
+fs.writeFileSync(recordFile, `${JSON.stringify(found('https://only.example.org/c'))}\n`);
+assert.deepEqual(unrelayed(sinceOwner(recordFile, 16)), ['https://only.example.org/c'], 'a record he has not written in is read whole');
+fs.rmSync(path.dirname(recordFile), { recursive: true, force: true });
 
 // The owner's decisions reach every session at its start and after each compaction: CLAUDE.md imports
 // them (Claude Code loads it then, whole); the start hook shows the board. A session that does not see
 // them asks him again what he settled
 const start = spawnSync(process.execPath, ['tools/claude-guard.mjs', 'start'], { cwd: ROOT, encoding: 'utf8', input: JSON.stringify({ source: 'startup', cwd: ROOT }) });
 const boardTop = fs.readFileSync(path.join(ROOT, BOARD), 'utf8').split(/\r?\n/)[0];
+const decisions = path.join(ROOT, 'docs/owner-decisions.md');
 assert.ok(/^His decisions load with this file[^\n]*@docs\/owner-decisions\.md/m.test(fs.readFileSync(path.join(ROOT, 'CLAUDE.md'), 'utf8')),
   'CLAUDE.md no longer imports docs/owner-decisions.md: his decisions are not in front of the session');
-assert.ok(/^- The corridor is the reference/m.test(fs.readFileSync(path.join(ROOT, 'docs/owner-decisions.md'), 'utf8')) && start.stdout.includes(boardTop),
-  `the start hook does not show the board:\n${start.stdout.slice(0, 400)}`);
+assert.ok(fs.existsSync(decisions) && /^- The corridor is the reference/m.test(fs.readFileSync(decisions, 'utf8')),
+  "the session does not show the owner's decisions: docs/owner-decisions.md is missing or lost its first decision");
+assert.ok(start.stdout.includes(boardTop), `the start hook does not show the board:\n${start.stdout.slice(0, 400)}`);
 
 // The board's table of showings: today's row is found in the owner's date form, and two answered rows in a
 // row without his yes stop the side work; rows still waiting for his look do not count either way
@@ -130,4 +209,4 @@ assert.ok(stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]])
 assert.ok(!stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]])), { today: '9.10', log: log('08', YES) }), 'his own yes counts');
 assert.ok(start.stdout.length < 10000, `the start hook prints ${start.stdout.length} characters: over 10,000 Claude Code keeps only a preview`);
 
-console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the headset's wearer seen, links owed to the owner found, his decisions imported by CLAUDE.md, the board shown at start)`);
+console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the hook wired, the headset's wearer seen, links owed to the owner found since his last message, his decisions imported by CLAUDE.md, the board shown at start)`);
