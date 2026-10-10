@@ -6,7 +6,7 @@ primary page. Parts 4 (running and publishing), 5 (data-quality risks) and the l
 [own-experiments-now-2.md](own-experiments-now-2.md). How working labs run studies outside the lab, lab by lab:
 [field-labs-1.md](field-labs-1.md), [field-labs-2.md](field-labs-2.md); ethics review and data law for a team without a
 university: [ethics-law.md](ethics-law.md); how a lab runs a study, step by step, applied to a room:
-[study-methods.md](study-methods.md). Parts, each answered or marked "not found":
+[study-methods.md](study-methods.md); how science projects reached millions, and fun without spoiling data: [science-reach.md](science-reach.md). Parts, each answered or marked "not found":
 
 The owner's questions about rooms (his words, our translation) and where each is answered; a question stays here
 until its answer is read and sourced:
@@ -15,8 +15,8 @@ until its answer is read and sourced:
   end-of-run seriousness and no-blame questions, self-knowledge as the reward).
 - "Start with a minute of fun, then: let's take this seriously": study-methods-1 1g (practice trial, then commitment).
 - "Without humour you are a lab rat; a host leads you through the story": owner's decision (docs/owner-decisions.md);
-  fun around the measured moment, plain inside it (Lumsden 2016); deeper: reach study (running).
-- "How did those projects get millions of users?": reach study (running).
+  fun around the measured moment, plain inside it (Lumsden 2016); science-reach.md part 3 (Sea Hero Quest, Portal).
+- "How did those projects get millions of users?": science-reach.md parts 1-2.
 - "Take all they solved, check how far it solves the problem; how precise can our data be, how do they measure
   precision?": precision study (running).
 - "Who approves our ethics?": ethics-law.md 1; open: MGPPU and SPbU committees (owner's pages, [own-experiments-now-2.md](own-experiments-now-2.md)).

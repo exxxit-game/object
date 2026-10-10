@@ -148,3 +148,5 @@ Paywalls (need access):
 - https://hdl.handle.net/2027.42/92172: Wilson & Nisbett 1978, stocking table by position and shoppers' reasons.
 - https://doi.org/10.1509/jmkr.2005.42.4.383: Shiv et al. 2005, drink, prices, puzzles per condition, N.
 - https://doi.org/10.1007/978-3-319-21996-7_47: "Virtual Blindness" 2015, detection by immersion condition.
+- https://www.campaignlive.co.uk/article/case-study-deutsche-telekom-brought-its-brand-purpose-life-mobile-gaming/1403023
+  (bot check): Sea Hero Quest's media plan (TV, film, online), budget if stated, downloads by date, "1 million in 16 days".
