@@ -74,6 +74,8 @@ const refused = cases([
   "env GIT_CONFIG_PARAMETERS=\"'core.hooksPath'='/dev/null'\" git push origin x",
   ["$env:GIT_CONFIG_COUNT = 1; $env:GIT_CONFIG_KEY_0 = 'core.hooksPath'; $env:GIT_CONFIG_VALUE_0 = 'NUL'; git commit -m x", PS],
   ['Set-Item env:GIT_CONFIG_KEY_0 core.hooksPath', PS],
+  ['Set-Item -Path Env:GIT_CONFIG_KEY_0 -Value core.hooksPath', PS],
+  ['New-Item -Path Env:GIT_CONFIG_KEY_0 -V core.hooksPath', PS],
   // the headset or its browser restarted past the check that the owner is not wearing it
   'adb reboot',
   'adb -s 2G0YC5ZG reboot',

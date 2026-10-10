@@ -202,12 +202,13 @@ function restarts(w) {
 
 // git reads config from the environment too (git-config(1), ENVIRONMENT: GIT_CONFIG_KEY_<n> with
 // GIT_CONFIG_VALUE_<n>, and GIT_CONFIG_PARAMETERS), so core.hooksPath set there skips the hooks as -c does;
-// the value follows the name's "=", or is the next word (PowerShell's "= value", set-item and setx)
+// the value follows the name's "=", or is the next word (PowerShell's "= value", set-item and setx),
+// or the word after PowerShell's named -Value (-V)
 function setsHooks(w, k) {
   const m = /^(\$?env:)?GIT_CONFIG_(KEY_\d+|PARAMETERS)(=|$)(.*)$/i.exec(w[k] ?? '');
   if (!m) return false;
   const next = w[k + 1] ?? '';
-  const value = m[3] ? m[4] : next === '=' ? w[k + 2] : next.replace(/^=/, '');
+  const value = m[3] ? m[4] : next === '=' || /^-(value|v)$/i.test(next) ? w[k + 2] : next.replace(/^=/, '');
   return /core\.hookspath/i.test(value ?? '');
 }
 
@@ -222,7 +223,7 @@ function judge(words, stdin, ps) {
   const p = base(w[0]), a = w.slice(1);
   if (!p) return null;
   if (/^(export|set|setx|declare|typeset|local|readonly|set-item|si)$/.test(p) && a.some((x) => /^(env:)?OBJECT_REVIEW_RECORD(=|$)/i.test(x))) return WHY.recordEnv;
-  if (/^(export|set|setx|declare|typeset|local|readonly|set-item|si)$/.test(p) && a.some((x, k) => setsHooks(a, k))) return WHY.hooks;
+  if (/^(export|set|setx|declare|typeset|local|readonly|set-item|si|new-item|ni)$/.test(p) && a.some((x, k) => setsHooks(a, k))) return WHY.hooks;
   if (Object.hasOwn(WRAPPERS, p)) {
     let k = 0;
     while (k < a.length && a[k].startsWith('-')) k += WRAPPERS[p]?.test(a[k]) ? 2 : 1;
