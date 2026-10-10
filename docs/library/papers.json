@@ -7486,6 +7486,60 @@
    "text": "ok",
    "status": "no card",
    "source": "https://doi.org/10.3390/s20123607"
+  },
+  {
+   "id": "edpb-2019",
+   "authors": "European Data Protection Board",
+   "year": "2019",
+   "title": "Guidelines 3/2018 on the territorial scope of the GDPR (Article 3), version 2.1",
+   "sections": [
+    "methods-ethics-law"
+   ],
+   "tags": [
+    "GDPR",
+    "territorial scope",
+    "EU representative"
+   ],
+   "type": "guideline",
+   "text": "ok",
+   "status": "no card",
+   "source": "https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_3_2018_territorial_scope_after_public_consultation_en_1.pdf"
+  },
+  {
+   "id": "ombudsman-2014",
+   "authors": "Ukrainian Parliament Commissioner for Human Rights",
+   "year": "2014",
+   "title": "Clarification of the procedure for notifying the Commissioner of personal data processing that poses a special risk (in Ukrainian)",
+   "sections": [
+    "methods-ethics-law"
+   ],
+   "tags": [
+    "Ukraine data protection",
+    "special-risk processing",
+    "biometric data"
+   ],
+   "type": "guideline",
+   "text": "ok",
+   "status": "no card",
+   "source": "https://www.ombudsman.gov.ua/storage/app/media/uploaded-files/rozyasnennya__3.pdf"
+  },
+  {
+   "id": "ukds-2025",
+   "authors": "UK Data Service",
+   "year": "2025",
+   "title": "Introduction to anonymisation techniques for social sciences research data (slides)",
+   "sections": [
+    "methods-ethics-law"
+   ],
+   "tags": [
+    "anonymisation",
+    "indirect identifiers",
+    "research data sharing"
+   ],
+   "type": "guideline",
+   "text": "ok",
+   "status": "no card",
+   "source": "https://ukdataservice.ac.uk/app/uploads/introanonymisation2025-05-22.pdf"
   }
  ]
 }

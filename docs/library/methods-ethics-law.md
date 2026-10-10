@@ -1,7 +1,7 @@
 # methods, ethics, law
 
 Generated from `docs/library/papers.json` by `node tools/build-library.mjs`. Do not edit by hand.
-77 papers. Each line: id, authors and year, title, tags, then the card or the status. The text is
+80 papers. Each line: id, authors and year, title, tags, then the card or the status. The text is
 in the library folder's papers\ as `<id>.txt` (a data set: `<dir>/<id>.txt` from the library folder); "text: ocr" marks a scan's
 text, "placeholder" an excerpt. Index of all sections: [library](../library.md).
 
@@ -23,6 +23,7 @@ text, "placeholder" an excerpt. Index of all sections: [library](../library.md).
 - **chapkovski-2023** Chapkovski 2023. Conducting interactive experiments on Toloka · interactive experiments, Toloka, online platform · no card
 - **colombia-8430-1993** Ministerio de Salud de Colombia 1993. Resolución 8430 de 1993: normas científicas, técnicas y administrativas para la investigación en salud · research ethics, Colombia, health research rules, minimal risk · no card
 - **crump-2013** Crump et al. 2013. Evaluating Amazon's Mechanical Turk as a Tool for Experimental Behavioral Research · Mechanical Turk, online experiments, classic effects online · no card
+- **edpb-2019** European Data Protection Board 2019. Guidelines 3/2018 on the territorial scope of the GDPR (Article 3), version 2.1 · GDPR, territorial scope, EU representative · no card
 - **eurec-2021** European Network of Research Ethics Committees (EUREC) 2021. Position of EUREC on Ethics Reviews of Research Projects involving Persons outside Biomedical Research · ethics review, non-medical research, Europe · no card
 - **exppsy-2022-2** Experimental Psychology (Russia), ed. Barabanschikov 2022. Experimental Psychology (Russia), vol. 15, no. 2 (whole issue, in Russian with English abstracts) · VR studies in Russia, journal issue, side effects · no card
 - **fitts-1954** Fitts 1954. The information capacity of the human motor system in controlling the amplitude of movement · Fitts law, movement time, motor control · no card · text: ocr · no room: a measuring tool with no reveal (search coverage, motor control)
@@ -50,6 +51,7 @@ text, "placeholder" an excerpt. Index of all sections: [library](../library.md).
 - **mottelson-2021** Mottelson et al. 2021. Conducting Unsupervised Virtual Reality User Studies Online · unsupervised VR studies, remote, online · no card
 - **oculus-2016-rift-health-safety** Oculus 2016. Oculus Rift Health and Safety Warnings · health and safety warnings, age limit, seizures · no card
 - **oliva-2022** Oliva et al. 2022. QuickVR: A standard library for virtual embodiment in unity · QuickVR, embodiment library, Unity · no card
+- **ombudsman-2014** Ukrainian Parliament Commissioner for Human Rights 2014. Clarification of the procedure for notifying the Commissioner of personal data processing that poses a special risk (in Ukrainian) · Ukraine data protection, special-risk processing, biometric data · no card
 - **open-science-collaboration-2015** Open Science Collaboration 2015. Estimating the reproducibility of psychological science · reproducibility, replication · no card
 - **oppenheimer-2009** Oppenheimer et al. 2009. Instructional manipulation checks: Detecting satisficing to increase statistical power · instructional manipulation check, satisficing, attention checks · no card
 - **orne-1962** Orne 1962. On the social psychology of the psychological experiment: With particular reference to demand characteristics and their implications · demand characteristics, experimenter effects · no card
@@ -69,6 +71,7 @@ text, "placeholder" an excerpt. Index of all sections: [library](../library.md).
 - **steed-2021** Steed et al. 2021. Some Lessons Learned Running Virtual Reality Experiments Out of the Laboratory · VR experiments out of the lab, remote studies · no card
 - **tran-2024** Tran et al. 2024. A Survey On Measuring Presence in Mixed Reality · presence measurement, mixed reality, survey · no card
 - **uittenhove-2023** Uittenhove et al. 2023. From Lab-Testing to Web-Testing in Cognitive Research: Who You Test is More Important than how You Test · web testing, lab testing, sample differences · no card
+- **ukds-2025** UK Data Service 2025. Introduction to anonymisation techniques for social sciences research data (slides) · anonymisation, indirect identifiers, research data sharing · no card
 - **van-den-bussche-2026** Van den Bussche et al. 2026. Citizen Science in Psychology: Challenges, Opportunities and Recommendations · citizen science in psychology, recommendations · no card
 - **van-zelderen-2026** van Zelderen et al. 2026. Creating common virtual ground: Protocols to democratize open VR research · open VR research, protocols, reporting standard · no card · text: ocr
 - **vrprotocols-checklist-v0.62** vrprotocols.org 2026. Project Checklist VR/XR Open Science Framework v0.62 · VR open science, checklist, reporting · no card · supplement of van-zelderen-2026
