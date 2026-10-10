@@ -104,6 +104,9 @@ const refused = cases([
   'gh --hostname github.com pr merge 9',
   "gh api graphql -f query='mutation { mergePullRequest(input: {pullRequestId: \"PR_x\"}) { clientMutationId } }'",
   "gh api graphql -f query='mutation { enablePullRequestAutoMerge(input: {pullRequestId: \"PR_x\"}) { clientMutationId } }'",
+  'gh api graphql -F query=@merge.graphql',
+  'gh api graphql --input body.json',
+  'gh api graphql -F query=@-',
   'gh api -X PUT repos/exxxit-game/youaretheobject/pulls/9/merge',
   'gh api repos/exxxit-game/youaretheobject/merges -f base=main -f head=room-polish',
 ]);
@@ -118,6 +121,7 @@ const allowed = cases([
   'gh pr view 9 --comments',
   'gh pr create --base main --head room-polish --title x --body y',
   'gh api repos/exxxit-game/youaretheobject/pulls/9/comments',
+  "gh api graphql -f query='query { viewer { login } }'",
   'grep -n node tests/smoke.mjs',
   'sed -n 1,40p tests/smoke.mjs',
   'git log --oneline -- tests/smoke.mjs',

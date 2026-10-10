@@ -256,4 +256,4 @@ primary page. Meta pages through `metavr docs` where it had them. Prices are our
 ## Checked by the owner (10.10)
 - ElevenLabs plan: Starter ($6 a month, "Current plan" on his subscription page), which lists "Commercial License for
   Speech and Music"; the Free plan has it struck through. Lines made while the account was on Free carry no commercial
-  licence: when he moved to Starter decides whether the room 01 and corridor lines need re-recording.
+  licence. He took Starter from the start, before any line was recorded ("I took it at once, as soon as we started", his words, 10.10, our translation): every shipped line is covered, nothing to re-record.

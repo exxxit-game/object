@@ -138,6 +138,7 @@ const WHY = {
   record: 'writes the practice review record, which only Claude Code\'s hook writes when a reviewer run ends',
   recordEnv: 'points the headset tools at another practice review record',
   merge: 'merges into main, the live site, on GitHub, past the push guard: main changes only by a push with the owner\'s word (OBJECT_LIVE=owner-said-yes)',
+  graphqlFile: 'sends GitHub a GraphQL request from a file or stdin, which the guard cannot read for a merge into main: give the query inline (-f query=...)',
 };
 // a program by its name, in any path form the shells take
 const base = (w = '') => w.replace(/^.*[\\/]/, '').toLowerCase().replace(/\.(exe|cmd|bat|ps1)$/, '');
@@ -248,6 +249,9 @@ function judge(words, stdin, ps) {
     const pr = g.indexOf('pr');
     // through the REST paths or the GraphQL mutations (a query given as -f query=...)
     if ((pr >= 0 && g[pr + 1] === 'merge') || (g[0] === 'api' && g.some((x) => /(^|\/)(merges|pulls\/\d+\/merge)$/.test(x) || /\b(mergePullRequest|enablePullRequestAutoMerge)\b/.test(x)))) return WHY.merge;
+    // a GraphQL body the guard cannot read: a field read from a file or stdin (-F query=@file, gh's
+    // "@" form) or the whole request from --input; our own calls give the query inline
+    if (g[0] === 'api' && g.includes('graphql') && (a.some((x) => /^[\w-]+=@/.test(x)) || a.includes('--input'))) return WHY.graphqlFile;
   }
   // the smoke test and Playwright: only on GitHub
   if (/^(npm|pnpm|yarn|bun)$/.test(p)) {
