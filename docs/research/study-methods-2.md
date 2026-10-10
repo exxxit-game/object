@@ -129,8 +129,20 @@ Part 1 (seriousness, data quality) is in study-methods-1.md. Same rules: link + 
   PMC: https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1073/pnas.2524991123&format=json&resultType=core).
   Abstract: "an interactive checklist to support VR research from across disciplines to meet three essential
   protocols-interoperability, procedural standardization, and data sharing", "a common, easy-to-evaluate format
-  for researchers to present projects to ethics boards, reviewers, and beyond". Full text: PNAS 403 to our tools
-  (owner list).
+  for researchers to present projects to ethics boards, reviewers, and beyond". Full text read (6 pages, the owner
+  brought it; PNAS Perspective, published 24 June 2026, CC BY-NC-ND; copy objekt-papers/van-zelderen-2026.pdf, image
+  only, no text layer). Built "through a Delphi process". Procedural standardization has five areas: "reporting VR
+  procedures, standard battery of measurements, ethics, accessibility, and safety"; VR familiarity is measured
+  because "participants' VR experiences ... can strongly predict effect sizes in VR studies". The standards "do not
+  adjudicate what is or is not acceptable in human-subjects research - that responsibility lies with ethics
+  committees"; "the psychological realism inherent in VR can render scenarios that appear benign in written or video
+  form, substantially more intense for participants". Cybersickness: "prioritizing seated experiences with no
+  locomotion, restricting the field of view during movement, and blurring dynamic nonsalient regions". For a
+  commercial product: "To prevent misuse (e.g., third parties illegally downloading the VR application for commercial
+  purposes), researchers may opt to make their assets available only to other researchers upon reasonable request".
+  Repository https://github.com/Openverse-OS/VR-Protocols (Zenodo 10.5281/zenodo.19442410). Leads in its references:
+  Steed et al. 2023 (distributed and remote MR experiments, Front. Comput. Sci. 4:966319), Draschkow 2022 (remote VR
+  and external validity, Nat. Rev. Psychol. 1:433-434), Gonzalez-Franco et al. 2018 (a VR Milgram, PLOS ONE).
 - https://www.vrprotocols.org/ (opened in the browser): pillars "Pillar 1: Interoperability", "Pillar 2: Procedural
   Standardisation", "Pillar 3: Data Sharing", plus "Health, Safety, and Ethics"; workflow "Plan Your Project" ->
   "Conduct Research" -> "Audit & Submit" (export a checklist as JSON/Word/PDF, self-audit at the end). The item list

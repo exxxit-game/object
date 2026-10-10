@@ -137,7 +137,6 @@ Bot checks or clicks (open in a browser):
   worn, consent, ethics approval, pay or credit.
 - https://online.ucpress.edu/collabra/article/8/1/33267/120491/Sample-Size-Justification (optional).
 Paywalls (need access):
-- https://www.pnas.org/doi/10.1073/pnas.2524991123: Openverse 2026, the list of protocol items.
 - https://www.nature.com/articles/s41586-018-0637-6: opened by the owner; supplement read (field-labs-2.md 8); its
   ethics and consent are only in the paid Methods (EUR 39.95), not bought.
 - https://hdl.handle.net/2027.42/92172: Wilson & Nisbett 1978, stocking table by position and shoppers' reasons.
