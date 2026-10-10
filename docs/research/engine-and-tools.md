@@ -30,6 +30,7 @@ and `vendor/` finds no `@iwsdk` import; `src/engine/locomotion-math.js` borrows 
 
 Parts 3-5 (IWSDK, Babylon.js, the options, Meta's tools) and a side effect of this research are in
 [engine-and-tools-2.md](engine-and-tools-2.md); this file holds parts 1-2, the short answer and the recommendation.
+The native engines (Unity, Godot) against this stack, now and for the planned rooms: [engine-native.md](engine-native.md).
 
 ## Findings (written as they come)
 

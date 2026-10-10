@@ -16,6 +16,10 @@ page was opened and the quote is in it; **[code]** read in source or a CLI; **[u
 2. Godot 4 on Quest: OpenXR, Meta toolkit, store path, maturity, web export with WebXR.
 3. An AI assistant in each: scenes and prefabs as files; official AI tooling (Unity AI, MCP servers for Unity and Godot).
 4. Meta's own guidance on choosing WebXR vs Unity for a new Horizon Store title; changes since July 2026.
-5. Verdict table: A-Frame / IWSDK / Unity / Godot; cost, gain, risk; the one measurement or fact that would change it.
+5. Verdict table: A-Frame / IWSDK / Unity / Godot; cost, gain, risk, future tasks; the one measurement or fact that
+   would change it.
+6. Future tasks (the caller's addition): live players replacing scripted people (Mori & Arai), our own experiments run
+   live, mixed reality where the original was a real room, voice (answers into the microphone), ~10 floors of 9 rooms,
+   paid packs (in-app purchases), several languages: for each engine built-in, a known library, or build it ourselves.
 
 ## Findings (written as they come)
