@@ -1,0 +1,100 @@
+{
+  "worktree": { "baseRef": "head" },
+  "enabledPlugins": {
+    "data@inline": false, "data@synced": false,
+    "marketing@inline": false, "marketing@synced": false,
+    "design@inline": false, "design@synced": false,
+    "customer-research@inline": false, "customer-research@synced": false,
+    "canva@inline": false, "canva@synced": false,
+    "adobe-for-creativity@inline": false, "adobe-for-creativity@synced": false,
+    "figma@inline": false, "figma@synced": false,
+    "hookify@claude-plugins-official": false, "hookify@inline": false,
+    "github@claude-plugins-official": false, "github@inline": false,
+    "privacy-legal@synced": false, "privacy-legal@inline": false
+  },
+  "deniedMcpServers": [
+    { "serverName": "plugin:research-desk:reference-lookup" },
+    { "serverName": "reference-lookup" }
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(node tools/quest-look.mjs)",
+      "Bash(node tools/quest-look.mjs *)",
+      "PowerShell(node tools/quest-look.mjs)",
+      "PowerShell(node tools/quest-look.mjs *)",
+      "Bash(gh run list)",
+      "Bash(gh run list *)",
+      "Bash(gh run view *)",
+      "PowerShell(gh run list)",
+      "PowerShell(gh run list *)",
+      "PowerShell(gh run view *)",
+      "Bash(node tools/publish-preview.mjs)",
+      "PowerShell(node tools/publish-preview.mjs)",
+      "Bash(git push origin claude/*)",
+      "Bash(git push -u origin claude/*)",
+      "Bash(git push origin room-polish)",
+      "PowerShell(git push origin claude/*)",
+      "PowerShell(git push -u origin claude/*)",
+      "PowerShell(git push origin room-polish)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" start", "timeout": 20 }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" prompt", "timeout": 10 }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" pre", "timeout": 10 }
+        ]
+      },
+      {
+        "matcher": "mcp__.*",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" pre", "timeout": 10 }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" pre", "timeout": 10 }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "practice-reviewer",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" subagent-start", "timeout": 60 }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "practice-reviewer",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" subagent-stop", "timeout": 60 }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/tools/claude-guard.mjs\" stop", "timeout": 180 }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+name: test
+
+on:
+  # once per commit: every session commit reaches room-polish (the main folder) and is pushed there;
+  # a run on the session branch too was a second run of the same commit. The pull request from
+  # room-polish into reviewed (kept open for CodeRabbit) shows these runs of its commits: a
+  # pull_request trigger would run each commit twice
+  push:
+    branches: [room-polish, main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the guard prover clones the repository
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - run: node tools/prove-guards.mjs --lf   # every guard must go red on its own mistake
+      - run: node tools/prove-guards.mjs        # and with Windows line ends, as on the laptop
+      - run: npm run test:smoke

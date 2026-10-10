@@ -1,0 +1,2 @@
+# git runs the hooks with sh: their lines must end in LF on every checkout
+tools/hooks/* text eol=lf

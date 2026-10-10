@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>XR probe</title>
+<link rel="stylesheet" href="../css/xr-probe.css">
+</head>
+<body>
+<!-- Headset capability probe: which WebXR features this headset and browser really
+     give a web page. A session needs a real button press, so the owner presses the
+     buttons once in the headset (or the tools press them over the debug link: a click
+     sent that way counts as the user's); the result is kept in window.__probe, in the
+     page and in localStorage, and is read over USB or Wi-Fi (CDP) afterwards. -->
+<p>Проверка шлема. Нажмите все три кнопки по очереди. Проверки VR и MR длятся по 5 секунд, потом шлем сам вернётся сюда. Для микрофона разрешите доступ и скажите что-нибудь: ничего не записывается и не отправляется.</p>
+<button id="vr">Проверить VR</button>
+<button id="ar">Проверить MR</button>
+<button id="mic">Проверить микрофон</button>
+<pre id="out">Результатов пока нет.</pre>
+<script>
+// No 'layers': together with the normal base layer the session fails (docs/headset-capabilities.md).
+const FEATURES = ['local-floor', 'bounded-floor', 'hand-tracking', 'plane-detection', 'mesh-detection',
+  'anchors', 'hit-test', 'depth-sensing', 'light-estimation', 'dom-overlay', 'body-tracking'];
+// Results are also kept in localStorage: the headset browser reloads background tabs,
+// which would otherwise lose them before they are read.
+try { window.__probe = JSON.parse(localStorage.getItem('xr-probe') || '{}'); } catch (e) { window.__probe = {}; }
+const out = document.getElementById('out');
+const show = () => {
+  out.textContent = JSON.stringify(window.__probe, null, 2);
+  try { localStorage.setItem('xr-probe', JSON.stringify(window.__probe)); } catch (e) { /* private mode */ }
+};
+if (Object.keys(window.__probe).length) show();
+
+async function probe(mode) {
+  const r = { mode, started: new Date().toISOString() };
+  window.__probe[mode] = r;
+  try {
+    const session = await navigator.xr.requestSession(mode, {
+      optionalFeatures: FEATURES,
+      depthSensing: { usagePreference: ['cpu-optimized', 'gpu-optimized'], dataFormatPreference: ['luminance-alpha', 'float32'] }
+    });
+    r.enabledFeatures = session.enabledFeatures ? [...session.enabledFeatures] : 'not reported';
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl2', { xrCompatible: true });
+    session.updateRenderState({ baseLayer: new XRWebGLLayer(session, gl) });
+    let bounded = null;
+    try { bounded = await session.requestReferenceSpace('bounded-floor'); r.boundedFloor = 'yes'; }
+    catch (e) { r.boundedFloor = 'no: ' + e.message; }
+    let frames = 0;
+    await new Promise((resolve) => {
+      const onFrame = (t, frame) => {
+        frames++;
+        if (bounded && bounded.boundsGeometry && bounded.boundsGeometry.length) {
+          const pts = [...bounded.boundsGeometry];
+          const xs = pts.map(p => p.x), zs = pts.map(p => p.z);
+          r.bounds = { points: pts.length, widthM: +(Math.max(...xs) - Math.min(...xs)).toFixed(2), depthM: +(Math.max(...zs) - Math.min(...zs)).toFixed(2) };
+        }
+        r.hands = [...session.inputSources].filter(s => s.hand).length;
+        r.controllers = [...session.inputSources].filter(s => s.gamepad).length;
+        if (frame.detectedPlanes) r.planes = [...frame.detectedPlanes].map(p => p.semanticLabel || p.orientation);
+        if (frame.detectedMeshes) r.meshes = [...frame.detectedMeshes].map(m => m.semanticLabel || 'mesh');
+        if (frames < 300) session.requestAnimationFrame(onFrame); else resolve();
+      };
+      session.requestAnimationFrame(onFrame);
+      setTimeout(resolve, 5000);
+    });
+    r.frames = frames;
+    await session.end();
+  } catch (e) {
+    r.error = e.name + ': ' + e.message;
+  }
+  show();
+}
+document.getElementById('vr').onclick = () => probe('immersive-vr');
+document.getElementById('ar').onclick = () => probe('immersive-ar');
+// Microphone: permission and a one-second level reading; nothing is recorded or sent.
+document.getElementById('mic').onclick = async () => {
+  const r = window.__probe.mic = {};
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const ctx = new AudioContext();
+    const an = ctx.createAnalyser();
+    ctx.createMediaStreamSource(stream).connect(an);
+    const buf = new Uint8Array(an.fftSize);
+    let peak = 0;
+    const t0 = performance.now();
+    while (performance.now() - t0 < 1000) { an.getByteTimeDomainData(buf); for (const v of buf) peak = Math.max(peak, Math.abs(v - 128)); await new Promise(res => setTimeout(res, 50)); }
+    r.granted = true; r.peakLevel = peak;
+    stream.getTracks().forEach(t => t.stop()); ctx.close();
+  } catch (e) { r.error = e.name + ': ' + e.message; }
+  show();
+};
+</script>
+</body>
+</html>
