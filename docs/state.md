@@ -8,6 +8,9 @@
   the main folder (room-polish) holds the session branch (stop hook, tools/claude-guard.mjs). Push every turn (power cuts); main only on his word.
 - Room 01 = illusion of control (Alloy & Abramson 1979), `src/rooms/01-control/`: SET ASIDE 08.10 as a lab
   room (16–20 min of waiting, owner found it unbearably boring). Playtest `?playtest=1`, speed `?speed=N`.
+- Migration 0009 (date only, random key, consent version, room 01 JSON Schema, keyed IP limit) is written and
+  reviewed twice, waiting for the owner's Run in the SQL editor; after it: read back tables, functions and the
+  history; on the first real results read app.recent.trusted (does CF-Connecting-IP reach the database).
 - Supabase `objekt` (`rkvdwzlymmewsxjysgma`, eu-west-1 Ireland), in the owner's organisation on the paid Pro plan (read
   10.10 with the Supabase connector's get_organization; a paid project is never paused), private schema `app`:
   `runs` via `submit_run` (room 01 whitelist), `playtests` via `submit_playtest`; both
