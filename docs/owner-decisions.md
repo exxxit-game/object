@@ -31,6 +31,8 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
 - Our own new experiments too, run live with players («мы можем ставить свои эксперименты… совсем новые опыты
   в реальном времени, в настоящем» 9.10 21:00); built on the closest published studies; he picks from the
   candidates (docs/research/own-experiments-now.md).
+- The whole before a part («поточечно чинить, оно не помогает… весь мотор пересобирать» 10.10): each step
+  weighed, not the simplest.
 - No light from nowhere: things are lit by the scene's lights, fixed once for the whole corridor («Подсвечиваешь
   предметы от несуществующего света… Мы починим свет» 9.10 18:22; «проблема решается глобально» 18:23).
 - The model is Guy Ritchie's "Revolver", not Portal: a game played again and again to understand it,
