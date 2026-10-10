@@ -63,31 +63,34 @@ export function extinguisher(x, wall) {
   // the gauge stands on its own short stem in front of the lever's head, its bezel clear of the head's
   // front wall (photos 5, 8)
   const gaugeY = Y.bodyTop - 0.021, gaugeZ = z - CAP.wall - 0.002;
-  // the loop on the dome's back: where the dome's surface is at its height, its far bar, the hook's lip
-  // in the middle of its opening, and the hook's bottom just under the loop
-  const back = z + EXT.r * Math.sqrt(1 - ((LUG.y - Y.shellTop) / EXT.dome) ** 2), far = back + LUG.d - LUG.rod;
-  const lipZ = back + LUG.d / 2 - LUG.rod, hookY = LUG.y - LUG.rod - HOOK.t;
+  // the top loop sits on the dome's back, where the dome's surface is at its height
+  const back = z + EXT.r * Math.sqrt(1 - ((LUG.y - Y.shellTop) / EXT.dome) ** 2);
+  // a loop on the shell's back at height y (its back there at z = at) and its wall hook: the steel strap
+  // screwed to the wall, bent out under the loop's far bar and up inside the loop as its lip, so the
+  // extinguisher lifts off it
+  const hang = (y, at) => {
+    const farZ = at + LUG.d - LUG.rod, lip = at + LUG.d / 2 - LUG.rod, low = y - LUG.rod - HOOK.t;
+    return `
+      <a-box class="hanger" decal position="${x} ${f(low + HOOK.h / 2)} ${f(wall - HOOK.t / 2)}" width="${HOOK.w}" height="${HOOK.h}" depth="${HOOK.t}" color="#2b2b2b"></a-box>
+      ${[0.025, 0.06].map((dy) => `<a-cylinder position="${x} ${f(low + dy)} ${f(wall - 0.004)}" radius="0.005" height="0.003" rotation="90 0 0" decal="layer: 2" ${METAL}></a-cylinder>`).join('')}
+      <a-box class="hanger" position="${x} ${f(low + HOOK.t / 2)} ${f((lip - HOOK.t / 2 + wall - HOOK.t) / 2)}" width="${HOOK.w}" height="${HOOK.t}" depth="${f(wall - HOOK.t - lip + HOOK.t / 2)}" color="#2b2b2b"></a-box>
+      <a-box class="hanger" position="${x} ${f(low + HOOK.lip / 2)} ${f(lip)}" width="${HOOK.w}" height="${HOOK.lip}" depth="${HOOK.t}" color="#2b2b2b"></a-box>
+      ${[-1, 1].map((s) => `<a-cylinder class="lug" position="${f(x + s * (LUG.w / 2 - LUG.rod))} ${f(y)} ${f(at + (LUG.d - 0.003) / 2)}" radius="${LUG.rod}" height="${LUG.d + 0.003}" rotation="90 0 0" ${STEEL}></a-cylinder>`).join('')}
+      <a-cylinder class="lug" position="${x} ${f(y)} ${f(farZ)}" radius="${LUG.rod}" height="${LUG.w}" rotation="0 0 90" ${STEEL}></a-cylinder>`;
+  };
   return `
     <a-entity class="extinguisher" data-dynamic merge-static reflect-env>
-      <!-- the wall hook: a steel strap screwed to the wall, bent out under the loop's far bar and up
-           inside the loop as its lip, so the extinguisher lifts off it -->
-      <a-box class="hanger" decal position="${x} ${f(hookY + HOOK.h / 2)} ${f(wall - HOOK.t / 2)}" width="${HOOK.w}" height="${HOOK.h}" depth="${HOOK.t}" color="#2b2b2b"></a-box>
-      ${[0.025, 0.06].map((dy) => `<a-cylinder position="${x} ${f(hookY + dy)} ${f(wall - 0.004)}" radius="0.005" height="0.003" rotation="90 0 0" decal="layer: 2" ${METAL}></a-cylinder>`).join('')}
-      <a-box class="hanger" position="${x} ${f(hookY + HOOK.t / 2)} ${f((lipZ - HOOK.t / 2 + wall - HOOK.t) / 2)}" width="${HOOK.w}" height="${HOOK.t}" depth="${f(wall - HOOK.t - lipZ + HOOK.t / 2)}" color="#2b2b2b"></a-box>
-      <a-box class="hanger" position="${x} ${f(hookY + HOOK.lip / 2)} ${f(lipZ)}" width="${HOOK.w}" height="${HOOK.lip}" depth="${HOOK.t}" color="#2b2b2b"></a-box>
-      <!-- the bottom's support: hung by the loop behind its top, the weight would swing its foot back to the
-           wall; a dark block on the wall behind the foot takes it, so it hangs upright on two points (the owner
-           in the headset: it cannot hang in the air) -->
-      <a-box class="foot-stop" position="${x} ${f(EXT.foot + 0.05)} ${f(wall - (wall - z - EXT.r + 0.0005) / 2)}" width="0.04" height="0.03" depth="${f(wall - z - EXT.r + 0.0005)}" color="#2b2b2b"></a-box>
+      <!-- hung as photo 16 shows, by a loop on the dome's back on a wall hook; the same loop and hook again
+           low on the shell's back, so the foot is held off the wall as the top is (the owner in the headset:
+           one hook at the top left the bottom in the air) -->
+      ${hang(LUG.y, back)}
+      ${hang(EXT.foot + 0.1, z + EXT.r)}
       <!-- the shell: foot ring, straight shell, the seam bands at its foot and its top, the high round top -->
       <a-cylinder position="${x} ${f(EXT.foot + EXT.footH / 2)} ${z}" radius="${EXT.r + 0.0005}" height="${EXT.footH}" ${STEEL}></a-cylinder>
       <a-cylinder position="${x} ${f(EXT.foot + EXT.footH + EXT.shell / 2)} ${z}" radius="${EXT.r}" height="${EXT.shell}" ${STEEL}></a-cylinder>
       <a-cylinder position="${x} ${f(EXT.foot + 0.05)} ${z}" radius="${EXT.r + 0.0008}" height="0.003" ${STEEL}></a-cylinder>
       <a-cylinder position="${x} ${f(Y.shellTop)} ${z}" radius="${EXT.r + 0.0015}" height="0.006" ${STEEL}></a-cylinder>
       <a-sphere position="${x} ${f(Y.shellTop)} ${z}" radius="${EXT.r}" scale="1 ${f(EXT.dome / EXT.r)} 1" ${STEEL}></a-sphere>
-      <!-- the hanging loop on the dome's back (photo 16): two side bars from the shell and the far bar -->
-      ${[-1, 1].map((s) => `<a-cylinder class="lug" position="${f(x + s * (LUG.w / 2 - LUG.rod))} ${f(LUG.y)} ${f(back + (LUG.d - 0.003) / 2)}" radius="${LUG.rod}" height="${LUG.d + 0.003}" rotation="90 0 0" ${STEEL}></a-cylinder>`).join('')}
-      <a-cylinder class="lug" position="${x} ${f(LUG.y)} ${f(far)}" radius="${LUG.rod}" height="${LUG.w}" rotation="0 0 90" ${STEEL}></a-cylinder>
       <!-- the label, as on the 1972 model: about 98 degrees round the front (painted by
            extinguisher-label.js) -->
       <a-cylinder id="extLabel" data-dynamic decal position="${x} 1.121 ${z}" radius="${EXT.r}" height="0.254" open-ended="true" theta-start="131" theta-length="98" material="roughness: 0.6"></a-cylinder>
