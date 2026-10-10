@@ -75,6 +75,9 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
 - The start best-in-class («Пока первое не будет супер, дальше нечего даже идти» 9.10 04:58).
 - The experimenter branch stays on the laptop and comes next after the corridor («Рано, они сырые. Но,
   они будут следующие после коридора» 9.10 04:37).
+- He learns to understand our code himself, as our practice after the corridor: 10 minutes on a piece he saw in the
+  headset, each line in plain words, one number changed by him («отличная идея, мы сделаем это нашей практикой чуть
+  позже. сначала архитектура»; «потом мне обязательно нуно научится самому понимать что мы пишшем в коде» 10.10).
 - GitHub done properly, releases and all, now («давай сейчас каждый этот шаг сделаем правильно… Пусть оно
   там всем этим занимается» 9.10 07:23); the live site gets one thing only once it is polished
   («оттачиваем одну вещь… И только потом добавляем это в официальный наш репозиторий» 12:42).

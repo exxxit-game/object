@@ -33,6 +33,7 @@ AFRAME.registerComponent('mirror-glass', {
     // first time the glass is drawn, in the middle of a frame, which multiview cannot take (A-Frame,
     // docs/components/renderer.md: such rendering "would have to move to the beginning of the frame")
     const pmrem = new THREE.PMREMGenerator(sceneEl.renderer);
+    if (this.envMap) this.envMap.dispose();
     this.envMap = pmrem.fromCubemap(target.texture).texture;
     pmrem.dispose();
     target.dispose();

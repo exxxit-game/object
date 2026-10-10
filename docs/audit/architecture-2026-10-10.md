@@ -16,5 +16,15 @@ The three changes it named, in order:
    functions for any room (today they accept only '01-control').
 3. One order of work: docs/target-architecture.md mirrors the board; the size rule reaches tools/ and tests/.
 
+Why the first change takes that form (the owner's architecture page, 10.10; recounted then: 74 game files, 6,012
+lines; tools and tests 58 files, 6,246 lines). Of three ways to join the corridor and the rooms (the room holds the
+corridor, as now; the corridor holds rooms behind doors; a page per room) the second is how Meta's IWSDK changes levels:
+world.loadLevel destroys the level's entities while those made persistent, the player rig among them, stay
+(developers.meta.com/vr/documentation/iwsdk/concepts/ecs/world/ and .../lifecycle/; packages/core/src/level/
+level-player-rig.ts), and how Unity's 2020.1 manual (Multi-Scene editing) keeps a manager scene loaded while the others
+load additively (LoadSceneMode.Additive). A page per room is not settled on Quest Browser: a new page needs a user
+action to enter VR (Meta, documentation/web/pwa-webxr) unless in-VR navigation is on, which A-Frame's link docs (1.8.0)
+say only the Oculus Browser ships, possibly behind a setting; a test in the headset would settle it.
+
 Also found: the start-size check counts a warning that appears only in a stale checkout; docs/engine.md leaves out
 moulding.js; room 01's walking bounds differ between room.js:63 and scene.js:33.

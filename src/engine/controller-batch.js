@@ -26,6 +26,8 @@ AFRAME.registerComponent('controller-batch', {
     this.mesh.removeFromParent();
     this.mesh.geometry.dispose();
     this.mesh.material.dispose();
+    // the bones' texture three.js made for this skeleton; the model reloads on every reconnect
+    this.mesh.skeleton.dispose();
     for (const part of this.parts) part.visible = true;
     this.mesh = null;
   },
