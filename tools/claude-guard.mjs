@@ -328,6 +328,10 @@ export const readOnlySql = (q) => /^\s*(select|with|explain|show)\b/i.test(q) &&
 
 // GitHub's own tests on room-polish (the smoke test runs only there): ten red runs in a row went
 // unseen while work went on, so the start says a red last run (gh run list --json: one run or none)
+// the start's lines after the board, each cut to EXTRA_LINE characters, the health check to
+// HEALTH_SHOWN problems: so the start's length on the worst day is known (tests/guard.test.mjs)
+export const HEALTH_SHOWN = 5, EXTRA_LINE = 350;
+const clip = (line) => (line.length > EXTRA_LINE ? `${line.slice(0, EXTRA_LINE - 1)}…` : line);
 export const ciLine = (run) => (run?.conclusion === 'failure'
   ? `GitHub's tests are RED on room-polish (${run.displayTitle}): ${run.url}: read why before other work (gh run view ${run.databaseId} --log-failed)` : null);
 
@@ -380,18 +384,18 @@ if (mode === 'start') {
     const health = execFileSync(process.execPath, [path.join(HERE, 'tools', 'health.mjs')], { cwd: HERE, encoding: 'utf8', timeout: 15000 }).trim();
     // at most five problem lines: a machine missing many programs (GitHub's runner) printed so many
     // that the start passed Claude Code's 10,000 characters and the board was no longer whole
-    const [head, ...rest] = health.split('\n'), more = rest.length - 5;
-    out.push(/broken|warning/.test(health) ? `Health check (tools/health.mjs), tell the owner what is broken:\n${[head, ...rest.slice(0, 5)].join('\n')}${more > 0 ? `\n…and ${more} more: node tools/health.mjs` : ''}` : head);
+    const [head, ...rest] = health.split('\n'), more = rest.length - HEALTH_SHOWN;
+    out.push(/broken|warning/.test(health) ? `Health check (tools/health.mjs), tell the owner what is broken:\n${[head, ...rest.slice(0, HEALTH_SHOWN)].map(clip).join('\n')}${more > 0 ? `\n…and ${more} more: node tools/health.mjs` : ''}` : clip(head));
   } catch { out.push('WARNING: the health check (tools/health.mjs) did not finish: run it by hand.'); }
   // the outside reviewer's open remarks on the pull request into `reviewed`, read before other work
   try {
     const remarks = execFileSync(process.execPath, [path.join(HERE, 'tools', 'coderabbit.mjs')], { cwd: HERE, encoding: 'utf8', timeout: 10000 }).trim();
-    if (remarks) out.push(remarks);
+    if (remarks) out.push(clip(remarks));
   } catch { /* GitHub out of reach: nothing to say */ }
   try {
     const runs = JSON.parse(execFileSync('gh', ['run', 'list', '--branch', 'room-polish', '--workflow', 'test.yml', '--limit', '1', '--json', 'conclusion,displayTitle,url,databaseId'], { cwd: HERE, encoding: 'utf8', timeout: 10000, windowsHide: true }));
     const red = ciLine(runs[0]);
-    if (red) out.push(red);
+    if (red) out.push(clip(red));
   } catch { /* GitHub out of reach: nothing to say */ }
   process.stdout.write(`${out.join('\n\n')}\n`);
   process.exit(0);

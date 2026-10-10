@@ -6,7 +6,13 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
 
 ## The process (the rebuild, docs/audit/process-rebuild.md)
 - Nothing moves on the game until the process is set up («нельзя улучшать игру, пока мы не улучшили процесс
-  разработки» 10.10); the rebuild goes by the plan, all at once.
+  разработки» 10.10); the rebuild goes by the plan, all at once («пересмотреть здесь все проанализировать и
+  выстроить этот процесс наконец-то так чтобы мы не ходили кругами» 07:50; «огромный опыт ошибок на
+  космограмме… это все надо учитывать полностью» 07:54). Two empty PATH entries in Windows stay as they are
+  («Вообще не хочу туда лезть» 10.10).
+- What matters is kept by checks the machine runs by itself, not by memory, stage by stage («Ты как-то должен
+  выстроить этот процесс, при котором ты не будешь забывать о крайне важных вещах… поэтапно» 10.10;
+  «вопрос оптимизации… очень важный»): each stage has its list of what must be known and checked before it.
 - Connectors: off - Notion, Jam, Adobe, Figma, the GitHub connector, Claude in Chrome, computer use, Minutes,
   privacy-legal; kept - Claude Docs, the browser pane, Consensus, PubMed, reference lookup, PDF Tools, Dropbox,
   one Supabase. The superpowers plugin off («да» 10.10).
@@ -44,6 +50,9 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   нельзя установить» 9.10 12:27); what costs more later is decided now («шаги, которые уже надо сейчас
   знать и решить» 12:30).
 - Deferred work is written down now («позже, значит, надо сделать запись уже сейчас» 9.10 05:08).
+- What can be learned now is learned now, never left for later («подумай сейчас внимательно, что уже со всего
+  нам стоит узнать сейчас, а что можно, вот реально можно отложить на потом»; «нам лучше быстро все
+  поузнавать» 10.10); money and the weakest headset's budget first («нужно закрыть это уже сейчас» 10.10).
 
 ## How things are built
 - Recreated from books and standards («опираться от книг, от готовых знаний… Мы воссоздаем» 9.10 10:58);
@@ -90,3 +99,4 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
 - Floor 1 free, then paid packs («это 9 и будет бесплатных… потом… купить дополнительный контент» 8.10
   17:05); chosen to work even when the trick is known; education licences; university partners.
 - Playtest: 5–10 testers from his Telegram VR community; 5 approved questions; releases only on his word.
+- Payouts go to Ukraine («украина» 10.10).

@@ -10,7 +10,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { refusal, ciLine } from '../tools/claude-guard.mjs';
+import { refusal, ciLine, HEALTH_SHOWN, EXTRA_LINE } from '../tools/claude-guard.mjs';
 import { onHead } from '../tools/headset.mjs';
 import { MARK, unrelayed, sinceOwner } from '../tools/owner-links.mjs';
 import { BOARD, SHOWS, YES, PENDING, shows, dayKey, plannedToday, stalled, saidYes } from '../tools/board.mjs';
@@ -235,5 +235,12 @@ assert.ok(!stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]]
 for (const a of [`«${YES}»`, `«${YES[0].toUpperCase()}${YES.slice(1)}»`, `moved it; «${YES}»`]) assert.ok(!stalled(shows(table([['7.10', 'x'], ['8.10', a], ['9.10', PENDING]])), { today: '9.10', log: log('08', YES) }), `the answer ${a} is his yes`);
 assert.ok(stalled(shows(table([['7.10', 'x'], ['8.10', `«${String.fromCharCode(0x43d, 0x430)}${YES}»`], ['9.10', PENDING]])), { today: '9.10' }), 'a word that only contains the letters is no yes');
 assert.ok(start.stdout.length < 10000, `the start hook prints ${start.stdout.length} characters: over 10,000 Claude Code keeps only a preview`);
+// and on the worst day, not only on this machine: the board and the session line, then five health
+// problems and the CodeRabbit and red-CI lines, each at its longest (GitHub's runner lacks the
+// laptop's programs; a start that fit here went over there twice)
+const lastBoardLine = fs.readFileSync(path.join(ROOT, BOARD), 'utf8').trim().split(/\r?\n/).pop();
+const shownBoard = start.stdout.slice(0, start.stdout.indexOf(lastBoardLine) + lastBoardLine.length).length;
+const worstStart = shownBoard + 2 + (1 + HEALTH_SHOWN + 1) * (EXTRA_LINE + 1) + 2 * (EXTRA_LINE + 2);
+assert.ok(worstStart < 10000, `on the worst day the start would print ${worstStart} characters (the board ${shownBoard}): shorten the board`);
 
 console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the hook wired, the headset's wearer seen, links owed to the owner found since his last message, his decisions imported by CLAUDE.md, the board shown at start)`);
