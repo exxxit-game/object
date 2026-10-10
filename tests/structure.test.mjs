@@ -278,4 +278,18 @@ assert.ok(!author || author.endsWith('@users.noreply.github.com'), `git commits 
     .filter((id) => !ours.has(id) && !OTHERS.includes(id)).map((id) => `${rel(f)}: ${id}`));
   assert.deepEqual(stale, [], `docs name constants the code does not have: ${stale.join(', ')}`);
 }
+
+// 24. Every ability of the headset has a decision in the game: hands sat in the map as "seen with all
+// 25 joints" while no room drew them, and only the owner's memory caught it (docs/owner-decisions.md:
+// what matters is kept by checks the machine runs, not by memory). The last cell of each row of
+// docs/headset-capabilities.md says used, decide by a stage of the board's road or before a named
+// room, not needed, or not available, and why.
+{
+  const rows = fs.readFileSync(path.join(ROOT, 'docs/headset-capabilities.md'), 'utf8').split(/\r?\n/)
+    .filter((l) => l.startsWith('| ') && !/^\| (Capability|---)/.test(l));
+  assert.ok(rows.length > 10, 'the headset capability map lost its rows');
+  const undecided = rows.filter((l) => !/^(used: |decide by stage [1-6]: |decide before \S|not needed: |not available)/.test(l.split('|').slice(-2, -1)[0].trim()))
+    .map((l) => l.split('|')[1].trim());
+  assert.deepEqual(undecided, [], `abilities of the headset with no decision in the game (docs/headset-capabilities.md): ${undecided.join('; ')}`);
+}
 console.log('structure tests: ok');

@@ -174,3 +174,43 @@ WebXR (spring 2027). (4) A first live room needing matchmaking, voice and MR at 
 Unity editor install size on Windows (a user report, macOS or Windows not stated); build and bake times on this laptop;
 Unity's web player with WebXR; Godot multiview on Quest; Whisper speed on Quest 2; WebXR on Meta VR Glasses; the Unity
 AI pages differ (the blog asks for a subscription, the features page calls MCP free).
+
+## Hands (11 Oct 2026, the owner: a press with his own hand feels unlike a controller)
+
+| | Hands drawn | A finger press on a button | Grab with the hand |
+|---|---|---|---|
+| A-Frame 1.8.0 | `hand-tracking-controls` (a mesh or dots at the joints) [read] | not found: only pinch events [read] | `hand-tracking-grab-controls` with `grabbable`, by pinch [read] |
+| IWSDK 1.0 | drawn by its input manager (AnimatedHand) [read] | `PokeInteractable`, a touch pointer in each hand [read]; what it emits: unverified | one-hand, two-hand and distance grab components [read]; bare hands with the first two: unverified |
+| Unity, Meta Interaction SDK | yes [read]; the hand prefab's name unverified | `PokeInteractor` and `PokeInteractable`, hands and controllers [read] | `HandGrabInteractor` and `HandGrabInteractable` [read, search summary] |
+
+Sources: https://aframe.io/docs/1.8.0/components/hand-tracking-controls.html,
+https://aframe.io/docs/1.8.0/components/hand-tracking-grab-controls.html,
+https://developers.meta.com/horizon/documentation/iwsdk/guides/06-built-in-interactions/,
+https://developers.meta.com/vr/documentation/iwsdk/concepts/xr-input/pointers/,
+https://developers.meta.com/horizon/documentation/iwsdk/concepts/xr-input/input-visuals/,
+https://developers.meta.com/horizon/documentation/unity/unity-isdk-poke-interaction/. A button for a finger, Meta's
+touch best practices (https://developers.meta.com/horizon/design/touch_bp/): a minimum target of 22 × 22 mm, at least
+12 mm apart, with clear visual and sound feedback on a press [read]. So in A-Frame a finger press is ours to build;
+IWSDK and Unity have it. The look of the hands is the owner's choice from several options (docs/board.md).
+
+## Measured in the owner's Quest 3 (11 Oct 2026)
+
+What the verdict waited for: CPU- or GPU-bound. The local game in the headset, in VR, both eyes in one pass
+(multiview on), 90 Hz; ten seconds a sample while he stood or turned a full circle, as the steps inside the headset
+told him (tools/quest-look.mjs say). CPU: the game's own time a frame on the main thread (A-Frame's tick and the draw
+calls handed to the GPU), timed around the scene's animation loop; the browser's own GPU process is not in it. GPU:
+the headset's "GPU % Utilization" each second (ovrgpuprofiler, part of its system) [code, our run].
+
+| Where | fps | game's time a frame, average (90th percentile) of 11.1 ms | GPU busy | draw calls a frame (both eyes) |
+|---|---|---|---|---|
+| corridor, looking along it | 90 | 2.41 (2.8) | not caught | 36 |
+| corridor, a full turn | 90 | 2.68 (3.2) | 45-51 % | 40 |
+| room 101, facing its door | 90 | 2.87 (3.3) | 50-58 % | 49 |
+| room 101, a full turn | 90 | 2.95 (3.4) | 56-61 % | 53 |
+
+Neither is at its limit on Quest 3; the GPU is nearer (about half busy) than the game's own time (about a quarter of
+the frame). Meta's device page puts the Quest 3 GPU at "~2.5x Quest 2 GPU" (engine-and-tools.md, Part 1), so on a
+Quest 2 the same scenes would most likely meet the GPU's limit first [mine; no Quest 2 here]. By Part 5's own rule a
+GPU limit is not one an engine change cures: lighting, shading and resolution are (baked light, fewer lights, fixed
+foveation; revision-4-graphics.md), in any engine. The verdict stands. Also measured: in the headset with multiview the
+room's views drew 49-53 calls a frame, where the emulator, drawing each eye on its own, counts 144 at its worst view (tests/draw-calls.mjs).
