@@ -208,7 +208,7 @@ primary page. Meta pages through `metavr docs` where it had them. Prices are our
   Audio API"; npm 2.0.0 on 2026-09-30, live. It plays recorded sound fields and sends "interactive panning" to
   Resonance: only for a recorded 360-degree ambience, if a room ever needs one.
 - **Fix in our code, not a tool:** where the experimenter stands or a loudspeaker speaks, the voice should come from
-  there (01-meta.md: "avoid head-locked stereo"); the corridor's automatic announcement can stay unplaced.
+  there (01-meta.md §5, our summary of Meta's "Immersive sound": avoid head-locked stereo); the corridor's automatic announcement can stay unplaced.
 
 ## Decisions for the owner (real options; nothing here is settled by a source)
 
