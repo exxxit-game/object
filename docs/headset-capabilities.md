@@ -11,6 +11,8 @@ Do not request the `layers` feature: with the normal base layer the session fail
 | Capability | Status | Source | What it gives an experiment |
 |---|---|---|---|
 | VR session (`immersive-vr`) | our headset: supported (Quest 3, browser 152) | CDP check | All current rooms |
+| Both eyes in one pass (`OCULUS_multiview`) | our headset: on in the corridor, 10 Oct 2026 (A-Frame 1.8.0: `renderer.xr.isMultiview` true, the extension present) | `tools/quest-look.mjs eval`, in VR | Each draw call made once a frame, not once an eye |
+| Frame rate | our headset: 90 Hz in the corridor; offered 72, 80, 90, 120 (`supportedFrameRates`), 10 Oct 2026 | `tools/quest-look.mjs eval`, in VR | The frame budget is 11.1 ms at 90 Hz; whether the game is CPU- or GPU-bound: not measured yet |
 | Mixed reality, the real room seen through the cameras (`immersive-ar`) | our headset: supported | CDP check; [Meta](https://developers.meta.com/horizon/documentation/web/webxr-mixed-reality/) | Experiments inside the player's own room |
 | Plane detection: walls, floor, tables | our headset: 57 planes with labels (wall, window, door, table, shelf, floor, ceiling, bed, wall art) | [Meta](https://developers.meta.com/horizon/documentation/web/webxr-mixed-reality/) | Put the apparatus on the player's real table |
 | Persistent anchors (max 8 per site) | our headset: feature granted | same | Keep an object in the same real place between sessions |
