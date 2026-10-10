@@ -221,3 +221,6 @@ Quest 2 evidence), revisit if A-Frame's multiview stays broken. First concrete s
 first: in the game page console read `renderer.getContext().getExtension('OCULUS_multiview')`,
 `xrSession.frameRate` and `supportedFrameRates`, then record a Chrome `xr.debug` trace of the corridor's worst view to
 learn CPU- or GPU-bound. That one measurement decides whether multiview (c) or fragment work (FFR, textures) comes first.
+
+## The wider revision of every tool (10.10)
+One file per area, written as found: `revision-1-store.md` (delivery and the Horizon Store), `revision-2-data.md` (data, server, law), `revision-3-live-voice-mr.md` (live players, voice, mixed reality), `revision-4-graphics.md` (graphics and content), `revision-5-testing-process.md` (testing and our tools).
