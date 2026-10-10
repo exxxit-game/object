@@ -28,6 +28,8 @@
 - THE WORK is the one-page board `docs/board.md` (shown at every start; his yes is the only measure of progress).
   Every owner message is logged on the laptop by the prompt hook. The big plan (archive and strategy, read only
   when a step needs it): https://claude.ai/code/artifact/71113d16-57ad-42ce-9905-87ff87dfdbd7
+  Every critical problem still open on 10.10 (money, law, data, headset, process, records), whose step each is and
+  the owner's choices: https://claude.ai/artifact/NGika3MZ8ms7GdFvfiZhvT
 - Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS 08.10, old 60 fps bar, no log); `tools/xr-probe.html`.
   Owner plays the test copy https://exxxit-game.github.io/object-preview/ (bookmark in the headset, the
   game from GitHub): `node tools/publish-preview.mjs` before he looks; it never sends data. From 9.10 the
