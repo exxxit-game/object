@@ -9,6 +9,7 @@ import '../../engine/shapes.js';
 import '../../engine/decal.js';
 import '../../engine/mirror.js';
 import '../../engine/merge-static.js';
+import '../../engine/controller-batch.js';
 import '../../engine/room-bounds.js';
 import { eventLog } from '../../engine/log.js';
 import { unlock } from '../../engine/audio.js';

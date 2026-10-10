@@ -31,8 +31,8 @@ export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: t
   <a-entity id="rig" position="0 0 0.35" recenter="x: 0; z: 0.35; yaw: 0">
     <a-entity id="cam" camera fader look-controls="pointerLockEnabled: false" wasd-controls="acceleration: 12" position="0 1.6 0"
               room-bounds="minX: -1.4; maxX: 1.4; minZ: 0.1; maxZ: 1.2"></a-entity>
-    <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" grab-press></a-entity>
-    <a-entity laser-controls="hand: right" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" grab-press></a-entity>
+    <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" grab-press controller-batch></a-entity>
+    <a-entity laser-controls="hand: right" raycaster="objects: .clickable; far: 8; lineColor: #f0c96a; lineOpacity: .6" grab-press controller-batch></a-entity>
   </a-entity>
 
   <!-- light: ambient fill and one warm lamp under an enamel shade (room-light: dark while
