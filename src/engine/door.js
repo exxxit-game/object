@@ -39,7 +39,7 @@ export function doorHTML({ x, room = 1.6, corridor = 1.8, latch = 1, leaf = '', 
   const lz = (v) => f(s * v);                 // leaf-local z, toward the corridor
   // a leaf that swings is left out of the room's merge (data-dynamic): its parts swing together,
   // so they are merged on the leaf itself
-  const moves = /data-dynamic/.test(leaf);
+  const moves = /\bdata-dynamic\b/.test(leaf);
   const knob = (z, out) => `<a-entity class="knob" lathe="${KNOB}; color: ${CHROME.color}; metalness: ${CHROME.metalness}; roughness: ${CHROME.roughness}" rotation="${out === s > 0 ? 90 : -90} 0 0" position="${lx(LEAF.w - 0.07)} 1.024 ${lz(z)}"></a-entity>`;
   const roomSide = inside ? `
       ${knob(0, false)}
