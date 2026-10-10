@@ -17,6 +17,8 @@ until its answer is read and sourced:
 - "Without humour you are a lab rat; a host leads you through the story": owner's decision (docs/owner-decisions.md);
   fun around the measured moment, plain inside it (Lumsden 2016); deeper: reach study (running).
 - "How did those projects get millions of users?": reach study (running).
+- "Take all they solved, check how far it solves the problem; how precise can our data be, how do they measure
+  precision?": precision study (running).
 - "Who approves our ethics?": ethics-law.md 1; open: MGPPU and SPbU committees (owner's pages, [own-experiments-now-2.md](own-experiments-now-2.md)).
 - "Which labs work now, and in Russia?": field-labs-1/2; open: MSU and MSUPE VR labs (owner's pages).
 - Two phones: part 3 here; open: Shiv 2005, Wilson & Nisbett 1978 (owner's pages).
