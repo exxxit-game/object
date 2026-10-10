@@ -2,8 +2,7 @@
 
 The owner's request (board, the current step): set up the whole process at once, not part by part. Five read-only
 audits (10.10.2026) are the evidence; their notes stayed in the session scratchpad, their findings are
-here. This plan replaces docs/audit/rules-review.md and docs/audit/claude-md-proposed.md (older audits never
-acted on); they are removed in step 3.
+here. This plan replaced the older rules review and CLAUDE.md draft (never acted on; removed, kept in git).
 
 ## What the audits found (the causes, not the symptoms)
 
