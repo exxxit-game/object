@@ -242,8 +242,10 @@ function judge(words, stdin, ps) {
   // words (gh pr -R owner/repo merge), so they are set aside before the words are read
   if (p === 'gh') {
     const g = [];
-    for (let k = 0; k < a.length; k++) { if (/^(-R|--repo)$/.test(a[k])) k++; else if (!a[k].startsWith('-')) g.push(a[k]); }
-    if ((g[0] === 'pr' && g[1] === 'merge') || (g[0] === 'api' && g.some((x) => /(^|\/)(merges|pulls\/\d+\/merge)$/.test(x)))) return WHY.merge;
+    // an option's separate value would read as a command word, so "pr merge" is looked for anywhere
+    for (let k = 0; k < a.length; k++) { if (/^(-R|--repo|--hostname)$/.test(a[k])) k++; else if (!a[k].startsWith('-')) g.push(a[k]); }
+    const pr = g.indexOf('pr');
+    if ((pr >= 0 && g[pr + 1] === 'merge') || (g[0] === 'api' && g.some((x) => /(^|\/)(merges|pulls\/\d+\/merge)$/.test(x)))) return WHY.merge;
   }
   // the smoke test and Playwright: only on GitHub
   if (/^(npm|pnpm|yarn|bun)$/.test(p)) {

@@ -99,6 +99,7 @@ const refused = cases([
   'gh pr -R exxxit-game/youaretheobject merge 9',
   'gh --repo exxxit-game/youaretheobject pr merge 9',
   ['gh.exe pr merge 9', PS],
+  'gh --hostname github.com pr merge 9',
   'gh api -X PUT repos/exxxit-game/youaretheobject/pulls/9/merge',
   'gh api repos/exxxit-game/youaretheobject/merges -f base=main -f head=room-polish',
 ]);
