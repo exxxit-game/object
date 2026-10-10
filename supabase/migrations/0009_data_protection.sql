@@ -129,10 +129,11 @@ create index recent_at_idx on app.recent (at);
 alter table app.recent enable row level security;
 revoke all on table app.recent from public, anon, authenticated;
 
--- forgotten by every call and, when nobody calls, by a job every minute; the jobs' own log is kept a
--- week (Supabase Cron: cron.job_run_details grows by a row a run)
+-- forgotten by every call and, when nobody calls, by a job every minute, which waits for the same lock
+-- as the calls (two deletes of the same rows in another order could deadlock and lose a result); the
+-- jobs' own log is kept a week (Supabase Cron: cron.job_run_details grows by a row a run)
 select cron.schedule('forget-recent-sources', '* * * * *',
-  $job$delete from app.recent where at < now() - interval '10 minutes'$job$);
+  $job$select pg_advisory_xact_lock(hashtext('app.allow')); delete from app.recent where at < now() - interval '10 minutes'$job$);
 select cron.schedule('forget-cron-runs', '17 3 * * *',
   $job$delete from cron.job_run_details where end_time < now() - interval '7 days'$job$);
 
