@@ -50,3 +50,28 @@ The project's paper library (C:\Users\admin\Documents\objekt-files\papers\) has 
   (c) unlocking content bought elsewhere: no general reader/cross-buy permission found in the policies (only the
   two exceptions above); (d) a free app unlocked by a code from our site: not allowed by 1.1.1 for an individual
   player (it is an off-platform sale of in-app content); allowed only as bulk licences to schools/companies (1.1.2).
+- Keys: "Distribution options", "Updated : Mar 23, 2026", https://developers.meta.com/horizon/policy/distribution-options/
+  (read): Keys can unlock the app "or in-app purchase items"; "You may generate 2000 Keys every 6 months";
+  "you can distribute Keys yourself or through other websites. You must follow the App Policies on Promotional
+  Mechanisms"; Meta "may ... charge a fee for Keys". App policies 1.2.1: promotional mechanisms give "a limited
+  number of users an entitlement". Selling Keys to consumers on our own site: no Meta page allows or forbids it in
+  words: not confirmed (ask Meta support); the "limited number" wording reads as promotion, not a sales channel
+  (my reading).
+- A Meta fee change or small-developer rate in 2025-2026: not found. Meta's GDC 2026 post
+  (https://developers.meta.com/horizon/blog/gdc-2026-state-of-vr/, read) reports revenue, no fee change.
+  "Monetization overview", "Updated : May 11, 2026", https://developers.meta.com/horizon/resources/monetization/
+  (read): lists add-ons and subscriptions, no rate. Anti-steering exception for Meta under the EU DMA or a court
+  order: not found (Meta's VR store is not a designated DMA core platform service: not confirmed here).
+
+### 1.2 PICO Store
+- PICO Developer terms, "Last Updated: December 12, 2024", https://developer.picoxr.com/terms/ (read with curl):
+  "you may request for the app to be offered to End Users for free or on a paid basis"; "The Parties agree to enter
+  into separate agreements if you decide to set price tiers for subscription to your app or offer your app on a paid
+  basis"; "we shall be entitled to collect and receive during the Term of this Agreement all payments made by End
+  Users". The public terms give no percentage.
+- The fee and any rule on outside payment, links or codes: not confirmed. PICO's docs list a separate "PICO
+  Developer Product Distribution Agreement" and "PICO Store Review Guidelines"
+  (https://developer.picoxr.com/document/distribute/app-distribution-overview/), but their body did not render in
+  curl or the browser pane (menu only). The older SDK doc (https://picosdken.readthedocs.io/en/latest/chapter%20seven.html,
+  seen only in a search result, not opened) speaks of in-game items being added in the developer backend.
+- Whether a PWA listed by URL can take payments at all: not found (as in revision-1-store.md part 12).

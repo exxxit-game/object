@@ -98,3 +98,32 @@ https://developers.meta.com/horizon/policy/developer-distribution-agreement/
   individual. Instead, use Form W-8BEN". (My reading: a FOP is not a separate legal person in Ukraine, so
   both a private individual and a FOP sign W-8BEN; not confirmed by an IRS line naming FOPs.)
 
+### Part 2. Ukraine's tax numbers (OECD CRS TIN sheet for Ukraine)
+https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/ukraine-tin.pdf (6 pages, downloaded)
+- Individuals: each is given "a registration number of the taxpayer's account card ... (RNOKPP), which is
+  also a tax number (TIN)"; "RNOKPP is the ten-digit numerical code"; it "does not change throughout the
+  life of an individual".
+- Legal entities: "EDRPOU Code is the eight-digit numerical code", assigned to "all legal persons
+  incorporated in Ukraine". The sheet gives no separate TIN for individual entrepreneurs.
+- (My reading) A FOP is the same individual registered as an entrepreneur, so Meta's TIN field takes the
+  10-digit RNOKPP in both cases; YeDRPOU applies only to a company (TOV). Not confirmed by a Meta page.
+- Tax Code 70.12 (same file as above): the RNOKPP is used by banks and by FOPs "in all documents
+  containing information about objects of taxation of individuals" (translated).
+
+### Part 2. US-Ukraine income tax convention (signed Washington, March 4, 1994)
+https://www.irs.gov/pub/irs-trty/ukrain.pdf (text extracted with pdftotext)
+- Article 7(1): "The business profits of a resident of a Contracting State shall be taxable only in that
+  State unless the resident carries on ... business in the other Contracting State through a permanent
+  establishment situated therein."
+- Article 12(2): royalties may be taxed where they arise, but "the tax so charged shall not exceed 10
+  percent of the gross amount of the royalties". 12(3): royalties are payments "for the use of, or the right
+  to use, any copyright of literary, artistic, or scientific work, including computer programs".
+- Article 12(5)(a): royalties "arise in a Contracting State when the payer is ... a resident of that State".
+  (My reading: payouts from Meta Platforms Technologies Ireland Ltd. are not US-source royalties under this
+  rule; the US treaty matters mainly if the payer is the US entity Facebook Technologies, LLC.)
+- Store sales of copies to end users: whether the US side treats them as royalties or business profits
+  is not settled by the treaty text; Meta's FAQ "Meta does not withhold any developer income tax" (part
+  1 file). For W-8BEN line 10 the IRS instructions mention business profits with the treaty article
+  (above). Which article, if any, to name on W-8BEN for Meta: not confirmed (Meta's own form wizard decides
+  what it asks).
+
