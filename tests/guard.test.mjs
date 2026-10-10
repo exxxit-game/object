@@ -105,12 +105,15 @@ assert.deepEqual(unrelayed('no research today'), [], 'no mark, nothing owed');
 assert.deepEqual(unrelayed(`{"content":"    9\\t| claude-guard | left by a research agent after \`${MARK}\`, not reached him |\\n   20\\t| serve | http://localhost:3000 |"}`), [], 'the mark named in a sentence is no report');
 assert.deepEqual(unrelayed(`{"content":"export const MARK = \\"${MARK}\\"; // see https://example.org/a"}`), [], 'the mark quoted in code is no report');
 
-// The owner's decisions reach every session at its start and after each compaction, beside the
-// open items: a session that does not see them asks him again what he settled
+// The owner's decisions reach every session at its start and after each compaction: CLAUDE.md imports
+// them (Claude Code loads it then, whole); the start hook shows the board. A session that does not see
+// them asks him again what he settled
 const start = spawnSync(process.execPath, ['tools/claude-guard.mjs', 'start'], { cwd: ROOT, encoding: 'utf8', input: JSON.stringify({ source: 'startup', cwd: ROOT }) });
 const boardTop = fs.readFileSync(path.join(ROOT, BOARD), 'utf8').split(/\r?\n/)[0];
-assert.ok(/^# The owner's decisions\r?\n/m.test(start.stdout) && /^- The corridor is the reference/m.test(start.stdout) && start.stdout.includes(boardTop),
-  `the start hook does not show the owner's decisions and the board:\n${start.stdout.slice(0, 400)}`);
+assert.ok(/^His decisions load with this file[^\n]*@docs\/owner-decisions\.md/m.test(fs.readFileSync(path.join(ROOT, 'CLAUDE.md'), 'utf8')),
+  'CLAUDE.md no longer imports docs/owner-decisions.md: his decisions are not in front of the session');
+assert.ok(/^- The corridor is the reference/m.test(fs.readFileSync(path.join(ROOT, 'docs/owner-decisions.md'), 'utf8')) && start.stdout.includes(boardTop),
+  `the start hook does not show the board:\n${start.stdout.slice(0, 400)}`);
 
 // The board's table of showings: today's row is found in the owner's date form, and two answered rows in a
 // row without his yes stop the side work; rows still waiting for his look do not count either way
@@ -127,4 +130,4 @@ assert.ok(stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]])
 assert.ok(!stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]])), { today: '9.10', log: log('08', YES) }), 'his own yes counts');
 assert.ok(start.stdout.length < 10000, `the start hook prints ${start.stdout.length} characters: over 10,000 Claude Code keeps only a preview`);
 
-console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the headset's wearer seen, links owed to the owner found, his decisions shown at start)`);
+console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the headset's wearer seen, links owed to the owner found, his decisions imported by CLAUDE.md, the board shown at start)`);

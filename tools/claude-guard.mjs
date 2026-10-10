@@ -95,17 +95,19 @@ const git = (...a) => { try { return execFileSync('git', a, { cwd: HERE, env: wi
 // context, so the state and the queue come back without anyone remembering to read them, and a
 // checkout made from the old live branch is named before work starts on it.
 if (mode === 'start') {
-  const out = [`Session ${event.source || 'start'}: the owner's decisions and the board (${BOARD}) are below; the board is the work. First thing: if its ${SHOWS} table has no row for today, add what he will see today and tell him in your first line. docs/state.md says where things are; the big plan doc is archive and strategy, read only when a step needs it.`];
+  const out = [`Session ${event.source || 'start'}: the board (${BOARD}) is below; the board is the work; the owner's decisions come with CLAUDE.md. First thing: if its ${SHOWS} table has no row for today, add what he will see today and tell him in your first line. docs/state.md says where things are; the big plan doc is archive and strategy, read only when a step needs it.`];
   const branch = git('rev-parse', '--abbrev-ref', 'HEAD');
   if (git('rev-parse', '--verify', '-q', 'room-polish') && git('merge-base', '--is-ancestor', 'room-polish', 'HEAD') === null) {
     out.push(`WARNING: this checkout (${branch}) lacks the latest work on room-polish; it was probably made from the old live branch. If it has no commits of its own, reset it to room-polish; otherwise merge room-polish. Say so to the owner.`);
   }
-  // The owner's decisions come back with the open items: a new session that does not see them
-  // re-asks what he settled, or advises against it from a general method (a risk list, "ship
-  // early"), and he has to say it again in every session.
-  try {
-    out.push(fs.readFileSync(path.join(HERE, DECISIONS), 'utf8').trim());
-  } catch { out.push(`WARNING: ${DECISIONS} is missing here: the owner's decisions are not in front of this session.`); }
+  // The owner's decisions are imported by CLAUDE.md, which Claude Code loads at every start and
+  // re-reads after every compaction without the 10,000-character cap on hook output; printed here
+  // they had to be trimmed to fit. Only if the import is gone are they printed here as before.
+  let claudeMd = '';
+  try { claudeMd = fs.readFileSync(path.join(HERE, 'CLAUDE.md'), 'utf8'); } catch { /* checked below */ }
+  if (!claudeMd.includes(`@${DECISIONS}`)) {
+    try { out.push(fs.readFileSync(path.join(HERE, DECISIONS), 'utf8').trim()); } catch { out.push(`WARNING: ${DECISIONS} is missing here: the owner's decisions are not in front of this session.`); }
+  }
   // the board, whole: Claude Code keeps a hook's output whole only up to 10,000 characters (hooks
   // docs), which tests/guard.test.mjs holds it to
   try {

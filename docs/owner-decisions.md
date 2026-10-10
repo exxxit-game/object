@@ -1,8 +1,17 @@
 # The owner's decisions
 
-Settled: never asked again, never advised against. A change comes only from the owner. Shown to
-every session at its start and after every compaction (`tools/claude-guard.mjs`, start). His words
+Settled: never asked again, never advised against. A change comes only from the owner. Loaded with
+CLAUDE.md, which imports this file, at every session start and after every compaction. His words
 quoted; the time is when he said it (UTC). A risk list or a general method is no reason to reopen one.
+
+## The process (the rebuild, docs/audit/process-rebuild.md)
+- Nothing moves on the game until the process is set up («нельзя улучшать игру, пока мы не улучшили процесс
+  разработки» 10.10); the rebuild goes by the plan, all at once.
+- Connectors: off - Notion, Jam, Adobe, Figma, the GitHub connector, Claude in Chrome, computer use, Minutes,
+  privacy-legal; kept - Claude Docs, the browser pane, Consensus, PubMed, reference lookup, PDF Tools, Dropbox,
+  one Supabase. The superpowers plugin off («да» 10.10).
+- After the rebuild the process is frozen: it changes only on a health-check finding or his word, and a change
+  replaces something («да», «согласен» 10.10).
 
 ## Order
 - The corridor is the reference every room is built on: finished to the end before anything else

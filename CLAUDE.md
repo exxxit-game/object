@@ -2,8 +2,8 @@
 
 "You are the object" (the name is never translated): a browser VR game (WebXR, A-Frame). The player is the
 subject of real psychology experiments, one room each, then sees how he was caught and what the study found.
-The start hook shows docs/owner-decisions.md (settled: never re-ask, never argue against) and docs/board.md
-(the work and its only order). Maps: docs/state.md, ARCHITECTURE.md. Answer the owner in Russian, plain
+His decisions load with this file, settled (never re-ask, never argue against): @docs/owner-decisions.md
+The start hook shows docs/board.md (the work and its only order). Maps: docs/state.md, ARCHITECTURE.md. Answer the owner in Russian, plain
 words, short. The repo is English; Russian only where tests/structure.test.mjs allows.
 
 ## How we work
