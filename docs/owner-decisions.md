@@ -12,6 +12,11 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   one Supabase. The superpowers plugin off («да» 10.10).
 - After the rebuild the process is frozen: it changes only on a health-check finding or his word, and a change
   replaces something («да», «согласен» 10.10).
+- CodeRabbit on its 14-day trial, kept and paid for only if it proves useful («14 дней нам хватит, чтобы...
+  попользоваться и понаходить все то, что нам необходимо. А если он нам будет очень полезен, я, может, и дальше
+  за него буду платить» 10.10 07:45). He sets up and connects what is needed; I check it all as one whole
+  («Все, что надо настроить, подключить, я настрою и подключу»; «когда мы беремся за это все вместе... не
+  работает» 07:45).
 
 ## Order
 - The corridor is the reference every room is built on (after the process rebuild, see The process): finished to the end before anything else
