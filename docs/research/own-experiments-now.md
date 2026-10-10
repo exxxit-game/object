@@ -8,6 +8,19 @@ primary page. Parts 4 (running and publishing), 5 (data-quality risks) and the l
 university: [ethics-law.md](ethics-law.md); how a lab runs a study, step by step, applied to a room:
 [study-methods.md](study-methods.md). Parts, each answered or marked "not found":
 
+The owner's questions about rooms (his words, our translation) and where each is answered; a question stays here
+until its answer is read and sourced:
+- "How did they collect data, what did they count as valid, what did they screen out?": field-labs-1/2, study-methods-1 part 2.
+- "At home you play for fun, you don't try like in a lab": study-methods-1 part 1 (commitment, playable practice,
+  end-of-run seriousness and no-blame questions, self-knowledge as the reward).
+- "Start with a minute of fun, then: let's take this seriously": study-methods-1 1g (practice trial, then commitment).
+- "Without humour you are a lab rat; a host leads you through the story": owner's decision (docs/owner-decisions.md);
+  fun around the measured moment, plain inside it (Lumsden 2016); deeper: reach study (running).
+- "How did those projects get millions of users?": reach study (running).
+- "Who approves our ethics?": ethics-law.md 1; open: MGPPU and SPbU committees (owner's pages, [own-experiments-now-2.md](own-experiments-now-2.md)).
+- "Which labs work now, and in Russia?": field-labs-1/2; open: MSU and MSUPE VR labs (owner's pages).
+- Two phones: part 3 here; open: Shiv 2005, Wilson & Nisbett 1978 (owner's pages).
+
 1. What psychology runs now (2023-2026) that a home VR game could join or run: 1a multi-site studies and registered
    reports; 1b citizen science and game-based research; 1c VR studies outside the lab; 1d open questions.
 2. 8-12 candidate experiments for our setup (one player, 5-10 min, body and head data, Russian-speaking first).
