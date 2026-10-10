@@ -75,6 +75,10 @@ export function extinguisher(x, wall) {
       ${[0.025, 0.06].map((dy) => `<a-cylinder position="${x} ${f(hookY + dy)} ${f(wall - 0.004)}" radius="0.005" height="0.003" rotation="90 0 0" decal="layer: 2" ${METAL}></a-cylinder>`).join('')}
       <a-box class="hanger" position="${x} ${f(hookY + HOOK.t / 2)} ${f((lipZ - HOOK.t / 2 + wall - HOOK.t) / 2)}" width="${HOOK.w}" height="${HOOK.t}" depth="${f(wall - HOOK.t - lipZ + HOOK.t / 2)}" color="#2b2b2b"></a-box>
       <a-box class="hanger" position="${x} ${f(hookY + HOOK.lip / 2)} ${f(lipZ)}" width="${HOOK.w}" height="${HOOK.lip}" depth="${HOOK.t}" color="#2b2b2b"></a-box>
+      <!-- the bottom's support: hung by the loop behind its top, the weight would swing its foot back to the
+           wall; a dark block on the wall behind the foot takes it, so it hangs upright on two points (the owner
+           in the headset: it cannot hang in the air) -->
+      <a-box class="foot-stop" position="${x} ${f(EXT.foot + 0.05)} ${f(wall - (wall - z - EXT.r + 0.0005) / 2)}" width="0.04" height="0.03" depth="${f(wall - z - EXT.r + 0.0005)}" color="#2b2b2b"></a-box>
       <!-- the shell: foot ring, straight shell, the seam bands at its foot and its top, the high round top -->
       <a-cylinder position="${x} ${f(EXT.foot + EXT.footH / 2)} ${z}" radius="${EXT.r + 0.0005}" height="${EXT.footH}" ${STEEL}></a-cylinder>
       <a-cylinder position="${x} ${f(EXT.foot + EXT.footH + EXT.shell / 2)} ${z}" radius="${EXT.r}" height="${EXT.shell}" ${STEEL}></a-cylinder>
