@@ -57,7 +57,6 @@ tests/NN-*.test.mjs; the smoke test runs every room to its end in CI
   Schema (supabase/schemas, 0009_data_protection.sql).
 - Languages: texts.en.js beside every texts.ru.js, voice per language, each language's script
   in the game's face (tests/fonts.test.mjs fails until its file is added).
-- A headset run in CI (an emulated WebXR device) beside the desktop smoke test.
 - A room scaffold (future tools/new-room.mjs): all files and tests of a new room at once.
 
 ## Rules that follow from this
