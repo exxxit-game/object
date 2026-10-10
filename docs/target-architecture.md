@@ -53,7 +53,8 @@ tests/NN-*.test.mjs; the smoke test runs every room to its end in CI
 - The reveal pager and a chart widget for "your timeline" (future src/app/reveal.js,
   src/engine/ui/timeline-chart.js).
 - "You against other players" is read for room 01 (`compareRoom`, src/engine/results.js; the word
-  "stats" stays out of file names, ad blockers block it); still to build: per-room validation in submit_run.
+  "stats" stays out of file names, ad blockers block it); each room version's report is checked against its JSON
+  Schema (supabase/schemas, 0009_data_protection.sql).
 - Languages: texts.en.js beside every texts.ru.js, voice per language, each language's script
   in the game's face (tests/fonts.test.mjs fails until its file is added).
 - A headset run in CI (an emulated WebXR device) beside the desktop smoke test.
