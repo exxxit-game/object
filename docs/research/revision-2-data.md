@@ -219,9 +219,9 @@ https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_3_201
 A. What "anonymous" means on the privacy page: (1) date only + random key + "your provider's logs may link a result
    to your IP for up to 7 days, then it is anonymous" (pick: true, cheap, keeps the word); (2) keep exact times and
    call the results "pseudonymous" (more science detail, weaker promise, GDPR applies in full while logs exist).
-B. Whether results may become science: (1) consent says now that anonymous results may be used for research and
-   published as open anonymous data (pick: every row from day one can count, data-platforms.md decision 1); (2) keep
-   "science only after a later, separate consent" (today's text; nothing collected now can ever be used).
+B. Whether results may become science: settled by the owner on 10.10 (docs/owner-decisions.md, "What the game
+   keeps"): first the player's own profile and anonymous numbers, science later and only on a separate consent («второй
+   потом, по отдельному согласию игрока»). The option of a research clause in today's consent is closed.
 C. Bot defence: (1) a hash of the IP kept 10 minutes for a per-source limit (pick: stops lock-outs; named as a
    security measure); (2) no IP at all: global limit + schema checks + alert (purest, a script can still lock out).
 D. A lawyer, when: (1) one consultation with a Ukrainian data-protection lawyer now, before testers (controller
