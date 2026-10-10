@@ -49,6 +49,10 @@ const CLIP = { d: 0.02, h: 0.025, top: EXT.foot + 0.07, x: EXT.r + 0.011 };
 // falling to its turned-down thumb end; the handle leaves the valve's side lower and curves down to
 // its own turned-down end, 12-17 mm under the collar's top (photos 3, 6, 19)
 const LEVER = '0.022 -0.004, 0.022 0.006, 0.010 0.017, -0.030 0.013, -0.065 0.008, -0.076 0.004, -0.081 -0.005, -0.076 -0.007, -0.068 0.000, -0.030 0.002, -0.012 0.000, 0.012 0.000, 0.016 -0.002';
+// the lever's head: a cast cap as wide as the valve, its top over the valve's top and its side walls
+// down the valve's sides, just clear of its widest radius (19 mm, the lathe below), 3 mm thick
+// (photos 5, 9); walls inside the valve were buried and showed only as two flat plates
+const CAP = { wall: 0.019 + 0.0015 };
 const HANDLE = '-0.014 -0.012, -0.050 -0.016, -0.088 -0.027, -0.111 -0.043, -0.120 -0.054, -0.114 -0.058, -0.101 -0.046, -0.079 -0.034, -0.047 -0.027, -0.016 -0.025';
 export function extinguisher(x, wall) {
   const z = wall - 0.03 - EXT.r, Y = EXT_Y, f = (v) => v.toFixed(4);
@@ -91,8 +95,9 @@ export function extinguisher(x, wall) {
            under it -->
       <a-entity position="${x} ${f(Y.bodyTop)} ${z}" outline="points: ${LEVER}; depth: 0.016; bevel: 0.002; ${CHROME_SHAPE}"></a-entity>
       <a-entity position="${x} ${f(Y.bodyTop)} ${z}" outline="points: ${HANDLE}; depth: 0.014; bevel: 0.002; ${CHROME_SHAPE}"></a-entity>
-      ${[-1, 1].map((s) => `<a-box position="${f(x + 0.005)} ${f(Y.bodyTop - 0.001)} ${f(z + s * 0.0095)}" width="0.034" height="0.018" depth="0.003" ${STEEL}></a-box>`).join('')}
-      <a-cylinder position="${x + 0.016} ${f(Y.bodyTop + 0.002)} ${z}" radius="0.0035" height="0.026" rotation="90 0 0" ${STEEL}></a-cylinder>
+      ${[-1, 1].map((s) => `<a-box position="${f(x + 0.005)} ${f(Y.bodyTop - 0.001)} ${f(z + s * CAP.wall)}" width="0.034" height="0.018" depth="0.003" ${STEEL}></a-box>`).join('')}
+      <a-box position="${f(x + 0.005)} ${f(Y.bodyTop + 0.0065)} ${z}" width="0.034" height="0.003" depth="${f(2 * CAP.wall + 0.003)}" ${STEEL}></a-box>
+      <a-cylinder position="${x + 0.016} ${f(Y.bodyTop + 0.002)} ${z}" radius="0.0035" height="${f(2 * CAP.wall + 0.006)}" rotation="90 0 0" ${STEEL}></a-cylinder>
       <!-- on the valve's back: the ring pin through its lugs and the ring hanging from it, the fill
            valve's knurled brass cap on its hex fitting below, the ring's chain to it; the ring's wire
            1.3 mm in radius (A-Frame draws twice radius-tubular) -->
