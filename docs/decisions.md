@@ -3,7 +3,7 @@
 Three lines each: what, why, consequence. No diary.
 
 ## No build step, A-Frame vendored
-Plain ES modules and `vendor/aframe-1.7.1.min.js`, served as static files.
+Plain ES modules and `vendor/aframe-1.8.0.min.js` (one line put back for multiview: tests/vendor.test.mjs), served as static files.
 Fewer moving parts for a non-programmer owner and for AI sessions.
 Consequence: no bundler, no npm runtime dependencies.
 

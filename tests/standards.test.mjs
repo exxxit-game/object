@@ -115,7 +115,7 @@ const bound = (t) => {
     const [rx, rz] = n && n < 12 ? [Math.max(...corners.map((a) => Math.abs(r * Math.sin(a)))), Math.max(...corners.map((a) => Math.abs(r * Math.cos(a))))] : [r, r];
     half = rot[0] === 90 ? [r, r, h / 2] : rot[2] === 90 ? [h / 2, r, r] : [rx, h / 2, rz];
   } else if (kind === 'torus') {
-    // A-Frame passes twice radius-tubular to three.js as the tube's radius (vendor/aframe-1.7.1.min.js)
+    // A-Frame passes twice radius-tubular to three.js as the tube's radius (vendor/aframe-1.8.0.min.js)
     const tube = 2 * Number(attr(t, 'radius-tubular')), r = Number(attr(t, 'radius')) + tube;
     half = [r, r, tube];
   } else if (kind === 'sphere') {

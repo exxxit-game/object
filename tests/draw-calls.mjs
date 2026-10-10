@@ -1,6 +1,7 @@
 // How many draw calls one frame of a place costs in VR, at its worst view, counted on the real XR path:
-// the smoke test puts on Meta's emulated headset (IWER, tests/smoke-vr.mjs) with both eyes drawn, as a
-// headset draws them (no multiview in A-Frame 1.7.1: src/rooms/01-control/scene.js). Quest 2, the
+// the smoke test puts on Meta's emulated headset (IWER, tests/smoke-vr.mjs) with both eyes drawn, each
+// on its own: the emulator has no OCULUS_multiview, which the headset's browser has and the game turns
+// on (src/rooms/01-control/scene.js), so in the headset each call is made once a frame. Quest 2, the
 // weakest headset whose budget the game keeps (docs/owner-decisions.md), wants fewer than 100 a frame
 // (Meta, device optimization comparison: docs/research/vr/01-meta.md).
 // Neither place is under it yet. The controllers' models alone draw 28 a frame (six parts and a ray

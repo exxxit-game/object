@@ -18,11 +18,13 @@ const SPACE = `space: 0 0 ${BOOTH.maxX - BOOTH.minX} ${BOOTH.maxZ - BOOTH.minZ}`
 // centre at a lower resolution, and Meta warns that "high-contrast or text-heavy scenes may make the
 // foveation artifacts more obvious" (developers.meta.com/horizon/documentation/web/webxr-ffr); with
 // it the door numbers looked blurred in the owner's headset and turned sharp without it.
-// No multiview (both eyes in one pass): A-Frame 1.7.1's renderer builds its XR manager without the
-// flag (vendor/aframe-1.7.1.min.js: "new Rm(E,xt)", the manager reads its fourth argument), so
-// multiviewStereo does nothing here, and where it is passed (1.8.0) textures first used in VR stay
-// black, the deferred uploads never run (supermedium/three.js PR #25). Each eye draws its own calls.
-export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true; foveationLevel: 0" background="color: #0b0b0d"
+// Multiview: both eyes drawn in one pass, so each draw call is made once a frame, not once an eye (Meta:
+// "Only CPU-bound experiences will benefit", "a CPU usage reduction of 25% - 50%"; Meta's IWSDK turns it
+// on by default: docs/research/engine-and-tools.md). A-Frame 1.8.0 passes the flag, but its three.js lost
+// the call that uploads the textures deferred during a multiview frame, so canvas text first drawn in VR
+// stayed black; vendor/aframe-1.8.0.min.js has it put back where super-three 0.181 has it
+// (supermedium/three.js PR #25; tests/vendor.test.mjs). Without OCULUS_multiview each eye draws as before.
+export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true; foveationLevel: 0; multiviewStereo: true" background="color: #0b0b0d"
          cursor="rayOrigin: mouse" raycaster="objects: .clickable; far: 8"
          vr-mode-ui="enabled: true" loading-screen="enabled: false" xr-mode-ui="enabled: true">
 
