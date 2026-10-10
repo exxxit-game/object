@@ -127,7 +127,7 @@ Consequence: a thing lying on a decal is a layer up (`decal="layer: 2"`: two equ
 
 ## The owner's automatic stop before the headset and the test copy
 VR in the headset (`tools/quest-look.mjs` vr, `tools/xr-probe-run.mjs`) and the test copy (`tools/publish-preview.mjs`) refuse until a practice reviewer has seen exactly the files a person meets (`tools/review-gate.mjs`).
-Why: a check built from a first idea wasted his headset run, and a rule in text did not stop the next one; the owner asked for a stop that does («автоматический стоп, который не даст начать проверку в очках без его разбора»). The record is written by Claude Code's own SubagentStart and SubagentStop hooks, never by the assistant, and counts only if the files did not change while the reviewer read them.
+Why: a check built from a first idea wasted his headset run, and a rule in text did not stop the next one; a stop that does was proposed in the assistant's words («автоматический стоп, который не даст начать проверку в очках без его разбора») and the owner said «Давай.» (9.10 13:34). The record is written by Claude Code's own SubagentStart and SubagentStop hooks, never by the assistant, and counts only if the files did not change while the reviewer read them.
 Consequence: every change to the game or the probe needs a fresh practice review before the owner meets it; no flag skips it (`tests/review-gate.test.mjs`, seen red in `tools/prove-guards.mjs`).
 
 ## The same picture on both end walls, one upside down

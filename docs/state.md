@@ -32,11 +32,7 @@
 - Voice: ElevenLabs key in ~/.elevenlabs-key.txt; Daniel, eleven_v3; `tools/make-voice.mjs`, `tools/check-voice.mjs`.
 
 ## Skills and tools, and when to use them
-- Rooms: the new-room skill (its room recipe). Papers: the index docs/library.md, then the research-desk skills
-  research-litnote (a paper into a note), paper-compare (several papers), citation-check (references real?).
-- Install and store: meta-vr hz-store-pwa, hz-store-submit; comfort in the headset: meta-vr hz-immersive-designer.
-- Research: the deep-research agent (a wide question) or quick-research (one fact); reviews: practice-reviewer,
-  paper-reviewer, fact-checker, request-auditor. The laptop: node tools/health.mjs. Other installed skills idle.
+- docs/tools.md, loaded with CLAUDE.md in every session. Other installed skills idle.
 
 ## Decisions with the owner
 All in `docs/owner-decisions.md` (shown at every session start): settled, never asked again.
@@ -62,11 +58,10 @@ All in `docs/owner-decisions.md` (shown at every session start): settled, never 
   person meets (tools/review-gate.mjs); the first real review was recorded by the hook on 9.10. The rebuilt
   controllers-and-hands probe (tools/xr-probe-input.html) follows docs/audit/probe-review.md.
 - Prompt and agent hooks need Claude Code 2.1.294 or later; the terminal and the app may run different versions.
-- metavr shows 0 tools in every session (its log: `%LOCALAPPDATA%\claude-cli-nodejs\Cache\<project>\mcp-logs-plugin-meta-vr-metavr`):
-  started through npx it answers Claude Code's new-protocol probe late (4.5 s), Claude Code then treats it as
-  new-protocol and the server refuses the tool list ("request _meta is missing"); asked directly it lists 38.
-  Recheck the log after the desktop app's Claude Code update. Supabase: the plugin's server is not signed
+- Meta's tools: the Meta VR CLI is installed (npm install -g metavr, Meta's own package) and runs from the shell
+  (metavr device, perf, vrc-local); the meta-vr plugin's MCP server gave 0 tools (started through npx it answered
+  Claude Code's protocol probe late and then refused the tool list), so the CLI is the way in. Supabase: the plugin's server is not signed
   in; the claude.ai connector's writes and any SELECT that calls a writing function are refused by
   tools/claude-guard.mjs. The process rebuild of 10.10 and its audits' findings: docs/audit/process-rebuild.md.
 - Earlier causes and audits: docs/audit/README.md. Corridor: finished item by item on the board; approved shots in docs/rooms/corridor-shots/.
-  Style book: https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH. Git guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.
+  Style book: https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH. How to use Claude Code, his memo: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.

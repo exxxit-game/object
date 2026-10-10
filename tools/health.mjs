@@ -51,7 +51,9 @@ export const PROGRAMS = [
   { name: 'tesseract', args: ['--version'], expect: /^tesseract v?\d\S*/m, fix: reinstall('tesseract') },
   { name: 'adb', args: ['version'], expect: /^Android Debug Bridge version \S+/m, fix: 'unpack Android platform-tools (developer.android.com/tools/releases/platform-tools) into C:\\adb\\platform-tools' },
   { name: 'scrcpy', args: ['--version'], expect: /^scrcpy \d\S*/m, fix: 'scoop install scrcpy' },
-  { name: 'ffmpeg', args: ['-version'], expect: /^ffmpeg version \S+/m, fix: 'scoop install ffmpeg' }
+  { name: 'ffmpeg', args: ['-version'], expect: /^ffmpeg version \S+/m, fix: 'scoop install ffmpeg' },
+  // Meta's own CLI: performance traces and store checks of the headset build (its MCP server gave no tools)
+  { name: 'metavr', args: ['--version'], expect: /^metavr \d\S*/m, fix: 'npm install -g metavr (Meta\'s package, github.com/meta-quest/agentic-tools)' }
 ];
 export const TESSERACT_LANGS = ['eng', 'rus'];
 
