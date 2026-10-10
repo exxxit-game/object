@@ -6,7 +6,7 @@ primary page. Parts 4 (running and publishing), 5 (data-quality risks) and the l
 [own-experiments-now-2.md](own-experiments-now-2.md). How working labs run studies outside the lab, lab by lab:
 [field-labs-1.md](field-labs-1.md), [field-labs-2.md](field-labs-2.md); ethics review and data law for a team without a
 university: [ethics-law.md](ethics-law.md); how a lab runs a study, step by step, applied to a room:
-[study-methods.md](study-methods.md); how science projects reached millions, and fun without spoiling data: [science-reach.md](science-reach.md); how precise our data can be, and how much each fix buys: [data-precision.md](data-precision.md). Parts, each answered or marked "not found":
+[study-methods.md](study-methods.md); how science projects reached millions, and fun without spoiling data: [science-reach.md](science-reach.md); how precise our data can be, and how much each fix buys: [data-precision.md](data-precision.md); continental Europe, Israel and Latin America in their own languages: [world-europe.md](world-europe.md), [world-europe-2.md](world-europe-2.md). Parts, each answered or marked "not found":
 
 The owner's questions about rooms (his words, our translation) and where each is answered; a question stays here
 until its answer is read and sourced:
