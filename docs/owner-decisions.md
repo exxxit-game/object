@@ -40,7 +40,13 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   человеческие способности, вот наша цель. Узнать и помочь их открыть в себе и развить.» 10.10). The limit is the
   person's own («ты сам себе худший забор»), as Korzybski reached him through Stuart Chase and Hayakawa; the text
   ends «добро пожаловать в лаборатория экспериментальной психологии», «почти готовый текст» (where it is used: his
-  choice). What the game keeps about a player follows from this goal (his explanation of what we collect comes next).
+  choice). It goes everywhere, each place in its own form: the manifesto, the game and Store page, the corridor's
+  welcome («всё и сразу», «это же наша цель… она везде» 10.10); three drafts wait for his edit.
+- What the game keeps (10.10): first the player's own profile across rooms stays on his headset and only anonymous
+  numbers go to the server; later, on a separate consent, the player is asked whether he wants to help science, and on
+  a yes his data goes, as a user's feedback goes to an AI's makers («сначала первый путь, а второй потом, по
+  отдельному согласию игрока. подходит. спросим, хочет ли он помочь науке, если да. данные идут»); science use still
+  only after ethics approval and preregistration. Bots: a hashed IP kept 10 minutes («Отпечаток IP на 10 минут»).
 
 ## Order
 - The corridor is the reference every room is built on (after the process rebuild, see The process): finished to the end before anything else
