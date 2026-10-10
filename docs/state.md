@@ -13,11 +13,12 @@
   insert-only for anon, verified. Sending is ON in code with consent; privacy page `privacy.html`
   (contact t.me/exxxit). Tests pin client fields to the SQL (`tests/results.test.mjs`, `tests/playtest.test.mjs`).
 - Papers (PDF + text, not in repo): `C:\Users\admin\Documents\objekt-papers\`, copied to `F:\objekt-papers-backup`
-  and Dropbox `/objekt-papers` (516 files checked 9.10; a new paper goes into both by hand: the Dropbox
-  connector writes text only, so a PDF needs the owner's drag on dropbox.com); still missing:
-  `docs/papers-needed.md`. 145 cards from full texts: `docs/cards/`, checked by
+  and Dropbox `/objekt-papers` (a new paper goes into both; `node tools/health.mjs` checks the F: copy; the Dropbox
+  connector writes text only, so a PDF needs the owner's drag on dropbox.com); the card index of
+  the whole library: `docs/library.md` (sections, then one line per paper, then card, then text; wanted and
+  dropped papers in `docs/library/wanted.md`; a new paper needs a record in `docs/library/papers.json`). 145 cards from full texts: `docs/cards/`, checked by
   `node tools/check-cards.mjs`; catalog generated: `docs/catalog.md` (`node tools/build-catalog.mjs`);
-  coverage closed: `docs/search-coverage.md`; ideas: `docs/ideas/`; headset abilities:
+  search coverage: `docs/library/coverage.md`; ideas: `docs/ideas/`; headset abilities:
   `docs/headset-capabilities.md`; owner page: https://claude.ai/artifact/Srhwjio7Ukp4FBDQAHpZB2
 - THE WORK is the one-page board `docs/board.md` (shown at every start; his yes is the only measure of progress).
   Every owner message is logged on the laptop by the prompt hook. The big plan (archive and strategy, read only
