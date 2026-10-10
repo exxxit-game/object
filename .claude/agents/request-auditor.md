@@ -22,5 +22,5 @@ Do:
    he already made: quote both; this is WRONG. A risk list or method is no reason to ask him again.
 
 Report in English, under 400 words: only MISSING and WRONG items (a short quote of him in Russian,
-time, what is wrong, where it belongs), at most 5, most important first. If nothing is lost, say so.
+time, what is wrong, where it belongs), every one found, most important first. If nothing is lost, say so.
 A gap that changes nothing for him is not a finding.
