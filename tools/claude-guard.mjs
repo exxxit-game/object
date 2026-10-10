@@ -326,6 +326,11 @@ export const readOnlySql = (q) => /^\s*(select|with|explain|show)\b/i.test(q) &&
   && !/\b(insert|update|delete|drop|alter|create|grant|revoke|truncate|copy|call|do|merge|vacuum|comment|set|reset|lock|refresh|reindex|cluster|import|security)\b/i.test(q)
   && !SQL_WRITE_CALLS.test(q);
 
+// GitHub's own tests on room-polish (the smoke test runs only there): ten red runs in a row went
+// unseen while work went on, so the start says a red last run (gh run list --json: one run or none)
+export const ciLine = (run) => (run?.conclusion === 'failure'
+  ? `GitHub's tests are RED on room-polish (${run.displayTitle}): ${run.url}: read why before other work (gh run view ${run.databaseId} --log-failed)` : null);
+
 if (mode === 'pre') {
   const tool = String(event.tool_name || '');
   if (BROWSER_TOOLS.test(tool)) stop('REFUSED: this tool starts a browser on the laptop; Playwright and Chromium run only on GitHub (use the browser pane for a look).');
@@ -375,10 +380,15 @@ if (mode === 'start') {
     const health = execFileSync(process.execPath, [path.join(HERE, 'tools', 'health.mjs')], { cwd: HERE, encoding: 'utf8', timeout: 15000 }).trim();
     out.push(/broken|warning/.test(health) ? `Health check (tools/health.mjs), tell the owner what is broken:\n${health}` : health.split('\n')[0]);
   } catch { out.push('WARNING: the health check (tools/health.mjs) did not finish: run it by hand.'); }
-  // the outside reviewer's open remarks on the pull request into main, read before other work
+  // the outside reviewer's open remarks on the pull request into `reviewed`, read before other work
   try {
     const remarks = execFileSync(process.execPath, [path.join(HERE, 'tools', 'coderabbit.mjs')], { cwd: HERE, encoding: 'utf8', timeout: 10000 }).trim();
     if (remarks) out.push(remarks);
+  } catch { /* GitHub out of reach: nothing to say */ }
+  try {
+    const runs = JSON.parse(execFileSync('gh', ['run', 'list', '--branch', 'room-polish', '--workflow', 'test.yml', '--limit', '1', '--json', 'conclusion,displayTitle,url,databaseId'], { cwd: HERE, encoding: 'utf8', timeout: 10000, windowsHide: true }));
+    const red = ciLine(runs[0]);
+    if (red) out.push(red);
   } catch { /* GitHub out of reach: nothing to say */ }
   process.stdout.write(`${out.join('\n\n')}\n`);
   process.exit(0);
@@ -437,7 +447,11 @@ if (mode === 'stop') {
   // written rule to bring it over at the end of a step does not hold when a session ends mid-step
   if (gitHere('rev-parse', '--verify', '-q', 'room-polish') && gitHere('merge-base', '--is-ancestor', 'HEAD', 'room-polish') === null) {
     const branch = gitHere('rev-parse', '--abbrev-ref', 'HEAD');
-    problems.push(`the main folder (room-polish, where the next window starts) lacks ${gitHere('rev-list', '--count', 'room-polish..HEAD')} commits of this branch: in it run git merge --ff-only ${branch}, then git push origin room-polish`);
+    // another window's commits on room-polish make the fast-forward fail; both windows write the
+    // board's showing and current lines, and a conflict resolved to one side loses the owner's words
+    const theirs = gitHere('merge-base', '--is-ancestor', 'room-polish', 'HEAD') === null ? gitHere('rev-list', '--count', 'HEAD..room-polish') : null;
+    const first = theirs ? `room-polish has ${theirs} commits of another window: first here run git merge room-polish, keeping both sides of every conflict in docs/board.md (the owner's words), then ` : '';
+    problems.push(`the main folder (room-polish, where the next window starts) lacks ${gitHere('rev-list', '--count', 'room-polish..HEAD')} commits of this branch: ${first}in it run git merge --ff-only ${branch}, then git push origin room-polish`);
   }
   // npm test is not run here: it runs before "done" and on GitHub, and the commit hook's quick check
   // before every commit; running the whole suite again cost 12-56 s a turn

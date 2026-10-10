@@ -125,6 +125,10 @@ const CASES = [
   ['claude-guard stop', 'the next window has the work', 'a turn ends with the main folder behind this branch',
     () => { git('checkout', '-q', '-b', 'planted-session'); git('branch', '-f', 'room-polish', 'HEAD'); append('docs/roadmap.md', '\nplanted\n'); git('commit', '-qam', 'planted'); },
     () => askGuard('stop', { stop_hook_active: false }), 'lacks'],
+  // after it, on that branch: another window's commit on room-polish, so a fast-forward alone would fail
+  ['claude-guard stop', 'the next window has the work', 'two windows: room-polish moved on while this branch did',
+    () => { git('branch', '-f', 'room-polish', 'HEAD~1'); git('checkout', '-q', 'room-polish'); append('docs/state.md', '\nother window\n'); git('commit', '-qam', 'other window'); git('checkout', '-q', 'planted-session'); },
+    () => askGuard('stop', { stop_hook_active: false }), 'first here run git merge room-polish'],
 ];
 
 const restore = () => {

@@ -10,7 +10,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { refusal } from '../tools/claude-guard.mjs';
+import { refusal, ciLine } from '../tools/claude-guard.mjs';
 import { onHead } from '../tools/headset.mjs';
 import { MARK, unrelayed, sinceOwner } from '../tools/owner-links.mjs';
 import { BOARD, SHOWS, YES, PENDING, shows, dayKey, plannedToday, stalled, saidYes } from '../tools/board.mjs';
@@ -106,6 +106,9 @@ const refused = cases([
   'gh api repos/exxxit-game/youaretheobject/merges -f base=main -f head=room-polish',
 ]);
 for (const [c, shell] of refused) assert.ok(refusal(c, shell === PS), `the guard let through: ${c}`);
+// a red last run of GitHub's tests is said at the start; a green one, one still running or none is not
+assert.match(ciLine({ conclusion: 'failure', displayTitle: 'x', url: 'https://github.com/r/actions/runs/7', databaseId: 7 }), /RED on room-polish \(x\): .+gh run view 7 --log-failed/);
+for (const run of [{ conclusion: 'success' }, { conclusion: '' }, undefined]) assert.equal(ciLine(run), null);
 
 const allowed = cases([
   'grep -n camera tests/smoke.mjs',

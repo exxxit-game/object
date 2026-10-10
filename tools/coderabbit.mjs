@@ -15,11 +15,16 @@ export const FILE_LIMIT = 300;
 const [OWNER, NAME] = REPO.split('/');
 const QUERY = `query { repository(owner: "${OWNER}", name: "${NAME}") {
   pullRequests(states: OPEN, baseRefName: "${BASE}", headRefName: "room-polish", first: 1) { nodes { number url headRefOid changedFiles
-    commits(last: 1) { nodes { commit { status { contexts { context state description } } } } }
+    commits(last: 1) { nodes { commit { committedDate status { contexts { context state description } } } } }
     reviewThreads(first: 100) { pageInfo { hasNextPage } nodes { isResolved isOutdated comments(first: 1) { nodes { author { login } path } } } } } } } }`;
 
+// A push it has not read for hours may never be read: after the trial a public repository under 10
+// stars is reviewed only when asked ("For public repositories with less than 10 stars, CodeRabbit
+// requires reviews to be triggered manually", docs.coderabbit.ai/management/plans), so the line says
+// how long the head has waited and, past WAIT hours, how to ask.
+export const WAIT = 2;
 // what to say at the start of a session
-export function summarize(data) {
+export function summarize(data, now = Date.now()) {
   const pr = data?.data?.repository?.pullRequests?.nodes?.[0];
   if (!pr) return { line: `CodeRabbit: no open pull request from room-polish into ${BASE}, so nothing is reviewed: open one (gh pr create --base ${BASE} --head room-polish)` };
   const open = pr.reviewThreads.nodes.filter((t) => !t.isResolved && !t.isOutdated && /^coderabbitai/.test(t.comments.nodes[0]?.author?.login || ''));
@@ -32,7 +37,11 @@ export function summarize(data) {
     return { line: `CodeRabbit: ${open.length} open remark${open.length === 1 ? '' : 's'} on ${pr.url} (${files.slice(0, 4).join(', ')}${files.length > 4 ? ', …' : ''}): read them before other work (gh pr view ${pr.number} --comments), fix the real ones, answer and resolve the rest` };
   }
   if (skipped) return { line: `CodeRabbit skipped the last push (${status.description}) on ${pr.url}: ${pr.changedFiles > FILE_LIMIT ? `${pr.changedFiles} files against its limit of ${FILE_LIMIT}; ` : ''}ask it again with a comment "@coderabbitai review"` };
-  if (!read) return { line: `CodeRabbit: the last push to ${pr.url} is not read yet` };
+  if (!read) {
+    const at = Date.parse(pr.commits.nodes[0]?.commit?.committedDate || ''), hours = Number.isNaN(at) ? null : Math.floor((now - at) / 3600000);
+    const waited = hours === null ? '' : ` (waiting ${hours} h)`;
+    return { line: `CodeRabbit: the last push to ${pr.url} is not read yet${waited}${hours >= WAIT ? `: past ${WAIT} h it may never come (a public repository under 10 stars is reviewed only when asked once the trial ends); ask with a comment "@coderabbitai review"` : ''}` };
+  }
   return { line: `CodeRabbit: no open remarks on ${pr.url}; the robot on GitHub moves ${BASE} up` };
 }
 

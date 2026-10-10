@@ -1,6 +1,6 @@
 // The laptop's health in plain words: every program the project calls, the PATH, the papers library
-// and its backup, the research agents' tools, and whether the guards Claude Code runs are this
-// checkout's. Things here broke without a sound (an OCR program registered but gone from the disk,
+// and its backup, the research agents' tools, whether the guards Claude Code runs are this
+// checkout's, and whether the results database answers. Things here broke without a sound (an OCR program registered but gone from the disk,
 // agents without their paper tools, a guard fixed in one checkout while another copy runs), and the
 // owner reads no code, so each problem is one line: what is wrong and what to do.
 // Usage: node tools/health.mjs [--all] [--strict]
@@ -279,6 +279,30 @@ export function headsetInfo(devices) {
   return info('no headset on the cable');
 }
 
+// --- The results database --------------------------------------------------------------------
+// Supabase pauses a free project after a week with too few database requests ("a few user requests to
+// the database each day over the previous week is enough", supabase.com/docs/guides/platform/
+// free-project-pausing), and the game ignores a failed send, so results would be lost without a sound
+// and only the owner can resume it. So each check makes one read (compare_room, the aggregates every
+// reveal reads with the game's public key, src/engine/results.js) and says when it does not answer.
+export function databaseCall(source = fs.readFileSync(path.join(ROOT, 'src', 'engine', 'results.js'), 'utf8')) {
+  const endpoint = source.match(/const ENDPOINT = '([^']+)'/)?.[1], key = source.match(/const PUBLIC_KEY = '([^']+)'/)?.[1];
+  if (!endpoint || !key) return null;
+  return { url: endpoint.replace('submit_run', 'compare_room'), key, project: new URL(endpoint).hostname.split('.')[0] };
+}
+export async function checkDatabase(call = databaseCall(), fetchIt = fetch) {
+  if (!call) return broken('the results database\'s address or key is no longer in src/engine/results.js: the check reads them there');
+  const resume = `https://supabase.com/dashboard/project/${call.project}`;
+  try {
+    const r = await fetchIt(call.url, { method: 'POST', headers: { apikey: call.key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_room: '01-control', p_version: 1 }), signal: AbortSignal.timeout(6000) });
+    return r.ok ? ok('the results database answered (a read a day keeps the free plan from pausing)')
+      : broken(`the results database answered ${r.status}: a free project pauses after a week without requests and the game's results are then lost; the owner resumes it at ${resume} (Resume project)`);
+  } catch (e) {
+    return warning(`the results database was not reached (${e.name === 'TimeoutError' ? 'no answer in 6 s' : 'no network?'}); if it lasts, the owner checks ${resume}`);
+  }
+}
+
 // --- The report ------------------------------------------------------------------------------
 export function format(results, { all = false } = {}) {
   const bad = results.filter((r) => r.level === 'broken'), look = results.filter((r) => r.level === 'warning');
@@ -307,7 +331,7 @@ export function runAll() {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  const results = runAll();
+  const results = [...runAll(), await checkDatabase()];
   console.log(format(results, { all: process.argv.includes('--all') }));
   process.exitCode = process.argv.includes('--strict') && results.some((r) => r.level === 'broken') ? 1 : 0;
 }

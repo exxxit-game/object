@@ -9,7 +9,7 @@ import path from 'node:path';
 import {
   findOnPath, parseShimgenHelp, parseScoopShim, parseExecScript, launcherOf, checkProgram, parseLangs, checkTesseractLangs,
   parseRegPath, expandVars, splitPath, deadPathEntries, words, checkPapers, agentLacks, agentHeaderProblems, localImports, sameText, checkGuards,
-  parseAdbDevices, headsetInfo, format, MIN_WORDS
+  parseAdbDevices, headsetInfo, format, MIN_WORDS, databaseCall, checkDatabase
 } from '../tools/health.mjs';
 import { summarize as summarizeRemarks } from '../tools/coderabbit.mjs';
 import { target as advanceTo } from '../tools/advance-reviewed.mjs';
@@ -137,13 +137,16 @@ assert.equal(newest(['2.1.293', '2.1.295', '2.1.30', 'tmp']), '2.1.295', 'versio
 // moved by the robot on GitHub (tools/advance-reviewed.mjs) only past commits it read, with nothing open,
 // and never onto the head, which would close the review window as merged
 const thread = (login, isResolved = false, isOutdated = false, p = 'src/a.js') => ({ isResolved, isOutdated, comments: { nodes: [{ author: { login }, path: p }] } });
-const prData = (threads, { state = 'SUCCESS', description = 'Review completed', changedFiles = 12 } = {}) => ({ data: { repository: { pullRequests: { nodes: threads === null ? [] : [{
+const prData = (threads, { state = 'SUCCESS', description = 'Review completed', changedFiles = 12, committedDate = '2026-10-10T10:00:00Z' } = {}) => ({ data: { repository: { pullRequests: { nodes: threads === null ? [] : [{
   number: 10, url: 'https://github.com/x/y/pull/10', headRefOid: 'abcdef1234567', changedFiles,
-  commits: { nodes: [{ commit: { status: { contexts: [{ context: 'CodeRabbit', state, description }] } } }] }, reviewThreads: { pageInfo: { hasNextPage: changedFiles === 999 }, nodes: threads } }] } } } });
+  commits: { nodes: [{ commit: { committedDate, status: { contexts: [{ context: 'CodeRabbit', state, description }] } } }] }, reviewThreads: { pageInfo: { hasNextPage: changedFiles === 999 }, nodes: threads } }] } } } });
 assert.match(summarizeRemarks(prData([], { changedFiles: 999 })).line, /more than 100 remark threads/, 'threads past the first page are not taken for none');
 const said = (...a) => summarizeRemarks(prData(...a));
 assert.match(said([thread('coderabbitai'), thread('coderabbitai', true), thread('coderabbitai', false, true), thread('exxxit-game')]).line, /^CodeRabbit: 1 open remark on .*pull\/10 \(src\/a\.js\)/, 'only its open, current remarks count');
 assert.match(said([], { state: 'PENDING', description: 'Review in progress' }).line, /not read yet/, 'a review still running is said as such');
+const pending = (hoursAgo) => summarizeRemarks(prData([], { state: 'PENDING', description: 'Review in progress' }), Date.parse('2026-10-10T10:00:00Z') + hoursAgo * 3600000).line;
+assert.match(pending(1), /not read yet \(waiting 1 h\)$/, 'a fresh push only waits');
+assert.match(pending(30), /waiting 30 h\): .+ask with a comment "@coderabbitai review"/, 'a push waiting for hours says how to ask for its review');
 assert.match(said([], { description: 'Review skipped: 428 files exceed the limit of 300', changedFiles: 428 }).line, /428 files against its limit of 300/, 'a skipped review is said with its reason');
 const read = (s) => s !== 'c4';
 assert.equal(advanceTo(['c1', 'c2', 'c3'], read, 0), 'c2', 'the head read: the baseline stops one short, so the pull request stays open');
@@ -193,4 +196,16 @@ assert.equal(format(mixed), 'health: 1 broken, 1 to look at\nbroken: tesseract m
 assert.equal(format([...okOnly, mixed[3]]), 'health: ok (4 checks), 1 to look at\nwarning: PATH names a folder that does not exist: C:\\Old');
 
 fs.rmSync(tmp, { recursive: true, force: true });
+// the results database: one read a day keeps the free plan awake; a paused one is broken, no network a warning
+const call = databaseCall("const ENDPOINT = 'https://abcd.supabase.co/rest/v1/rpc/submit_run';\nconst PUBLIC_KEY = 'sb_publishable_x';");
+assert.deepEqual(call, { url: 'https://abcd.supabase.co/rest/v1/rpc/compare_room', key: 'sb_publishable_x', project: 'abcd' });
+assert.equal(databaseCall('no address here'), null);
+assert.equal((await checkDatabase(null)).level, 'broken', 'no address to call is broken');
+let asked;
+assert.equal((await checkDatabase(call, async (url, o) => { asked = [url, o.headers.apikey, o.method]; return { ok: true, status: 200 }; })).level, 'ok');
+assert.deepEqual(asked, [call.url, 'sb_publishable_x', 'POST'], 'it reads compare_room with the game\'s public key');
+const paused = await checkDatabase(call, async () => ({ ok: false, status: 540 }));
+assert.equal(paused.level, 'broken');
+assert.match(paused.text, /answered 540: .+https:\/\/supabase\.com\/dashboard\/project\/abcd/);
+assert.equal((await checkDatabase(call, async () => { throw new TypeError('fetch failed'); })).level, 'warning', 'no network is a warning');
 console.log('health tests: ok');
