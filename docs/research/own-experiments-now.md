@@ -6,7 +6,7 @@ primary page. Parts 4 (running and publishing), 5 (data-quality risks) and the l
 [own-experiments-now-2.md](own-experiments-now-2.md). How working labs run studies outside the lab, lab by lab:
 [field-labs-1.md](field-labs-1.md), [field-labs-2.md](field-labs-2.md); ethics review and data law for a team without a
 university: [ethics-law.md](ethics-law.md); how a lab runs a study, step by step, applied to a room:
-[study-methods.md](study-methods.md); how science projects reached millions, and fun without spoiling data: [science-reach.md](science-reach.md). Parts, each answered or marked "not found":
+[study-methods.md](study-methods.md); how science projects reached millions, and fun without spoiling data: [science-reach.md](science-reach.md); how precise our data can be, and how much each fix buys: [data-precision.md](data-precision.md). Parts, each answered or marked "not found":
 
 The owner's questions about rooms (his words, our translation) and where each is answered; a question stays here
 until its answer is read and sourced:
@@ -18,7 +18,7 @@ until its answer is read and sourced:
   fun around the measured moment, plain inside it (Lumsden 2016); science-reach.md part 3 (Sea Hero Quest, Portal).
 - "How did those projects get millions of users?": science-reach.md parts 1-2.
 - "Take all they solved, check how far it solves the problem; how precise can our data be, how do they measure
-  precision?": precision study (running).
+  precision?": data-precision.md (fixes table and order: [data-precision-2.md](data-precision-2.md)).
 - "Who approves our ethics?": ethics-law.md 1; SPbU IRB#1 takes outside organisations for a fee; MGPPU reviews joint studies (ethics-law.md 1d) (owner's pages, [own-experiments-now-2.md](own-experiments-now-2.md)).
 - "Which labs work now, and in Russia?": field-labs-1/2; Russia: MSU and MGPPU VR labs (field-labs-2.md).
 - Two phones: part 3 here; open: Shiv 2005, Wilson & Nisbett 1978 (owner's pages).

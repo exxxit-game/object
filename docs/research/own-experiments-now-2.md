@@ -144,3 +144,7 @@ Paywalls (need access):
 - https://doi.org/10.1007/978-3-319-21996-7_47: "Virtual Blindness" 2015, detection by immersion condition.
 - https://www.campaignlive.co.uk/article/case-study-deutsche-telekom-brought-its-brand-purpose-life-mobile-gaming/1403023
   (bot check): Sea Hero Quest's media plan (TV, film, online), budget if stated, downloads by date, "1 million in 16 days".
+- https://journals.sagepub.com/doi/10.1177/25152459211007467 (SAGE): Scheel 2021, how "positive result" was coded,
+  the 96% vs 44% table.
+- https://doi.org/10.1109/tvcg.2025.3549182 (IEEE paywall): Quest 3 vs Quest Pro hand tracking, error, jitter, latency.
+- https://research-collection.ethz.ch/handle/20.500.11850/516589: Quest 2 vs SteamVR tracking, accuracy in mm.
