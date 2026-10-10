@@ -41,7 +41,19 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   person's own («ты сам себе худший забор»), as Korzybski reached him through Stuart Chase and Hayakawa; the text
   ends «добро пожаловать в лаборатория экспериментальной психологии», «почти готовый текст» (where it is used: his
   choice). It goes everywhere, each place in its own form: the manifesto, the game and Store page, the corridor's
-  welcome («всё и сразу», «это же наша цель… она везде» 10.10); three drafts wait for his edit.
+  welcome («всё и сразу», «это же наша цель… она везде» 10.10). The three texts, accepted as written («Да» 10.10):
+  Manifesto: «Скрытые человеческие способности — вот наша цель: узнать их и помочь открыть в себе и развить. Всё
+  упирается в собственные ограничения: ты сам себе худший забор. Как только сказал «я не могу» — сразу себя зашторил.
+  А ты просто не пробовал иначе. Нет такого, чего человек не умеет, — есть нежелание учиться или ещё не найденный
+  учитель, который донесёт доступно. Человек — сложнейшая биологическая машина, способная изменить планету, и мы это
+  сделали. И тот же вид в то же время сидит на диване и думает, что начальник мудак. Разница катастрофическая. Жизнь
+  потеряла вкус и смысл? Добро пожаловать в лабораторию экспериментальной психологии.»
+  Game and Store page: «Скрытые способности человека. Чаще всего нас ограничиваем только мы сами. You are the object —
+  лаборатория экспериментальной психологии в VR: настоящие опыты, на которых учёные открывали, как устроен человек.
+  Пройдите их сами — и узнайте, на что способны вы.»
+  Corridor welcome (goes in with the corridor's texts, board item 7): «Добро пожаловать в лабораторию экспериментальной
+  психологии. Здесь изучают скрытые способности человека. Человек — сложнейшая биологическая машина, способная
+  изменить планету. Чаще всего её ограничивает только она сама. Сегодня объект исследования — вы.»
 - What the game keeps (10.10): first the player's own profile across rooms stays on his headset and only anonymous
   numbers go to the server; later, on a separate consent, the player is asked whether he wants to help science, and on
   a yes his data goes, as a user's feedback goes to an AI's makers («сначала первый путь, а второй потом, по
