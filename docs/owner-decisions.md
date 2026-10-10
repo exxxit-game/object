@@ -65,6 +65,10 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   («давай доделывать коридор до конца, а потом уже будем делать дальше» 8.10 21:27; «доделать эталонный
   коридор, на который мы опираемся» 9.10 14:08). Its order: «Подпись, печать, лаборатории, картины…
   указатель… свет» (8.10 21:27); visuals first, its texts after («Сначала… визуальные, а потом и текстовые» 9.10 09:41).
+- Until the corridor is done («Да» 10.10, after «это уже девятое окно, и я все время прошу и одном и том же»): one window
+  at a time, the others closed; in it only the corridor, one item from start to finish, then a picture to him and his
+  yes or fix; whatever comes up on the way (money, checks, ideas, his questions not about the corridor) is one line at
+  the end of the board and waits, unless he says it is urgent; the board's first line counts the corridor's items done.
 - The headset check now, before the next room («Давай сейчас и потом продолжим правки» 9.10 04:28;
   «Мы все время откладывали эту проверку» 12:37).
 - Yesterday's errors closed fully first («решим их полностью и потом начнем что-то дальше двигать» 9.10 04:30).
