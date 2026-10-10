@@ -127,3 +127,27 @@ https://www.irs.gov/pub/irs-trty/ukrain.pdf (text extracted with pdftotext)
   (above). Which article, if any, to name on W-8BEN for Meta: not confirmed (Meta's own form wizard decides
   what it asks).
 
+### Part 3. Currency rules (laws and NBU acts, texts downloaded from zakon.rada.gov.ua 2026-10-10)
+- Law on Currency and Currency Operations 2473-VIII (edition of 26.06.2026),
+  https://zakon.rada.gov.ua/laws/show/2473-19 : Art. 13(1) the NBU "may set settlement deadlines for export
+  and import operations of goods" (translated); 13(2) the export proceeds "are to be credited to the
+  residents' accounts in Ukrainian banks" (translated), the deadline counted, for "works, services,
+  intellectual property rights", "from the day an act, invoice or other document confirming their provision
+  is drawn up in writing" (translated). Art. 1: "goods" has the meaning of the Foreign Economic Activity law
+  (translated); (my reading) that covers services and IP rights, so a software sale abroad is "export of goods"
+  for currency control.
+- NBU Resolution 18 of 24.02.2022 (edition of 17.09.2026), https://zakon.rada.gov.ua/laws/show/v0018500-22 :
+  14-2 "settlement deadlines for export and import operations of goods are 180 calendar days" (translated).
+  No mandatory sale of export currency proceeds found in its text (searched; not found).
+- NBU Instruction on currency supervision, Resolution 7 of 02.01.2019 (edition of 31.05.2025),
+  https://zakon.rada.gov.ua/laws/show/v0007500-19 : 6(1) the bank supervises an export operation if, on the
+  date of "performing works, providing services, exporting intellectual property rights", payment has not yet
+  arrived (translated); 9(1) supervision ends when the unsettled amount "does not exceed the insignificant
+  amount" (translated), defined in 3(5) by reference to Article 20 of the AML law.
+- AML law 361-IX, https://zakon.rada.gov.ua/laws/show/361-20 : Art. 20(1) financial operations are threshold
+  operations if each "equals or exceeds 400 thousand hryvnias" (translated).
+- (My reading) Meta pays after the month of sale, so each month's sales are an export settled later; under
+  about UAH 400,000 per operation the bank does not keep it under deadline supervision; above it, the
+  180-day deadline applies, which Meta's 30-day payment meets. The documents a bank wants to close it
+  (contract, act/invoice, Meta's payment report) are each bank's own list: not confirmed per bank.
+

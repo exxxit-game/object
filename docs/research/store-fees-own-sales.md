@@ -75,3 +75,23 @@ The project's paper library (C:\Users\admin\Documents\objekt-files\papers\) has 
   curl or the browser pane (menu only). The older SDK doc (https://picosdken.readthedocs.io/en/latest/chapter%20seven.html,
   seen only in a search result, not opened) speaks of in-game items being added in the developer backend.
 - Whether a PWA listed by URL can take payments at all: not found (as in revision-1-store.md part 12).
+
+### 1.3 Steam (desktop wrapper; Steam Frame)
+- Fee: Valve's own text (the Steam Distribution Agreement, behind the partner login; the 2018 announcement
+  https://steamcommunity.com/groups/steamworks/announcements/detail/1697191267930157838 did not render) not read.
+  Press report of that announcement (https://www.pcgamesn.com/steam-revenue-split-big-games, seen in a search
+  result): 75/25 "on earnings beyond $10M", 80/20 beyond $50M; the 30% base rate: not confirmed from Valve's text.
+- In-game purchases, Steamworks "Microtransactions", https://partner.steamgames.com/doc/features/microtransactions
+  (read 10.10, no date shown): "For any in-game purchases, you'll need to use the microtransaction API so Steam
+  customers can only make purchases from the Steam Wallet." So (a) no own web payment inside the Steam build.
+- Steam Keys, https://partner.steamgames.com/doc/features/keys (read): "a free service we provide to developers as
+  a convenient tool to help you sell your game on other stores"; "You can request Steam Keys only for content that
+  is available for purchase or download on Steam. This includes games, demos, and DLC"; "It is important that you
+  don't give Steam customers a worse deal than Steam Key purchasers"; free-to-play games "cannot request Steam Keys
+  by default". So selling the game or DLC as Steam Keys on our own site is allowed (Valve takes nothing on keys sold
+  elsewhere: the page calls keys "a free service"), at a price no better than on Steam.
+- (b) links to buy elsewhere from inside a Steam game, (c) unlocking content bought on another platform, (d) a free
+  Steam app unlocked by our own codes: no Steamworks page found that states the rule: not confirmed.
+- Steam Frame: Steamworks has "How to upload Android APKs to Steam"
+  (https://partner.steamgames.com/doc/steamhardware/steamframe/apk_upload, read): "check Android under Supported
+  Operating Systems". Whether a TWA (a browser shell) runs on Steam Frame: not confirmed.
