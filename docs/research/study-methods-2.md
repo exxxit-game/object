@@ -134,7 +134,36 @@ Part 1 (seriousness, data quality) is in study-methods-1.md. Same rules: link + 
 - https://www.vrprotocols.org/ (opened in the browser): pillars "Pillar 1: Interoperability", "Pillar 2: Procedural
   Standardisation", "Pillar 3: Data Sharing", plus "Health, Safety, and Ethics"; workflow "Plan Your Project" ->
   "Conduct Research" -> "Audit & Submit" (export a checklist as JSON/Word/PDF, self-audit at the end). The item list
-  appears only after ticking badges (needs clicks; our tools cannot click): owner list.
+  appears only after ticking badges; the owner ticked all four and exported the checklist (v.0.62, 10.10.2026, 8
+  pages; copy in objekt-papers/vrprotocols-checklist-v0.62.pdf). All items "Required". What it asks, and where we
+  stand (our reading):
+  - Interoperability: common formats and engines, assets listed in a repository with version numbers (engine and
+    tools), version control, OpenXR and SDK versions. Ours: public git repo, A-Frame pinned in vendor/; WebXR is the
+    browser's standard, not OpenXR itself (to state in the report).
+  - Reporting: simulation name and version; trial length incl. breaks; "simulation mode" (on the headset) and
+    researcher involvement; "observatory condition" (who watches); HMD make, resolution, field of view, refresh rate;
+    the physical space; participant instructions incl. "training or familiarization periods" and their duration;
+    the tasks. Ours: at home, unattended, the player's own room: to report as such.
+  - Standard battery: a presence measure ("IPQ, SUS, or SPES") and VR familiarity ("Self-rated familiarity, 2 items").
+  - Ethics: consent names cybersickness and possible distress, "withdraw at any time without penalty"; informed
+    choices on biometric and interaction data; GDPR; "robust encryption ... in transit and at rest"; explicit use and
+    reuse of data; IRB approval; distressing scenarios named in the consent; harm mitigation; virtual humans keep out
+    of the participant's personal space unless the question needs it.
+  - Accessibility: not colour alone; adjustable size and distance; dominant-hand choice; hand or controller and a
+    seated alternative; subtitles that can be turned off; few buttons; highlighted interactables; small steps.
+  - Safety: 90 Hz or more and 6DoF; IPD set; boundary system; "Avoid leaving ambulatory participants in VR
+    unattended" (at home we cannot: a deviation to declare, seated or standing tiers only); audio level; natural
+    locomotion; smooth movement; "Gradual Acclimation ... starting with simple, low-intensity tasks" and "Controls
+    Training" (the owner's warm-up idea is the standard's own step); a comfort rating told beforehand; rest.
+  - Data sharing: rights to share the simulation and assets; readme; the complete simulation and assets; participant
+    data as a benchmark; open repository; csv with a codebook; head orientation and other automatic output "in a
+    separate file"; analysis reproducible in two steps; the repository link in the paper.
+  - Items that appear only for some project features (the full live list the owner sent, and the exported project
+    file objekt-papers/vrprotocols-project-v0.62.json): "Detail Deviations" (off OpenXR: name the SDK and the headsets
+    it runs on: ours, WebXR in the Quest browser); hardware and software reported; open source for custom software;
+    asset EULAs, repurposed or reputable-store assets; controllers and motion tracking described; the code of the
+    virtual environment uploaded; sensitive variables removed before sharing; analysis code also in plain text; and
+    "Prevent Reidentification": body or eye tracking never combined with other data that could re-identify a person.
 - Other checklists seen only in search results (unverified): Skorupska et al., "All Factors Should Matter!" (arXiv
   2101.01285), a reference checklist of hardware, software and human factors for describing IVR experiments;
   VR-Check (Krohn et al. 2020, JMIR, PMC7215516), 10 dimensions for clinical neuropsychology VR paradigms.
@@ -242,6 +271,6 @@ Each step: what to do -> source (file section). "Ours" = our adaptation where no
 ## Not reached / unverified (part 2)
 
 - Behind bot checks or 403 for our tools: Simonsohn 2015 full text; Klein et al. 2018 (Many Labs 2) criteria; Hauser
-  & Schwarz 2015; Lakens 2022 journal version; Openverse 2026 full text; vrprotocols.org item list (needs clicks).
+  & Schwarz 2015; Lakens 2022 journal version; Openverse 2026 full text (the vrprotocols.org item list: 5a).
 - Not opened: Charness et al. 2012; CONSORT randomisation items; Bargh & Chartrand 2000 funnel debriefing; Meade &
   Craig 2012; Ward & Meade 2023; Curran 2016; AsPredicted price.

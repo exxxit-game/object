@@ -130,7 +130,6 @@ quote; "unverified" marks what was not confirmed on a primary page.
 ## Pages only the owner can open (region block, bot check, paywall, clicks), and what to bring back
 
 Bot checks or clicks (open in a browser):
-- https://www.vrprotocols.org/: tick all four badges, export the checklist PDF (the VR reporting standard).
 - https://journals.sagepub.com/doi/10.1177/2515245918810225: Many Labs 2, the exact rule for "replicated".
 - https://journals.sagepub.com/doi/10.1177/0956797614567341: Simonsohn 2015, the 33%-power benchmark and 2.5x rule.
 - https://journals.sagepub.com/doi/full/10.1177/2158244015584617: Hauser & Schwarz 2015, where to place checks.
