@@ -378,7 +378,10 @@ if (mode === 'start') {
   // the start (it takes about 2 s; a hung check must not hold the session up)
   try {
     const health = execFileSync(process.execPath, [path.join(HERE, 'tools', 'health.mjs')], { cwd: HERE, encoding: 'utf8', timeout: 15000 }).trim();
-    out.push(/broken|warning/.test(health) ? `Health check (tools/health.mjs), tell the owner what is broken:\n${health}` : health.split('\n')[0]);
+    // at most five problem lines: a machine missing many programs (GitHub's runner) printed so many
+    // that the start passed Claude Code's 10,000 characters and the board was no longer whole
+    const [head, ...rest] = health.split('\n'), more = rest.length - 5;
+    out.push(/broken|warning/.test(health) ? `Health check (tools/health.mjs), tell the owner what is broken:\n${[head, ...rest.slice(0, 5)].join('\n')}${more > 0 ? `\n…and ${more} more: node tools/health.mjs` : ''}` : head);
   } catch { out.push('WARNING: the health check (tools/health.mjs) did not finish: run it by hand.'); }
   // the outside reviewer's open remarks on the pull request into `reviewed`, read before other work
   try {
