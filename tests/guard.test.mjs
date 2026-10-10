@@ -176,6 +176,26 @@ assert.equal(ask('Bash', 'git commit -n -m x'), 2, 'the hook let a hook-skipping
 assert.equal(ask(PS, 'npm run test:smoke'), 2, 'the hook let the smoke test run in PowerShell');
 assert.equal(ask('Bash', 'grep -rn "git commit --no-verify" docs/'), 0, 'the hook refused a search');
 
+// One window at a time (tools/one-window.mjs): the window the owner last wrote in holds the work,
+// another may not run commands or change files, and its turn ends without demands. A holder file and
+// a home of the test's own, so neither the real holder nor his message log is touched.
+{
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'one-window-'));
+  const env = { ...process.env, OBJECT_WINDOW: path.join(dir, 'window.json'), HOME: dir, USERPROFILE: dir };
+  const hook = (mode, event) => spawnSync(process.execPath, ['tools/claude-guard.mjs', mode], { cwd: ROOT, encoding: 'utf8', env, input: JSON.stringify({ cwd: ROOT, ...event }) }).status;
+  hook('prompt', { session_id: 'A', prompt: 'his message' });
+  assert.equal(JSON.parse(fs.readFileSync(env.OBJECT_WINDOW, 'utf8')).session, 'A', 'the window he wrote in does not hold the work');
+  assert.equal(hook('pre', { session_id: 'B', tool_name: 'Bash', tool_input: { command: 'ls' } }), 2, 'another window ran a command');
+  assert.equal(hook('pre', { session_id: 'B', tool_name: 'Edit', tool_input: { file_path: 'x.js' } }), 2, 'another window changed a file');
+  assert.equal(hook('pre', { session_id: 'A', tool_name: 'Bash', tool_input: { command: 'ls' } }), 0, 'the window he wrote in was stopped');
+  assert.equal(hook('stop', { session_id: 'B' }), 0, 'a window without the work was asked to save or push');
+  hook('prompt', { session_id: 'B', prompt: '<task-notification>a helper finished</task-notification>' });
+  assert.equal(JSON.parse(fs.readFileSync(env.OBJECT_WINDOW, 'utf8')).session, 'A', 'a notice took the work, not his message');
+  hook('prompt', { session_id: 'B', prompt: 'now here' });
+  assert.equal(hook('pre', { session_id: 'B', tool_name: 'Bash', tool_input: { command: 'ls' } }), 0, 'the work did not follow him to the window he wrote in');
+  fs.rmSync(dir, { recursive: true, force: true });
+}
+
 // The headset tools restart nothing while the owner wears the headset: the power service's dump
 // says mounted with no override of ours (tools/headset.mjs). Dumps as the headset printed them.
 const dump = (state, virtual) => `Virtual proximity state: ${virtual}\nisAutosleepDisabled: false\nState: ${state}\n`;

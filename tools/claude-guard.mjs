@@ -11,7 +11,8 @@
 //         can open, left by research since his last message, has not reached him (owner-links.mjs),
 //         or while the board has no row for today saying what he will see (board.mjs)
 //   start, prompt: the board comes back at start and after every compaction; every owner message
-//         is logged
+//         is logged, and the window it was written in holds the work (one-window.mjs): another
+//         window may read but not run commands or change files, and its turns end freely
 // Imported with no mode (tests/guard.test.mjs), it only defines refusal() and readOnlySql().
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -22,6 +23,7 @@ import { withoutGitVars } from './secrets.mjs';
 import { unrelayed, sinceOwner } from './owner-links.mjs';
 import { scan, named, entries, write, lastReport, REVIEWER, REPORT_END } from './review-gate.mjs';
 import { BOARD, SHOWS, LOG, shows, stalled, plannedToday } from './board.mjs';
+import { windowFile, take, elsewhere } from './one-window.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DECISIONS = 'docs/owner-decisions.md';
@@ -345,6 +347,8 @@ export const ciLine = (run) => (NEEDS_LOOK.has(run?.conclusion)
 
 if (mode === 'pre') {
   const tool = String(event.tool_name || '');
+  const other = /^(Bash|PowerShell|Write|Edit|MultiEdit|NotebookEdit)$/.test(tool) ? elsewhere(windowFile(HERE), event.session_id) : null;
+  if (other) stop(`REFUSED: another window holds the work: the owner wrote there last (${other.at}). This window may only read; tell him so, and go on when he writes here.`);
   if (BROWSER_TOOLS.test(tool)) stop('REFUSED: this tool starts a browser on the laptop; Playwright and Chromium run only on GitHub (use the browser pane for a look).');
   if (DB_WRITES.test(tool)) stop('REFUSED: the live database is read-only for the assistant; a change goes into supabase/migrations and reaches the server only on the owner\'s word.');
   if (GITHUB_WRITES.test(tool)) stop('REFUSED: this connector writes to GitHub past the push hook (main only on the owner\'s word, the secret check); commit and git push instead.');
@@ -445,12 +449,15 @@ if (mode === 'prompt') {
     const said = String(event.prompt || '');
     if (!/^\s*<(task-notification|system-reminder|agent-message|artifact-view-context)\b/.test(said)) {
       fs.appendFileSync(log, `\n## ${new Date().toISOString()} ${event.session_id || ''}\n${said}\n`);
+      take(windowFile(HERE), event.session_id);
     }
   } catch { /* a failed log must not stop his message */ }
   process.exit(0);
 }
 
 if (mode === 'stop') {
+  // a window that does not hold the work may not save or push, so nothing is asked of it
+  if (elsewhere(windowFile(HERE), event.session_id)) process.exit(0);
   const problems = [];
   const dirty = gitHere('status', '--porcelain');
   if (dirty) problems.push(`work not saved (power is cut daily):\n${dirty}`);
