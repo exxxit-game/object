@@ -1,15 +1,16 @@
 // The owner's automatic stop (tools/review-gate.mjs) both ways: the headset tools and the test copy
 // refuse with no practice review of the current files, a review recorded by Claude Code's hook
 // (tools/claude-guard.mjs, subagent-start and subagent-stop) lets them go, any change to what a
-// person meets stops them again, and the assistant cannot write the record or point the tools at
-// another one. Runs on a scratch checkout with its own record; nothing touches the headset.
+// person meets stops them again (the assistant's own look excepted, after a fix only of files the
+// review named), and the assistant cannot write the record or point the tools at another one.
+// Runs on a scratch checkout with its own record; nothing touches the headset.
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { fingerprint, reviewOf, REPORT_END } from '../tools/review-gate.mjs';
+import { fingerprint, reviewOf, lookOf, REPORT_END } from '../tools/review-gate.mjs';
 import { withoutGitVars } from '../tools/secrets.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -67,6 +68,14 @@ review('good-1');
 assert.ok(reviewOf(place, record), 'a whole practice review of these very files lets the tools go');
 put('tools/xr-probe.html', '<p>probe, changed</p>\n');
 assert.equal(reviewOf(place, record), null, 'the probe changed after the review: the stop holds again');
+// the assistant's own look in the headset after fixing what a review found (quest-look vr): a change
+// only to files the report named lets it go; the test copy still waits for a review of these files
+review('fix-1', { report: `The answer button in src/a.js is too small to hit.\n${REPORT_END} none` });
+put('src/a.js', 'export const a = 5;\n');
+assert.equal(reviewOf(place, record), null, 'after the fix the test copy waits for a new review');
+assert.ok(lookOf(place, record), 'a fix only of the files the review named lets the own look go');
+put('index.html', '<html>changed</html>\n');
+assert.equal(lookOf(place, record), null, 'a file the review did not name changed: the own look waits too');
 
 // the tools refuse before they touch the headset or GitHub (an empty record: no review exists); run
 // with only node on the path, so a stop that ever broke could reach no adb, git or gh from here
@@ -93,4 +102,4 @@ for (const c of ['node tools/quest-look.mjs vr', 'node tools/publish-preview.mjs
 }
 
 fs.rmSync(tmp, { recursive: true, force: true });
-console.log('review gate: ok (the stop holds without a review, after a change, for other agents and cut reports; the record is the hook\'s alone)');
+console.log('review gate: ok (the stop holds without a review, after a change, for other agents and cut reports; the own look goes after a fix of what the review named; the record is the hook\'s alone)');

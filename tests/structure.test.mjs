@@ -96,17 +96,25 @@ for (const d of docs) {
 }
 assert.deepEqual(missing, [], `docs name files that do not exist: ${missing.join(', ')}`);
 
-// 8. The mistakes file: short, and every row names its guard (an existing file,
-// which rule 7 checks).
-const mistakes = fs.readFileSync(path.join(ROOT, 'docs/mistakes.md'), 'utf8').split('\n');
-assert.ok(mistakes.length <= 60, 'docs/mistakes.md over 60 lines: merge rows');
-for (const row of mistakes.filter(l => l.startsWith('| ') && !/^\| (Mistake|---)/.test(l))) {
-  assert.ok(/`(src|tests|tools|docs|\.claude|\.github)\/[^`]+`/.test(row.split('|')[2] || ''), `mistake without a guard: ${row.slice(0, 80)}`);
+// 8. The mistakes file: every row names the test that now catches its mistake, as the test's file
+// and words that stand in it (an assertion's message or the code that checks): a file name alone
+// stayed "guarded" after its check was removed. A row no test catches says so ("unguarded: why").
+// A test file is one under tests/ or one GitHub's run starts. One row per line, of any length.
+{
+  const ci = fs.readFileSync(path.join(ROOT, '.github/workflows/test.yml'), 'utf8');
+  const isTest = (p) => p.startsWith('tests/') || ci.includes(`node ${p}`);
+  const rows = fs.readFileSync(path.join(ROOT, 'docs/mistakes.md'), 'utf8').split(/\r?\n/).filter((l) => l.startsWith('| ') && !/^\| (Mistake|---)/.test(l));
+  for (const row of rows) {
+    const guard = row.split('|').slice(2, -1).join('|').trim();
+    if (/^unguarded: \S.{9,}/.test(guard)) continue;
+    const named = [...guard.matchAll(/`([^`]+)` "([^"]+)"/g)].filter(([, p]) => isTest(p));
+    assert.ok(named.length, `mistake without a guard (a test file and its words, or "unguarded: why"): ${row.slice(0, 80)}`);
+    for (const [, p, words] of named) {
+      const text = fs.existsSync(path.join(ROOT, p)) ? fs.readFileSync(path.join(ROOT, p), 'utf8') : '';
+      assert.ok(text.includes(words), `mistake names words its test does not have: ${p} "${words}" (${row.slice(0, 60)})`);
+    }
+  }
 }
-// tools/prove-guards.mjs plants a two-line row here; with no room left it goes red on the cap,
-// not on the missing guard, so the proof fails on GitHub after a green commit. Checked after the
-// rows, so the planted row still fails on its missing guard first.
-assert.ok(mistakes.length + 2 <= 60, 'docs/mistakes.md leaves no room for the planted row: merge rows');
 
 // 9. Every script parses: a shell heredoc can change backslashes silently.
 const scripts = [...code, ...walk(path.join(ROOT, 'tests')), ...walk(path.join(ROOT, 'tools'))]

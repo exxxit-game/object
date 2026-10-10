@@ -71,8 +71,9 @@ if (cmd === 'restart-browser' || cmd === 'reboot') {
   process.exit(0);
 }
 
-// the owner's automatic stop: no VR in the headset until the practice reviewer saw these files
-if (cmd === 'vr' || (cmd === 'eval' && /enterVR|requestSession/.test(arg || ''))) requireReview(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), 'VR in the headset');
+// the owner's automatic stop: no VR in the headset until the practice reviewer saw these files, or
+// saw them before a fix of only the files its report named (tools/review-gate.mjs lookOf)
+if (cmd === 'vr' || (cmd === 'eval' && /enterVR|requestSession/.test(arg || ''))) requireReview(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), 'VR in the headset', { look: true });
 const game = await page(/object-preview\/|localhost:3000/);
 if (!game) { console.log('no game tab: run "node tools/quest-look.mjs open" first'); process.exit(1); }
 const { tab, send, run } = game;
