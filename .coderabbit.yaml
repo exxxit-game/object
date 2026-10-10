@@ -1,6 +1,7 @@
 # CodeRabbit, the reviewer from outside (the owner's 14-day trial, docs/owner-decisions.md): it reviews the
-# one open pull request from room-polish into main, the live site, incrementally on every push, against
-# the repository's rules; its open remarks are read at each session start (tools/coderabbit.mjs).
+# one open pull request from room-polish into the branch `reviewed` (the last state it has read), on every
+# push, against the repository's rules; its open remarks are read at each session start and `reviewed`
+# moves up once a push is read with nothing open (tools/coderabbit.mjs).
 # It changes nothing on its own: the repository is public, and main changes only on the owner's word.
 # Keys: https://docs.coderabbit.ai/reference/configuration (schema: coderabbit.ai/integrations/schema.v2.json)
 language: en-US                      # the repository is English; the owner hears about it in Russian from the assistant
@@ -14,6 +15,8 @@ reviews:
     drafts: false
     auto_incremental_review: true
     auto_pause_after_reviewed_commits: 0   # every push of the long-lived pull request is read, not the first five
+    base_branches:
+      - "^reviewed$"                      # main is the default and is reviewed anyway; the pull request targets this one
   finishing_touches:                 # each of these pushes code or opens pull requests
     docstrings:
       enabled: false

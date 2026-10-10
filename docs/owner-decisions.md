@@ -16,8 +16,8 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   replaces something («да», «согласен» 10.10).
 - CodeRabbit on its 14-day trial, kept and paid for only if it proves useful («14 дней нам хватит, чтобы...
   попользоваться и понаходить все то, что нам необходимо. А если он нам будет очень полезен, я, может, и дальше
-  за него буду платить» 10.10 07:45). It reviews the one open pull request from room-polish into main and
-  replaces the PR review toolkit plugin (the setup page, «делай» 09:27). He sets up and connects what is
+  за него буду платить» 10.10 07:45). It reviews the one open pull request from room-polish into the branch
+  reviewed (what it has already read; into main it hit its 300-file limit) and replaces the PR review toolkit plugin (the setup page, «делай» 09:27). He sets up and connects what is
   needed; I check it all as one whole («Все, что надо настроить, подключить, я настрою и подключу»; «когда мы
   беремся за это все вместе... не работает» 07:45).
 - Plugins on for every project: CodeRabbit and the TypeScript language server («ставь» 9.10 15:13); the rest
