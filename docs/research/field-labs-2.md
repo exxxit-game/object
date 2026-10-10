@@ -17,13 +17,21 @@
     performance with which I may not agree. Knowing this, I wish to proceed" (touchscreen or keyboard).
   - Geo-routing to country sites ("It looks like you are taking this from Canada. Click here to go to our Canadian
     site."); the menu has "Donate".
-- About page (https://www.projectimplicit.net/about/, via WebFetch): offers to "discuss your research, education,
-  or consulting needs" (paid services to organisations: details not on the page, unverified); a "Perception
-  Institute" collaboration link (not read). Founders, test counts, OSF data archive: not read (unverified).
+- About page (https://www.projectimplicit.net/about/, via WebFetch): "Schedule a call ... to discuss your research,
+  education, or consulting needs"; whether paid is not stated there or on the Perception Institute page, which is a
+  partner's "Hair Implicit Association Test (IAT)" (https://www.projectimplicit.net/perception-institute-collaboration/).
+- Founders and data (OSF archive wiki, read via the OSF API, https://osf.io/y9hiq/wiki): "founded as a
+  multi-university research collaboration in 1998 by three scientists - Tony Greenwald (University of Washington),
+  Mahzarin Banaji (Harvard University), and Brian Nosek (University of Virginia), and was incorporated as a
+  non-profit in 2001" (Ratliff & Smith 2024 say "In 2003 ... incorporated"; sources differ); "15 IAT studies"; yearly data sets with codebooks;
+  users must agree to "strictly non-commercial research purposes" and "not attempt to identify or re-identify".
+  Total test count: see science-reach.md A3.
 
 ### 8. MIT Moral Machine (Awad, Dsouza, Rahwan - MIT Media Lab; Shariff, UBC; Bonnefon, Toulouse; USA/Canada/France)
-- Awad et al. (2018), Nature 563:59-64, doi:10.1038/s41586-018-0637-6 - only abstract and extended data were open
-  (https://www.nature.com/articles/s41586-018-0637-6): "40 million decisions in ten languages from millions of
+- Awad et al. (2018), Nature 563:59-64, doi:10.1038/s41586-018-0637-6; full text with Methods read and saved
+  objekt-papers/awad-2018.txt (open copy https://cdn.vanderbilt.edu/vu-my/wp-content/uploads/sites/2688/2020/01/11235711/The_Moral_Machine_experiment.pdf).
+  Ethics: "This study was approved by the Institute Review Board (IRB) at Massachusetts Institute of Technology
+  (MIT)"; no consent wording in the paper. Reporting summary: "the sample is self-selected". Other facts: "40 million decisions in ten languages from millions of
   people in 233 countries and territories"; "data, both at the individual level (anonymized IDs) and the country
   level, can be used beyond replication". Robustness checks used "only first completed (13-scenario) session by
   any user" because those respondents "had not seen their summary of results yet" (repeat-play handling).
@@ -34,8 +42,8 @@
   ten languages incl. Russian "through a process of forward-translation and back-translation"; country from
   "approximate geo-location information ... through the IP addresses". The first-session data set exists because
   repeat sessions bring "adapting respondents, who upon seeing a summary of their results decided to make different
-  decisions". Checks: scenario order, left-right position, device, description seen. No ethics approval or consent
-  wording in the abstract page or the supplement; the Methods are behind the paywall (EUR 39.95, not bought).
+  decisions". Checks: scenario order, left-right position, device, description seen. No ethics or consent wording in
+  the supplement (the IRB sentence is in the Methods, above).
 - Awad, Dsouza, Shariff, Rahwan & Bonnefon (2020), PNAS 117(5):2332-2337, full text read and saved
   objekt-papers/awad-2020.txt (Europe PMC PMC7007553):
   - Flow: 3 dilemmas ("Classic" mode, from June 2017), text translated "using a translation and back-translation
@@ -46,7 +54,8 @@
     users opted to fill out that survey"; "75% of survey takers were men, 75% were younger than 32".
   - Self-critique: "We relied on voluntary participation in a viral online experiment, and our sample shows clear
     signs of self-selection." Data and code: "deposited in the Open Science Framework".
-  - Ethics body: not stated in the main text read (in the SI, not read): unverified.
+  - Ethics body: not in the main text; its SI could not be fetched (PMC bot check, Europe PMC archive cut off).
+    Same website as the 2018 study, whose Methods name the MIT IRB (above).
 - Platform: a plain website (moralmachine.mit.edu), no pay; the reward is a summary of your choices vs others
   (the Nature extended data mention the "summary of results").
 
@@ -71,10 +80,15 @@
     number); complaints also to the UK ICO, "although note that anonymous research data is generally outside the
     scope of UK data protection law".
   - Benefits: "There are no direct benefits to taking part in the research." Age limit: none stated.
-- Original data deal (Telekom release, search snippet only, page returned 404 on fetch: unverified): data "stored
-  in a secure T-Systems server in Germany", analysis by UCL/UEA on anonymised data; Telekom "initiated and led".
-- Sea Hero Quest VR existed (search listing "saatchi londons award winning sea hero quest jumps to virtual
-  reality", lbbonline.com; not read: unverified).
+- Original data deal, Telekom launch release of May 04, 2016 (live page 404; Wayback copy read,
+  http://web.archive.org/web/20160723230306/http://www.telekom.com:80/media/company/311740): "All of the gameplay
+  data collected will be anonymised and stored securely within T-Systems data center in Germany"; design "led by
+  Saatchi & Saatchi London".
+- Sea Hero Quest VR, Telekom release (Wayback copy, http://web.archive.org/web/20250921114157/https://www.telekom.com/en/media/media-information/archive/revolutionary-virtual-reality-game-that-aids-dementia-research-501354):
+  "developed to work with the Samsung Gear VR", free "from 29th August 2017 via the Oculus mobile platform"; "The
+  project was initiated and led by Deutsche Telekom"; data "stored in a secure T-Systems server in Germany an [sic]
+  all analysis by the UCL / UEA team is conducted on entirely anonymous data"; mobile game "downloaded nearly 3
+  million times". (lbbonline.com article on the VR launch: the page shows no text in our browser; not needed now.)
 
 ### 5. Stanford Virtual Human Interaction Lab (Bailenson, Stanford, USA)
 - Han, Miller, DeVeaux, Jun, Nowak, Hancock, Ram & Bailenson (2023), "People, places, and time: a large-scale,
@@ -107,15 +121,21 @@
     under-age (age of majority by region: 18; "Taiwan, where the age of majority is 20"); "Prior participation"
     2.52%; failed all three comprehension questions 46.36%; "Knowledge of hypothesis" 2.15% (explicitly stated the
     hypothesis when asked); low language proficiency 22.17%. Final N = 4,826; site median 81 (28-588).
+- Network size (PSA's own Patreon page, undated, via WebFetch, https://www.patreon.com/psysciacc/about): "currently
+  over 500" labs "representing over 60 countries"; money goes to "Grants to support data collection costs in
+  under-resourced labs" and staff stipends. Home page (https://psysciacc.org/): "12+ projects in our study
+  portfolio"; its join page returned 404 (whether membership is free: not stated).
 
 ### 12. Russia (possible partners)
 - HSE Centre for Cognition & Decision Making (Institute for Cognitive Neuroscience, HSE University, Moscow).
   Participant page read (https://www.hse.ru/cdm-centre/cdm_exp_ru): it invites people "to take part in experiments
   run by staff and students of our Centre" and points to a VKontakte group and a Telegram channel
   (https://t.me/experimentshse) "with current information about experiments" (our translation). No pay, consent
-  or ethics details on that page (not found). Research lines from search snippets (unverified): decoding neural
-  processes in cognitive and neuroeconomic tasks, persuasion, cognitive dissonance, trust, neuromarketing; a MEG
-  lab with MSUPE's MEG centre. No VR or at-home study found for this centre.
+  or ethics details on that page (none). Corrected from snippets: the centre's home page
+  (https://www.hse.ru/cdm-centre/, via WebFetch) lists only groups - "Neuroeconomics", "mechanisms of impulsive and
+  risky decisions", "neurobiology of adaptive decisions", "dynamics of neuronal processes", "mathematical
+  modelling", "motor control", an "MEG group" (our translation); persuasion, dissonance, trust, neuromarketing are
+  not named there. No VR or at-home study found for this centre.
 - MSU Faculty of Psychology, "VR centre of MSU" page (https://vrmsu.ru/departments/psihfak/; region block, text sent
   by the owner, our translation): founded 1966, "13 departments and 5 research laboratories"; a programme on the
   psychological aspects of VR run by the Department of Methodology of Psychology, the "Perception" laboratory and
@@ -125,20 +145,30 @@
   translation): the "laboratory of virtual technologies and reserve capacities of the personality" of the Faculty of
   Extreme Psychology hosted on 11 March 2024 a presentation of "PsyTechVR" by the company Kore Partners Soft, for
   training psychologists in managing stress and phobias, "more than 50 VR scenes of a phobic nature", EMDR for PTSD;
-  organised by Prof. T. N. Berezina (mgppu.ru/news/13972). A company working with the lab: the partner model exists. Snippets (unverified): Institute of Experimental Psychology studies of VR and anxiety (Beck scale) and VR and
-  creativity with first- and second-year students (mgppu.ru/news/11095; naked-science.ru); a master's course
-  "Practicum on studying cognitive processes with a VR headset". All lab-based or clinical; no home-VR study found.
-- Institute of Psychology RAS: no VR or online-at-scale project found in two searches (not found).
-- RUDN University has a "Laboratory of Virtual Reality" page (https://www.rudn.ru/science/laboratories-and-centers/laboratoriya-virtualnoy-realnosti,
-  search listing only, not read: unverified whether it does psychology).
+  organised by Prof. T. N. Berezina (mgppu.ru/news/13972). A company working with the lab: the partner model exists.
+  MSUPE Institute of Experimental Psychology (Barabanshchikov, Selivanov; journal "Experimental Psychology"), two
+  lab studies on VIVE headsets, both via WebFetch (our translation): anxiety, 1 Dec 2023
+  (https://naked-science.ru/article/column/psihtualnoj-realnosti-pom): 44 people, programs "Anxiety: no-1/-2"
+  (third- vs first-person avatar, EMDR elements), Spielberger-Khanin and Beck scales, "training in a VR environment
+  significantly lowers anxiety"; creativity, 23 Nov 2023 (https://naked-science.ru/article/column/v-mgppna-psihiku-i-kreati):
+  "1st-2nd year students" of MSUPE and SmolGU, VR groups of 40, 23 and 10 vs 46 on monitors. The master's course
+  "Practicum ... with a VR headset": search listing only, not opened. All lab or clinical; no home-VR study.
+- Institute of Psychology RAS: no VR or online-at-scale project found in three searches (not found).
+- RUDN "Laboratory of Virtual Reality" (https://www.rudn.ru/science/laboratories-and-centers/laboratoriya-virtualnoy-realnosti,
+  via WebFetch): a unit of the centre for digital technologies in education, to "ensure effective use of VR
+  technologies in teaching students" (our translation); VR trainers for courses; no experiments with people. Not
+  a psychology lab.
 - Summary for Russia: lab and clinical VR work exists (MSU "Perception" lab, MSUPE); the field model we copy
   (public, unpaid, home, consent screens, open data) was not found at any Russian institution in this pass.
 
 ### 6. Mel Slater's EventLab (Universitat de Barcelona, Spain)
 - One search for a 2023-2025 EventLab study on participants' own headsets at home found none (not found). The
   lab's recent work in objekt-papers is lab-based (Slater et al. 2022, "A Separate Reality", Front. Virtual Real.,
-  "Event Lab, Faculty of Psychology, Universitat de Barcelona", objekt-papers/slater-2022.txt). Their published
-  open tool QuickVR (Unity library) and remote work: unverified.
+  "Event Lab, Faculty of Psychology, Universitat de Barcelona", objekt-papers/slater-2022.txt). QuickVR: Oliva,
+  Beacco, Navarro & Slater (2022), Front. Virtual Real. 3:937191, read in full, saved objekt-papers/oliva-2022.txt:
+  "publicly available and free for non-profit and research projects" (https://github.com/eventlab-projects/com.quickvr.quickbase),
+  setups for "Meta Quest, Pico Neo 2/3, OpenXR"; the paper says nothing of remote or at-home studies. A second
+  search (2026-10-10) again found no EventLab home-headset study (not found).
 
 ### 13. Other active labs of this kind (found on the way)
 - Bundeswehr University Munich / LMU Munich (Radiah, Makela, Prange, Delgado Rodriguez, Alt): "Remote VR Studies -
@@ -147,7 +177,10 @@
   via "Prolific (97), Reddit (95), mailing lists (14), Facebook (12), Discord (4)"; 67% willing to join VR studies
   after the pandemic. Pay: "mostly willing to accept cash (= 189, 83%), but also game vouchers (= 103, 45%). A
   total of 77 participants (34%) stated that they would do so voluntarily without any compensation."
-  (A 2022 follow-up, N=21, on setup help is listed in search only: unverified.)
+  2022 follow-up, read in full, saved objekt-papers/rivu-2022.txt (Rivu, Bayerl, Knierim & Alt, MUM 2022,
+  doi:10.1145/3568444.3568462): 21 people without own headsets set up an HTC VIVE at home; "12 participants
+  successfully assembled the hardware without assistance"; longest setup 47 minutes; "it is harder to recruit
+  participants who do not have prior VR experience" (many declined "thinking they were not tech-savvy enough").
 - TestMyBrain (Germine; McLean Hospital / Mass General Brigham + non-profit Many Brains; USA). Who-we-are page
   read (https://v5.testmybrain.org/dashboard/who-we-are.html): "co-supported by Many Brains and the Laboratory for
   Brain and Cognitive Health Technology (BaCH Tech Lab) at McLean Hospital. Since 2005, we have collected data
@@ -156,14 +189,21 @@
   build or develop specific cognitive tests or cognitive testing infrastructure". Citizen-science page
   (https://v5.testmybrain.org/using-tmb/citizen-science.html): "a not-for-profit initiative ... providing
   cognitive testing tools that allow people to engage in science and learn about themselves". Model: a university
-  lab + a non-profit that hosts other researchers' studies (the "platform for others" route). Consent text and
-  IRB: not read (unverified). LabintheWild's 2015 paper credits it: about 15-minute tests "proven to successfully
+  lab + a non-profit that hosts other researchers' studies (the "platform for others" route). Ethics in Germine et
+  al. 2012 (objekt-papers/germine-2012.txt): "Informed consent was obtained from all participants in accordance with
+  the guidelines set by the Committee for the Use of Human Subjects at Harvard University and Wellesley College";
+  exclusions: "self-reported technical problems, self-reported cheating, repeat participation", age <10 or >70. LabintheWild's 2015 paper credits it: about 15-minute tests "proven to successfully
   engage participants on TestMyBrain.org".
 
 ### 7 (cont.). Steed group, lessons from running out of the lab (UCL), full text saved objekt-papers/steed-2021.txt
 - Steed, Archer, Congdon, Friston, Swapp & Thiel (2021), "Some Lessons Learned Running Virtual Reality Experiments
   Out of the Laboratory", arXiv:2104.05359 (https://ar5iv.labs.arxiv.org/html/2104.05359). No 2023-2026 home-VR
-  study of this group was found in one search (not found).
+  study of this group was found in two searches (not found); nearest, Bovo, Giunchi, Costanza, Steed & Heinis
+  2022, Front. Comput. Sci. doi:10.3389/fcomp.2022.928269, on no-shows in remote collaborative VR (not opened).
+  - The 2016 study's live participant sheet (https://vr.cs.ucl.ac.uk/vrjam/information-for-participants, via
+    WebFetch): for owners of "Samsung Gear VR" or Cardboard; "You do not need to consent to data collection";
+    "No data is sent from the device until the experiment is completed"; removal by emailing the device used;
+    UCL Research Ethics Committee approval 0439/002.
   - Consent: "fully on the web as part of the download experience or from within the app. Our ethics approval
     allows for short-form instruction and consent in-app as long as participants can also access a long-form
     version online if they wish."
@@ -186,7 +226,7 @@ Common to (nearly) all:
 1. A named ethics body approves before any data: Copenhagen psychology dept (Mottelson); UCL Research Ethics
    Committee (Steed; Great Brain Experiment, no. 4354/001); Columbia IRB (Ouvrai); UW Human Subjects Division named
    on the consent screen (LabintheWild); UVA IRB named before every IAT (Project Implicit); St Andrews TREC (Sea Hero
-   Quest now); networks: each site's own approval filed with the preregistration (PSA). Moral Machine: unverified.
+   Quest now); networks: each site's own approval filed with the preregistration (PSA); MIT IRB (Moral Machine).
 2. Consent is a short screen before the task, with an independent contact and a long version online: LITW's four
    questions + one checkbox; Project Implicit's one-sentence "I wish to proceed"; Great Brain Experiment "on
    downloading the app"; Steed: "short-form ... consent in-app as long as participants can also access a long-form
@@ -232,15 +272,14 @@ Where they differ:
   the second group.
 - Exclusion rates: 2.2% (LITW Exp 1) to 48.88% (PSA Gettier, mostly comprehension and missing age).
 
-## Not reached / unverified (limit of about 25 page reads hit)
-- Stanford VHIL full text (bot check); Moral Machine ethics body (Nature main text paywalled, PNAS SI not read);
-  PSA membership and current projects (home page has no numbers); Project Implicit founders, test counts, OSF
-  archive; TestMyBrain consent and IRB; EventLab and Steed group home-VR studies 2023-2026 (none found in one search
-  each); Ouvrai's consent screen wording (in its GitHub code, not read); LabintheWild /donate page.
-- Russia: MSU VR centre and MSUPE pages opened by the owner (part 12); Institute of Psychology RAS: nothing found.
+## Not reached / still open (updated in pass 4, 2026-10-10)
+- Closed in pass 4: Ouvrai consent screen; LabintheWild donate page; Project Implicit founders, OSF archive and
+  counts; Moral Machine ethics (MIT IRB); Sea Hero Quest data deal and VR version; Stanford VHIL (owner's copy);
+  TestMyBrain ethics (2012 paper); PSA size; HSE centre groups; MSUPE studies; RUDN lab; QuickVR; Rivu 2022.
+- Still open: TestMyBrain's current consent wording (not opened); Moral Machine PNAS 2020 SI (PMC bot check);
+  EventLab and Steed-group home-VR studies 2023-2026 (none in two searches each); Institute of Psychology RAS
+  (nothing in three searches); whether PSA membership costs anything (join page 404).
 
 ## Pages only a person can open
-- https://academic.oup.com/jcmc/article/28/2/zmac031/6965183 - bot check: where headsets were worn, consent, IRB, pay.
-- https://vrmsu.ru/departments/psihfak/ - failed from our tools: MSU psychology VR programme, labs, contacts.
-- https://mgppu.ru/news/13972 - connection refused: MSUPE VR lab, PsyTechVR, research with participants.
-- https://www.nature.com/articles/s41586-018-0637-6 - paywall: Methods, ethics approval and consent of Moral Machine.
+- Done: JCMC (owner's copy), vrmsu.ru and mgppu.ru/news/13972 (text sent by the owner), Nature Moral Machine (open
+  copy found); mgppu.ru/news/11095 no longer needed (the same studies read on naked-science.ru).

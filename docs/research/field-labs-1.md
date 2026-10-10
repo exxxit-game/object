@@ -78,7 +78,11 @@ Parts (each gets an answer or "not found"):
   trials". Exclusion at trial level: "One trial from one participant was excluded because a valid reach angle
   could not be extracted" (no participant-level exclusions reported).
 - Ethics: "protocols approved by the Columbia University Institutional Review Board"; Helsinki 1964.
-- Debrief: not described in the paper (not found). Outside companies: none named beyond Prolific/MTurk/Firebase.
+- Consent screen in the code (github.com/EvanCesanek/ouvrai, lib/components/Consent.js): the lab's own form as a
+  PDF (a JPG in VR) in a frame, one checkbox "I agree to take part in this study." that enables "Continue". The VR
+  template's states run CONSENT, SIGNIN, WELCOME, CALIBRATE ... SURVEY, CODE; the last screen says "Thank you. Exit
+  VR to find the submission link on the study web page." No debrief state in the template or the paper (none).
+  Outside companies: none named beyond Prolific/MTurk/Firebase.
 
 ### 10. UCL "Great Brain Experiment" app (Dolan group, Wellcome Trust Centre for Neuroimaging, UCL, UK)
 - Brown, Zeidman, Smittenaar, Adams, McNab, Rutledge & Dolan (2014), PLoS ONE 9(7):e100662, full text read and
@@ -135,8 +139,9 @@ Parts (each gets an answer or "not found"):
   visitors new.
 - Who now (about page read in the browser, https://www.labinthewild.org/about): Katharina Reinecke "Co-Founder &
   Lead Researcher", "Professor of Computer Science at the University of Washington"; Gajos "Co-Founder & Friend
-  of LabintheWild" (Harvard SEAS); a lead technologist and a "Science Communicator". The home page also links a
-  /donate page (content not read: unverified). Live studies 2026 include frameline (Eastern/Western perception),
+  of LabintheWild" (Harvard SEAS); a lead technologist and a "Science Communicator". Donate page (read in the
+  browser, https://www.labinthewild.org/donate): "a tax-deductible donation to the University of Washington's
+  LabintheWild fund", an "unrestricted gift", once or monthly, paid through UW's site. Live studies 2026 include frameline (Eastern/Western perception),
   ai-values, socialmedia-ads, privacy expectations, peripheral vision.
 - LIVE FLOW WALKED (2026-10-10), study "Is your perception more Eastern or Western?"
   (https://studies.labinthewild.org/frameline/?REF=home). Landing: "This study takes 8-10 minutes" + "Begin

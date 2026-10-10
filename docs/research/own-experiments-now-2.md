@@ -173,3 +173,10 @@ Later research passes (optional, none blocks the work):
 - https://www.alexandria.unisg.ch/handle/20.500.14171/78586: Herrmann et al. 2008 PDF, Samara and Minsk numbers.
 - https://www.academia.edu/32909519/User_centered_Game_Design (login): Pagulayan, Microsoft playtest methods.
 - https://www.brany.com/?p=7702: BRANY fee request form; only if a US commercial ethics board is chosen.
+- https://legalacts.ru/doc/prikaz-roskomnadzora-ot-05082022-n-128-ob-utverzhdenii-perechnja/ (region): is Ireland on
+  Roskomnadzor's list (Order 128), how many states, from when.
+- http://www.ipras.ru/cntnt/rus/novosti/rus_psy/n3353.html (region): does the Institute of Psychology RAS have its own
+  ethics committee.
+- https://eprints.soton.ac.uk/404286/1/2017_CIHB_Citizen_Science_with_authors.pdf (bot check): EyeWire players, recruiting.
+- https://www.lovethework.com/en/work/campaigns/sea-hero-quest-34191 (paid login): the Cannes entry's figures.
+- https://www.pearlirb.com/fee-schedule/ (form with personal details): Pearl IRB fees, only if a US board is chosen.

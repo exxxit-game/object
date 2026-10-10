@@ -1,6 +1,7 @@
 # Reach and fun: how science projects got millions, and how game-like ones keep fun without spoiling data
 Pass 3 (2026-10-10). Builds on docs/research/field-labs-1.md, field-labs-2.md, study-methods-1.md (not repeated).
 Rule: every fact has its URL and a short quote from the page read; "unverified" = snippet only or not read.
+Part C3 (Portal) lives in [science-reach-3.md](science-reach-3.md) (moved there to keep this file under 300 lines).
 
 ## Parts (each gets an answer or "not found")
 A1 Sea Hero Quest: numbers over time, jumps, Telekom campaign, agency, ads, awards, cost
@@ -71,13 +72,15 @@ D  What to copy, ranked by how much it brought
   - Results (as of 23 Jun 2016): "Plus de 500 000 telechargements les 5 premiers jours (debut mai)"; "Plus d'un
     million de telechargements au total"; "Top 20 dans les App Store et Google Play de 40 marches"; "404 medias
     ont relaye le lancement"; Cannes 2016: "8 lions" (Gold + Silver Promo & Activation, Silver Direct, Cyber,
-    Health & Wellness, Pharma, 2 Bronze Mobile). Telekom's own archive title says nine (search listing only; the
-    page returned 404 on fetch: unverified).
+    Health & Wellness, Pharma, 2 Bronze Mobile). The Telekom group's own release says nine (below).
   - The paid jump-start: Telekom used "le Youtubeur star PewDiePie et a ses 45 millions d'abonnes"; his video
     showed 3 free games including Sea Hero Quest, "avec 4,7 millions de vues".
   - Branding light: one Telekom splash screen and brand pink; no service promotion inside the game; personal
     data optional "pour aider la science" at the end of some levels; Telekom promised no marketing use.
-  - Cost: not public in any page read (not found).
+  - Cost: development cost not published (2 searches). Media spend, German GWA EFFIE 2017 entry (PDF read with
+    pdftotext, https://www.gwa.de/content/files/cases/1116.pdf): "Nach nur zwei Tagen wird das Mediabudget
+    eingefroren" (media budget frozen after two days); chart for 05/16-12/16 in thousand euros: budget used 82 vs
+    earned media value 4,846.6 ("x 59"); "160.000 deutsche Spieler" by April 2017 (our translation).
 - Campaign (UK trade) case study https://www.campaignlive.co.uk/article/case-study-deutsche-telekom-brought-its-
   brand-purpose-life-mobile-gaming/1403023 (the owner opened it and sent its text): Saatchi & Saatchi London "as lead
   agency", with UCL, UEA and Glitchers; "In its first 16 days, the game racked up more than a 1m downloads", "1770
@@ -87,9 +90,13 @@ D  What to copy, ranked by how much it brought
   worked"); "At the end of April we soft launched in the UK and then went global"; the goal was "100,000 downloads
   because the biggest existing research was of 599 people and we got this in 24 hours". Lessons: two audiences, two
   channels; a soft launch in one country first; a target set against the largest study so far.
-- Later totals (search snippets only, unverified): "about 1.6 million" downloads (Telekom release, mid 2016);
-  "played by 2.7 million people" (Cannes entry); "within 16 days ... more than one million" (Campaign, confirmed above);
-  "brand perception rose by 54%" (agency entry).
+- Later totals: Telekom group release of 27.6.2016 (Hrvatski Telekom English page, read in the browser,
+  https://www.t.ht.hr/en/Press/press-releases/3253/Gold-Lion-for-Sea-Hero-Quest-at-Cannes-Lions-International-Festival-of-Creativity.html):
+  "one gold, five silver and three bronze Lions"; downloads "have reached about 1.6 million"; "played for over 30
+  years". Campaign, 14 Dec 2016 (https://www.campaignlive.co.uk/article/top-10-customer-engagement-ads-2016/1418857):
+  target "100,000 players by the end of the year"; "as of November ... a total of 2.4 million". Telekom VR release
+  (Aug 2017, field-labs-2.md part 4): "almost 3 million players"; Spiers 2023: 3.9 million. "2.7 million" and "brand
+  perception rose by 54%" sit in the Cannes Lions entry (lovethework.com, subscription only): unreachable.
 
 ### A2 Moral Machine
 - "Inside the Moral Machine" by the authors, Springer Nature Behind the Paper blog
@@ -142,44 +149,26 @@ D  What to copy, ranked by how much it brought
   month, they had received 50,000 completed tests." Why people came: "People cared about the tests results";
   "The simplicity of the implicit bias test ... was the key to its success." Book "Blindspot" (2013) took the idea
   to the public. Funding: NSF, later NIH. No press release or launch campaign is named on this page.
-- Later totals (search snippets only, unverified): 11 million tests by 2009 and "20,000 new tests taken each
-  week" (ABC News 2009); "more than 14 million" by 2013 (Harvard Gazette); "more than twenty-eight million IATs"
-  (Cambridge Handbook chapter 2024); first month "45,000" in Banaji's telling (UW Magazine).
+- Later totals: Harvard Gazette, 26 Feb 2013 (https://news.harvard.edu/gazette/story/2013/02/peering-into-our-blind-spots/):
+  "In the past 15 years, more than 14 million such tests have been taken"; Banaji "hoped to garner 500 responses in
+  the first year", and "With no advertising, they hit 45,000 in the first month". Ratliff & Smith, Daedalus Winter
+  2024, read in full, saved objekt-papers/ratliff-2024.txt (https://www.amacad.org/publication/daedalus/implicit-association-test): "As of
+  late 2023, more than eighty million study sessions have been launched and more than forty million IATs
+  completed", "an IAT every twenty-one seconds"; the site is "set up in the model of an interactive exhibit at a
+  science museum". ABC News 2009 (11 million) and the Cambridge Handbook 2024 (28 million): not opened, superseded.
 
-### C3 Portal (Valve, 2007): the developers' own words (in-game developer commentary; transcript on the fan wiki,
-read in full in the browser: https://theportalwiki.com/wiki/Portal_developer_commentary)
-- The whole game is a test sequence that teaches: "Portal is effectively an extended player training exercise"
-  (Robin Walker, Chamber 00); "gating" made "a solid understanding of key gameplay concepts" required (Chamber 01).
-- The voice stays out of the way until a test is hard: "We even have the AI voice pretty explicitly explain the
-  elements of the puzzle, something we avoided throughout most of the rest of the game" (Garret Rickey, Ch. 10).
-- The voice changes behaviour: playtesters left the box behind until "having the AI talk about the box. A lot.
-  Once the dialog went in, playtesters went from routinely abandoning the box to never wanting it to leave their
-  side" (Chet Faliszek, Ch. 17).
-- The character arc is paced to the tests: "Before the player escapes the fire pit, the AI dialog is all delivered
-  in a computerized monotone. After the escape, however, GLaDOS gets progressively more expressive" (Erik Wolpaw,
-  Escape 1). Voice made by an actress mimicking text-to-speech, then pitch-processed (Wolpaw, Ch. 18).
-- Being watched as part of the fiction: "frosted-glass observation rooms make the player feel as if they're being
-  watched at all times, while keeping the identity of these watchers a mystery" (Realm Lovejoy, Ch. 00); orange
-  jumpsuit "to reinforce the fact that she's a test subject" (Bay Raitt).
-- Clean rooms help the task: cluttered art "distracted players to the point where it actually interfered with
-  the portal training process. So we simplified the art style" (Nick Maggiore, Ch. 05).
-- Pacing against fatigue: "fatigue set in if we didn't break up the more complicated, deliberately paced puzzles
-  with ... a much simpler task under time pressure" (Rickey, Escape 2). Too many new things at once "ended up
-  frustrating a lot of playtesters" (Chris Chin, Ch. 08). Everything tuned by watching playtesters.
-- The tone: GLaDOS is "sarcastic a lot" and grew into "a very sweet, passive-aggressive person" (Ellen McLain).
-- Note for us: Portal's narrator is a hostile, lying experimenter; nothing in this commentary measures the player.
-  The transferable parts are pacing (voice silent during work, help on the hardest step, short easy breaks), the
-  voice steering attention (the box), and the arc (flat at first, personality grows).
+### C3 Portal: moved whole to science-reach-3.md (the developers' commentary, read in full).
 
 ### A5 TestMyBrain
 - Harvard Gazette, 31 Aug 2012 (https://news.harvard.edu/gazette/story/2012/08/bringing-the-psych-lab-online),
   via WebFetch: "recruited thousands of volunteers through Germine's site, TestMyBrain.org"; they "navigated from
   search engines and social networking sites"; came "to learn more about themselves and contribute to scientific
   research"; Germine: "the results from studies conducted with Web volunteers were the same as those done in the
-  lab"; "it's fast, it's cheap, but it's not dirty". Paper: Germine et al. 2012, Psychon Bull Rev 19(5):847-857
-  (full text not read).
-- Snippet only (unverified): top traffic sources "Google, StumbleUpon, and i-am-bored.com"; feedback "on how
-  their performance compared with the performance of the average participant". No dated jumps found.
+  lab"; "it's fast, it's cheap, but it's not dirty". Paper: Germine et al. 2012, Psychon Bull Rev 19(5):847-857,
+  read in full (objekt-papers/germine-2012.txt): "collected data from half a million participants over the past
+  three years"; top traffic sources "www.google.com, www.stumbleupon.com, and www.i-am-bored.com"; "brain test"
+  searches = 13% of traffic; reward = "feedback on how their performance compared with the performance of the
+  average participant". No dated jumps found.
 
 ### A7 Foldit
 - Cooper et al. (2010) "The challenge of designing scientific discovery games", FDG 2010, read in full and saved
@@ -192,18 +181,24 @@ read in full in the browser: https://theportalwiki.com/wiki/Portal_developer_com
     player-created wiki". Look: "a bright, cartoonish look"; "not bring back memories of high school textbooks".
   - Teaching: introductory levels where "using the newly introduced concepts is the easiest way to reach the goal
     score"; tuned by think-alouds and per-level completion data. The paper says nothing on press or reach.
-- Later totals and the 2011 jump (snippets only, unverified): the 2011 M-PMV protease result (Khatib et al., Nat
-  Struct Mol Biol, doi:10.1038/NSMB.2119) was covered widely in Sept 2011 (National Geographic, JHU Newsletter);
-  "over 460,000 players" (NSF STEM for All video hall 2017); a player forum estimate of under three thousand active
-  players from leaderboards. No dated player curve found.
+- The 2011 result: Khatib et al., "Crystal structure of a monomeric retroviral protease solved by protein folding
+  game players", Nat Struct Mol Biol 18(10):1175-1177, 18 Sep 2011 (https://pmc.ncbi.nlm.nih.gov/articles/PMC3705907/,
+  via WebFetch): solved in a "3-week competition"; no player count. Press pages on it (National Geographic, JHU):
+  not opened. Total: "Since its release, Foldit has gained over 460,000 players" (Koepnick, UW Center for Game
+  Science, NSF STEM for All video hall 2017, https://stemforall2017.videohall.com/presentations/1032.html). Active
+  players: the page gives none; the forum estimate (under 3,000) is a player's post, not a source. No dated curve.
 
 ### A8 EyeWire
-- Snippets only (the project case study page at citizenscience.gov now redirects to usa.gov; archive not
-  reachable): before the official launch on 10 Dec 2012 "about 35 to 50 players" a day (Boston.com, 11 Dec 2012);
-  team lesson: "initially assumed that if you build an amazing project, people will flock to it ... you must work
-  to help people find you!"; they seeded Facebook, Twitter, Google+ and a blog before launch and "personally reached
-  out to journalists". Later: 120,000 (Nature blog), 150,000 (Gatsby), "180,000 players" (Bio-IT World, May 2015).
-  All unverified.
+- Boston.com, 11 Dec 2012 (https://www.boston.com/news/science/2012/12/11/mit-researchers-expand-citizen-science-powered-brain-mapping-effort/):
+  "Before J Day, each day there were about 35 to 50 players" (J Day = official launch, 10 Dec 2012).
+- US government case study (live page now redirects; Wayback copy read,
+  http://web.archive.org/web/2021/https://www.citizenscience.gov/eyewire-brain-mapping/): "The EyeWire team initially
+  assumed that if you build an amazing project, people will flock to it"; "you must work to help people find you!";
+  before launch they seeded "Facebook, Twitter, Google+ and a blog" and "personally reached out to journalists";
+  "More than 200,000 people in 150 countries around the world have played the game".
+- Nature House of Wisdom blog, 9 Apr 2014: "Currently, there are 120,000 players on Eyewire". Gatsby (150,000) and
+  Bio-IT World (180,000, May 2015): not opened, between the two read figures. Tinati et al. 2017 (player survey,
+  eprints.soton.ac.uk/404286): behind a bot check.
 
 ### B2 Small reach for comparison: Science XL lexical decision app (Dufau et al. 2011, PLoS ONE 6(9):e24974)
 - https://pmc.ncbi.nlm.nih.gov/articles/PMC3182196, via WebFetch: launched "December 2010"; "4157 emails received
@@ -235,16 +230,25 @@ read in full in the browser: https://theportalwiki.com/wiki/Portal_developer_com
   Review (https://truthinitiative.org/research-resources/tobacco-prevention-efforts/how-humor-can-boost-response-
   rates-online-survey), via WebFetch: "2,963 participants" aged 18-34 who ignored a first invitation; a humorous
   reminder "increased the odds of response to the survey by 23 percent". It measured response, not data quality.
-  Humour INSIDE a measured task vs data quality: no peer-reviewed study found (not found). Practitioner claims
-  (Quirk's, Kantar: cartoon lead-in doubled admitted non-voting 20% -> 40%) seen as snippets only: unverified.
+  Humour INSIDE a measured task vs data quality: no peer-reviewed study found (3 searches). Practitioner claim,
+  Kantar, 23 May 2023 (https://www.kantar.com/inspiration/research-services/humour-the-deadly-serious-role-it-can-play-in-market-research-pf,
+  via WebFetch): after a cartoon, people "admitting to not voting increased from 20% to 40%", "almost exactly in
+  line with real life vote turnout levels in the UK"; a toothpaste survey "reduced the amount of straight-lining
+  from 50% to nearly zero". No sample size, no control described: a company claim. No Quirk's page was found.
 - Narrator in gamified assessment and data: no study found that tests a narrator or host voice against no voice
-  (not found in 2 searches). Closest evidence: Portal commentary (voice changes what players do, C3); Lumsden
-  2016 and Friehs 2020 (theme matters only through what the player sees and does during the trial).
+  (3 searches). Nearest: a protocol for an animated "virtual experimenter" (C4). Closest evidence: Portal
+  commentary (voice changes what players do, C3 in science-reach-3.md); Lumsden 2016 and Friehs 2020 (theme matters
+  only through what the player sees and does during the trial).
 
 ### C4 "The experimenter as a character"
-- Not found as a studied topic (1 search): results were a fan character page on The Stanley Parable narrator and
-  an informal student blog; nothing peer-reviewed. Portal's commentary (C3) is the best primary source: watchers
-  hidden behind frosted glass, the subject in a jumpsuit, the AI voice as the only experimenter.
+- Hoering, Newsome, Enck, Babu & Muth (2016), "A virtual experimenter to increase standardization for the
+  investigation of placebo effects", BMC Med Res Methodol 16:84, read in full, saved objekt-papers/horing-2016.txt:
+  a 3D agent "Dr. Halsey" (voice actor, lip-sync, FAQ by touch screen) planned against a human experimenter and
+  audio/text. Only pilots ran: N = 48 judged it well on Message and Likeability but it "received comparatively bad
+  rating on the Compelling scale", which they put down to "a rather neutral demeanor". No comparison data yet.
+- Otherwise not found as a studied topic (2 searches): a fan page on The Stanley Parable narrator, a student blog.
+  Portal's commentary (C3, science-reach-3.md) is the best design source: watchers hidden behind frosted glass, the
+  subject in a jumpsuit, the AI voice as the only experimenter.
 
 ### B1 What the million-scale ones share (from the pages above)
 1. An outside megaphone at the start, not "it is science": a brand's paid campaign (Sea Hero Quest: Telekom's
@@ -264,13 +268,13 @@ read in full in the browser: https://theportalwiki.com/wiki/Portal_developer_com
    Great Brain Experiment had to "maintain the high profile of the app".
 - Small reach (B2): the Science XL word app had the same kind of task and platform but none of 2, 3 or 6, and no
   press: 4,157 people in four months vs the Great Brain Experiment's 20,800 in one month. EyeWire had 35-50
-  players a day until the team went to journalists (snippet, unverified).
+  players a day before its press launch (Boston.com), over 200,000 later (case study, A8).
 
 ## D. What to copy, ranked by how much it brought those projects
 1. A launch megaphone with a news hook: line up a press story and video creators for the day the first floor
    opens (Sea Hero Quest's PewDiePie video, 2+ million views in 5 days, made it the top App Store download for a
    day; Moral Machine's press and Reddit). For Russian speakers the documented channel is VK (Moral Machine). Who
-   paid for Sea Hero Quest: Deutsche Telekom (cost not public).
+   paid for Sea Hero Quest: Deutsche Telekom (development cost not public; German media budget EUR 82k, A1).
 2. Your result vs everyone else at the end of every room, as a one-line, slightly surprising headline you want to
    show (LITW's "Only 3% of people ... share your visual preferences!"). This is the reward and the recruiter.
 3. A share button on that result screen, in Russian, plus a one-line ask ("send it to a friend who thinks they
