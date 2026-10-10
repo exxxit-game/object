@@ -3,9 +3,9 @@
 ## Where things are
 - Repo `exxxit-game/youaretheobject` (folder `C:\Users\admin\Documents\GitHub\objekt`). Site:
   https://youaretheobject.com (GitHub Pages from `main`; `main` is an OLD package). Work: `room-polish`.
-  One board item per session. Each session works in its own worktree, made from the main
+  Each session: one visible thing for him plus internal work (the board). Each session works in its own worktree, made from the main
   folder's HEAD (`.claude/settings.json` worktree.baseRef head; the default was old main); no turn ends until
-  the main folder (room-polish) holds the session branch (stop hook, tools/claude-guard.mjs). Push: his "Делай"; main: his word only.
+  the main folder (room-polish) holds the session branch (stop hook, tools/claude-guard.mjs). Push every turn (power cuts); main only on his word.
 - Room 01 = illusion of control (Alloy & Abramson 1979), `src/rooms/01-control/`: SET ASIDE 08.10 as a lab
   room (16–20 min of waiting, owner found it unbearably boring). Playtest `?playtest=1`, speed `?speed=N`.
 - Supabase `objekt` (`rkvdwzlymmewsxjysgma`, eu-west-1 Ireland), private schema `app`:
@@ -53,13 +53,12 @@ All in `docs/owner-decisions.md` (shown at every session start): settled, never 
 - The owner's automatic stop: VR in the headset and the test copy wait for a practice review of the files a
   person meets (tools/review-gate.mjs); the first real review was recorded by the hook on 9.10. The rebuilt
   controllers-and-hands probe (tools/xr-probe-input.html) follows docs/audit/probe-review.md.
-- Claude Code here is 2.1.293 (his app is the latest); prompt and agent hooks are fixed only from 2.1.294.
+- Prompt and agent hooks need Claude Code 2.1.294 or later; the terminal and the app may run different versions.
 - metavr shows 0 tools in every session (its log: `%LOCALAPPDATA%\claude-cli-nodejs\Cache\<project>\mcp-logs-plugin-meta-vr-metavr`):
   started through npx it answers Claude Code's new-protocol probe late (4.5 s), Claude Code then treats it as
   new-protocol and the server refuses the tool list ("request _meta is missing"); asked directly it lists 38.
   Recheck the log after the desktop app's Claude Code update. Supabase: the plugin's server is not signed
   in; the claude.ai connector's writes and any SELECT that calls a writing function are refused by
-  tools/claude-guard.mjs. CLAUDE.md is one page with a line cap (tests/structure.test.mjs); the whole-picture
-  reports behind the board's path are in the session scratchpad only (game, machinery, docs, infra, path).
-- Earlier causes and audits: docs/audit/README.md. Corridor ACCEPTED 8.10 (docs/rooms/corridor-shots/).
+  tools/claude-guard.mjs. The process rebuild of 10.10 and its audits' findings: docs/audit/process-rebuild.md.
+- Earlier causes and audits: docs/audit/README.md. Corridor: finished item by item on the board; approved shots in docs/rooms/corridor-shots/.
   Style book: https://claude.ai/artifact/DKDDa4sH1BG9TF24MJyQaH. Git guide: https://claude.ai/artifact/V4HzbgVtK8HGqczZ3zyfS9.

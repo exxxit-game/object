@@ -15,11 +15,12 @@ check. Do not tell the owner "done" before step 9.
    over about 10 min or there is no task/tension, stop and tell the owner.
    Write a 3-line entry in `docs/decisions.md` first.
 2. **Owner decisions.** Everything the headset cannot copy (money, typing, paper
-   forms, live experimenter, personal data) goes to the owner as one question each,
-   with a recommended option.
+   forms, live experimenter, personal data): a choice a source settles is mine, with the reason in a
+   line; the rest goes to the owner as real options, in pictures where it is a look.
 3. **Spec** `docs/rooms/NN-name.md`: the original procedure table with pages, the
    results to compare with, deviations (told to player or docs only), "not in the
-   paper: our choices", flow and states, data sent. Facts also in `docs/sources.md`.
+   paper: our choices", flow and states, data sent, and the room recipe below filled in for this room.
+   Facts also in `docs/sources.md`.
 4. **Numbers first.** `protocol.js` (procedure) and `original.js` (results shown),
    page in each comment, frozen; a test pins every value to the paper. Then pure
    `schedule.js` / `report.js` with tests. Break a value on purpose once: the test
@@ -40,7 +41,8 @@ check. Do not tell the owner "done" before step 9.
    and `tools/quest-check.mjs` for the room's flow.
 8. **Independent review.** Run the `paper-reviewer` agent on the room. Verify its
    main claims in the paper yourself, fix, then run it again on the fixes.
-9. **See it.** Browser pass at `?speed=20` with screenshots of every new screen
+9. **See it.** First the `practice-reviewer` agent (the headset waits for it: `tools/review-gate.mjs`).
+   Then a browser pass at `?speed=20` with screenshots of every new screen
    and a comparison with the room's approved shots (`docs/rooms/NN-shots/`); in the
    headset `node tools/quest-look.mjs` (enter VR, frames, timing of each step, frame rate,
    `levels` for its sounds) and `node tools/quest-check.mjs` (all PASS); an independent
@@ -48,3 +50,19 @@ check. Do not tell the owner "done" before step 9.
    what ran and what was seen.
 10. **Lessons.** A mistake that broke the room gets a test that catches it
     and a row in `docs/mistakes.md`; nothing else is added.
+
+## The room recipe (from docs/research; each step already tested somewhere)
+1. A "what stands for what" table: every part of the original procedure and its place in the room (Re-Search,
+   docs/research/owner-brought.md).
+2. A playable practice step first, repeatable until understood; controls taught before the measure (vrprotocols
+   "Gradual Acclimation", "Controls Training"; Oppenheimer 2009; Miura & Kobayashi 2016; Druzhinin's training series).
+3. A one-tap commitment before the measure, never a trap question before it (Geisen 2022; Hauser & Schwarz 2015).
+4. The measured moment plain: the host quiet, no game styling on what is measured, the host's style the same for
+   every player (Lumsden 2016; Portal commentary; Druzhinin).
+5. Effects that show in few trials; behaviour logged automatically; head pose only for coarse gaze.
+6. After the measure: one short block in the headset; a no-blame "did anything get in the way, did you play it
+   for real" question (Aust 2013; LabintheWild); prior VR and game experience and the run number recorded.
+7. The reveal: your result next to other players and the original study, a share button; science counts the
+   first run (LabintheWild; Moral Machine; Van den Bussche 2026; Chandler 2015).
+8. Before data count: a preregistered plan (AsPredicted), exclusions fixed in advance, sample 2.5 x the original
+   (Simonsohn 2015; Many Labs 2), ethics approval (docs/research/ethics-law.md), a separate science consent.

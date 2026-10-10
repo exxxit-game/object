@@ -83,22 +83,10 @@ acted on); they are removed in step 3.
 9. After the rebuild the process is frozen: a change to it comes only from a health-check finding or the
    owner's word, and replaces something.
 
-## What the research gives the rooms: one recipe (goes into the new-room skill in step 3)
+## What the research gives the rooms: one recipe
 
-From docs/research (study-methods-1/2/3, data-precision, science-reach, owner-brought, world-*), each step
-already tested somewhere, so nothing is invented:
-1. A "what stands for what" table: every part of the original procedure and its place in the room (Re-Search).
-2. A playable practice step first, repeatable until understood; controls taught before the measure
-   (vrprotocols "Gradual Acclimation", "Controls Training"; Oppenheimer; Miura & Kobayashi).
-3. A one-tap commitment before the measure, never a trap question before it (Geisen; Hauser & Schwarz).
-4. The measured moment plain: the host quiet, no game styling on what is measured (Lumsden; Portal commentary).
-5. Effects that show in few trials; behaviour logged automatically; head pose only for coarse gaze.
-6. After the measure: one short block in the headset, a no-blame "did anything get in the way, did you play it
-   for real" question (Aust; LabintheWild); record prior VR and game experience and the run number.
-7. The reveal: your result next to other players and the original study (LabintheWild, Moral Machine,
-   Van den Bussche); a share button; science counts the first run (Chandler; Moral Machine).
-8. Before data count: a preregistered plan (AsPredicted), exclusions fixed in advance, sample 2.5 x the original
-   (Simonsohn; Many Labs 2), ethics approval (SPbU IRB, or a university partner), a separate science consent.
+Kept in one place, the new-room skill (.claude/skills/new-room/SKILL.md, "The room recipe"): eight steps, each
+already tested somewhere, from the what-stands-for-what table to preregistration and ethics approval.
 
 ## Risks of the rebuild itself, and their answers
 

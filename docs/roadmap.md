@@ -18,7 +18,8 @@ watching is better, living through it is the strongest form of explanation.
 - Russian and English; Quest Browser and desktop where the room allows.
 - Privacy page, consent, anonymous statistics; "you vs others" in every reveal.
 - Playtested with at least 10 people outside the team; top issues fixed.
-- Public page and link; optional later: Meta Horizon Store as a WebXR PWA.
+- Installed first, through Meta's test channel and store (a WebXR app); the public page second (his decision:
+  install first).
 
 ## Science track (runs beside the game)
 - Evidence that people take part for a personal result and a comparison with others:
@@ -67,10 +68,10 @@ moves onto the clipboard and gives its shared flow to `src/app/` (`docs/target-a
 retell in their own words. Exit check (owner 08.10): 7 of 10 finish and the mean "would play the
 next room" is at least 7 of 10; a written result in docs/playtests/.
 
-### 3. Choose the first room by testing, not by opinion
+### 3. Choose the first room: trial rooms, then his pick
 Read the top candidates' papers in full (Kohnstamm, Morehead, Hirschhorn, Shams, Drori,
 Pailhès, DRM); build two or three short prototypes; playtest them the same way.
-Exit check: one hook chosen on the playtest numbers.
+Exit check: he picks one, with the playtest numbers in front of him (board step 2).
 
 ### 4. Statistics live
 Built for room 01: privacy page, server whitelist, consent, sending on, "you vs others" read.

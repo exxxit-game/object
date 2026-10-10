@@ -100,8 +100,13 @@ https://iom.anketolog.ru/2021/03/11/kak-ponyat-iskrenni-li-vashi-respondenty (An
 - Caution toward others (Toloka, read): 78% "cautious" generalized trust, close to the World Values Survey's 74%.
 - Answering about things that do not exist (Anketolog page, second-hand): 10% "read" a non-existent book; 1.2% backed
   and 12.8% opposed a made-up movement.
-- Suspicion of deception: one trust study reported "of 91 participants only five doubted" the partner was real and
-  were excluded (search snippet of an elementy.ru news item; page refused connection: unverified which country).
+- Suspicion of deception: the elementy.ru item (opened by the owner) reports FeldmanHall, Dunsmoor, Tompary, Hunter,
+  Todorov & Phelps (2018), "Stimulus generalization as a mechanism for learning to trust", PNAS, E1690-E1697: a US
+  trust game where every partner was a program set to a fixed honesty (93%, 60%, 7% returns); questionnaires showed
+  that "of 91 participants only five doubted" the partners were real, and their data were not used (our
+  translation). Participants were promised a later turn as the partner, which never came, to keep the cover. Its
+  figures (sent by the owner): money trusted in stage 1, $5.47 / $4.42 / $1.17 to the honest, neutral and dishonest
+  partner over 15 trials; then new faces morphed 23-78% toward each. Not a Russian sample.
 - Antisocial punishment (Herrmann, Thoni & Gachter 2008, Science 319:1362-1367, doi:10.1126/science.1153808; record
   read at https://www.alexandria.unisg.ch/43857): 16 pools; punishing cooperators is predicted by weak norms of civic
   cooperation and weak rule of law. Samara (Russia) and Minsk results: full text not read (unverified).
@@ -154,8 +159,6 @@ https://iom.anketolog.ru/2021/03/11/kak-ponyat-iskrenni-li-vashi-respondenty (An
   attention-check wording, the 36% figure, pay levels.
 - https://psyjournals.ru/journals/exppsy/archive/2019_n1/exppsy_2019_n1_Selivanov.pdf and
   https://psyjournals.ru/journals/exppsy/archive/exppsy_2022_n2.pdf - Russian VR studies: sample, headset, side effects.
-- https://elementy.ru/novosti_nauki/433205/Prinimaya_reshenie_o_doverii_neznakomomu_cheloveku_my_opiraemsya_na_predydushchiy_opyt
-  - which study, which country, the "5 of 91" suspicion check.
 - https://www.alexandria.unisg.ch/handle/20.500.14171/78586 - Herrmann et al. 2008 PDF: Samara and Minsk numbers.
 - https://www.academia.edu/32909519/User_centered_Game_Design - Pagulayan et al. draft (login): methods sections.
 

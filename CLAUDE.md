@@ -3,17 +3,17 @@
 "You are the object" (the name is never translated): a browser VR game (WebXR, A-Frame). The player is the
 subject of real psychology experiments, one room each, then sees how he was caught and what the study found.
 His decisions load with this file, settled (never re-ask, never argue against): @docs/owner-decisions.md
-The start hook shows docs/board.md (the work and its only order). Maps: docs/state.md, ARCHITECTURE.md. Answer the owner in Russian, plain
-words, short. The repo is English; Russian only where tests/structure.test.mjs allows.
+The start hook shows docs/board.md (the work and its only order). Maps: docs/state.md, ARCHITECTURE.md.
+Answer the owner in Russian, plain words, short. The repo is English; Russian only where tests/structure.test.mjs allows.
 
 ## How we work
 - Progress = he saw it and said «да». Every session opens with a row in the board's «Показы» (what he will
   see today) and ends by showing it to him, in the headset or as a picture.
 - His new request goes on the board in his words; the order changes only on his word. A choice a source
   settles is mine (the reason in a line); one no source settles goes to him as real options, in pictures.
-- Do exactly what was asked; ideas go at the end of the answer, not into code.
-- No new process: a new rule, guard, agent, hook or doc only when the game itself broke or something private
-  leaked, and then in place of an old one. This file stays under 45 lines (tests/structure.test.mjs).
+- Do what was asked, with the whole around it seen first; ideas go at the end of the answer, not into code.
+- The process is frozen (his decision): it changes only on a health-check finding (node tools/health.mjs) or
+  his word, and a change replaces something. This file stays under 45 lines (tests/structure.test.mjs).
 - Blocked (a login, a captcha, a paywall, a photo only he can take): ask him at once, with the link.
 - He is angry: act on the topic, no promises.
 
@@ -28,8 +28,8 @@ words, short. The repo is English; Russian only where tests/structure.test.mjs a
 
 ## Checking
 - "Done" only after `npm test`, saying what ran; no run = "not verified".
-- Before he meets anything: my own look in the browser pane and the headset (tools/quest-look.mjs, sleep
-  after), the practice-reviewer (VR and the test copy wait for it: tools/review-gate.mjs), the approved
+- Before he meets anything: the practice-reviewer first (VR and the test copy wait for it: tools/review-gate.mjs),
+  then my own look in the browser pane and the headset (tools/quest-look.mjs, sleep after), and the approved
   shots in docs/rooms/. He judges only feel and taste.
 - Never Playwright or Chromium on the laptop: the smoke test runs on GitHub. Preview: `npm run serve`.
 

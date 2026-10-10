@@ -167,8 +167,6 @@ Later research passes (optional, none blocks the work):
 - https://www.soc4m.ru/index.php/soc4m/article/view/9355 (region): Toloka attention check, the 36% figure.
 - https://psyjournals.ru/journals/exppsy/archive/2019_n1/exppsy_2019_n1_Selivanov.pdf and
   https://psyjournals.ru/journals/exppsy/archive/exppsy_2022_n2.pdf (region): Russian VR studies, samples, headsets.
-- https://elementy.ru/novosti_nauki/433205/Prinimaya_reshenie_o_doverii_neznakomomu_cheloveku_my_opiraemsya_na_predydushchiy_opyt
-  (region): which trust study, the "5 of 91" suspicion check.
 - https://www.alexandria.unisg.ch/handle/20.500.14171/78586: Herrmann et al. 2008 PDF, Samara and Minsk numbers.
 - https://www.academia.edu/32909519/User_centered_Game_Design (login): Pagulayan, Microsoft playtest methods.
 - https://www.brany.com/?p=7702: BRANY fee request form; only if a US commercial ethics board is chosen.
