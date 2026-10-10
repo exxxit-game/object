@@ -60,7 +60,9 @@ const WALL = '0.023 -0.004, 0.022 0.006, 0.010 0.017, -0.012 0.0148, -0.012 -0.0
 const HANDLE = '-0.014 -0.012, -0.050 -0.016, -0.088 -0.027, -0.111 -0.043, -0.120 -0.054, -0.114 -0.058, -0.101 -0.046, -0.079 -0.034, -0.047 -0.027, -0.016 -0.025';
 export function extinguisher(x, wall) {
   const z = wall - 0.03 - EXT.r, Y = EXT_Y, f = (v) => v.toFixed(4);
-  const gaugeY = Y.bodyTop - 0.021, gaugeZ = z - 0.019;
+  // the gauge stands on its own short stem in front of the lever's head, its bezel clear of the head's
+  // front wall (photos 5, 8)
+  const gaugeY = Y.bodyTop - 0.021, gaugeZ = z - CAP.wall - 0.002;
   // the loop on the dome's back: where the dome's surface is at its height, its far bar, the hook's lip
   // in the middle of its opening, and the hook's bottom just under the loop
   const back = z + EXT.r * Math.sqrt(1 - ((LUG.y - Y.shellTop) / EXT.dome) ** 2), far = back + LUG.d - LUG.rod;
@@ -91,6 +93,7 @@ export function extinguisher(x, wall) {
       <a-entity position="${x} ${f(Y.collarTop)} ${z}" lathe="points: 0 0, 0.019 0, 0.019 0.03, 0.017 0.038, 0.012 0.043, 0 0.043; ${CHROME_SHAPE}"></a-entity>
       <!-- the gauge on the valve's front: a chrome bezel, its raised lip round the dial set back in it
            (photos 5, 8) -->
+      <a-cylinder position="${x} ${f(gaugeY)} ${f((gaugeZ + z - 0.015) / 2)}" radius="0.006" height="${f(z - 0.015 - gaugeZ + 0.001)}" rotation="90 0 0" ${STEEL}></a-cylinder>
       <a-cylinder position="${x} ${f(gaugeY)} ${f(gaugeZ - 0.005)}" radius="0.0235" height="0.010" rotation="90 0 0" ${STEEL}></a-cylinder>
       <a-torus position="${x} ${f(gaugeY)} ${f(gaugeZ - 0.0121)}" radius="0.0215" radius-tubular="0.0011" segments-tubular="48" ${STEEL}></a-torus>
       <a-circle id="extGauge" data-dynamic decal position="${x} ${f(gaugeY)} ${f(gaugeZ - 0.0101)}" radius="0.0205" rotation="0 180 0" segments="48" material="roughness: 0.5"></a-circle>
