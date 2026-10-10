@@ -220,6 +220,12 @@ Meta's pages: the age API exists for WebXR PWAs, and the comfort rating judges t
   a public site repo (as the test copy already is); hides notes and history, not the floors. (c) Our server gives a
   paid floor's files only after Meta's `verify_entitlement`; real protection, but our server then handles a Meta user id
   (DUC, DPA, privacy text), against "no account" in our data rules. My pick: (b) now, (c) only if copying is seen.
+  What (b) costs on GitHub's free plan (read 10.10) **[read]**: private repositories get "2,000 minutes per month" of
+  Actions; Pro "3,000 GitHub Actions minutes per month" and "Protected branches" in private repositories
+  (https://docs.github.com/en/get-started/learning-about-github/githubs-plans); minutes are "Free for public
+  repositories" (https://github.com/pricing); a Linux 2-core minute "$0.006"
+  (https://docs.github.com/en/billing/reference/actions-runner-pricing). Our runs on 9 and 10 Oct took about 1,100
+  and 1,350 minutes a day (gh run list, wall time) **[measured]**.
 - **D2. Age group.** 13+ (my pick) or Mixed Ages (10-12 allowed; age call each launch; children's-data law).
 - **D3. Testers versus buyers.** (a) One site for every channel; (b) ALPHA builds open a `/next/` path on the same
   domain, Production opens `/`, a release copies `/next/` over (my pick, to be tried on a sideloaded build first).
