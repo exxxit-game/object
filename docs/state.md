@@ -31,6 +31,13 @@
   `tools/quest-look.mjs` (open [local port], reload, vr, frame, eval, sleep); opening 8.10: sign +10 s, 90 fps (no saved log: re-measure with a log, plan step 4.3).
 - Voice: ElevenLabs key in ~/.elevenlabs-key.txt; Daniel, eleven_v3; `tools/make-voice.mjs`, `tools/check-voice.mjs`.
 
+## Skills and tools, and when to use them
+- Rooms: the new-room skill (its room recipe). Papers: the index docs/library.md, then the research-desk skills
+  research-litnote (a paper into a note), paper-compare (several papers), citation-check (references real?).
+- Install and store: meta-vr hz-store-pwa, hz-store-submit; comfort in the headset: meta-vr hz-immersive-designer.
+- Research: the deep-research agent (a wide question) or quick-research (one fact); reviews: practice-reviewer,
+  paper-reviewer, fact-checker, request-auditor. The laptop: node tools/health.mjs. Other installed skills idle.
+
 ## Decisions with the owner
 All in `docs/owner-decisions.md` (shown at every session start): settled, never asked again.
 
