@@ -1,0 +1,59 @@
+# CodeRabbit, the reviewer from outside (the owner's 14-day trial, docs/owner-decisions.md): it reviews the
+# one open pull request from room-polish into main, the live site, incrementally on every push, against
+# the repository's rules; its open remarks are read at each session start (tools/coderabbit.mjs).
+# It changes nothing on its own: the repository is public, and main changes only on the owner's word.
+# Keys: https://docs.coderabbit.ai/reference/configuration (schema: coderabbit.ai/integrations/schema.v2.json)
+language: en-US                      # the repository is English; the owner hears about it in Russian from the assistant
+reviews:
+  profile: chill
+  high_level_summary: true
+  high_level_summary_in_walkthrough: true
+  request_changes_workflow: false    # never approves anything by itself
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_incremental_review: true
+    auto_pause_after_reviewed_commits: 0   # every push of the long-lived pull request is read, not the first five
+  finishing_touches:                 # each of these pushes code or opens pull requests
+    docstrings:
+      enabled: false
+    unit_tests:
+      enabled: false
+    autofix:
+      enabled: false
+    simplify:
+      enabled: false
+    fix_ci:
+      enabled: false
+    resolve_merge_conflict:
+      enabled: false
+  path_instructions:
+    - path: "src/**"
+      instructions: >-
+        Plain ES modules for a WebXR game (A-Frame, three.js), no build step. Player-facing text lives only in
+        texts.ru.js files and styles only in css/; the engine (src/engine) never imports a room (src/rooms).
+        Every comment says why, never when or who. Files stay about 300 lines. Lights in a scene come from
+        the scene's own lamps, never a light that exists only to brighten one object. Quest 2 frame budget:
+        flag anything that adds draw calls or per-frame allocations.
+    - path: "src/rooms/**"
+      instructions: >-
+        Each room re-creates a published psychology experiment faithfully. A number, a procedure step or a
+        claim shown to the player must match the paper named in the room's card (docs/cards); flag any that has
+        no source in the code's WHY comments or docs/sources.md.
+    - path: "tools/**"
+      instructions: >-
+        Laptop tools on Windows 10 (PowerShell 5.1 and Git Bash). Flag anything that would run Playwright or
+        Chromium on the laptop, push to main, write to the live database, or print a key or token.
+  tools:
+    markdownlint:
+      enabled: false                 # the docs keep long lines on purpose (one row per line)
+    languagetool:
+      enabled: false                 # the docs quote Russian; an English grammar check only adds noise
+chat:
+  auto_reply: false                  # public repository: it answers only when asked by name
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:                    # CLAUDE.md is read by default; its import is not followed
+      - "docs/owner-decisions.md"
+      - "ARCHITECTURE.md"

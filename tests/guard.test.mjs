@@ -88,11 +88,20 @@ const refused = cases([
   "node -e \"import('./tools/review-gate.mjs').then((m) => m.write({ kind: 'review' }))\"",
   'env OBJECT_REVIEW_RECORD=/tmp/x.jsonl node tools/quest-look.mjs vr',
   'export OBJECT_REVIEW_RECORD=/tmp/x.jsonl',
+  // main merged on GitHub, past the push guard
+  'gh pr merge 9 --merge',
+  'gh pr merge --squash --auto',
+  ['gh.exe pr merge 9', PS],
+  'gh api -X PUT repos/exxxit-game/youaretheobject/pulls/9/merge',
+  'gh api repos/exxxit-game/youaretheobject/merges -f base=main -f head=room-polish',
 ]);
 for (const [c, shell] of refused) assert.ok(refusal(c, shell === PS), `the guard let through: ${c}`);
 
 const allowed = cases([
   'grep -n camera tests/smoke.mjs',
+  'gh pr view 9 --comments',
+  'gh pr create --base main --head room-polish --title x --body y',
+  'gh api repos/exxxit-game/youaretheobject/pulls/9/comments',
   'grep -n node tests/smoke.mjs',
   'sed -n 1,40p tests/smoke.mjs',
   'git log --oneline -- tests/smoke.mjs',

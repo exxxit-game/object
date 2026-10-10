@@ -11,6 +11,7 @@ import {
   parseRegPath, expandVars, splitPath, deadPathEntries, words, checkPapers, agentLacks, agentHeaderProblems, localImports, sameText, checkGuards,
   parseAdbDevices, headsetInfo, format, MIN_WORDS
 } from '../tools/health.mjs';
+import { summarize as summarizeRemarks } from '../tools/coderabbit.mjs';
 import { hooksProblems, memoryIndexProblems, pluginProblems, PLUGINS_ON, atLeast, newest } from '../tools/health-setup.mjs';
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'health-'));
@@ -129,6 +130,12 @@ assert.deepEqual(pluginProblems({ ...Object.fromEntries(PLUGINS_ON.map((p) => [p
   ['pr-review-toolkit@claude-plugins-official is on, though not decided'], 'a plugin he did not decide is caught; one switched off is not');
 assert.ok(atLeast('2.1.295', '2.1.294') && atLeast('2.1.294', '2.1.294') && !atLeast('2.1.293', '2.1.294') && atLeast('2.2.0', '2.1.294'));
 assert.equal(newest(['2.1.293', '2.1.295', '2.1.30', 'tmp']), '2.1.295', 'versions compared as numbers, not as text');
+// CodeRabbit's remarks read at session start (tools/coderabbit.mjs): only open ones, only its own
+const thread = (login, isResolved = false, isOutdated = false, p = 'src/a.js') => ({ isResolved, isOutdated, comments: { nodes: [{ author: { login }, path: p }] } });
+const prData = (threads) => ({ data: { repository: { pullRequests: { nodes: threads === null ? [] : [{ number: 9, url: 'https://github.com/x/y/pull/9', reviewThreads: { nodes: threads } }] } } } });
+assert.match(summarizeRemarks(prData([thread('coderabbitai'), thread('coderabbitai', true), thread('coderabbitai', false, true), thread('exxxit-game')])), /^CodeRabbit: 1 open remark on .*pull\/9 \(src\/a\.js\)/, 'only its open, current remarks count');
+assert.match(summarizeRemarks(prData([])), /no open remarks/);
+assert.match(summarizeRemarks(prData(null)), /no open pull request from room-polish into main/, 'a missing pull request is said, not passed over');
 // the project switches off what loads into every session though the work never uses it
 const projectSettings = JSON.parse(fs.readFileSync('.claude/settings.json', 'utf8'));
 assert.equal(projectSettings.enabledPlugins['privacy-legal@synced'], false, 'privacy-legal is off for the project');

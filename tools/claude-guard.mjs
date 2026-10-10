@@ -137,6 +137,7 @@ const WHY = {
   headset: 'restarts the headset or its browser past tools/quest-look.mjs, which first checks that the owner is not wearing it',
   record: 'writes the practice review record, which only Claude Code\'s hook writes when a reviewer run ends',
   recordEnv: 'points the headset tools at another practice review record',
+  merge: 'merges into main, the live site, on GitHub, past the push guard: main changes only by a push with the owner\'s word (OBJECT_LIVE=owner-said-yes)',
 };
 // a program by its name, in any path form the shells take
 const base = (w = '') => w.replace(/^.*[\\/]/, '').toLowerCase().replace(/\.(exe|cmd|bat|ps1)$/, '');
@@ -224,6 +225,8 @@ function judge(words, stdin, ps) {
   if (p === 'cmd') { const c = a.findIndex((x) => /^\/[ck]$/i.test(x)); if (c >= 0) return refusal(a.slice(c + 1).join(' '), false); }
   if (p === 'invoke-expression' || p === 'iex') return refusal(a.join(' '), true);
   if (p === 'git') return git(a);
+  // the pull request into main stays open for CodeRabbit's reviews; merging it there would skip the push guard
+  if (p === 'gh' && ((a[0] === 'pr' && a[1] === 'merge') || (a[0] === 'api' && a.some((x) => /(^|\/)(merges|pulls\/\d+\/merge)$/.test(x))))) return WHY.merge;
   // the smoke test and Playwright: only on GitHub
   if (/^(npm|pnpm|yarn|bun)$/.test(p)) {
     const x = a.findIndex((v) => /^(exec|x|dlx)$/.test(v));
@@ -351,6 +354,11 @@ if (mode === 'start') {
     const health = execFileSync(process.execPath, [path.join(HERE, 'tools', 'health.mjs')], { cwd: HERE, encoding: 'utf8', timeout: 15000 }).trim();
     out.push(/broken|warning/.test(health) ? `Health check (tools/health.mjs), tell the owner what is broken:\n${health}` : health.split('\n')[0]);
   } catch { out.push('WARNING: the health check (tools/health.mjs) did not finish: run it by hand.'); }
+  // the outside reviewer's open remarks on the pull request into main, read before other work
+  try {
+    const remarks = execFileSync(process.execPath, [path.join(HERE, 'tools', 'coderabbit.mjs')], { cwd: HERE, encoding: 'utf8', timeout: 10000 }).trim();
+    if (remarks) out.push(remarks);
+  } catch { /* GitHub out of reach: nothing to say */ }
   process.stdout.write(`${out.join('\n\n')}\n`);
   process.exit(0);
 }

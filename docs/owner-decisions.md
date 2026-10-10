@@ -16,9 +16,14 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   replaces something («да», «согласен» 10.10).
 - CodeRabbit on its 14-day trial, kept and paid for only if it proves useful («14 дней нам хватит, чтобы...
   попользоваться и понаходить все то, что нам необходимо. А если он нам будет очень полезен, я, может, и дальше
-  за него буду платить» 10.10 07:45). He sets up and connects what is needed; I check it all as one whole
-  («Все, что надо настроить, подключить, я настрою и подключу»; «когда мы беремся за это все вместе... не
-  работает» 07:45).
+  за него буду платить» 10.10 07:45). It reviews the one open pull request from room-polish into main and
+  replaces the PR review toolkit plugin (the setup page, «делай» 09:27). He sets up and connects what is
+  needed; I check it all as one whole («Все, что надо настроить, подключить, я настрою и подключу»; «когда мы
+  беремся за это все вместе... не работает» 07:45).
+- Plugins on for every project: CodeRabbit and the TypeScript language server («ставь» 9.10 15:13); the rest
+  off. The strongest model («взял самую-самую умную» 9.10 15:59; «я подключил опус 5.5» 10.10 05:31). Main
+  protected on GitHub («Да» 9.10 05:32). Paid tools only when they help decisively («я не против за это
+  платить… но я не готов платить за лишнюю херню» 10.10 07:50).
 
 ## Order
 - The corridor is the reference every room is built on (after the process rebuild, see The process): finished to the end before anything else
