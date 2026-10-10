@@ -46,7 +46,9 @@ Part 1 (seriousness, data quality) is in study-methods-1.md. Same rules: link + 
 ### 3c. Sample size and power (Lakens, Improving Your Statistical Inferences, ch. 8, online book)
 
 - https://lakens.github.io/statistical_inferences/08-samplesizejustification.html (the journal version, Lakens 2022,
-  Collabra: Psychology 8(1):33267, is behind a bot check for our tools: owner list).
+  Collabra: Psychology 8(1):33267, since read from the owner's copy, objekt-papers/lakens-2022.txt: the same six
+  approaches, and the questions to answer: "what the smallest effect size of interest is", "which effect sizes they
+  expect (and what they base these expectations on)", "which ranges of effects a study has sufficient power to detect").
 - Six ways to justify N: "Measure entire population", "Resource constraints", "Accuracy", "A-priori power analysis",
   "Heuristics", "No justification".
 - Smallest effect size of interest: "can be based on theoretical predictions or practical considerations".
@@ -289,7 +291,7 @@ Each step: what to do -> source (file section). "Ours" = our adaptation where no
 
 ## Not reached / unverified (part 2)
 
-- Behind bot checks or 403 for our tools: Simonsohn 2015 full text (its supplement read, 3c); Hauser
-  & Schwarz 2015; Lakens 2022 journal version; Openverse 2026 full text (the vrprotocols.org item list: 5a).
+- Behind bot checks or 403 for our tools: Simonsohn 2015 full text (its supplement read, 3c); Hauser (since read, study-methods-1 1g)
+  & Schwarz 2015 (since read); Lakens 2022 (since read); Openverse 2026 full text (the vrprotocols.org item list: 5a).
 - Not opened: Charness et al. 2012; CONSORT randomisation items; Bargh & Chartrand 2000 funnel debriefing; Meade &
   Craig 2012; Ward & Meade 2023; Curran 2016; AsPredicted price.

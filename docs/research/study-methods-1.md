@@ -217,8 +217,11 @@ Parts (each gets an answer or "not found"):
     industry); passive warnings did nothing and penalty warnings do not fit a free game (Bruhlmann 2024); "sign first"
     pledges did not replicate (Kristal 2020).
   - Make the instruction check playable and repeatable, not a trap: forcing a re-read made failers "indistinguishable"
-    (Oppenheimer 2009); traps may insult ("participant backlash") and may change thinking on later tricky tasks (Hauser
-    & Schwarz 2015, abstract only via search: unverified).
+    (Oppenheimer 2009); traps may insult ("participant backlash"). A trap BEFORE the task changes the task (Hauser &
+    Schwarz 2015, SAGE Open, full text from the owner, objekt-papers/hauser-2015.txt; 380 MTurk workers, 92% passed):
+    after the check correct CRT answers rose from 1.33 to 1.76 (d = .38) and intuitive ones fell (d = .31); "IMCs could
+    eliminate effects one might otherwise observe or create effects", most where intuition and reflection disagree.
+    So no trap question before a room's measured moment: the classic rooms measure intuitive errors.
   - Ask seriousness at the END, with a no-cost "throw my data away" answer (Aust 2013); unpaid people admit it.
   - Offer a no-blame end question on distractions, tech trouble and "did you cheat" plus a comment box (LabintheWild).
   - Pay in self-knowledge: the reveal comparing the player with others is LabintheWild's tested reward; it also

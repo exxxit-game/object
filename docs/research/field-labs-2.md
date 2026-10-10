@@ -81,13 +81,17 @@
   longitudinal study of transformed avatars and environmental context in group interaction in the metaverse",
   J. Computer-Mediated Communication 28(2) zmac031, doi:10.1093/jcmc/zmac031. Publication page read
   (https://sml.stanford.edu/publications/hancock-jt/people-places-and-time-large-scale-longitudinal-study-transformed-avatars,
-  gives only the DOI). Full text blocked: academic.oup.com returned 403 to fetch and a bot check ("Just a
-  moment...") in the browser - goes to the owner.
-- From search snippets only (unverified): Study 1, 81 participants in 8 groups meeting 8 times in headsets over
-  8 weeks inside a 10-week VR course; Study 2, 137 participants through 192 virtual environments. Headset model,
-  where they were worn (home vs campus), consent, IRB, pay or course credit, data storage: all unverified.
-- Model to note (unverified detail): the lab runs its at-scale studies inside its own university course (students
-  as participants over weeks), not with public players.
+  gives only the DOI). Full text read from the owner's copy (objekt-papers/han-2023.txt).
+- Inside a 10-week course on VR: "all students who were part of the course took part in all the VR activities, only
+  those who consented to participate in the study had their data included"; Study 1: 93 of 101 consented, 81 kept
+  (five or more of eight sessions), 59% new to VR; Study 2: 158 of 171 consented, 137 kept. Headsets: "Oculus Quest 2
+  ... for use in their personal environment" (worn at home). Oversight: "review both by the IRB and a second
+  university ethics organization, and third-party oversight of the consent process and data collection" (teachers
+  were the researchers). Two training sessions first, a Zoom call open in every session for technical help.
+  Recorded: "18 degrees of freedom of movement ... (e.g., pitch, yaw, and roll of head and both hands)" for
+  synchrony, plus weekly surveys.
+- Model: everyone plays the same, only consenters' data counts; this is the same split as our "start without
+  recording".
 
 ### 11. Psychological Science Accelerator and Many Labs (global networks)
 - PSA 004 (with CREP): Hall et al. (2024), "Registered Replication Report: A Large Multilab Cross-Cultural

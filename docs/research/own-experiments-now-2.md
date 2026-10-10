@@ -130,10 +130,6 @@ quote; "unverified" marks what was not confirmed on a primary page.
 ## Pages only the owner can open (region block, bot check, paywall, clicks), and what to bring back
 
 Bot checks or clicks (open in a browser):
-- https://journals.sagepub.com/doi/full/10.1177/2158244015584617: Hauser & Schwarz 2015, where to place checks.
-- https://academic.oup.com/jcmc/article/28/2/zmac031/6965183: Stanford home-VR course study: where headsets were
-  worn, consent, ethics approval, pay or credit.
-- https://online.ucpress.edu/collabra/article/8/1/33267/120491/Sample-Size-Justification (optional).
 Paywalls (need access):
 - https://www.nature.com/articles/s41586-018-0637-6: opened by the owner; supplement read (field-labs-2.md 8); its
   ethics and consent are only in the paid Methods (EUR 39.95), not bought.
