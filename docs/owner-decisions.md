@@ -13,6 +13,9 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
 - What matters is kept by checks the machine runs by itself, not by memory, stage by stage («Ты как-то должен
   выстроить этот процесс, при котором ты не будешь забывать о крайне важных вещах… поэтапно» 10.10;
   «вопрос оптимизации… очень важный»): each stage has its list of what must be known and checked before it.
+  A claim about our setup is read from the thing itself, a claim about Quest from Meta's docs, and nothing red
+  reaches GitHub («с этим тоже нужно разобраться, нас это подводит очень сильно»; «мне нужно тебе каждый
+  раз писать, чтобы ты не по памяти отвечал?» 10.10).
 - Connectors: off - Notion, Jam, Adobe, Figma, the GitHub connector, Claude in Chrome, computer use, Minutes,
   privacy-legal; kept - Claude Docs, the browser pane, Consensus, PubMed, reference lookup, PDF Tools, Dropbox,
   one Supabase. The superpowers plugin off («да» 10.10).
