@@ -91,3 +91,6 @@ Every claim has its link and a short quote. "not confirmed" = no source found fo
   "Add Payment Information": see whether Ukraine is in the country list and which business types it offers.
 - https://developers.meta.com/horizon/contact/ : "Get Developer Support", category
   "Payments & Payouts", to ask Meta directly.
+
+## Next
+- Private person or FOP, the tax form and the bank for these payouts: docs/research/meta-payout-ukraine-2.md.

@@ -230,3 +230,6 @@ Meta's pages: the age API exists for WebXR PWAs, and the comfort rating judges t
 ## Not verified / not reached
 A real upload (API 34), a real Digital Goods purchase, a TWA under vrc-local, which apps get a DPA, whether ALPHA needs
 verification, shared storage between the installed app and the Quest Browser, PICO's web-app payments, Steam's rules.
+
+## Selling outside the store
+Free in every store, paid content bought on our own site, and what each store allows: docs/research/store-fees-own-sales.md.
