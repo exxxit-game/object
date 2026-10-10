@@ -102,6 +102,10 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
 - Readability beats period look («Читаемость» 8.10); pictures before the game («мне надо его увидеть,
   чтобы потом уже… его в игру добавлять» 8.10); beauty only within the weakest headset's budget
   («максимум красоты, ну не в нагрузку» 9.10 11:43).
+  Looks (detail, nicer light, textures) can rise later, one thing at a time; now the build method and the frame
+  budget («нужно ли нам сейчас тратить на него свои силы?… ты сюда не за отрисовкой солнечных лучей пришёл. а поднять
+  потом качество в максимум… думаю норм» 10.10 14:05 UTC, asked in another window; the plan he accepted here the same day:
+  merge first, measure in the headset, then multiview).
 - Where something is left to imagination (he did not ask, the task does not need it, no source decides it),
   I do not decide it: I bring him several real options and he picks («если есть момент, где можно
   додумать, ты что-то сам додумываешь… у меня не спрашиваешь… Есть несколько вариантов, и я выбираю» 9.10).
