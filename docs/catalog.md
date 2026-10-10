@@ -7,7 +7,7 @@ to players with that space). Reality: VR, MR (mixed reality fits the original be
 any, or "not judged" (card written before that line was required). Live: real players
 needed at the same time.
 
-Cards: 145 — first-room candidates: 10, rooms: 57, interludes: 57, rejected: 19, not read: no legal full text: 2.
+Cards: 145 — first-room candidates: 10, rooms: 57, interludes: 57, rejected: 19, not read: no legal full text when the card was written: 2.
 
 ## First-room candidates
 
@@ -172,7 +172,7 @@ Cards: 145 — first-room candidates: 10, rooms: 57, interludes: 57, rejected: 1
 | [trueblood-2013](cards/trueblood-2013.md) | The decoy rectangle (attraction, similarity and compromise effects… | seated | any | — | small, fragile and display-dependent; it needs hundreds of trials and does not use the headset. |
 | [von-castell-2018](cards/von-castell-2018.md) | Paint the walls white (bright surfaces make a room look bigger) | seated | VR | — | ; at most a background manipulation inside another room, e.g. as a hidden variable in a space-perception room. |
 
-## Not read: no legal full text (see docs/papers-needed.md)
+## Not read: no legal full text when the card was written (status now: docs/library.md)
 
 | Card | Experiment | Space | Reality | Live | Why |
 |---|---|---|---|---|---|
