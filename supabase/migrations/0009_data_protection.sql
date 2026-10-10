@@ -122,6 +122,7 @@ create table app.recent (
   id uuid primary key default gen_random_uuid(),
   source bytea not null,
   kind text not null check (kind in ('run', 'playtest', 'issue')),
+  trusted boolean not null,
   at timestamptz not null default now()
 );
 create index recent_source_at_idx on app.recent (source, kind, at);
@@ -139,9 +140,11 @@ select cron.schedule('forget-cron-runs', '17 3 * * *',
 
 -- Called by the submit functions (their owner runs it): busy when this source sent p_source of this kind
 -- in 5 minutes, or the game received p_global of this kind in the last minute. The client's address is
--- Cloudflare's CF-Connecting-IP when it reaches the database (Cloudflare sets it, a client cannot), else
--- the first entry of X-Forwarded-For ("Securing your API"), which a client can prefill. Calls wait in
--- turn, so ones arriving together cannot pass a cap at once.
+-- Cloudflare's CF-Connecting-IP (Cloudflare sets it, a client cannot). X-Forwarded-For is not read: its
+-- first entry is whatever the client wrote. Whether CF-Connecting-IP reaches the database is not yet
+-- seen, so a call without it is not refused (that would lose every result) but shares one source with
+-- all such calls, and app.recent.trusted shows whether it came. Calls wait in turn, so ones arriving
+-- together cannot pass a cap at once.
 create function app.allow(p_kind text, p_source int, p_global int)
 returns void
 language plpgsql
@@ -149,17 +152,17 @@ set search_path = ''
 as $$
 declare
   headers json := nullif(current_setting('request.headers', true), '')::json;
-  ip text := coalesce(nullif(headers ->> 'cf-connecting-ip', ''), split_part(coalesce(headers ->> 'x-forwarded-for', ''), ',', 1));
+  ip text := nullif(trim(headers ->> 'cf-connecting-ip'), '');
   src bytea;
 begin
   perform pg_advisory_xact_lock(hashtext('app.allow'));
   delete from app.recent where at < now() - interval '10 minutes';
-  select extensions.hmac(convert_to(trim(ip), 'UTF8'), key, 'sha256') into src from app.limit_key;
+  select extensions.hmac(convert_to(coalesce(ip, ''), 'UTF8'), key, 'sha256') into src from app.limit_key;
   if (select count(*) from app.recent where source = src and kind = p_kind and at > now() - interval '5 minutes') >= p_source
      or (select count(*) from app.recent where kind = p_kind and at > now() - interval '1 minute') >= p_global then
     raise exception 'busy';
   end if;
-  insert into app.recent (source, kind) values (src, p_kind);
+  insert into app.recent (source, kind, trusted) values (src, p_kind, ip is not null);
 end;
 $$;
 revoke execute on function app.allow(text, int, int) from public, anon, authenticated;
