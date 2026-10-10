@@ -18,6 +18,7 @@ Parts (each gets an answer or "not found"):
 5. VR practice: 5a reporting guidelines for VR studies; 5b simulator sickness (SSQ) and presence questionnaires;
    5c hardware and frame-rate differences; 5d tracking loss and play area; 5e what to log.
 6. Checklist: how a lab runs a study, applied to a game room (each step with its source).
+Parts 3, 4 and 6 are in study-methods-2.md; part 5 in study-methods-3.md.
 
 ---
 
@@ -79,7 +80,9 @@ Parts (each gets an answer or "not found"):
   typed version "led to statistically significantly more attrition" (careless people may simply leave).
 - Self-reported diligence higher with the typed warning, but small: "d = 0.18"; no change in page time.
 - 37.1% to 48% missed at least one of six attention items in every condition (paid, experienced MTurk sample).
-- Prior evidence they summarise (secondary, not read by me): Berinsky et al. 2016, a warning raised pass rates "by
+- Prior evidence they summarise (secondary; originals checked on OpenAlex 10.10.2026: Berinsky 2016, Huang 2012 and
+  Meade & Craig 2012 closed access; Ward & Meade 2023, Annu. Rev. Psychol., open but behind a bot check: owner;
+  Curran 2016 has an open copy, https://osf.io/6dkhm, not read): Berinsky et al. 2016, a warning raised pass rates "by
   eight percentage points"; Huang et al. 2012 warnings "reduce the severity"; Meade & Craig 2012 warnings gave "no
   benefit" and "decreased respondent self-reported attitude toward the study"; Ward & Meade 2023 review: positive
   approaches (rewards for care) "have been less effective than warnings" (as summarised by Bruhlmann et al.).
@@ -87,20 +90,22 @@ Parts (each gets an answer or "not found"):
   self-report diligence items (Meade & Craig 2012, e.g. "I carefully read every survey item"), response time,
   longstring, Mahalanobis distance, even-odd consistency, psychometric synonyms/antonyms, response variability.
 - For a game: warnings with penalties do not fit a free game and did not work when passive; an active, typed (in VR:
-  performed) commitment works but loses people. Unverified for unpaid players: all these samples were paid.
+  performed) commitment works but loses people. Not tested on unpaid players: all these samples were paid.
 
 ### 1b. Commitment request instead of attention checks (Geisen 2022, Qualtrics; industry test, not peer-reviewed)
 
 - https://www.qualtrics.com/articles/strategy-research/attention-checks-and-data-quality/ (Emily Geisen, 4 Aug 2022).
 - About 4,000 respondents, 5 online panels, 5 random groups (commitment 776; factual check 803; textual check 780;
-  speed check 798; control 799). Question: "Do you commit to providing thoughtful answers?"; pass = "Yes, I will";
-  preceded by a note that the team cares about data quality (full wording only in an image: unverified).
+  speed check 798; control 799). Full screen (read from the article's screenshot, Picture-1_0.png): "We care about
+  the quality of our survey data. For us to get the most accurate measures of your opinions, it is important that
+  you provide thoughtful answers to each question in this survey." / "Do you commit to providing thoughtful answers
+  to the questions in this survey?" [I can't promise either way] [Yes, I will] [No, I will not]; pass = "Yes, I will".
 - Share with 2+ of 11 quality problems among those who passed: commitment 4.6%, factual 6.7%, textual 7.5%,
   speed 9.7%, control 11.0% (commitment, factual, textual significant vs control).
 - 5.2% did not commit (highest "failure" of all arms).
 - Warning in the same article: "Too many attention checks can cause break offs or frustrate respondents".
-- Older roots named in search results (Cannell, Michigan, 1970s-80s interviewer studies; Vannette, 14-country web
-  test): not opened, unverified.
+- Older roots (Cannell, Michigan, 1970s-80s interviewer studies; Vannette, 14-country web test): named only in
+  search results; the article itself cites neither (re-read): unverified, not needed for the tested numbers above.
 - For a game room: a one-tap "I'll do this one for real" before the critical task is the cheapest tested lever; a
   "just looking" answer routes the run out of science data, not out of the game.
 
@@ -113,8 +118,9 @@ Parts (each gets an answer or "not found"):
   conceptual replications (n = 4,559) and one highly powered, preregistered, direct replication (n = 1,235) ... we
   observed no effect of signing first on honest reporting."
   https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1073/pnas.1911695117&format=json&resultType=core
-- Why retracted (fabricated field data found by Data Colada, 2021): secondary reports only (reason.com, bigthink),
-  unverified on the retraction notice itself.
+- Why retracted (notice read, PNAS 13 Sep 2021, doi:10.1073/pnas.2115397118, https://pmc.ncbi.nlm.nih.gov/articles/PMC8463784/):
+  "The editors are retracting this article and note that Simonsohn, Simmons, and Nelson" "have provided evidence to
+  question the validity of the data", citing datacolada.org/98. CORRECTED: the notice does not say "fabricated".
 - For a game room: do not build an "honesty pledge" on that evidence; a commitment request (1b above) and the
   seriousness check (1a) are the tested tools.
 
@@ -152,8 +158,10 @@ Parts (each gets an answer or "not found"):
 - Plain task rated "far more boring, far less enjoyable" than either game version.
 - Online vs lab: "slightly longer reaction times but were otherwise very similar".
 - Hawkins, Rae, Nesbitt & Brown (2013), "Gamelike features might not improve data", Behavior Research Methods 45,
-  301-318: latency, accuracy and performance "unchanged by gamelike features", experience more positive (search
-  snippet and as cited by Lumsden; not opened: unverified on the page).
+  301-318 (READ, https://link.springer.com/article/10.3758/s13428-012-0264-3, objekt-papers/hawkins-2013.txt):
+  students for credit (200 online; 127, 31 lab + 96 online); "Response latency, accuracy, and overall task
+  performance were unchanged by gamelike features in both experiments"; the game version "provided a more positive
+  and enjoyable experience", which "did not translate into data effects".
 - For a game room: fun is fine as long as the scene does not change what is measured (the stimulus the paper used
   must stay as readable and as timed as in the paper); keep decoration out of the critical stimulus, keep points/
   feedback away from the measured response until after it is recorded.
@@ -173,7 +181,7 @@ Parts (each gets an answer or "not found"):
   tasks risk "filtering out human respondents"; treat "low-barrier convenience samples" with skepticism; options
   (identity validation, locked-down software) each have "significant trade-offs".
 - Scope: web surveys (Qualtrics pages). Not tested: an immersive WebXR task with tracked head and hands. That such a
-  run is harder to fake is our inference, unverified. Practical reading for us: no pay = no profit motive (his main
+  run is harder to fake is our inference; no source tested it. Practical reading for us: no pay = no profit motive (his main
   threat model is "financially motivated fraud"); log per-frame head/hand pose so a run can be checked for physical
   plausibility; still treat it as a convenience sample.
 

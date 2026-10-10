@@ -1,12 +1,13 @@
-# How a lab runs a study, applied to one game room (part 2 of 2: study plan, ethics, VR practice, checklist)
+# How a lab runs a study, applied to one game room (part 2 of 3: study plan, ethics, checklist)
 
-Part 1 (seriousness, data quality) is in study-methods-1.md. Same rules: link + short quote; "unverified" = snippet only.
+Part 1 (seriousness, data quality) is in study-methods-1.md; part 5 (VR practice) in study-methods-3.md. Same rules: link + short quote; "unverified" = snippet only.
 
 ### 3a. Preregistration: AsPredicted's eight questions (read from its own example PDF)
 
 - https://aspredicted.org/ : "Pre-registration remains private until an author makes it public"; public ones
   "cannot be modified and are automatically backed up in the Web Archive"; "single page PDFs that are time-stamped
-  and include a unique URL for verification". Cost: not stated on the page (unverified).
+  and include a unique URL for verification". Cost (Help page, https://aspredicted.org/help): "we are a free
+  service and receive about 200 submissions a day".
 - Questions, verbatim from the example https://aspredicted.org/kv692.pdf :
   1 "Have any data been collected for this study already?"
   2 "What's the main question being asked or hypothesis being tested in this study?"
@@ -129,105 +130,15 @@ Part 1 (seriousness, data quality) is in study-methods-1.md. Same rules: link + 
   sound"; the authors say it "could have used stronger language".
 - Conclusion: the post-experimental inquiry "does not appear to be able to reliably and accurately assess
   participant suspicion and awareness" (so: measure suspicion, analyse it as a moderator; do not trust it as a filter).
-- Bargh & Chartrand (2000) funnel-debriefing chapter: not found online in this pass (book chapter): not found.
+- Bargh & Chartrand (2000), Reis & Judd Handbook pp. 253-285 (READ pp. 7-8 and Table 2 of the scanned manuscript,
+  https://acmelab.yale.edu/sites/default/files/2000_studying_the_mind_in_the_middle.pdf; excerpt objekt-papers/bargh-2000.txt):
+  "The best way of doing this is through a 'funneled debriefing'"; Table 2 runs from "What do you think the purpose
+  of this experiment was?" through "were related in any way?" to the specific stimulus; any answer "in the ballpark"
+  excludes the run; alarm if "upwards of 5% or so" show awareness.
 
-### 5a. VR reporting standard: the Openverse protocols (PNAS 2026) and vrprotocols.org
+### 5. VR practice (5a-5d): moved whole to [study-methods-3.md](study-methods-3.md)
 
-- Zelderen, Masters-Waage, Affinito, ... Banakou, ... Draschkow ... (2026), "Creating common virtual ground:
-  Protocols to democratize open VR research", PNAS 123(26), doi:10.1073/pnas.2524991123 (record and abstract via Europe
-  PMC: https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1073/pnas.2524991123&format=json&resultType=core).
-  Abstract: "an interactive checklist to support VR research from across disciplines to meet three essential
-  protocols-interoperability, procedural standardization, and data sharing", "a common, easy-to-evaluate format
-  for researchers to present projects to ethics boards, reviewers, and beyond". Full text read (6 pages, the owner
-  brought it; PNAS Perspective, published 24 June 2026, CC BY-NC-ND; copy objekt-papers/van-zelderen-2026.pdf, image
-  only, no text layer). Built "through a Delphi process". Procedural standardization has five areas: "reporting VR
-  procedures, standard battery of measurements, ethics, accessibility, and safety"; VR familiarity is measured
-  because "participants' VR experiences ... can strongly predict effect sizes in VR studies". The standards "do not
-  adjudicate what is or is not acceptable in human-subjects research - that responsibility lies with ethics
-  committees"; "the psychological realism inherent in VR can render scenarios that appear benign in written or video
-  form, substantially more intense for participants". Cybersickness: "prioritizing seated experiences with no
-  locomotion, restricting the field of view during movement, and blurring dynamic nonsalient regions". For a
-  commercial product: "To prevent misuse (e.g., third parties illegally downloading the VR application for commercial
-  purposes), researchers may opt to make their assets available only to other researchers upon reasonable request".
-  Repository https://github.com/Openverse-OS/VR-Protocols (Zenodo 10.5281/zenodo.19442410). Leads in its references:
-  Steed et al. 2023 (distributed and remote MR experiments, Front. Comput. Sci. 4:966319), Draschkow 2022 (remote VR
-  and external validity, Nat. Rev. Psychol. 1:433-434), Gonzalez-Franco et al. 2018 (a VR Milgram, PLOS ONE).
-- https://www.vrprotocols.org/ (opened in the browser): pillars "Pillar 1: Interoperability", "Pillar 2: Procedural
-  Standardisation", "Pillar 3: Data Sharing", plus "Health, Safety, and Ethics"; workflow "Plan Your Project" ->
-  "Conduct Research" -> "Audit & Submit" (export a checklist as JSON/Word/PDF, self-audit at the end). The item list
-  appears only after ticking badges; the owner ticked all four and exported the checklist (v.0.62, 10.10.2026, 8
-  pages; copy in objekt-papers/vrprotocols-checklist-v0.62.pdf). All items "Required". What it asks, and where we
-  stand (our reading):
-  - Interoperability: common formats and engines, assets listed in a repository with version numbers (engine and
-    tools), version control, OpenXR and SDK versions. Ours: public git repo, A-Frame pinned in vendor/; WebXR is the
-    browser's standard, not OpenXR itself (to state in the report).
-  - Reporting: simulation name and version; trial length incl. breaks; "simulation mode" (on the headset) and
-    researcher involvement; "observatory condition" (who watches); HMD make, resolution, field of view, refresh rate;
-    the physical space; participant instructions incl. "training or familiarization periods" and their duration;
-    the tasks. Ours: at home, unattended, the player's own room: to report as such.
-  - Standard battery: a presence measure ("IPQ, SUS, or SPES") and VR familiarity ("Self-rated familiarity, 2 items").
-  - Ethics: consent names cybersickness and possible distress, "withdraw at any time without penalty"; informed
-    choices on biometric and interaction data; GDPR; "robust encryption ... in transit and at rest"; explicit use and
-    reuse of data; IRB approval; distressing scenarios named in the consent; harm mitigation; virtual humans keep out
-    of the participant's personal space unless the question needs it.
-  - Accessibility: not colour alone; adjustable size and distance; dominant-hand choice; hand or controller and a
-    seated alternative; subtitles that can be turned off; few buttons; highlighted interactables; small steps.
-  - Safety: 90 Hz or more and 6DoF; IPD set; boundary system; "Avoid leaving ambulatory participants in VR
-    unattended" (at home we cannot: a deviation to declare, seated or standing tiers only); audio level; natural
-    locomotion; smooth movement; "Gradual Acclimation ... starting with simple, low-intensity tasks" and "Controls
-    Training" (the owner's warm-up idea is the standard's own step); a comfort rating told beforehand; rest.
-  - Data sharing: rights to share the simulation and assets; readme; the complete simulation and assets; participant
-    data as a benchmark; open repository; csv with a codebook; head orientation and other automatic output "in a
-    separate file"; analysis reproducible in two steps; the repository link in the paper.
-  - Items that appear only for some project features (the full live list the owner sent, and the exported project
-    file objekt-papers/vrprotocols-project-v0.62.json): "Detail Deviations" (off OpenXR: name the SDK and the headsets
-    it runs on: ours, WebXR in the Quest browser); hardware and software reported; open source for custom software;
-    asset EULAs, repurposed or reputable-store assets; controllers and motion tracking described; the code of the
-    virtual environment uploaded; sensitive variables removed before sharing; analysis code also in plain text; and
-    "Prevent Reidentification": body or eye tracking never combined with other data that could re-identify a person.
-- Other checklists seen only in search results (unverified): Skorupska et al., "All Factors Should Matter!" (arXiv
-  2101.01285), a reference checklist of hardware, software and human factors for describing IVR experiments;
-  VR-Check (Krohn et al. 2020, JMIR, PMC7215516), 10 dimensions for clinical neuropsychology VR paradigms.
-- For a game room: run the room through vrprotocols.org's checklist (all four badges) and keep the exported JSON
-  with the room's preregistration; it is the newest field standard and is aimed at ethics boards and reviewers.
-
-### 5b. Simulator sickness: how the SSQ is meant to be used (Kennedy et al. 1993; local objekt-papers/kennedy-1993.txt)
-
-- Int. J. Aviation Psychology. Scoring weights in the paper: Nausea = [1] x 9.54; Oculomotor = [2] x 7.58;
-  Disorientation = [3] x 13.92; Total = ([1]+[2]+[3]) x 3.74.
-- Pre-screen: a "pre-exposure checklist" asked whether people were "sick" or not in their "usual state of fitness";
-  "Records from subjects who reported themselves as 'other than healthy' were excluded"; the scoring "is intended
-  only for application to postexposure symptoms, with the further precondition that a screening of 'unhealthy'
-  subjects is required".
-- For a game room: one pre-room question ("feeling well right now?"); a no answer = play allowed, run not used for
-  science; the full 16-item SSQ is too long for every room (our reading); a short post-room sickness item plus
-  drop-out logging (06-science.md, Pan & Hamilton; Mottelson 2021) is the practical minimum. Presence: IPQ details are
-  in 06-science.md (not repeated).
-
-### 5c/5d. Frame rate, tracking loss, interruptions, play area: what WebXR itself reports (W3C spec, read)
-
-- WebXR Device API, W3C Candidate Recommendation Snapshot, https://immersive-web.github.io/webxr/
-- Frame rate: "The frameRate attribute reflects the internal nominal framerate"; supportedFrameRates "returns a list
-  of supported target frame rate values"; updateTargetFrameRate(rate) sets the target. -> log the nominal rate and the
-  measured frame times per run.
-- Interruptions: visibilityState "visible" / "visible-blurred" (seen but "not the primary focus", input not
-  processed) / "hidden" (imagery "cannot be seen by the user", frame callbacks pause). -> log every state change
-  with time; a run with "hidden" during the critical moment is flagged (headset off or system menu).
-- Tracking quality: emulatedPosition "is false when the transform represents an actively tracked 6DoF pose ... or
-  true if its position value includes a computed offset, such as that provided by a neck or arm model". -> log the
-  flag per frame for head and each hand.
-- Tracking loss / recentre: a "reset" event fires on "discontinuities of the native origin", e.g. "After user
-  recalibration of their XR device or if the XR device automatically shifts its origin after losing and regaining
-  tracking", and when boundsGeometry changes; not for momentary loss "within the same tracking area".
-- Play area: boundsGeometry "MUST report an empty array" during "extended periods of tracking loss"; bounded-floor
-  "Always requires consent". -> log reference-space type and bounds size if granted.
-- Session end is "permanent and irreversible" ("end" event): log it; an ended-early run is a drop-out, reported per
-  condition (Mottelson 2021 checklist, 06-science.md).
-- Hardware differences (06-science.md, not repeated): absolute performance depended on hardware (Mottelson &
-  Hornbaek 2017); built-in timing off by about 55 ms in a native engine (Wiesing et al. 2020); browser RT delays
-  70-120 ms (Anwyl-Irvine et al. 2021) -> compare conditions within the same device type; log device model.
-
-### 3d. Randomisation, counterbalancing, within vs between (from texts read; the general standards were not opened)
+### 3d. Randomisation, counterbalancing, within vs between (from texts read)
 
 - Within-design exposure lowers effects: Chandler et al. 2015 (local): attenuation was strongest when people saw the
   other condition, "analogous to participating once in a within-participant experiment (Greenwald, 1976)". -> a
@@ -235,17 +146,21 @@ Part 1 (seriousness, data quality) is in study-methods-1.md. Same rules: link + 
 - Between-design cost: Lumsden et al. 2016: a between design "confounds hardware/individual differences with
   effects caused by the task variant", offset by "the large sample size" online. -> stratify or block by device model.
 - Simple randomisation in the wild leaves cells unequal: Steed et al. 2016 (local): "participants are randomly
-  assigned and are not matched in any way. Thus the conditions are not balanced." -> assign in shuffled blocks
-  (our reading; block randomisation is the trial standard, e.g. CONSORT: not opened in this pass).
+  assigned and are not matched in any way. Thus the conditions are not balanced." -> assign in shuffled blocks.
+  The trial standard asks for exactly this report (CONSORT 2025, Nature Medicine supplement, read,
+  doi:10.1038/s41591-025-03635-5): item 17b "Type of randomisation and details of any restriction (e.g.,
+  stratification, blocking and block size)" (was 2010 item 8b); also whether block sizes were "fixed or randomly varied".
 - Position and order: counterbalance left/right and order of options within the room (the two-phones sketch in
   own-experiments-now.md already does this); log the assigned side/order.
-- Charness, Gneezy & Kuhn (2012), "Experimental methods: Between-subject and within-subject design", J. Economic
-  Behavior & Organization 81:1-8: between-subjects "more conservative", demand effects stronger within (search
-  snippet only: unverified; the PDF tried was a CV, not the paper).
+- Charness, Gneezy & Kuhn (2012), J. Economic Behavior & Organization 81(1):1-8, doi:10.1016/j.jebo.2011.08.009:
+  abstract read (https://ideas.repec.org/a/eee/jeborg/v81y2012i1p1-8.html): "both designs have their merits, and
+  the choice of designs should be carefully considered". "More conservative" and stronger demand effects within:
+  not in the abstract; full text for ScienceDirect subscribers only (two PDFs tried were Charness's CV): unverified.
 
 ## 6. Checklist: how a lab runs a study, applied to one game room
 
-Each step: what to do -> source (file section). "Ours" = our adaptation where no source sets the detail.
+Each step: what to do -> source (file section; 5a-5d are in study-methods-3.md). "Ours" = our adaptation where no
+source sets the detail.
 
 1. Choose the original study and read it in full; note its N, effect size, procedure, exclusions -> project rule;
    Lakens ch. 8 (3c) for whether its effect can drive power.
@@ -289,9 +204,10 @@ Each step: what to do -> source (file section). "Ours" = our adaptation where no
 22. Treat the sample as players, not people ("you vs other players"); state it is a self-selected convenience
     sample; stay alert to automated runs -> Westwood 2025 (2b); Mottelson 2021 demographics (06-science.md).
 
-## Not reached / unverified (part 2)
+## Not reached / unverified (parts 2-3)
 
-- Behind bot checks or 403 for our tools: Simonsohn 2015 full text (its supplement read, 3c); Hauser (since read, study-methods-1 1g)
-  & Schwarz 2015 (since read); Lakens 2022 (since read); Openverse 2026 full text (the vrprotocols.org item list: 5a).
-- Not opened: Charness et al. 2012; CONSORT randomisation items; Bargh & Chartrand 2000 funnel debriefing; Meade &
-  Craig 2012; Ward & Meade 2023; Curran 2016; AsPredicted price.
+- Since read: Hauser & Schwarz 2015, Lakens 2022, Openverse 2026 (5a), CONSORT 2025 (3d), Bargh & Chartrand 2000
+  (4c), Skorupska 2021 and VR-Check (5a), AsPredicted price (3a, free).
+- Closed access (OpenAlex, 10.10.2026): Simonsohn 2015 full text (abstract and supplement read, 3c); Charness et
+  al. 2012 (abstract read, 3d); Meade & Craig 2012. Ward & Meade 2023: open but behind a bot check (owner).
+  Curran 2016: open copy https://osf.io/6dkhm, not read (page budget).

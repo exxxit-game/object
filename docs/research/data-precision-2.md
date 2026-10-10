@@ -32,11 +32,11 @@ text files for this pass. "Not measured" = no number for the fix's own effect in
 | Clock | performance.now() at 100 us, or 5 us if cross-origin isolated | Not a limit |
 | Frame sampling | one pose per frame: 13.9 / 11.1 / 8.3 ms at 72 / 90 / 120 Hz; Vive ran at 89.53, not 90 | Log measured frame times, not the nominal rate |
 | Motion-to-photon, mid-movement | 8.3 ms (Quest 2, browser, with prediction) | Smooth movement display is lab-grade |
-| Motion-to-photon, movement onset | 21-42 ms on PC headsets (Quest not measured) | Unverified for Quest; measure once with a 240 fps phone video |
+| Motion-to-photon, movement onset | 21-42 ms on PC headsets; no Quest onset figure published (searched 10.10.2026) | Measure once with a 240 fps phone video |
 | Keyboard/browser RT offset on home PCs | about 70-120 ms, SD about 8 ms (Gorilla); Bridges: 8-67 ms | Offset cancels between conditions on the same device; do not compare absolute RTs across device models |
 | RT effects online | ~20 ms effects found with many trials; primes of 64 ms or shorter failed | RT differences of 20-30 ms or more between conditions, many trials, many players |
 | Engine time stamps | "highly variable" in a game engine until fixed | Check our timing against an external measurement first |
-| Head position | Quest 2 RMSE 3.17-3.19 mm, max 9.5-10.5 mm (robot, native app) | Head position, leaning, distance kept: yes |
+| Head position | Quest 2 RMSE 3.17-3.19 mm, max 9.5-10.5 mm; Quest 3 RMSE 0.35 mm, 0.14 deg (robots, native apps) | Head position, leaning, distance kept: yes |
 | Controller | 13.5 mm worst static error at 500 mm; rotation 1.11 deg worst | Reach paths at cm level, pointing direction: yes |
 | Hand tracking | Fingertip 1.1 cm, joint angle 9.6 deg, delay 45 ms, lost above about 3.2 m/s (Quest 2) | Coarse gestures and grasp; not fast or latency-sensitive motor tasks |
 | Gaze from head pose | Eye sits on average about 11.7 deg off head direction while fixating; head-only map CC 0.50 | Which region or large object (targets more than about 25 deg apart); not which small object |
@@ -82,8 +82,10 @@ Instrument steps that cost little: log device model, measured frame times, and W
 Quest's motion-to-photon latency once with a 240 fps phone video (Cesanek 2024 method).
 
 ## Not reached / unverified
-- Many Labs 2 criteria: since read (study-methods-2.md 3e); Scheel 2021 since read (data-precision.md); Quest 3 tracking
-  studies (snippets only: Sensors 2026 robot study PMC13119968; TVCG 2025 hand tracking, citation only); Holzwarth et al. 2021
-  since read (data-precision.md); Quest motion-to-photon latency at movement onset (not found).
+- Many Labs 2 criteria: since read (study-methods-2.md 3e); Scheel 2021 since read (data-precision.md); Quest 3 tracking:
+  Sensors 2026 robot study since read (headset RMSE 0.346 mm, 0.143 deg; data-precision.md 4c); TVCG 2025 hand
+  tracking: citation only, full text paid (owner); Holzwarth et al. 2021
+  since read (data-precision.md); Quest motion-to-photon latency at movement onset: none published (searched again;
+  OptoFidelity's Quest 3 test is mid-movement only, data-precision.md 4b).
 - Validity as a concept (construct, external) was not covered by a separate source in this pass; reliability types
   appear only through Hedge 2018 (test-retest ICC) and Germine 2012 (Cronbach alpha, split-half).

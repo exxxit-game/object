@@ -51,8 +51,12 @@ in a search listing.
     translation); new application 7,500 NIS; extension or new protocol version 1,000 NIS; consent-form changes free.
   - Follows the Ministry of Health procedure and ICH-GCP; decision time not stated (meetings by calendar).
   - Whether a company-initiated, non-medical psychology game would be accepted there: not stated (unverified).
-- Israeli online panels: iPanel's quality page refused both WebFetch (403) and the browser ("Service
-  unavailable"); a search listing claims "over 100,000 members", trap questions and speeder removal (unverified).
+- Israeli online panels: iPanel's answers to the ESOMAR 28 questions (the owner brought the PDF): "more than 100,000
+  active members"; points per survey by length, redeemed for gift cards; invited to "no more than 4-5 surveys each
+  month", answering "2-3"; each data file tested on open and closed answers, "inconsistencies and response time";
+  inconsistencies tracked across surveys, "repeat offenders are then removed"; age and gender checked at entry; an ID
+  copy to redeem points; certified to no quality system. ESOMAR's 28 questions are the market-research checklist
+  for buying an online sample: the questions to ask any panel we use.
   No Israeli home-VR or game-based psychology study was found in two searches (not found).
 
 ### 3. Germany: a longer test at home makes people dodge the test, not quit (NEPS experiment) - abstract read
@@ -94,8 +98,14 @@ in a search listing.
 
 ### 1d. Italy, 1g. Poland and Czechia
 - Italy: one Italian search found no home or game-based psychology study at scale. A University of Pisa
-  open-source VR spider avoidance test (vr-BAT, 75 participants, October 2026 news) appeared in listings; the
-  article page showed a bot check (unverified).
+  open-source VR spider avoidance test: the owner opened the article (scientificult.it, 7 Oct 2026, from the
+  University of Pisa press office; our translation). It replicates "a test used since the 1960s where people find
+  themselves in a corridor at the end of which there is a big spider"; people were asked to approach it as close
+  as possible, measuring completion time and walking speed; 75 participants with varying arachnophobia; avoidance
+  subtypes read from approach trajectories. Paper: Frumento, Magnavacca, Iannizzotto, Gemignani, Scilingo,
+  Menicucci & Greco (2026), Communications Psychology, doi:10.1038/s44271-026-00530-8; tool free on OSF,
+  doi:10.17605/OSF.IO/YN29T. A published VR re-creation of a classic test with a corridor and an approach path;
+  phobic content, so not for unsupervised home play without its own safeguards.
 - Poland and Czechia: one Polish/English search found no online psychology experiment at the thousands scale
   (not found).
 
@@ -135,6 +145,6 @@ in a search listing.
   Lei 14.874/2024 text (only its summary page read: "Dispoe sobre a pesquisa com seres humanos").
 - Norway, Finland, Denmark, Spain, Italy, Poland, Czechia ethics rules for non-medical research: not searched.
 - Whether a French CER or a Swiss committee reviews outside companies: not found.
-- Israel online panels (iPanel, Midgam): pages blocked; Israeli home-VR studies: not found.
+- Israel online panels: iPanel answered (part 4 above), Midgam blocked; Israeli home-VR studies: not found.
 - SoSci Panel (Munich) page: DNS failure; panel facts from search only (unverified).
 - Markovitch et al. 2025 (infrequent gamers): not opened.

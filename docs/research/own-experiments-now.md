@@ -6,7 +6,7 @@ primary page. Parts 4 (running and publishing), 5 (data-quality risks) and the l
 [own-experiments-now-2.md](own-experiments-now-2.md). How working labs run studies outside the lab, lab by lab:
 [field-labs-1.md](field-labs-1.md), [field-labs-2.md](field-labs-2.md); ethics review and data law for a team without a
 university: [ethics-law.md](ethics-law.md); how a lab runs a study, step by step, applied to a room:
-[study-methods.md](study-methods.md); how science projects reached millions, and fun without spoiling data: [science-reach.md](science-reach.md); how precise our data can be, and how much each fix buys: [data-precision.md](data-precision.md); continental Europe, Israel and Latin America in their own languages: [world-europe.md](world-europe.md), [world-europe-2.md](world-europe-2.md); the games industry's own player research and Russian-language science: [world-industry-russia.md](world-industry-russia.md), [world-industry-russia-2.md](world-industry-russia-2.md). Parts, each answered or marked "not found":
+[study-methods.md](study-methods.md); how science projects reached millions, and fun without spoiling data: [science-reach.md](science-reach.md); how precise our data can be, and how much each fix buys: [data-precision.md](data-precision.md); continental Europe, Israel and Latin America in their own languages: [world-europe.md](world-europe.md), [world-europe-2.md](world-europe-2.md); the games industry's own player research and Russian-language science: [world-industry-russia.md](world-industry-russia.md), [world-industry-russia-2.md](world-industry-russia-2.md); Asia (China, Japan, Korea, Taiwan, Singapore): [world-asia.md](world-asia.md), [world-asia-2.md](world-asia-2.md); papers the owner brought (Re-Search, the Portal 2 re-creations; citizen science review 2026; Colombia 8430): [owner-brought.md](owner-brought.md). Parts, each answered or marked "not found":
 
 The owner's questions about rooms (his words, our translation) and where each is answered; a question stays here
 until its answer is read and sourced:
@@ -46,8 +46,9 @@ until its answer is read and sourced:
   https://news.cnrs.fr/print/1460 — "The initiative came in 2015 from the company Deutsche Telekom, which contacted
   University College London"; "called on a professional developer, Glitchers"; "released in May 2016"; data sent
   "with the participant's consent"; "four million players". CORRECTED: the page gives no cost or time figure; the
-  "$10 billion" was found nowhere. A CNRS press release (https://www.cnrs.fr/en/press/video-game-aids-research-alzheimers-disease)
-  is listed in search as equating the data to "10,000 years" of lab data (search listing only: unverified).
+  "$10 billion" was found nowhere. CNRS press release of 24 April 2019 (read,
+  https://www.cnrs.fr/en/press/video-game-aids-research-alzheimers-disease): the players' strategies "represent the
+  equivalent of 10,000 years of data", from "over 4 million players"; no cost figure.
 - Lesson for us: a game made by a studio with a university partner, data with consent, published in top venues.
 
 ### 1c. VR studies run outside the lab, on players' own headsets
@@ -97,8 +98,10 @@ until its answer is read and sourced:
 - Psychological Science Accelerator: "a globally distributed network of researchers that pool intellectual and
   material resources to accelerate the accumulation of rigorous knowledge in psychological science"; proposals by
   open call. https://psysciacc.org/ — About (read, https://psysciacc.org/about.html): "The PSA began in August
-  2017"; "100 labs signed up for the consortium one month after the post went live". No current lab or country
-  count on either page (the home page's member dashboard loads by script: not read).
+  2017"; "100 labs signed up for the consortium one month after the post went live". No count on either page; the
+  home page's member dashboard (https://shiny.thedoomlab.com/psadata/MemberMap) refuses connections (checked
+  10.10.2026). Latest count read: "2,468 members in 73 countries" (Einstein Foundation 2022 award page,
+  https://award.einsteinfoundation.de/award-winners-finalists/recipients-2022/psychological-science-accelerator).
 - PSA projects (read, https://psysciacc.org/projects.html): 15 projects, PSA001-009, PSA-CR 001-003, PSA-JTF1-3;
   e.g. PSA001 Face Perception "11 world regions, 41 countries and 11,570 participants"; PSA006 Trolley Problem
   "in 45 countries"; PSA-CR 003 "n = 25,718 from 89 countries". No VR study on the page.
@@ -162,14 +165,22 @@ until its answer is read and sourced:
   "Choice Blindness in a Military Setting" (Patterson, Hum Factors, Sep 2026, PMID 42041049); pupillometry
   "evidence of covert detection" (Grassi, Front Psychol, Dec 2025, PMID 41426389); "Social cues for experimenter
   incompetence influence choice blindness" (Marchant, Conscious Cogn, Jul 2025, PMID 40381527).
-  From search listings only (unverified): autistic vs non-autistic adults, Remington et al., J. Cognitive
-  Psychology 2024, doi:10.1080/20445911.2024.2356283, 16 vs 21 adults, equal rates (open PDF at
-  https://discovery.ucl.ac.uk/10192819/, not read); a preregistered no-deception arm with a one-week retest is
-  likely Olson et al. (BIAL grant 347/20 reports, 145 and 147 students, https://www.fundacaobial.com/media/4353/2020-open-label-choice-blindness.pdf);
-  religious attitudes (2025, https://www.tandfonline.com/doi/full/10.1080/2153599X.2025.2557482, not read).
+  Remington et al., J. Cognitive Psychology 2024, doi:10.1080/20445911.2024.2356283 (READ, CC BY,
+  https://discovery.ucl.ac.uk/id/eprint/10192819/, objekt-papers/remington-2024.txt): computer task at UCL, 5 of 25
+  face trials swapped; detections per person 1.06 (autistic) vs 1.34 of 5, "no significant difference" (U = 300,
+  p = .797), "a floor effect might be present". CORRECTED: the abstract says 16 and 21 adults, the method "A
+  total of 50 individuals took part: 18 autistic adults ... and 32 non-autistic". A preregistered no-deception arm
+  with a one-week retest (Olson, BIAL grant 347/20; listings: 145 or 147 students, 80% missed the swap): both BIAL
+  PDFs now return 404 (https://www.fundacaobial.com/media/4353/2020-open-label-choice-blindness.pdf, .../4654/grant-347-20-jeremy-olson.pdf);
+  a Wayback copy of 9 Aug 2025 shows only as an embedded PDF our tools cannot read (owner); no journal version
+  found (OpenAlex): unverified. Religious attitudes: McKay, Hall, Strandberg et al. 2025, Religion, Brain &
+  Behavior, doi:10.1080/2153599X.2025.2557482 (CC BY; journal page behind a bot check; authors' manuscript READ
+  from OSF https://osf.io/nwr49, objekt-papers/mckay-2025.txt): three iPad studies with students (final 130, 98,
+  110); of manipulated trials "105 (40%) were corrected", 52% and 44% in studies 2-3; "a large effect (d > 1)" on
+  later attitudes; religious people "no less likely" to detect.
   CORRECTED: no 2024 pension study was found; the pension study found is McLaughlin & Somerville (2013), Judgment
   and Decision Making 8(5):577-588 (listing: 100 people, at most 37.2% detected). The "online study of 498" was not
-  found (an online paper with 955 people, Strandberg et al. 2020, was listed instead): not found.
+  found (an online paper with 955 people, Strandberg et al. 2020, was listed instead; searched again 10.10.2026).
 - VR versions (both read). Lingonblad et al., "Virtual Blindness", IVA 2015, LNCS 9238:442-451 (Lund record
   https://lup.lub.lu.se/search/publication/282f44a7-04a9-4755-b818-2388a93809cd; Springer's page needs a login):
   38 participants, a virtual experimenter, 16 portrait pairs, 4 swapped; more and earlier detections in the
@@ -246,15 +257,18 @@ home (Steed et al. 2016, doi:10.1109/TVCG.2016.2518135); compare conditions with
    Does the gap hold in thousands, across cultures? (ours) / Hesitation time, aborted hand movements. / Judge a
    (non-gory) dilemma in words, then meet it with a lever; ask "was that what you meant?"
 4. Proteus effect (avatar height and bargaining). Huber & Gajos 2020 (1b): online replication with d 0.34 vs
-   1.23, only 27 headset users; the original, Yee & Bailenson 2007 (Human Communication Research 33:271-290), not
-   read (search listing: taller avatars "behaved more confidently in a negotiation task": unverified). / Its size
+   1.23, only 27 headset users; the original, Yee & Bailenson 2007, Human Communication Research 33:271-290 (READ,
+   https://vhil.stanford.edu/sites/g/files/sbiybj29011/files/media/file/yee-proteus-effect.pdf, objekt-papers/yee-2007.txt):
+   "50 undergraduate students at Stanford", paid $10; shorter, equal or taller avatar; ultimatum game over a
+   hypothetical $100; tall split "more in their own favor (M = 60.63 ...)" than short (M = 52.06), F(2, 46) = 5.64,
+   eta2 = .20; the abstract's "behaved more confidently in a negotiation task" confirmed. / Its size
    with a tracked first-person body (ours). / Real embodiment, many players. / Random avatar height seen in a
    mirror, then split 100 points with an agent.
 5. Doorway effect. McFadyen et al. (2021), "Doorways do not always cause forgetting: a multimodal investigation",
    BMC Psychology 9:41, https://link.springer.com/article/10.1186/s40359-021-00536-3 (read in the browser, earlier
    pass; open copy https://pmc.ncbi.nlm.nih.gov/articles/PMC7938580): "we observed no significant effect of doorways
-   on forgetting", except under working-memory load in VR. Sample sizes per experiment: not re-read in this pass
-   (unverified). / Whether the effect exists; the paper asks "what factors contributed to the effect observed in
+   on forgetting", except under working-memory load in VR. Samples (re-read on PMC): VR "final sample of 29" and,
+   with a counting load, "45" (Fig. 4 says N = 40); video 26; real walk 26. / Whether the effect exists; the paper asks "what factors contributed to the effect observed in
    previous studies". / Our building is a corridor of doors; huge N settles a small effect. / Carry an object
    through a door vs the same distance in one room; a memory probe halfway.
 6. Cheating with a virtual observer. Mol, van der Heijden & Potters (2020), Experimental Economics,

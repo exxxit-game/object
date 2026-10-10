@@ -65,7 +65,7 @@ Earlier passes (not repeated): docs/research/study-methods-1.md, study-methods-2
   lagging of 0-2 frames"; audio delays "in the hundreds of milliseconds".
 - Conclusion: "modern web platforms provide reasonable accuracy and precision for display duration and manual
   response time"; "timing could change substantially in the future".
-- Not a headset: no Quest browser was tested (not found in the text).
+- Not a headset: no Quest or other headset browser was among the set-ups tested (checked in the full text).
 
 ### 2a. Web vs lab, unpaid volunteers (Germine et al. 2012) - full text and Tables 1, 3 read, saved objekt-papers/germine-2012.txt
 - Psychon Bull Rev 19:847-857, https://link.springer.com/article/10.3758/s13423-012-0296-9 (tables: .../tables/1, /tables/3)
@@ -130,7 +130,10 @@ Earlier passes (not repeated): docs/research/study-methods-1.md, study-methods-2
 - Context they cite: errors in handwriting/tracing rise with "delays as little as 40 ms".
 - For us: Ouvrai's 8.3 ms (Quest 2, browser) was measured on a back-and-forth (continuous) movement, so it is the
   predicted, mid-movement figure; the onset of a sudden movement is likely 20-40 ms late (by analogy with the
-  headsets Warburton measured; Quest onset latency itself: not found, unverified).
+  headsets Warburton measured). Quest onset latency: searched again (10.10.2026), no measurement published. The
+  one industry test with Quest 3 (OptoFidelity, 15 Feb 2024, read, https://www.optofidelity.com/insights/blogs/apple-vision-pro-bencmark-test-2.-angular-motion-to-photon-latency-in-vr)
+  moves "in a back-and-forth sequence" (mid-movement again), says "Quest Pro and Quest 3 excel", numbers only in
+  charts. So our own 240 fps measurement stays the only way to get the onset figure.
 
 ### 4d (cont.). Quest 2 controller position and rotation vs optical motion capture (Carnevale et al. 2022) - full text read, saved objekt-papers/carnevale-2022.txt
 - Sensors 22(15):5511, doi:10.3390/s22155511, https://pmc.ncbi.nlm.nih.gov/articles/PMC9332705/ (CC BY)
@@ -189,8 +192,11 @@ Earlier passes (not repeated): docs/research/study-methods-1.md, study-methods-2
   10.48 mm and 11.97 mm". Repeated real-game path (Table 2): Quest 2 RMSE 3.19 mm, mean 2.85, SD 1.46, max 9.51 mm.
 - A later two-hour run after re-calibration showed "42.74 mm translation error and 3.96 deg rotation error",
   attributed by the authors to "an accidental movement" (of the mount): long sessions need a drift check.
-- Quest 3: a robot study (Sensors 2026, doi:10.3390/s26082285, PMC13119968) reports sub-millimetre headset RMSE and
-  rotation "below 0.4 deg" (search snippet only: unverified); Quest 3 hand tracking 1.73 cm error, 1.11 cm jitter,
+- Quest 3 headset on a robot (Lopez-Xarbau et al. 2026, Sensors 26(8):2285, doi:10.3390/s26082285, read,
+  https://pmc.ncbi.nlm.nih.gov/articles/PMC13119968/; Unity app, robot as repeatable reference, not metrology):
+  "a mean translational RMSE of 0.346 mm (3D RMSE = 0.621 mm)" and "a mean rotational RMSE of 0.143" deg, yaw
+  worst (0.259 deg); no controller or hand data. CORRECTED: the "below 0.4 deg" snippet is consistent but not the
+  paper's wording. Quest 3 hand tracking 1.73 cm error, 1.11 cm jitter,
   latency 14.4-220.5 ms (Godden, Steedman & Pan 2025, IEEE TVCG 31(5):3025-3034, doi:10.1109/tvcg.2025.3549182;
   citation confirmed by the owner, full text paid: the numbers stay unverified).
 - Quest 2 in a 5 m x 5 m room (Holzwarth, Gisler, Hirt & Kunz 2021, ICVARS, CC BY 4.0; full text from the owner,
@@ -215,10 +221,12 @@ Earlier passes (not repeated): docs/research/study-methods-1.md, study-methods-2
 ### 1d (cont.). A Registered Replication Report judges by the pooled effect and its CI (Hagger et al. 2016, repository page read)
 - Perspect. Psychol. Sci. 11(4):546-573; https://mro.massey.ac.nz/items/4a1951d7-6022-4d0e-bbb6-fc336ecd4792/full
 - "Multiple laboratories (k = 23, total N = 2,141) conducted replications of a standardized ego-depletion protocol";
-  "d = 0.04, 95% CI [-0.07, 0.15]" - CI includes zero, so the effect was judged small/absent. The original's
-  d (0.69 per search snippet) not on the page read: unverified.
+  "d = 0.04, 95% CI [-0.07, 0.15]" - CI includes zero, so the effect was judged small/absent. The original's d,
+  confirmed in the full text (Lirias submitted version, objekt-papers/hagger-2016.txt): "Sripada et al.'s (2014)
+  study adopting the current methods (d = 0.69)"; the 2010 meta-analysis "(d = 0.62)".
 - Many Labs 2 (APS report, earlier pass study-methods-2.md 3e): 14 of 28 replicated, samples "more than 60 times
-  larger"; its exact criterion still unverified (SAGE bot check).
+  larger"; criterion since read in the paper (objekt-papers/klein-2018.txt, study-methods-2.md 3e): "no simple
+  decision rule", five significance criteria side by side; 10 of 28 passed all, 13 failed all.
 
 ### 4a (cont.). Reaction times inside a VR engine (Wiesing, Fink & Weidner 2020) - local full text objekt-papers/wiesing-2020.txt
 - PLOS ONE, "Accuracy and precision of stimulus timing and reaction times with Unreal Engine and SteamVR" (HTC Vive).
@@ -230,5 +238,6 @@ Earlier passes (not repeated): docs/research/study-methods-1.md, study-methods-2
 
 ### 2d (cont.). Out-of-lab VR vs lab (Mottelson & Hornbaek 2017) - local full text objekt-papers/mottelson-2017.txt
 - Proc. VRST '17, doi:10.1145/3139131.3139141: pointing, 3D tracing, body illusions; lab 31 (state-of-the-art VR) vs
-  57 out of lab (cardboard). Earlier summary (docs/research/vr/06-science.md): same experimental effects, absolute
-  performance depended on hardware. Not re-read in this pass.
+  57 out of lab (cardboard). Re-read: leaf task "out-of-lab, d = 1.11, 95% CIs [.45, 1.80]; in-lab, d = 1.40, 95% CIs
+  [.40, 2.77]", "the effect of the experimental condition was the same"; a follow-up found speed and accuracy gaps
+  "were likely due to the hardware used", while for body ownership "the place of study seems to be of more concern".
