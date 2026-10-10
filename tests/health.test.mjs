@@ -62,6 +62,7 @@ assert.equal(path.resolve(node.real), path.resolve(process.execPath));
 const outside = checkProgram({ ...TESS, name: 'tool' }, [], { extra: [a], platform: 'linux', runIt: () => ({ out: 'tesseract v5.5.3\n' }) });
 assert.equal(outside.level, 'warning');
 assert.match(outside.text, /runs only inside Git Bash/);
+assert.equal(checkProgram({ ...TESS, name: 'tool', bash: true }, [], { extra: [a], platform: 'linux', runIt: () => ({ out: 'tesseract v5.5.3\n' }) }).level, 'ok', 'a program meant for Git Bash, found there, is in order');
 
 // tesseract's languages, as --list-langs prints them
 const LANGS = 'List of available languages in "C:\\Program Files\\Tesseract-OCR/tessdata/" (3):\neng\nosd\nrus\n';

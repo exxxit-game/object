@@ -46,8 +46,10 @@ export const PROGRAMS = [
   { name: 'python', args: ['--version'], expect: /^Python \d\S*/m, fix: 'py install 3.14 (the Python install manager from python.org/downloads)' },
   { name: 'pdftotext', args: ['-v'], expect: /^pdftotext version \S+/m, fix: reinstall('poppler') },
   { name: 'pdftoppm', args: ['-v'], expect: /^pdftoppm version \S+/m, fix: reinstall('poppler') },
-  // antiword has no version switch: run bare, it prints its usage with the version in it
-  { name: 'antiword', args: [], expect: /Version: \S+/, fix: 'it lived in Git for Windows\' folder C:\\Program Files\\Git\\ucrt64\\bin (with share\\antiword): put it back there' },
+  // antiword (text out of old Word .doc files) has no version switch: run bare, it prints its usage with
+  // the version in it. It lives in Git for Windows' folder and is called from Git Bash, the shell the
+  // assistant reads papers in, so Git Bash alone finding it is its normal state (bash: true)
+  { name: 'antiword', args: [], expect: /Version: \S+/, bash: true, fix: 'it lived in Git for Windows\' folder C:\\Program Files\\Git\\ucrt64\\bin (with share\\antiword): put it back there' },
   { name: 'tesseract', args: ['--version'], expect: /^tesseract v?\d\S*/m, fix: reinstall('tesseract') },
   { name: 'adb', args: ['version'], expect: /^Android Debug Bridge version \S+/m, fix: 'unpack Android platform-tools (developer.android.com/tools/releases/platform-tools) into C:\\adb\\platform-tools' },
   { name: 'scrcpy', args: ['--version'], expect: /^scrcpy \d\S*/m, fix: 'scoop install scrcpy' },
@@ -112,6 +114,7 @@ export function checkProgram(p, dirs, { extra = [], platform = process.platform,
     const r = runIt(real, p.args);
     const version = r.out.match(p.expect)?.[0];
     if (!version) return broken(`${p.name} does not run (${r.error || r.out.trim().split(/\r?\n/)[0] || 'no answer'}): ${p.fix}`, { name: p.name });
+    if (outside && p.bash) return ok(`${p.name}: ${version.trim()} (in Git Bash, where it is called: ${real})`, { name: p.name, real });
     if (outside) return result('warning', `${p.name} runs only inside Git Bash (${path.dirname(hit)} is not on the Windows PATH): call it from the Bash tool, not PowerShell`, { name: p.name, real });
     return ok(`${p.name}: ${version.trim()} (${real})`, { name: p.name, real });
   }
