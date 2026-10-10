@@ -49,6 +49,17 @@ export function openUrl(url) {
   adb('shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', url, 'com.oculus.browser');
 }
 
+// Every open tab of the game, the test copy's or the laptop's, closed: two game tabs play two sets
+// of sounds, so a room's hum from a tab left in its room is heard in the other tab's corridor.
+// Called before the game is opened, so only one game runs. Returns how many were closed.
+export async function closeGameTabs() {
+  adb('forward', 'tcp:9222', 'localabstract:chrome_devtools_remote');
+  const tabs = await (await fetch('http://127.0.0.1:9222/json/list')).json();
+  const game = tabs.filter((t) => t.type === 'page' && /object-preview\/|localhost:3000/.test(t.url));
+  for (const t of game) await fetch(`http://127.0.0.1:9222/json/close/${t.id}`);
+  return game.length;
+}
+
 // A page in the headset's browser whose address matches: { tab, send, run(expression, gesture),
 // errors, close }. A call the page never answers (the headset slept, the tab changed) reports so
 // instead of leaving the tool waiting.
