@@ -13,5 +13,5 @@ assert.ok(/three\.js r184|"184"/.test(build), 'the build is not A-Frame 1.8.0 wi
 assert.ok(build.includes('Tt.enabled&&Tt.isMultiview)ot.setDeferTextureUploads(!0)'), 'the multiview frame no longer defers texture uploads as expected');
 assert.equal(build.split('t.onAfterRender(M,t,e),ot.runDeferredUploads(),_t.resetDefaultState()').length - 1, 1,
   'the deferred texture uploads are not run after the scene is drawn: multiview leaves new textures black');
-assert.ok(/multiviewStereo: true/.test(fs.readFileSync(new URL('../src/rooms/01-control/scene.js', import.meta.url), 'utf8')), 'multiview is not turned on');
+assert.ok(/multiviewStereo: \$\{MULTIVIEW\}/.test(fs.readFileSync(new URL('../src/rooms/01-control/scene.js', import.meta.url), 'utf8')), 'multiview is not turned on');
 console.log('vendor tests: ok');

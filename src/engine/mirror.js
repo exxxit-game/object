@@ -29,7 +29,13 @@ AFRAME.registerComponent('mirror-glass', {
     camera.update(sceneEl.renderer, sceneEl.object3D);
     mesh.visible = true;
     sceneEl.object3D.remove(camera);
-    this.envMap = target.texture;
+    // blurred for the glass here (PMREM), as reflect-env.js does: left to three.js it is blurred the
+    // first time the glass is drawn, in the middle of a frame, which multiview cannot take (A-Frame,
+    // docs/components/renderer.md: such rendering "would have to move to the beginning of the frame")
+    const pmrem = new THREE.PMREMGenerator(sceneEl.renderer);
+    this.envMap = pmrem.fromCubemap(target.texture).texture;
+    pmrem.dispose();
+    target.dispose();
     this.apply();
   },
   apply() {

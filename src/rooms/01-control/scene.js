@@ -24,7 +24,9 @@ const SPACE = `space: 0 0 ${BOOTH.maxX - BOOTH.minX} ${BOOTH.maxZ - BOOTH.minZ}`
 // the call that uploads the textures deferred during a multiview frame, so canvas text first drawn in VR
 // stayed black; vendor/aframe-1.8.0.min.js has it put back where super-three 0.181 has it
 // (supermedium/three.js PR #25; tests/vendor.test.mjs). Without OCULUS_multiview each eye draws as before.
-export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true; foveationLevel: 0; multiviewStereo: true" background="color: #0b0b0d"
+// ?multiview=0 turns it off, so the headset's measure can compare (tools/quest-look.mjs perf).
+const MULTIVIEW = new URLSearchParams(globalThis.location?.search || '').get('multiview') !== '0';
+export const sceneHTML = `<a-scene renderer="antialias: true; colorManagement: true; foveationLevel: 0; multiviewStereo: ${MULTIVIEW}" background="color: #0b0b0d"
          cursor="rayOrigin: mouse" raycaster="objects: .clickable; far: 8"
          vr-mode-ui="enabled: true" loading-screen="enabled: false" xr-mode-ui="enabled: true">
 
