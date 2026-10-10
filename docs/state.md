@@ -44,10 +44,10 @@ All in `docs/owner-decisions.md` (shown at every session start): settled, never 
 ## How errors are caught (the owner cannot read code)
 - `new-room` skill; `paper-reviewer` agent; `docs/mistakes.md` (a mistake that broke the game, with the test that now catches it); facts in one place
   with a test; `tests/structure.test.mjs` (sizes, imports, no Russian outside texts, this file ≤ 80 lines).
-- Machine stops: tools/hooks (no commit while npm test fails, no push without the secret check, main only on
+- Machine stops: tools/hooks (no commit while the quick tests fail, no push without the secret check, main only on
   his word); Claude Code hooks, `tools/claude-guard.mjs` (state at start and after compaction, owner messages
   logged, no skipping hooks, no browser on the laptop, the live DB read only, no GitHub connector writes, no
-  turn ends red or unsaved); every guard seen red by `tools/prove-guards.mjs` on GitHub at every push.
+  turn ends unsaved or unpushed); every guard seen red by `tools/prove-guards.mjs` on GitHub on room-polish and main.
 
 ## Lessons (do not repeat)
 - Read the full paper before recommending or designing (summaries overstated effects twice).

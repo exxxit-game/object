@@ -62,7 +62,7 @@ The rows of the plan named here are fixed in the plan itself; this file keeps th
 | 4 | every headset measure saved as a log the plan cites; a number in the plan without a source is written "not checked" (in the plan, in Russian) |
 | 5 | the source's own words kept next to the number (docs/research), checked by the fact-checker |
 | 7 | the plan's facts about the project come from the code, checked by the fact-checker |
-| 8 | `tools/morning.mjs` fails when any checkout of the repository lacks the hook files |
+| 8 | the morning check (since replaced by the health check) fails when any checkout of the repository lacks the hook files |
 
 ## What was fixed (9.10)
 

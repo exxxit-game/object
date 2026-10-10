@@ -11,6 +11,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { runSetup } from './health-setup.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const PAPERS = path.join(os.homedir(), 'Documents', 'objekt-papers');
@@ -286,7 +287,7 @@ export function runAll() {
   if (tess) results.push(checkTesseractLangs(tess.real));
   results.push(...checkPath(), ...checkPapers(), ...checkAgentsLoad(), ...checkAgents());
   const { main, branch } = mainFolder();
-  results.push(...checkGuards(ROOT, main, branch));
+  results.push(...checkGuards(ROOT, main, branch), ...runSetup(ROOT, main));
   const adb = programs.find((r) => r.name === 'adb' && r.real);
   results.push(adb ? headsetInfo(parseAdbDevices(run(adb.real, ['devices']).out)) : info('headset not checked: adb does not run'));
   return results;

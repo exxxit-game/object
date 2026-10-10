@@ -11,6 +11,7 @@ import {
   parseRegPath, expandVars, splitPath, deadPathEntries, words, checkPapers, agentLacks, agentHeaderProblems, localImports, sameText, checkGuards,
   parseAdbDevices, headsetInfo, format, MIN_WORDS
 } from '../tools/health.mjs';
+import { hooksProblems, memoryIndexProblems, pluginProblems, PLUGINS_ON, atLeast, newest } from '../tools/health-setup.mjs';
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'health-'));
 const put = (rel, text) => { const f = path.join(tmp, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, text); return f; };
@@ -116,6 +117,22 @@ assert.deepEqual(agentHeaderProblems('---\nname: x\ndescription: checks each cla
 assert.deepEqual(agentHeaderProblems('---\nname: x\n---\n'), ['no description']);
 for (const f of fs.readdirSync('.claude/agents')) assert.deepEqual(agentHeaderProblems(fs.readFileSync(path.join('.claude/agents', f), 'utf8')), [], `.claude/agents/${f} loads`);
 
+// the setup around the code (tools/health-setup.mjs): read from the laptop at each session start
+assert.deepEqual(hooksProblems('tools/hooks', 'C:/x', (f) => /pre-(commit|push)$/.test(f)), [], 'the hooks folder git runs has both hooks');
+assert.equal(hooksProblems('C:/main/tools/hooks', 'C:/x', (f) => f.endsWith('pre-commit')).length, 1, 'a hooks folder without pre-push is caught, an absolute setting read as is');
+assert.equal(hooksProblems('', 'C:/x').length, 1, 'no hook setting at all is caught');
+assert.deepEqual(memoryIndexProblems('- [A](a.md) — x\n', ['a.md']), []);
+assert.deepEqual(memoryIndexProblems('- [A](a.md) — x\n', ['a.md', 'b.md']), ['a memory file the index does not name: b.md']);
+assert.deepEqual(memoryIndexProblems('- [A](a.md)\n- [C](c.md)\n', ['a.md']), ['the index names a missing c.md']);
+assert.deepEqual(pluginProblems(Object.fromEntries(PLUGINS_ON.map((p) => [p, true]))), [], 'the decided plugins pass');
+assert.deepEqual(pluginProblems({ ...Object.fromEntries(PLUGINS_ON.map((p) => [p, true])), 'pr-review-toolkit@claude-plugins-official': true, 'supabase@claude-plugins-official': false }),
+  ['pr-review-toolkit@claude-plugins-official is on, though not decided'], 'a plugin he did not decide is caught; one switched off is not');
+assert.ok(atLeast('2.1.295', '2.1.294') && atLeast('2.1.294', '2.1.294') && !atLeast('2.1.293', '2.1.294') && atLeast('2.2.0', '2.1.294'));
+assert.equal(newest(['2.1.293', '2.1.295', '2.1.30', 'tmp']), '2.1.295', 'versions compared as numbers, not as text');
+// the project switches off what loads into every session though the work never uses it
+const projectSettings = JSON.parse(fs.readFileSync('.claude/settings.json', 'utf8'));
+assert.equal(projectSettings.enabledPlugins['privacy-legal@synced'], false, 'privacy-legal is off for the project');
+assert.ok(projectSettings.deniedMcpServers.some((s) => s.serverName === 'plugin:research-desk:reference-lookup'), 'the local copy of the reference lookup is denied; the hosted one is kept');
 // the guards: Claude Code runs the main folder's copies; a difference in content (not in line ends) is broken
 assert.deepEqual(localImports("import fs from 'node:fs';\nimport { a } from './secrets.mjs';\nimport { b, c } from './board.mjs';\n"), ['secrets.mjs', 'board.mjs']);
 assert.ok(sameText('a\r\nb\r\n', 'a\nb\n'));

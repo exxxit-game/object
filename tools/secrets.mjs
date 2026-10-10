@@ -1,7 +1,7 @@
 // Nothing private leaves this laptop: the commits about to go to GitHub must carry no key, token
 // or password, and no address but the account's private one (GitHub's noreply), never the owner's
 // own email. Run by git before every push (tools/hooks/pre-push; `git config core.hooksPath
-// tools/hooks` once per clone), by the morning check, and by tools/publish-preview.mjs on the copy it
+// tools/hooks` once per clone), and by tools/publish-preview.mjs on the copy it
 // pushes from a folder of its own (git runs no hook there). Prints what it found, never the secret.
 // Usage: node tools/secrets.mjs [range]   (default: the commits not on GitHub yet)
 //        node tools/secrets.mjs --staged  (what the next commit adds: the commit hook, tools/hooks)
