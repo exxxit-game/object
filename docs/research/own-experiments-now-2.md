@@ -133,7 +133,8 @@ Bot checks or clicks (open in a browser):
 Paywalls (need access):
 - https://www.nature.com/articles/s41586-018-0637-6: opened by the owner; supplement read (field-labs-2.md 8); its
   ethics and consent are only in the paid Methods (EUR 39.95), not bought.
-- https://hdl.handle.net/2027.42/92172: Wilson & Nisbett 1978, stocking table by position and shoppers' reasons.
+- https://hdl.handle.net/2027.42/92172: Wilson & Nisbett 1978, Social Psychology 41:118-131 (record opened by the
+  owner: "Access restricted to U-M campus"); needed only if the two-phones room is chosen, then via a library.
 - https://doi.org/10.1509/jmkr.2005.42.4.383: Shiv et al. 2005: opened by the owner, abstract only (three experiments,
   discounted price, fewer puzzles); the numbers are in the paid full text, needed only if the two-phones room is chosen.
 - https://doi.org/10.1007/978-3-319-21996-7_47: "Virtual Blindness" 2015: the owner opened it; abstract and citation
