@@ -60,8 +60,10 @@ Part 1 (seriousness, data quality) is in study-methods-1.md. Same rules: link + 
   Science 26(5):559-569, doi:10.1177/0956797614567341; abstract (APS page,
   https://www.psychologicalscience.org/journals/psychological-science/0956797614567341/): tests whether replication
   results are consistent with "an effect size big enough to have been detectable in the original study"; separates
-  replications "that are too noisy" from those showing the effect is "undetectably different from zero". Full text
-  behind SAGE bot check: owner list.
+  replications "that are too noisy" from those showing the effect is "undetectably different from zero". Its
+  supplement (the owner brought it; objekt-papers/simonsohn-2015-supplement.txt): d33% is the effect the original
+  had 33% power to detect (for n = 30 per cell, "d=.401"); "replications with 2.5*original sample size have 80% power
+  to reject d33%".
 - For a game room: N per room = max(2.5 x original N, N from an a-priori power analysis on a smallest effect of
   interest), counted AFTER exclusions and first runs only; then inflate for the expected exclusion rate (2e).
 
@@ -71,8 +73,13 @@ Part 1 (seriousness, data quality) is in study-methods-1.md. Same rules: link + 
   samples "on average were more than 60 times larger than the original samples"; procedures "peer-reviewed in
   advance by experts and, in some cases, authors on the original work"; 14 of 28 replicated, "some at variable
   degrees across the different labs"; framing effect "only half as strong".
-- The exact Many Labs 2 success criterion (threshold, direction) is not on that page: unverified (paper: Klein et
-  al. 2018, Advances in Methods and Practices in Psychological Science, SAGE, bot check: owner list).
+- The paper itself (Klein et al. 2018, AMPPS 1(4):443-490; the owner brought it; objekt-papers/klein-2018.txt):
+  "There is no simple decision rule for declaring success or failure in replication"; five criteria, each "whether
+  the observed effect size would be considered statistically significant": the replication data at p < .05 (54%)
+  or p < .0001 (50%), or the observed effect at the original N, at 2.5 x the original N, or at 50 per group, p < .05
+  (41%, 44%, 35%). "Ten of the effects (36%) were successfully replicated according to all the criteria", 13 (46%)
+  failed all, 5 (18%) varied. Median d in WEIRD samples "0.60 for the original findings and 0.15 for the
+  replications"; 21 of 28 replication effects smaller than the original; 9 in the opposite direction.
 - Practice to copy: show the room's protocol to an outside expert (ideally an original author) before data count;
   report the effect with its CI next to the original, plus the small-telescopes test (3c).
 
@@ -282,7 +289,7 @@ Each step: what to do -> source (file section). "Ours" = our adaptation where no
 
 ## Not reached / unverified (part 2)
 
-- Behind bot checks or 403 for our tools: Simonsohn 2015 full text; Klein et al. 2018 (Many Labs 2) criteria; Hauser
+- Behind bot checks or 403 for our tools: Simonsohn 2015 full text (its supplement read, 3c); Hauser
   & Schwarz 2015; Lakens 2022 journal version; Openverse 2026 full text (the vrprotocols.org item list: 5a).
 - Not opened: Charness et al. 2012; CONSORT randomisation items; Bargh & Chartrand 2000 funnel debriefing; Meade &
   Craig 2012; Ward & Meade 2023; Curran 2016; AsPredicted price.
