@@ -7,9 +7,13 @@
 -- 3. A room's report is checked against its JSON Schema, one per room version (pg_jsonschema; D5): the
 --    same file the game's test reads (supabase/schemas/01-control-1.json), so a room's checks are data,
 --    and a new room cannot break another's.
--- 4. Floods are limited per source, as Supabase's own example does (100 writes in 5 minutes from one
---    IP: "Securing your API"), but without the IP: a hash of it under a secret key, forgotten after
---    10 minutes by a job every minute (pg_cron); the global caps per minute stay (D6).
+-- 4. Floods are limited per source, as Supabase's own example does ("Securing your API": 100 writes in
+--    5 minutes from one IP), but without the IP: a hash of it under a secret key, forgotten after 10
+--    minutes (D6). Per source and kind the cap is a real player's need, so one script cannot take the
+--    whole game's cap from everyone; the game-wide caps per minute stay, raised above one source's reach.
+-- What it does not hide: rows are only added, so a row's place in its table and its transaction number
+-- still show which came first (Postgres, "System Columns": xmin). With the provider's logs, kept 7 days,
+-- a row can therefore still be linked to an IP for those days; privacy.html says so.
 
 begin;
 
@@ -107,46 +111,61 @@ insert into app.room_schemas (room, version, schema) values ('01-control', 1, $j
 }
 $json$);
 
--- 4: who sent lately, as a keyed hash only, for 10 minutes
-create table app.limit_key (key bytea not null);
+-- 4: who sent lately, as a keyed hash only, for 10 minutes. One key, one row: without it every hash
+-- would be null and every result refused.
+create table app.limit_key (one boolean primary key default true check (one), key bytea not null);
 insert into app.limit_key (key) values (extensions.gen_random_bytes(32));
 alter table app.limit_key enable row level security;
 revoke all on table app.limit_key from public, anon, authenticated;
 
 create table app.recent (
+  id uuid primary key default gen_random_uuid(),
   source bytea not null,
   kind text not null check (kind in ('run', 'playtest', 'issue')),
   at timestamptz not null default now()
 );
-create index recent_source_at_idx on app.recent (source, at);
+create index recent_source_at_idx on app.recent (source, kind, at);
 create index recent_at_idx on app.recent (at);
 alter table app.recent enable row level security;
 revoke all on table app.recent from public, anon, authenticated;
 
+-- forgotten by every call and, when nobody calls, by a job every minute; the jobs' own log is kept a
+-- week (Supabase Cron: cron.job_run_details grows by a row a run)
 select cron.schedule('forget-recent-sources', '* * * * *',
   $job$delete from app.recent where at < now() - interval '10 minutes'$job$);
+select cron.schedule('forget-cron-runs', '17 3 * * *',
+  $job$delete from cron.job_run_details where end_time < now() - interval '7 days'$job$);
 
--- Called by the submit functions (their owner runs it): busy when this source sent 100 in 5 minutes or
--- the game received p_global of this kind in the last minute. The client's IP is the first entry of
--- X-Forwarded-For ("Securing your API").
-create function app.allow(p_kind text, p_global int)
+-- Called by the submit functions (their owner runs it): busy when this source sent p_source of this kind
+-- in 5 minutes, or the game received p_global of this kind in the last minute. The client's address is
+-- Cloudflare's CF-Connecting-IP when it reaches the database (Cloudflare sets it, a client cannot), else
+-- the first entry of X-Forwarded-For ("Securing your API"), which a client can prefill. Calls wait in
+-- turn, so ones arriving together cannot pass a cap at once.
+create function app.allow(p_kind text, p_source int, p_global int)
 returns void
 language plpgsql
 set search_path = ''
 as $$
 declare
-  ip text := split_part(coalesce(current_setting('request.headers', true)::json ->> 'x-forwarded-for', ''), ',', 1);
+  headers json := nullif(current_setting('request.headers', true), '')::json;
+  ip text := coalesce(nullif(headers ->> 'cf-connecting-ip', ''), split_part(coalesce(headers ->> 'x-forwarded-for', ''), ',', 1));
   src bytea;
 begin
+  perform pg_advisory_xact_lock(hashtext('app.allow'));
+  delete from app.recent where at < now() - interval '10 minutes';
   select extensions.hmac(convert_to(trim(ip), 'UTF8'), key, 'sha256') into src from app.limit_key;
-  if (select count(*) from app.recent where source = src and at > now() - interval '5 minutes') >= 100
+  if (select count(*) from app.recent where source = src and kind = p_kind and at > now() - interval '5 minutes') >= p_source
      or (select count(*) from app.recent where kind = p_kind and at > now() - interval '1 minute') >= p_global then
     raise exception 'busy';
   end if;
   insert into app.recent (source, kind) values (src, p_kind);
 end;
 $$;
-revoke execute on function app.allow(text, int) from public, anon, authenticated;
+revoke execute on function app.allow(text, int, int) from public, anon, authenticated;
+
+-- The caps. A room takes minutes, so one player sends a result rarely; a class behind one address (the
+-- education licences, docs/owner-decisions.md) sends about 30 at once. Errors: at most 5 a page load
+-- (src/app/session.js), so 60 covers a class. The game-wide caps are ten one-source bursts.
 
 -- The entry points, each now with the consent version. The old ones go: they wrote the old columns.
 drop function public.submit_run(text, int, boolean, jsonb);
@@ -169,7 +188,7 @@ begin
   if p_report is null or pg_column_size(p_report) >= 2048 or not extensions.jsonb_matches_schema(s, p_report) then
     raise exception 'bad report';
   end if;
-  perform app.allow('run', 120);
+  perform app.allow('run', 30, 300);
   insert into app.runs (room, version, first_run, consent, report) values (p_room, p_version, p_first, p_consent, p_report);
 end;
 $$;
@@ -223,7 +242,7 @@ begin
      or coalesce((p_report ->> 'psych')::numeric, 0) not between 0 and 2 then
     raise exception 'out of range';
   end if;
-  perform app.allow('playtest', 60);
+  perform app.allow('playtest', 30, 300);
   insert into app.playtests (room, version, consent, report) values (p_room, p_version, p_consent, p_report);
 end;
 $$;
@@ -265,11 +284,42 @@ begin
      or (p_report ->> 'line')::numeric not between 0 and 100000) then
     raise exception 'bad line';
   end if;
-  perform app.allow('issue', 60);
+  perform app.allow('issue', 60, 600);
   insert into app.issues (room, version, consent, report) values (p_room, p_version, p_consent, p_report);
 end;
 $$;
 revoke execute on function public.submit_issue(text, int, int, jsonb) from public, anon, authenticated;
 grant execute on function public.submit_issue(text, int, int, jsonb) to anon;
+
+-- The server's own schema check must agree with the game's test (tests/sql.mjs reads the same file): a
+-- full report passes; a test run, an unknown field, an answer past its last choice, a report without its
+-- condition and a count left empty fail. If they disagree, the whole migration is undone.
+do $$
+declare
+  s json := (select schema from app.room_schemas where room = '01-control' and version = 1);
+  good jsonb := '{"condition": "75-75", "speed": 1, "seated": true, "trials": 40, "presses": 20, "greens": 30,
+    "greenIfPress": 15, "greenIfNoPress": 15, "confirming": 10, "voided": 3, "strays": 1, "total": 75, "ifPress": 75,
+    "ifNoPress": null, "successes": 50, "successesOfAll": 40, "actualControl": 0, "errTotal": null, "errIfPress": -5,
+    "errIfNoPress": 100, "answers": {"control": 100, "total": 0, "ifPress": 50, "ifNoPress": 50, "certainty": 100,
+    "evidence": 5, "hypotheses": 1, "gender": 2, "age": 6, "knew": 3}}';
+begin
+  if not extensions.jsonb_matches_schema(s, good) then raise exception 'self-test: a full report is refused'; end if;
+  if extensions.jsonb_matches_schema(s, good || '{"speed": 20}')
+     or extensions.jsonb_matches_schema(s, good || '{"name": "x"}')
+     or extensions.jsonb_matches_schema(s, jsonb_set(good, '{answers,age}', '7'))
+     or extensions.jsonb_matches_schema(s, good - 'condition')
+     or extensions.jsonb_matches_schema(s, jsonb_set(good, '{trials}', 'null')) then
+    raise exception 'self-test: a bad report is accepted';
+  end if;
+end;
+$$;
+
+-- A file run in the SQL editor is not recorded in the migration history (Supabase, "Database migrations":
+-- the editor "bypasses the migration history"): recorded here as the earlier ones are, so the dashboard's
+-- list and a later drift check see it.
+insert into supabase_migrations.schema_migrations (version, name)
+values (to_char(now() at time zone 'utc', 'YYYYMMDDHH24MISS'), '0009_data_protection');
+
+notify pgrst, 'reload schema';
 
 commit;
