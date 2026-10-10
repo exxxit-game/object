@@ -120,6 +120,12 @@ if (mode === 'start') {
     const rows = lines.filter((l) => /^\|\s*\d{1,2}\.\d{1,2}\s*\|/.test(l));
     out.push(at < 0 ? board : `${board.slice(0, at)}${lines.filter((l) => !rows.slice(0, -5).includes(l)).join('\n')}`);
   } catch { out.push(`WARNING: ${BOARD} is missing here: this checkout is not the project's current work.`); }
+  // the health check, so a program, the library backup or a guard copy that broke silently is named at
+  // the start (it takes about 2 s; a hung check must not hold the session up)
+  try {
+    const health = execFileSync(process.execPath, [path.join(HERE, 'tools', 'health.mjs')], { cwd: HERE, encoding: 'utf8', timeout: 15000 }).trim();
+    out.push(/broken|warning/.test(health) ? `Health check (tools/health.mjs), tell the owner what is broken:\n${health}` : health.split('\n')[0]);
+  } catch { out.push('WARNING: the health check (tools/health.mjs) did not finish: run it by hand.'); }
   process.stdout.write(`${out.join('\n\n')}\n`);
   process.exit(0);
 }
