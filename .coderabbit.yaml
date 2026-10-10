@@ -1,7 +1,7 @@
 # CodeRabbit, the reviewer from outside (the owner's 14-day trial, docs/owner-decisions.md): it reviews the
 # one open pull request from room-polish into the branch `reviewed` (the last state it has read), on every
-# push, against the repository's rules; its open remarks are read at each session start and `reviewed`
-# moves up once a push is read with nothing open (tools/coderabbit.mjs).
+# push, against the repository's rules; its open remarks are read at each session start, and the start
+# says when `reviewed` may move up because a push was read with nothing open (tools/coderabbit.mjs).
 # It changes nothing on its own: the repository is public, and main changes only on the owner's word.
 # Keys: https://docs.coderabbit.ai/reference/configuration (schema: coderabbit.ai/integrations/schema.v2.json)
 language: en-US                      # the repository is English; the owner hears about it in Russian from the assistant

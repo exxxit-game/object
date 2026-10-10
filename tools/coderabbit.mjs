@@ -3,7 +3,7 @@
 // state it has already read, and writes its remarks on GitHub, where a remark nobody reads changes
 // nothing. A pull request into main held three days of work, 428 files, over its limit of 300, so it
 // read nothing; against `reviewed` it sees only what is new. When the newest push is read and no remark
-// is open, `reviewed` moves up to it, so the next pull request diff starts empty again.
+// is open, it says that `reviewed` may move up to it, so the next diff starts empty again.
 // Usage: node tools/coderabbit.mjs   (one line; nothing printed when GitHub cannot be reached)
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
@@ -41,10 +41,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   const r = gh(['api', 'graphql', '-f', `query=${QUERY}`]);
   let said = null;
   try { said = r.status === 0 ? summarize(JSON.parse(r.stdout)) : null; } catch { /* an answer that is not JSON: say nothing */ }
-  if (said?.advance) {
-    // a fast-forward only (GitHub refuses to move the branch backwards or sideways without force)
-    const moved = gh(['api', '-X', 'PATCH', `repos/${REPO}/git/refs/heads/${BASE}`, '-f', `sha=${said.advance}`]);
-    if (moved.status !== 0) said.line = `CodeRabbit: the last push was read with no open remarks, but ${BASE} did not move (${(moved.stderr || '').trim().split('\n')[0]})`;
-  }
+  // the baseline is not moved from here: the reviewed party moving its own reviewer's baseline is the
+  // kind of change the auto-mode safety check refuses; who moves it waits for the owner's word
+  if (said?.advance) said.line = `CodeRabbit: the last push was read with no open remarks; ${BASE} may move up to ${said.advance.slice(0, 7)} (not moved automatically: the owner decides how)`;
   if (said) console.log(said.line);
 }
