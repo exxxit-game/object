@@ -54,7 +54,7 @@ export const PROGRAMS = [
   { name: 'adb', args: ['version'], expect: /^Android Debug Bridge version \S+/m, fix: 'unpack Android platform-tools (developer.android.com/tools/releases/platform-tools) into C:\\adb\\platform-tools' },
   { name: 'scrcpy', args: ['--version'], expect: /^scrcpy \d\S*/m, fix: 'scoop install scrcpy' },
   { name: 'ffmpeg', args: ['-version'], expect: /^ffmpeg version \S+/m, fix: 'scoop install ffmpeg' },
-  // the light baked into textures and the period props as models (the owner's yes to the tool revision, 10.10)
+  // the light baked into textures and the period props made as models (docs/owner-decisions.md, the tool revision)
   { name: 'blender', args: ['--version'], expect: /^Blender \d\S*/m, fix: 'scoop install extras/blender' },
   // Meta's own CLI: performance traces and store checks of the headset build (its MCP server gave no tools)
   { name: 'metavr', args: ['--version'], expect: /^metavr \d\S*/m, fix: 'npm install -g metavr (Meta\'s package, github.com/meta-quest/agentic-tools)' }
