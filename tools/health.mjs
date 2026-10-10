@@ -168,7 +168,12 @@ function checkPath() {
 }
 
 // --- The papers and their backup -------------------------------------------------------------
+// the Google Drive program stages its uploads in a hidden .tmp.driveupload folder inside the synced folder
+// (.tmp.drivedownload the other way): its working copies, not papers, so neither counted nor backed up
+const DRIVE_WORK = /^\.tmp\.drive/;
+const COPY_OUT = '/E /XD .tmp.drive*';
 const walk = (dir, base = dir) => fs.readdirSync(dir, { withFileTypes: true })
+  .filter((e) => !DRIVE_WORK.test(e.name))
   .flatMap((e) => (e.isDirectory() ? walk(path.join(dir, e.name), base) : [path.relative(base, path.join(dir, e.name)).replaceAll('\\', '/')]));
 export const words = (text) => (text.match(/\S+/g) || []).length;
 export function checkPapers(lib = PAPERS, backup = BACKUP, exists = fs.existsSync) {
@@ -181,10 +186,10 @@ export function checkPapers(lib = PAPERS, backup = BACKUP, exists = fs.existsSyn
     : ok(`${count(pdfs.length, 'paper')}, each with a text copy`)];
   const drive = path.parse(backup).root;
   if (!exists(drive)) return [...out, warning(`the backup drive ${drive} is not plugged in, so the papers' backup was not checked`)];
-  if (!exists(backup)) return [...out, broken(`no backup of the papers on ${drive}: make it: robocopy "${lib}" "${backup}" /E`)];
+  if (!exists(backup)) return [...out, broken(`no backup of the papers on ${drive}: make it: robocopy "${lib}" "${backup}" ${COPY_OUT}`)];
   const saved = new Set(walk(backup));
   const unsaved = files.filter((f) => !saved.has(f)), gone = [...saved].sort().filter((f) => !have.has(f));
-  out.push(unsaved.length ? broken(`${count(unsaved.length, 'file')} of the papers library not in the backup (${few(unsaved)}): copy them: robocopy "${lib}" "${backup}" /E`) : ok(`the backup holds all ${files.length} files`));
+  out.push(unsaved.length ? broken(`${count(unsaved.length, 'file')} of the papers library not in the backup (${few(unsaved)}): copy them: robocopy "${lib}" "${backup}" ${COPY_OUT}`) : ok(`the backup holds all ${files.length} files`));
   if (gone.length) out.push(warning(`the backup holds ${count(gone.length, 'file')} the library no longer has (${few(gone)}): renamed or removed in the library; keep or remove them in the backup by hand`));
   return out;
 }
