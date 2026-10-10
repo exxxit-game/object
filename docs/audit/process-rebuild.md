@@ -3,6 +3,8 @@
 The owner's request (board, the current step): set up the whole process at once, not part by part. Five read-only
 audits (10.10.2026) are the evidence; their notes are kept in [rebuild/README.md](rebuild/README.md), their findings are
 here. This plan replaced the older rules review and CLAUDE.md draft (never acted on; removed, kept in git).
+The owner's pages: the scheme https://claude.ai/artifact/HyPzpc1kAdhEwR7rvBTHF3 (his yes, 10.10) and the setup
+https://claude.ai/artifact/16XbLoydJ1xfq8LWyPLd2w (his "go ahead", 10.10).
 
 ## What the audits found (the causes, not the symptoms)
 
