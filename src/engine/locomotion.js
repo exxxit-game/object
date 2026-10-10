@@ -58,6 +58,7 @@ AFRAME.registerComponent('locomotion', {
     this.p = new THREE.Vector3();
     this.d = new THREE.Vector3();
     this.q = new THREE.Quaternion();
+    this.e = new THREE.Euler();   // reused: the yaw is read every frame while sliding, and garbage costs frames on Quest 2
   },
 
   remove() {
@@ -152,7 +153,7 @@ AFRAME.registerComponent('locomotion', {
 
   headYaw() {
     this.el.sceneEl.camera.getWorldQuaternion(this.q);
-    return new THREE.Euler().setFromQuaternion(this.q, 'YXZ').y;
+    return this.e.setFromQuaternion(this.q, 'YXZ').y;
   },
 
   // a move in one step (teleport, snap turn, back step)

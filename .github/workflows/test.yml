@@ -8,6 +8,10 @@ on:
   push:
     branches: [room-polish, main]
 
+# the tests only read the code: the token cannot write, whatever the repository's default
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -15,6 +19,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0   # the guard prover clones the repository
+          persist-credentials: false   # it clones the local checkout, so no step needs the token
       - uses: actions/setup-node@v4
         with:
           node-version: 22

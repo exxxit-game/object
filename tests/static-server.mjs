@@ -23,8 +23,11 @@ const TYPES = {
 
 export function startServer(port = 0) {
   const server = http.createServer((req, res) => {
-    const url = new URL(req.url, 'http://localhost');
-    let rel = decodeURIComponent(url.pathname);
+    // a malformed escape (/%) or a NUL byte throws inside this listener and would stop the server
+    // for everyone on the public link: such a path is refused instead
+    let rel;
+    try { rel = decodeURIComponent(new URL(req.url, 'http://localhost').pathname); } catch { rel = '\0'; }
+    if (rel.includes('\0')) { res.writeHead(400).end(); return; }
     if (rel.endsWith('/')) rel += 'index.html';
     const file = path.join(ROOT, rel);
     if (!file.startsWith(ROOT) || !isPublic(path.relative(ROOT, file).split(path.sep).join('/'))) {

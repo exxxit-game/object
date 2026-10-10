@@ -21,11 +21,15 @@ const MIN_VOICE_PLAYS = 20;
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 worn(true);
+// every way out, a failure or a throw included, puts the headset back to sleep: worn(true) overrides
+// its proximity sensor, which would otherwise keep it awake on the slow USB charge
+let game = null;
+process.on('exit', () => { game?.close(); try { sleepNow(); } catch { /* the cable is out */ } });
 if (!awake()) openUrl(URL_TO_TEST);
 // Use the open game tab if there is one, else open the URL in the headset browser.
-let game = await openPage(/object|localhost:3000/);
+game = await openPage(/object|localhost:3000/);
 if (!game) { openUrl(URL_TO_TEST); await sleep(5000); game = await openPage(/object|localhost:3000/); }
-if (!game) { console.log('FAIL no browser tab with the game'); sleepNow(); process.exit(1); }
+if (!game) { console.log('FAIL no browser tab with the game'); process.exit(1); }
 const { send, errors } = game;
 const run = async (expression) => {
   const v = await game.run(expression, false);
@@ -127,6 +131,4 @@ console.log(`URL ${page.url}\nscreen resolution ${page.screenPx}, draw calls ${r
 console.log(`voice durations: ${result.played.join(', ') || 'none'}`);
 for (const [name, ok] of checks) console.log(`${ok ? 'PASS' : 'FAIL'} ${name}`);
 if (errors.length) console.log('errors:\n  ' + errors.join('\n  '));
-game.close();
-sleepNow();
 process.exit(checks.every(([, ok]) => ok) ? 0 : 1);

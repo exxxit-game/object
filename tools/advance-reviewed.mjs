@@ -38,9 +38,10 @@ const openRemarks = () => {
   const q = `query { repository(owner: "${owner}", name: "${name}") { pullRequests(states: OPEN, baseRefName: "${BASE}", headRefName: "room-polish", first: 1) {
     nodes { reviewThreads(first: 100) { pageInfo { hasNextPage } nodes { isResolved isOutdated comments(first: 1) { nodes { author { login } } } } } } } } }`;
   const pr = JSON.parse(gh(['api', 'graphql', '-f', `query=${q}`])).data.repository.pullRequests.nodes[0];
-  // more threads than one page: unread ones may be open, so nothing moves
-  if (pr?.reviewThreads.pageInfo.hasNextPage) return Infinity;
-  return pr ? pr.reviewThreads.nodes.filter((t) => !t.isResolved && !t.isOutdated && /^coderabbitai/.test(t.comments.nodes[0]?.author?.login || '')).length : 0;
+  // no open pull request (closed, renamed, another base) or more threads than one page: the remarks
+  // are unknown, and may be open, so nothing moves
+  if (!pr || pr.reviewThreads.pageInfo.hasNextPage) return Infinity;
+  return pr.reviewThreads.nodes.filter((t) => !t.isResolved && !t.isOutdated && /^coderabbitai/.test(t.comments.nodes[0]?.author?.login || '')).length;
 };
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {

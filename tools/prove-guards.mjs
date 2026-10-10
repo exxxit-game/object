@@ -110,8 +110,9 @@ const CASES = [
     () => headsetTool(['tools/quest-look.mjs', 'vr'], `${dir}-look.jsonl`), 'waits for the practice reviewer'],
   ['review gate', 'the owner\'s automatic stop', 'the probe run in VR after the game changed since its review',
     () => { write({ kind: 'review', agent: 'planted', print: fingerprint(dir) }, `${dir}-reviews.jsonl`); append('src/engine/sfx.js', '\n// changed after the review\n'); },
-    // the probe, not the test copy: were the stop blind, the copy would really be published
-    () => run(process.execPath, ['tools/xr-probe-run.mjs', 'input'], { OBJECT_REVIEW_RECORD: `${dir}-reviews.jsonl` }), 'waits for the practice reviewer'],
+    // the probe, not the test copy: were the stop blind, the copy would really be published; and with
+    // only node on the path, as the other headset cases, so a blind stop could reach no headset either
+    () => headsetTool(['tools/xr-probe-run.mjs', 'input'], `${dir}-reviews.jsonl`), 'waits for the practice reviewer'],
   ['claude-guard pre', 'the owner\'s automatic stop', 'the assistant writes the practice review record itself', () => {},
     () => askGuard('pre', { tool_name: 'Write', tool_input: { file_path: `${dir}-reviews.jsonl`.replace(/\.jsonl$/, '-practice-reviews.jsonl'), content: '{}' } }), 'REFUSED'],
   ['claude-guard stop', 'the owner\'s yes is the measure', 'a session with no row saying what he will see today',

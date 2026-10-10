@@ -10,7 +10,7 @@
 // text's size: UKAAF G003, Creating clear print and large print documents, 2012, p. 15).
 export const RING_LETTER = 0.115;
 export const sealRadius = (letter) => letter / RING_LETTER;
-// The ring's face: Oswald, a bold sans fit for a stamp (thin serifs do not print), the owner's pick;
+// The ring's face: Oswald, a bold sans fit for a stamp (thin serifs do not print; docs/decisions.md);
 // declared in css/fonts.css and waited for before a room starts (src/main.js)
 const FACE = '600';
 const FAMILY = 'Oswald, "Arial Narrow", sans-serif';

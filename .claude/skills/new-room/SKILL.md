@@ -46,10 +46,10 @@ check. Do not tell the owner "done" before step 9.
    and a comparison with the room's approved shots (`docs/rooms/NN-shots/`); in the
    headset `node tools/quest-look.mjs` (enter VR, frames, timing of each step, frame rate,
    `levels` for its sounds) and `node tools/quest-check.mjs` (all PASS); an independent
-   reviewer agent on the diff; fix. Only now report, with a frame from the headset, saying
-   what ran and what was seen.
+   reviewer agent on the diff; fix.
 10. **Lessons.** A mistake that broke the room gets a test that catches it
-    and a row in `docs/mistakes.md`; nothing else is added.
+    and a row in `docs/mistakes.md`; nothing else is added. Only now report, with a frame
+    from the headset, saying what ran and what was seen.
 
 ## The room recipe (from docs/research; each step already tested somewhere)
 1. A "what stands for what" table: every part of the original procedure and its place in the room (Re-Search,

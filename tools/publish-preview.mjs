@@ -94,7 +94,8 @@ const served = async () => {
     old = [];
     for (let k = 0; k < pageFiles.length; k += 8) {
       await Promise.all(pageFiles.slice(k, k + 8).map(async (f) => {
-        const text = await (await fetch(BASE + f)).text().catch(() => '');
+        // a file that cannot be fetched (offline, DNS, TLS) counts as not yet served, never as a gh failure
+        const text = await fetch(BASE + f).then((r) => r.text()).catch(() => '');
         const mine = fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
         if (text.replace(/\r\n/g, '\n') !== mine) old.push(f);
       }));
@@ -115,4 +116,5 @@ try {
   if (status !== 'built') process.exitCode = 1;
 } catch (e) {
   console.log('could not read the Pages build (gh):', e.message.split('\n')[0]);
+  process.exitCode = 1;   // an unchecked copy is never reported as live
 }

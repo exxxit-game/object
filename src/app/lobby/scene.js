@@ -94,7 +94,7 @@ const STEEL = 'material="color: #eef0f2; metalness: 1; roughness: .12"';
 const CHROME_SHAPE = 'color: #eef0f2; metalness: 1; roughness: .12';
 const BRASS = 'material="color: #b08d4a; metalness: 1; roughness: .3"';
 // A 2.5 gal stored-pressure water extinguisher, the General WS-900 of 1970 as a seller photographed
-// one whole (the owner's find: 19 photos, 62.2 cm tall, 18.3 cm across; docs/research/vr/07-corridor-
+// one whole (a flea-market listing: 19 photos, 62.2 cm tall, 18.3 cm across; docs/research/vr/07-corridor-
 // 1979.md). Every height below is read off its straight-on photos in parts of the shell's 7 in
 // diameter (S23): a foot ring, the straight shell 2.5 diameters tall with a seam band at its top, a
 // high round top 0.41 of the diameter, then the neck, a hex collar, the cast valve body and on it the
@@ -196,9 +196,9 @@ function lip() {
 // The end walls: Arcimboldo's Vegetable Gardener (about 1590; Wikimedia Commons, public domain,
 // docs/art/credits.md) on each, the right way up (a face) at one end and upside down (a bowl of
 // vegetables) at the other, with no caption: whoever walks to both ends may notice it is one picture
-// (the owner's choice; docs/research/vr/09-end-wall-pictures.md). It hangs as in its museum (Museo
-// Civico Ala Ponzone, Cremona; Monica Rondoni's photo, Wikimedia Commons, CC BY-SA 4.0, the owner's
-// pick): 24 cm wide (Web Gallery of Art, which gives 36 x 24 cm; the museum 35.8 x 24.2), its height
+// (a find for a game played again to be understood: docs/owner-decisions.md; the candidates in
+// docs/research/vr/09-end-wall-pictures.md). It hangs as in its museum (Museo Civico Ala Ponzone,
+// Cremona; Monica Rondoni's photo, Wikimedia Commons, CC BY-SA 4.0): 24 cm wide (Web Gallery of Art, which gives 36 x 24 cm; the museum 35.8 x 24.2), its height
 // from the scan, 1.33 of its width as in every reproduction (the difference is not explained),
 // straight in a gilded frame with no mat; the frame laps the panel's edge by 1/4 in, as framers lap
 // a picture (frameiteasy.com: 1/4 in, at least 1/8 in), the lap inside the moulding's face, so the
@@ -239,7 +239,7 @@ const PROFILE = [
 const OUTER = { w: r(PICTURE.w - 2 * LAP + 2 * M), h: r(PICTURE.h - 2 * LAP + 2 * M) };
 const PRINT_Y = r(1.2 + OUTER.h / 2);
 const END_PRINTS = [{ x: PLAN.from, facing: 1, turn: 0 }, { x: PLAN.to, facing: -1, turn: 180 }];
-// Each new visit the two swap ends, for whoever notices (the owner's detail): the picture's turn
+// Each new visit the two swap ends, for whoever notices on a replay (docs/owner-decisions.md): the picture's turn
 // on end i (0 west, 1 east), visits counted from 0 (opening.js, visitsSoFar)
 export const printTurn = (i, visits) => (END_PRINTS[i].turn + 180 * (Math.abs(visits | 0) % 2)) % 360;
 // the gilded frame and the picture in it (turned 180 degrees on one end)

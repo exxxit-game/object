@@ -69,6 +69,11 @@ const refused = cases([
   'git -c core.hooksPath=/dev/null commit -m x',
   'git config core.hooksPath .git/hooks',
   'git config --unset core.hooksPath',
+  'GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.hooksPath GIT_CONFIG_VALUE_0=/dev/null git commit -m x',
+  'export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.hooksPath GIT_CONFIG_VALUE_0=/dev/null',
+  "env GIT_CONFIG_PARAMETERS=\"'core.hooksPath'='/dev/null'\" git push origin x",
+  ["$env:GIT_CONFIG_COUNT = 1; $env:GIT_CONFIG_KEY_0 = 'core.hooksPath'; $env:GIT_CONFIG_VALUE_0 = 'NUL'; git commit -m x", PS],
+  ['Set-Item env:GIT_CONFIG_KEY_0 core.hooksPath', PS],
   // the headset or its browser restarted past the check that the owner is not wearing it
   'adb reboot',
   'adb -s 2G0YC5ZG reboot',
@@ -144,6 +149,8 @@ const allowed = cases([
   `cp ${record} /tmp/copy.jsonl`,
   "node -e \"const fs = require('fs'); const rows = fs.readFileSync(require('os').homedir() + '/Documents/objekt-files/notes/practice-reviews.jsonl', 'utf8').split('\\n').filter(Boolean).map((l) => JSON.parse(l)); process.stdout.write(rows.length + '\\n')\"",
   'grep -n OBJECT_REVIEW_RECORD tools/review-gate.mjs',
+  'grep -n "GIT_CONFIG_KEY_0=core.hooksPath" tests/guard.test.mjs',
+  'GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=user.name GIT_CONFIG_VALUE_0=x git commit -m x',
 ]);
 for (const [c, shell] of allowed) {
   const why = refusal(c, shell === PS);

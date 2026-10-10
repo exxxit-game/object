@@ -200,16 +200,29 @@ function restarts(w) {
     || (p === 'svc' && /^power (reboot|shutdown)/.test(rest)) || (p === 'setprop' && w[1] === 'sys.powerctl');
 }
 
+// git reads config from the environment too (git-config(1), ENVIRONMENT: GIT_CONFIG_KEY_<n> with
+// GIT_CONFIG_VALUE_<n>, and GIT_CONFIG_PARAMETERS), so core.hooksPath set there skips the hooks as -c does;
+// the value follows the name's "=", or is the next word (PowerShell's "= value", set-item and setx)
+function setsHooks(w, k) {
+  const m = /^(\$?env:)?GIT_CONFIG_(KEY_\d+|PARAMETERS)(=|$)(.*)$/i.exec(w[k] ?? '');
+  if (!m) return false;
+  const next = w[k + 1] ?? '';
+  const value = m[3] ? m[4] : next === '=' ? w[k + 2] : next.replace(/^=/, '');
+  return /core\.hookspath/i.test(value ?? '');
+}
+
 function judge(words, stdin, ps) {
   const w = [...words];
   // variables set for the command, and the shell's own words before it
   while (w.length) {
     if (/^(\$env:)?OBJECT_REVIEW_RECORD(=|$)/i.test(w[0]) && (w[0].includes('=') || /^=/.test(w[1] ?? ''))) return WHY.recordEnv;
+    if (setsHooks(w, 0)) return WHY.hooks;
     if (/^[A-Za-z_]\w*=/.test(w[0]) || KEYWORDS.has(w[0])) w.shift(); else break;
   }
   const p = base(w[0]), a = w.slice(1);
   if (!p) return null;
   if (/^(export|set|setx|declare|typeset|local|readonly|set-item|si)$/.test(p) && a.some((x) => /^(env:)?OBJECT_REVIEW_RECORD(=|$)/i.test(x))) return WHY.recordEnv;
+  if (/^(export|set|setx|declare|typeset|local|readonly|set-item|si)$/.test(p) && a.some((x, k) => setsHooks(a, k))) return WHY.hooks;
   if (Object.hasOwn(WRAPPERS, p)) {
     let k = 0;
     while (k < a.length && a[k].startsWith('-')) k += WRAPPERS[p]?.test(a[k]) ? 2 : 1;

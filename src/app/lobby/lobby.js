@@ -113,7 +113,7 @@ function lightCorridor() {
 }
 
 // The end walls' picture (scene.js): which end shows it upside down changes with each visit, for
-// whoever notices (the owner's detail); seen at a slant it stays as sharp as the game's other
+// whoever notices on a replay (docs/owner-decisions.md); seen at a slant it stays as sharp as the game's other
 // textures (panel.js: anisotropy 8).
 function hangPrints(visits) {
   document.querySelectorAll('.end-print').forEach((el, i) => {
