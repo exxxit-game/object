@@ -130,7 +130,6 @@ quote; "unverified" marks what was not confirmed on a primary page.
 ## Pages only the owner can open (region block, bot check, paywall, clicks), and what to bring back
 
 Bot checks or clicks (open in a browser):
-- https://research-collection.ethz.ch/handle/20.500.11850/516589: Quest 2 vs SteamVR tracking, accuracy in mm.
 Paywalls (need access):
 - https://www.nature.com/articles/s41586-018-0637-6: opened by the owner; supplement read (field-labs-2.md 8); its
   ethics and consent are only in the paid Methods (EUR 39.95), not bought.
@@ -142,4 +141,3 @@ Paywalls (need access):
   EUR 29.95 at Springer, not bought: needed only if a choice-blindness room is chosen.
 - https://journals.sagepub.com/doi/10.1177/25152459211007467 (SAGE): Scheel 2021, how "positive result" was coded,
   the 96% vs 44% table.
-- https://doi.org/10.1109/tvcg.2025.3549182 (IEEE paywall): Quest 3 vs Quest Pro hand tracking, error, jitter, latency.

@@ -187,7 +187,11 @@ Earlier passes (not repeated): docs/research/study-methods-1.md, study-methods-2
   attributed by the authors to "an accidental movement" (of the mount): long sessions need a drift check.
 - Quest 3: a robot study (Sensors 2026, doi:10.3390/s26082285, PMC13119968) reports sub-millimetre headset RMSE and
   rotation "below 0.4 deg" (search snippet only: unverified); Quest 3 hand tracking 1.73 cm error, 1.11 cm jitter,
-  latency 14.4-220.5 ms (TVCG 2025, doi:10.1109/tvcg.2025.3549182; snippet only: unverified).
+  latency 14.4-220.5 ms (Godden, Steedman & Pan 2025, IEEE TVCG 31(5):3025-3034, doi:10.1109/tvcg.2025.3549182;
+  citation confirmed by the owner, full text paid: the numbers stay unverified).
+- Quest 2 in a 5 m x 5 m room (Holzwarth, Gisler, Hirt & Kunz 2021, ICVARS, CC BY 4.0; full text from the owner,
+  objekt-papers/holzwarth-2021.txt): mean height error of the headset "-0.001m" against "0.007m" for a Vive Tracker;
+  jitter "0.06mm for the Oculus Quest 2 HMD and 0.18mm for the HTC VIVE Tracker" (RMS, static); height (y) only.
 
 ### 4a (cont.). Browser clock resolution (W3C High Resolution Time, Editor's Draft 1 September 2026, read)
 - https://w3c.github.io/hr-time/ : performance.now() is coarsened to "100 microseconds, or a higher
