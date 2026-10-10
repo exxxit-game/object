@@ -207,6 +207,9 @@ const log = (day, text) => `## 2026-10-${day}T12:00:00.000Z s\n${text}\n`;
 assert.ok(saidYes(log('08', `${YES}, ok`), '8.10') && !saidYes(log('08', 'later maybe'), '8.10') && !saidYes(log('07', YES), '8.10'), 'his yes found only on its own day and as a word');
 assert.ok(stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]])), { today: '9.10', log: log('08', 'no answer from him') }), 'a yes the assistant wrote without his word does not count');
 assert.ok(!stalled(shows(table([['7.10', 'x'], ['8.10', YES], ['9.10', PENDING]])), { today: '9.10', log: log('08', YES) }), 'his own yes counts');
+// the board quotes his answers: «да», «Да», or a note and then «Да»; a word that only contains the letters is no yes
+for (const a of [`«${YES}»`, `«${YES[0].toUpperCase()}${YES.slice(1)}»`, `moved it; «${YES}»`]) assert.ok(!stalled(shows(table([['7.10', 'x'], ['8.10', a], ['9.10', PENDING]])), { today: '9.10', log: log('08', YES) }), `the answer ${a} is his yes`);
+assert.ok(stalled(shows(table([['7.10', 'x'], ['8.10', `«на${YES}»`], ['9.10', PENDING]])), { today: '9.10' }), 'a word that only contains the letters is no yes');
 assert.ok(start.stdout.length < 10000, `the start hook prints ${start.stdout.length} characters: over 10,000 Claude Code keeps only a preview`);
 
 console.log(`guard: ok (${refused.length} refused, ${allowed.length} allowed, the hook wired, the headset's wearer seen, links owed to the owner found since his last message, his decisions imported by CLAUDE.md, the board shown at start)`);

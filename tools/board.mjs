@@ -26,17 +26,20 @@ export const plannedToday = (rows, key = dayKey()) => rows.some((r) => r.when ==
 // whether his own messages of that day hold a «да»: the assistant writes the board, so a yes there
 // counts only when his log (written by the prompt hook, word for word) has one that day
 export const LOG = 'Documents/objekt-notes/owner-messages.md';
+// «да» as a word in any case and inside any quotes: the board writes his answers quoted («да», «Да»),
+// and an exact match on the bare word called every session stalled
+export const isYes = (text) => new RegExp(`(^|[^\\p{L}])${YES}([^\\p{L}]|$)`, 'iu').test(text);
 export function saidYes(log, when) {
   return log.split(/\r?\n(?=## \d{4}-\d\d-\d\dT)/).some((m) => {
     const at = m.match(/^## (\S+)/);
-    return at && dayKey(new Date(at[1])) === when && new RegExp(`(^|[^\\p{L}])${YES}([^\\p{L}]|$)`, 'iu').test(m.slice(m.indexOf('\n')));
+    return at && dayKey(new Date(at[1])) === when && isYes(m.slice(m.indexOf('\n')));
   });
 }
 
 // The last two rows of past sessions both without his yes: a row still waiting from an earlier day is
 // a session he saw nothing in, and a yes counts only if his log confirms it (when the log is at hand)
 export function stalled(rows, { today = dayKey(), log = null } = {}) {
-  const yes = (r) => r.answer === YES && (log === null || saidYes(log, r.when));
+  const yes = (r) => isYes(r.answer) && (log === null || saidYes(log, r.when));
   const done = rows.filter((r) => r.answer !== PENDING || r.when !== today);
   return done.length >= 2 && done.slice(-2).every((r) => !yes(r));
 }

@@ -182,9 +182,11 @@ export function checkPapers(lib = PAPERS, backup = BACKUP, exists = fs.existsSyn
 
 // --- The research agents ---------------------------------------------------------------------
 export const RESEARCH_AGENTS = ['deep-research', 'quick-research'];
+// the hosted copy of the reference lookup is the one kept (docs/owner-decisions.md); the local copy
+// is denied in .claude/settings.json, so an agent naming it has no lookup at all
 const NEEDS = [
   ['the papers search (4ff8cb31 search)', (t) => /4ff8cb31[\w-]*__search\b/.test(t)],
-  ['reference lookup', (t) => t.includes('reference-lookup')],
+  ['the reference lookup (its hosted copy)', (t) => t.includes('reference-lookup-hosted__')],
   ['PDF Tools', (t) => t.includes('PDF_Tools')],
   ['the browser', (t) => t.includes('Claude_Browser')]
 ];
@@ -195,6 +197,25 @@ export function agentLacks(text) {
   const lacks = tools === undefined ? [] : NEEDS.filter(([, has]) => !has(tools)).map(([what]) => what);
   if (!text.includes('objekt-papers')) lacks.push('the papers library (objekt-papers) named in its instructions');
   return lacks;
+}
+// Claude Code reads an agent's header as YAML and drops an agent whose header does not parse,
+// without a word: an unquoted value holding ": " is a second key to YAML, and two agents went
+// missing from every session that way while a check of their text passed
+export function agentHeaderProblems(text) {
+  const front = text.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1];
+  if (front === undefined) return ['no header between --- lines'];
+  const fields = front.split(/\r?\n/).map((l) => l.match(/^([\w-]+):\s?(.*)$/)).filter(Boolean);
+  const problems = ['name', 'description'].filter((k) => !fields.some(([, key]) => key === k)).map((k) => `no ${k}`);
+  for (const [, key, value] of fields) if (!/^['"]/.test(value) && /:\s/.test(value)) problems.push(`the ${key} holds an unquoted ": " (put the value in single quotes)`);
+  return problems;
+}
+export function checkAgentsLoad(root = ROOT) {
+  const dir = path.join(root, '.claude', 'agents');
+  const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith('.md')) : [];
+  const bad = files.map((f) => [f, agentHeaderProblems(fs.readFileSync(path.join(dir, f), 'utf8'))]).filter(([, p]) => p.length);
+  return bad.length
+    ? bad.map(([f, p]) => broken(`the ${f.replace(/\.md$/, '')} agent does not load in any session (${p.join('; ')}): fix .claude/agents/${f}`))
+    : [ok(`all ${files.length} agents load`)];
 }
 export function checkAgents(root = ROOT) {
   return RESEARCH_AGENTS.map((name) => {
@@ -263,7 +284,7 @@ export function runAll() {
   const results = [...programs];
   const tess = programs.find((r) => r.name === 'tesseract' && r.real);
   if (tess) results.push(checkTesseractLangs(tess.real));
-  results.push(...checkPath(), ...checkPapers(), ...checkAgents());
+  results.push(...checkPath(), ...checkPapers(), ...checkAgentsLoad(), ...checkAgents());
   const { main, branch } = mainFolder();
   results.push(...checkGuards(ROOT, main, branch));
   const adb = programs.find((r) => r.name === 'adb' && r.real);

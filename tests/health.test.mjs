@@ -8,7 +8,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {
   findOnPath, parseShimgenHelp, parseScoopShim, parseExecScript, launcherOf, checkProgram, parseLangs, checkTesseractLangs,
-  parseRegPath, expandVars, splitPath, deadPathEntries, words, checkPapers, agentLacks, localImports, sameText, checkGuards,
+  parseRegPath, expandVars, splitPath, deadPathEntries, words, checkPapers, agentLacks, agentHeaderProblems, localImports, sameText, checkGuards,
   parseAdbDevices, headsetInfo, format, MIN_WORDS
 } from '../tools/health.mjs';
 
@@ -103,11 +103,18 @@ assert.match(papers.at(-1).text, /is not plugged in/);
 assert.match(checkPapers(path.join(tmp, 'none'), backup)[0].text, /^the papers library .+ is gone/);
 
 // the research agents: the paper tools, the browser and the library named
-const AGENT = '---\nname: quick-research\ntools: WebSearch, mcp__Claude_Browser__navigate, mcp__4ff8cb31-8eb4-4720-944b-24fa9d492ec5__search, mcp__plugin_research-desk_reference-lookup__search_works, mcp__PDF_Tools__read_pdf_content\n---\nPapers first: C:\\Users\\admin\\Documents\\objekt-papers\n';
+const AGENT = '---\nname: quick-research\ntools: WebSearch, mcp__Claude_Browser__navigate, mcp__4ff8cb31-8eb4-4720-944b-24fa9d492ec5__search, mcp__plugin_research-desk_reference-lookup-hosted__search_works, mcp__PDF_Tools__read_pdf_content\n---\nPapers first: C:\\Users\\admin\\Documents\\objekt-papers\n';
 assert.deepEqual(agentLacks(AGENT), []);
 assert.deepEqual(agentLacks(AGENT.replace(/, mcp__PDF_Tools__\w+/, '').replace(/objekt-papers/, 'library')), ['PDF Tools', 'the papers library (objekt-papers) named in its instructions']);
 assert.deepEqual(agentLacks(AGENT.replace('mcp__4ff8cb31-8eb4-4720-944b-24fa9d492ec5__search', 'mcp__4ff8cb31-8eb4-4720-944b-24fa9d492ec5__get_thread')), ['the papers search (4ff8cb31 search)']);
 assert.deepEqual(agentLacks('---\nname: x\n---\nobjekt-papers\n'), [], 'no tools line: the agent inherits every tool');
+assert.deepEqual(agentLacks(AGENT.replace('reference-lookup-hosted__', 'reference-lookup__')), ['the reference lookup (its hosted copy)'], 'the local copy of the lookup is denied: naming it is having none');
+// an agent's header must parse as YAML, or Claude Code drops the agent from every session
+assert.deepEqual(agentHeaderProblems('---\nname: x\ndescription: one fact, fast\n---\n'), []);
+assert.deepEqual(agentHeaderProblems("---\nname: x\ndescription: 'checks each claim: done, checked'\n---\n"), [], 'a quoted value may hold ": "');
+assert.deepEqual(agentHeaderProblems('---\nname: x\ndescription: checks each claim: done, checked\n---\n'), ['the description holds an unquoted ": " (put the value in single quotes)']);
+assert.deepEqual(agentHeaderProblems('---\nname: x\n---\n'), ['no description']);
+for (const f of fs.readdirSync('.claude/agents')) assert.deepEqual(agentHeaderProblems(fs.readFileSync(path.join('.claude/agents', f), 'utf8')), [], `.claude/agents/${f} loads`);
 
 // the guards: Claude Code runs the main folder's copies; a difference in content (not in line ends) is broken
 assert.deepEqual(localImports("import fs from 'node:fs';\nimport { a } from './secrets.mjs';\nimport { b, c } from './board.mjs';\n"), ['secrets.mjs', 'board.mjs']);
