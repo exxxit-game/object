@@ -139,5 +139,3 @@ Paywalls (need access):
 - https://doi.org/10.1007/978-3-319-21996-7_47: "Virtual Blindness" 2015: the owner opened it; abstract and citation
   agree with part 3b (38 people, 16 pairs, 8 justified, 4 swapped); the full text with detection per condition costs
   EUR 29.95 at Springer, not bought: needed only if a choice-blindness room is chosen.
-- https://journals.sagepub.com/doi/10.1177/25152459211007467 (SAGE): Scheel 2021, how "positive result" was coded,
-  the 96% vs 44% table.

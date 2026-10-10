@@ -87,7 +87,11 @@ Earlier passes (not repeated): docs/research/study-methods-1.md, study-methods-2
 - 71 registered reports vs 152 standard hypothesis-testing papers, first hypothesis each: "we found 96% positive
   results in standard reports, but only 44% positive results in Registered Reports"; 96% vs 50% without direct
   replications (page summary); the authors note the study did not test directly whether RRs reduce bias.
-- Full text not opened (PDF route only via PsyArXiv osf.io/p6e9c): coding details unverified.
+- Full text read from the owner's copy (objekt-papers/scheel-2021.txt). Coding: "The main dependent variable was
+  whether the first hypothesis was supported, as reported by the authors", following Fanelli (2010); in RRs "the
+  first preregistered hypothesis". Result: "Thirty-one out of 71 RRs and 146 out of 152 SRs had positive results",
+  43.66% (95% CI 31.91-55.95) vs 96.05% (91.61-98.54). Original studies only: RRs 15 of 30 (50.00%), SRs 142 of
+  148 (95.95%); replications: RRs 39.02% of 41. Replications were 57.75% of RRs and 2.63% of SRs.
 
 ### 2b. Paid online workers vs lab (Crump, McDonnell & Gureckis 2013) - full text read, saved objekt-papers/crump-2013.txt
 - PLoS ONE 8(3):e57410, https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0057410

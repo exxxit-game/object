@@ -82,7 +82,7 @@ Instrument steps that cost little: log device model, measured frame times, and W
 Quest's motion-to-photon latency once with a 240 fps phone video (Cesanek 2024 method).
 
 ## Not reached / unverified
-- Many Labs 2 criteria: since read (study-methods-2.md 3e); Scheel 2021 full text (coding details); Quest 3 tracking
+- Many Labs 2 criteria: since read (study-methods-2.md 3e); Scheel 2021 since read (data-precision.md); Quest 3 tracking
   studies (snippets only: Sensors 2026 robot study PMC13119968; TVCG 2025 hand tracking, citation only); Holzwarth et al. 2021
   since read (data-precision.md); Quest motion-to-photon latency at movement onset (not found).
 - Validity as a concept (construct, external) was not covered by a separate source in this pass; reliability types
