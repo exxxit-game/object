@@ -35,6 +35,13 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   protected on GitHub («Да» 9.10 05:32). Paid tools only when they help decisively («я не против за это
   платить… но я не готов платить за лишнюю херню» 10.10 07:50).
 
+## The goal
+- Hidden human abilities: to find them and help each player open and develop them in himself («Скрытые
+  человеческие способности, вот наша цель. Узнать и помочь их открыть в себе и развить.» 10.10). The limit is the
+  person's own («ты сам себе худший забор»), as Korzybski reached him through Stuart Chase and Hayakawa; the text
+  ends «добро пожаловать в лаборатория экспериментальной психологии», «почти готовый текст» (where it is used: his
+  choice). What the game keeps about a player follows from this goal (his explanation of what we collect comes next).
+
 ## Order
 - The corridor is the reference every room is built on (after the process rebuild, see The process): finished to the end before anything else
   («давай доделывать коридор до конца, а потом уже будем делать дальше» 8.10 21:27; «доделать эталонный
