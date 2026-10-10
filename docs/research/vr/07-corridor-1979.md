@@ -96,6 +96,10 @@ plates or a narrow vision light: **unverified**.
   turned down; a white gauge face in a red rim facing forward where the dial is dark blue with red
   arcs and a RANGE wedge in a chrome bezel, facing the side; no ring pin, fill valve or their chains;
   no brass coupling where the hose leaves the valve; the body's seam band under the dome to check.
+  All of the next list is fixed in src/app/lobby/extinguisher.js and extinguisher-label.js (10.10, each
+  checked against the photos named), save the hanger and the back's vertical weld (it faces the wall);
+  read off photos 5 and 8 besides: a small cream pointer at the dial's rim upper left and a cream tab
+  across the red band at the bottom, both drawn.
   The redrawn one against all 19 photos (practice reviewer, 10.10), still to fix: the nozzle is a short
   brass tip held in a square stainless clip on the shell's left side, about 6 cm above the bottom (3, 10,
   14, 18, 19; the black slotted part in 15, 17 is the siphon tube inside); the dial's red band is narrow and
@@ -110,6 +114,10 @@ plates or a narrow vision light: **unverified**.
   cylinder, this bracket has a flat hook", 01007, https://tigermedical.com/products/wall-hanger-fire-
   extinguisher-flat-hook-bracket-ame01007-oo; chart https://www.amerex-fire.com/upl/downloads/library/
   bracket-reference.pdf); no source names a fork for a water unit.
+  Amerex sells a fork too, also "for collar support", but for aluminium-valve cylinders of 1 to 10 lb
+  (01521, https://tigermedical.com/products/wall-hanger-fire-extinguisher-fork-bracket-ame01521-oo); the
+  flat hook 01007 lists models 270 and 272 among its fits. How a flat hook meets a collar no source
+  shows: the hanger stays a fork until the owner picks between the two, shown as pictures.
 - **ABC dry chemical, CO2 in 1979:** look and labels **unverified** in this pass.
 - **Mounting height.** The 5 ft top (units up to 40 lb), 3-1/2 ft top (heavier) and 4 in floor
   clearance are quoted from NFPA 10 1994 (1-6.10) and later [C18, search]. NFPA 10 had editions

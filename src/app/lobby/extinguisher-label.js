@@ -5,9 +5,10 @@ import { LOBBY_T } from './texts.ru.js';
 // silver label with a thin dark rule round it, an oval mark at the top, the agent under it, a blue
 // band with how to operate it, the small print below. The maker's own name is left out of the
 // oval (it is a trade mark); the words are ours (texts.ru.js). Drawn on a canvas wrapped round the
-// label's piece of the shell (scene.js, #extLabel), u running left to right as seen from the front.
+// label's piece of the shell (extinguisher.js, #extLabel), u running left to right as seen from the front.
 const W = 420, H = 690;
-const SILVER = '#d9dcdd', RULE = '#3c3f44', BLUE = '#2b4c94', INK = '#2a2c30', GREY = '#5d6168';
+// printed in dark blue on the silver, the rule and the small print too (photo 4 of the 1970 one)
+const SILVER = '#d9dcdd', RULE = '#1f3466', BLUE = '#2b4c94', INK = '#1c2f5e', GREY = '#33497a';
 
 export function paintExtinguisherLabel(el) {
   const t = LOBBY_T.extinguisher;
@@ -39,14 +40,18 @@ export function paintExtinguisherLabel(el) {
   mesh.material.needsUpdate = true;
 }
 
-// The gauge's dial, as on the 1970 WS-900 (the owner's photo 5): dark blue; round its rim a red band
-// on the left (recharge) and on the right (overcharged), and between them at the top a yellow wedge
-// (the right range) with 100 in it; 0 on the left, 200 on the right; the needle in the range. Drawn on
-// the dial's disc (scene.js, #extGauge).
-const DIAL = 256, NAVY = '#1d2f5c', RED = '#c0242a', YELLOW = '#e8c547', WHITE = '#f2f0ea';
+// The gauge's dial, as on the 1970 WS-900 (the listing's photos 5 and 8): dark blue; a narrow red band
+// round the rim from the top wedge's one side round the bottom to its other, RECHARGE along it on the
+// left and OVERCHARGED on the right, a small cream tab on it at the bottom; at the top a pale cream
+// wedge from the rim to the hub (the right range) with RANGE and 100 in it; 0 on the left and 200 on
+// the right, each with a dot; a small cream pointer at the rim upper left; a brass hub; no needle
+// shows. Drawn on the dial's disc (extinguisher.js, #extGauge).
+const DIAL = 256, NAVY = '#1d2f5c', RED = '#c0242a', CREAM = '#ece3b2', WHITE = '#f2f0ea', HUB = '#b8952f';
 // the scale's angle (canvas angles: 0 to the right, clockwise) for a reading: 0 at the left, 100 at the
 // top, 200 at the right
 const reading = (v) => Math.PI + (v / 200) * Math.PI;
+// the band's inner and outer radius, and the wedge's edges as readings
+const BAND = [0.8, 0.93], WEDGE = [80, 120];
 function along(x, text, m, r, from, to) {
   const chars = [...text], step = (to - from) / chars.length;
   chars.forEach((ch, i) => {
@@ -59,23 +64,27 @@ export function paintGauge(el) {
   c.width = c.height = DIAL;
   const x = c.getContext('2d'), m = DIAL / 2;
   x.fillStyle = NAVY; x.beginPath(); x.arc(m, m, m, 0, Math.PI * 2); x.fill();
-  x.lineWidth = DIAL * 0.12;
-  x.strokeStyle = RED;
-  for (const [a, b] of [[-25, 75], [125, 225]]) { x.beginPath(); x.arc(m, m, m * 0.84, reading(a), reading(b)); x.stroke(); }
-  x.fillStyle = YELLOW; x.beginPath(); x.moveTo(m, m); x.arc(m, m, m * 0.9, reading(75), reading(125)); x.closePath(); x.fill();
+  const [inner, outer] = BAND.map((k) => k * m), mid = (inner + outer) / 2, at = (a, r) => [m + Math.cos(a) * r, m + Math.sin(a) * r];
+  x.lineWidth = outer - inner; x.strokeStyle = RED;
+  x.beginPath(); x.arc(m, m, mid, reading(WEDGE[1]), reading(WEDGE[0]) + 2 * Math.PI); x.stroke();
+  x.fillStyle = CREAM; x.beginPath(); x.moveTo(m, m); x.arc(m, m, outer, reading(WEDGE[0]), reading(WEDGE[1])); x.closePath(); x.fill();
+  // the tab across the band at the bottom, and the pointer at the rim upper left
+  const tab = Math.PI / 2, w = 0.05;
+  x.beginPath(); [at(tab - w, inner), at(tab - w, outer), at(tab + w, outer), at(tab + w, inner)].forEach(([px, py], i) => (i ? x.lineTo(px, py) : x.moveTo(px, py))); x.closePath(); x.fill();
+  const tip = reading(58);
+  x.beginPath(); [at(tip - 0.13, outer), at(tip + 0.13, outer), at(tip, m * 0.6)].forEach(([px, py], i) => (i ? x.lineTo(px, py) : x.moveTo(px, py))); x.closePath(); x.fill();
   x.textAlign = 'center'; x.textBaseline = 'middle';
-  x.fillStyle = WHITE; x.font = `700 ${DIAL * 0.05}px ${FONT}`;
-  along(x, t.low, m, m * 0.84, reading(-20), reading(70));
-  along(x, t.high, m, m * 0.84, reading(130), reading(220));
-  // the numbers stand in the blue, clear of the red bands (whose inner edge is 0.72 of the radius)
-  x.font = `700 ${DIAL * 0.1}px ${FONT}`;
-  x.fillText('0', m * 0.52, m); x.fillText('200', m * 1.45, m);
-  x.fillStyle = NAVY; x.fillText('100', m, m * 0.42);
-  x.font = `700 ${DIAL * 0.06}px ${FONT}`; x.fillText(t.range, m, m * 0.25);
-  // the needle in the range, and its hub
-  const n = reading(100);
-  x.strokeStyle = '#111'; x.lineWidth = DIAL * 0.025; x.beginPath(); x.moveTo(m, m); x.lineTo(m + Math.cos(n) * m * 0.7, m + Math.sin(n) * m * 0.7); x.stroke();
-  x.fillStyle = '#111'; x.beginPath(); x.arc(m, m, DIAL * 0.04, 0, Math.PI * 2); x.fill();
+  x.fillStyle = WHITE; x.font = `700 ${DIAL * 0.045}px ${FONT}`;
+  along(x, t.low, m, mid, reading(-40), reading(48));
+  along(x, t.high, m, mid, reading(132), reading(235));
+  // the numbers and their dots in the blue, clear of the band; 100 and RANGE in the wedge
+  x.fillStyle = CREAM; x.font = `700 ${DIAL * 0.09}px ${FONT}`;
+  x.fillText('0', m * 0.5, m); x.fillText('200', m * 1.42, m * 1.04);
+  for (const [px, py] of [[m * 0.36, m * 0.95], [m * 1.66, m * 1.05]]) { x.beginPath(); x.arc(px, py, DIAL * 0.017, 0, Math.PI * 2); x.fill(); }
+  x.fillStyle = NAVY; x.fillText('100', m, m * 0.45);
+  x.beginPath(); x.arc(m, m * 0.3, DIAL * 0.015, 0, Math.PI * 2); x.fill();
+  x.font = `700 ${DIAL * 0.05}px ${FONT}`; x.fillText(t.range, m, m * 0.17);
+  x.fillStyle = HUB; x.beginPath(); x.arc(m, m, DIAL * 0.045, 0, Math.PI * 2); x.fill();
   const tex = new AFRAME.THREE.CanvasTexture(c);
   tex.colorSpace = AFRAME.THREE.SRGBColorSpace;
   tex.anisotropy = 8;
