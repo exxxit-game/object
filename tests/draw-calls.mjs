@@ -14,7 +14,7 @@
 // calls are counted by the nearest entity with an id that holds each drawn mesh (by): where the
 // next cut is (Meta's order: measure first, then merge: docs/research/revision-4-graphics.md).
 export const QUEST2_VIEW = 50;
-export const VIEW_BUDGET = { corridor: QUEST2_VIEW, room: 75 };
+export const VIEW_BUDGET = { corridor: QUEST2_VIEW, room: 65 };
 export function drawCalls({ eyes: boxes } = {}) {
   if (!boxes || !boxes.length) throw new Error('drawCalls: where an eye can be is not given');
   const sceneEl = document.querySelector('a-scene'), renderer = sceneEl.renderer, own = sceneEl.camera;
