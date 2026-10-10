@@ -130,8 +130,6 @@ quote; "unverified" marks what was not confirmed on a primary page.
 ## Pages only the owner can open (region block, bot check, paywall, clicks), and what to bring back
 
 Bot checks or clicks (open in a browser):
-- https://www.campaignlive.co.uk/article/case-study-deutsche-telekom-brought-its-brand-purpose-life-mobile-gaming/1403023
-  (bot check): Sea Hero Quest's media plan (TV, film, online), budget if stated, downloads by date, "1 million in 16 days".
 - https://research-collection.ethz.ch/handle/20.500.11850/516589: Quest 2 vs SteamVR tracking, accuracy in mm.
 Paywalls (need access):
 - https://www.nature.com/articles/s41586-018-0637-6: opened by the owner; supplement read (field-labs-2.md 8); its

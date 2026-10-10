@@ -79,9 +79,16 @@ D  What to copy, ranked by how much it brought
     data optional "pour aider la science" at the end of some levels; Telekom promised no marketing use.
   - Cost: not public in any page read (not found).
 - Campaign (UK trade) case study https://www.campaignlive.co.uk/article/case-study-deutsche-telekom-brought-its-
-  brand-purpose-life-mobile-gaming/1403023: 403 to the fetcher, bot check in the browser: not read (owner).
+  brand-purpose-life-mobile-gaming/1403023 (the owner opened it and sent its text): Saatchi & Saatchi London "as lead
+  agency", with UCL, UEA and Glitchers; "In its first 16 days, the game racked up more than a 1m downloads", "1770
+  years' worth of lab-based dementia research"; "nine Cannes Lions" (the French review says 8). Telekom's project
+  lead: two target groups, the "emotional philanthropist" ("PR is very good to use for the philanthropists because
+  they want to understand it") and "casual gamers" ("the collaboration with PewDiePie from the very early stages
+  worked"); "At the end of April we soft launched in the UK and then went global"; the goal was "100,000 downloads
+  because the biggest existing research was of 599 people and we got this in 24 hours". Lessons: two audiences, two
+  channels; a soft launch in one country first; a target set against the largest study so far.
 - Later totals (search snippets only, unverified): "about 1.6 million" downloads (Telekom release, mid 2016);
-  "played by 2.7 million people" (Cannes entry); "within 16 days ... more than one million" (Campaign);
+  "played by 2.7 million people" (Cannes entry); "within 16 days ... more than one million" (Campaign, confirmed above);
   "brand perception rose by 54%" (agency entry).
 
 ### A2 Moral Machine
