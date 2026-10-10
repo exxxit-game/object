@@ -191,7 +191,8 @@ if (cmd === 'reload') {
   // frames slower than 72 Hz, and what one frame costs. Meta: 72 Hz at least (90 recommended); fewer
   // than 100 draw calls and 750,000 triangles a frame on Quest 2, 200 and 1.5 million on Quest 3
   // (device optimization comparison, docs/research/vr/01-meta.md). The bar is Quest 2's, the weakest
-  // headset, since beauty stays within its budget (docs/owner-decisions.md); over it, exit 1.
+  // headset, since beauty stays within its budget (docs/owner-decisions.md); over it, exit 1. Whether
+  // both eyes were drawn in one pass (multiview: the browser's OCULUS_multiview) is said too.
   const v = await run(`new Promise((resolve) => {
     const s = document.querySelector('a-scene'), vr = s.is('vr-mode') && s.xrSession;
     const raf = (f) => vr ? s.xrSession.requestAnimationFrame(f) : requestAnimationFrame(f);
@@ -202,13 +203,13 @@ if (cmd === 'reload') {
       if (n) { if (dt > 1000 / 72 + 2) slow++; worst = Math.max(worst, dt); }
       n++;
       if (now - t0 < 5000) raf(f);
-      else resolve({ vr: !!vr, fps: Math.round((n - 1) / ((now - t0) / 1000)), slow, worstMs: Math.round(worst), calls: s.renderer.info.render.calls, triangles: s.renderer.info.render.triangles });
+      else resolve({ vr: !!vr, fps: Math.round((n - 1) / ((now - t0) / 1000)), slow, worstMs: Math.round(worst), calls: s.renderer.info.render.calls, triangles: s.renderer.info.render.triangles, multiview: !!s.renderer.xr.isMultiview });
     };
     raf(f);
   })`);
   if (!v || v.error) { console.log(v ? v.error : 'no answer'); process.exit(1); }
   const ok = v.fps >= 72 && v.calls < 100 && v.triangles < 750000;
-  console.log(`${ok ? 'ok  ' : 'OVER'} ${v.vr ? 'VR' : '2D'}: ${v.fps} fps, ${v.slow} frames slower than 72 Hz (worst ${v.worstMs} ms), ${v.calls} draw calls, ${v.triangles} triangles`);
+  console.log(`${ok ? 'ok  ' : 'OVER'} ${v.vr ? 'VR' : '2D'}: ${v.fps} fps, ${v.slow} frames slower than 72 Hz (worst ${v.worstMs} ms), ${v.calls} draw calls, ${v.triangles} triangles${v.vr ? `, multiview ${v.multiview ? 'on' : 'off'}` : ''}`);
   if (!ok) process.exitCode = 1;
 } else {
   console.log('usage: node tools/quest-look.mjs open [local port] | sleep | reload | vr | frame out.jpg | eval "<js>" | worn on|off | restart-browser | reboot | levels | perf');
