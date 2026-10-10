@@ -141,6 +141,16 @@ function texture(kind) {
   return t;
 }
 
+function repeated(kind, { x, y }) {
+  const key = `${kind} ${x} ${y}`;
+  if (cache[key]) return cache[key];
+  const t = texture(kind).clone();
+  t.repeat.set(x, y);
+  t.needsUpdate = true;
+  cache[key] = t;
+  return t;
+}
+
 AFRAME.registerComponent('surface', {
   schema: {
     kind: { default: 'block', oneOf: Object.keys(KINDS) },
@@ -166,9 +176,9 @@ AFRAME.registerComponent('surface', {
     if (grid) worldUV(mesh, grid, this.data.space);
     // A gridded kind takes its place from world UVs, so every surface of the kind shares one
     // texture, and merge-static can merge the pieces of a wall into one mesh (one draw call;
-    // Meta: batch objects that share a material). Kinds without a grid repeat their own copy.
-    const map = grid ? texture(this.data.kind) : texture(this.data.kind).clone();
-    if (!grid) { map.repeat.set(this.data.repeat.x, this.data.repeat.y); map.needsUpdate = true; }
+    // Meta: batch objects that share a material). A kind without a grid is repeated: one copy
+    // per repeat, shared the same way (the corridor's lamp lenses merge into one).
+    const map = grid ? texture(this.data.kind) : repeated(this.data.kind, this.data.repeat);
     mesh.material.map = map;
     if (this.data.glow) mesh.material.emissiveMap = map;
     mesh.material.color.set(this.data.tint);

@@ -1,5 +1,6 @@
 import { readingPose, glidePath, BOARD, CLIP, BOARD_REACH } from './sheet-math.js';
 import '../reflect-env.js';
+import '../merge-static.js';
 import { createPage, PAPER, PAPER_BG, DENSITY } from './sheet-page.js';
 import '../glide.js';
 import '../shapes.js';
@@ -26,6 +27,7 @@ export function createSheet(scene, { inside = null } = {}) {
   el.setAttribute('visible', false);
   el.setAttribute('glide', '');
   el.setAttribute('reflect-env', 'strength: 0.4');
+  el.setAttribute('merge-static', '');   // the clip's five steel parts move with the board: one draw call
   el.innerHTML = `
     <a-entity class="board" decal="back: true" plate="width: ${BOARD.w}; height: ${BOARD.top + BOARD.bottom}; depth: ${BOARD.d}; corner: ${BOARD.corner}; color: ${HARDBOARD}; roughness: 0.55"
               position="0 ${(BOARD.top - BOARD.bottom) / 2} ${-BOARD.d / 2}"></a-entity>

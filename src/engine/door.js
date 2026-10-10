@@ -37,6 +37,9 @@ export function doorHTML({ x, room = 1.6, corridor = 1.8, latch = 1, leaf = '', 
   const hinge = f(x - side * LEAF.w / 2);     // the leaf's hinge edge
   const lx = (v) => f(side * v);              // leaf-local x, mirrored for a latch along -x
   const lz = (v) => f(s * v);                 // leaf-local z, toward the corridor
+  // a leaf that swings is left out of the room's merge (data-dynamic): its parts swing together,
+  // so they are merged on the leaf itself
+  const moves = /data-dynamic/.test(leaf);
   const knob = (z, out) => `<a-entity class="knob" lathe="${KNOB}; color: ${CHROME.color}; metalness: ${CHROME.metalness}; roughness: ${CHROME.roughness}" rotation="${out === s > 0 ? 90 : -90} 0 0" position="${lx(LEAF.w - 0.07)} 1.024 ${lz(z)}"></a-entity>`;
   const roomSide = inside ? `
       ${knob(0, false)}
@@ -53,7 +56,7 @@ export function doorHTML({ x, room = 1.6, corridor = 1.8, latch = 1, leaf = '', 
     <a-box position="${f(x + stop)} 1.0766 ${f(room + s * 0.063)}" width="0.016" height="2.1532" depth="0.016" ${FRAME}></a-box>
     <a-box position="${f(x)} 2.1452 ${f(room + s * 0.063)}" width="0.9204" height="0.016" depth="0.016" ${FRAME}></a-box>
     <a-box position="${f(x)} 0.0065 ${f(room + s * 0.0325)}" width="0.9204" height="0.013" depth="0.127" material="color: #9a9c9e; metalness: .6; roughness: .4"></a-box>
-    <a-entity ${leaf} position="${hinge} 0 ${f(room + s * 0.01)}">
+    <a-entity ${leaf}${moves ? ' merge-static' : ''} position="${hinge} 0 ${f(room + s * 0.01)}">
       <a-entity ${clickable ? 'class="clickable" ' : ''}rounded-box="width: ${LEAF.w}; height: ${LEAF.h}; depth: ${LEAF.t}; radius: 0.004; color: #6a5641; roughness: 0.55"
                 position="${lx(LEAF.w / 2)} 1.083 ${lz(LEAF.t / 2)}"></a-entity>
       <a-box decal position="${lx(LEAF.w / 2)} 0.143 ${lz(LEAF.t + 0.00075)}" width="0.864" height="0.254" depth="0.0015" ${PLATE}></a-box>
