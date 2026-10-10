@@ -56,6 +56,17 @@ Meta's pages: the age API exists for WebXR PWAs, and the comfort rating judges t
   (github.com/meta-quest/bubblewrap, `packages/core/template_project/app/build.gradle`, pushed 2026-09-16) **[read]**:
   Quest builds get `targetSdkVersion 32`. Our app will be created after March 2026, so an upload may be refused
   **[unverified: PWAs may be treated differently; no upload tried]**.
+- **Read again 10.10** **[read]**: the blog says "minSdkVersion will not be impacted and can still use API level 32" and
+  "API level 34 will be enforced during binary upload"; it names no PWA or TWA. The template (path
+  `bubblewrap/packages/core/template_project/app/build.gradle`) holds Quest builds at `compileSdkVersion 32` /
+  `targetSdkVersion 32` and every other build at 36 / 35 with the same helper library, so the wrapper's own code
+  already runs under newer rules elsewhere **[mine]**; the generated project is plain Gradle, so 34 is one line in it.
+  What can be checked before the Dashboard and the real key: a build at 34 with a throwaway test key, sideloaded on
+  the owner's Quest (needs JDK 17 and the Android SDK on the laptop: his word). Only Meta's upload check stays.
+- **Open risk for Quest 2** **[read]**: github.com/meta-quest/bubblewrap/issues/24 (open since 2026-03-29, no reply):
+  an `immersive` TWA on a Quest 2 (Android 14 firmware, Quest Browser 144) never renders, the loading dots stay, then
+  "App name unavailable"; the same TWA in `2D` mode works. Quest 2 is the weakest headset the game keeps, and our
+  checks run on a Quest 3, so this needs a Quest 2 or a fallback (a 2D launch into a page with an enter-VR button).
 - **Who ships this way**: UploadVR, 7 Aug 2025, https://uploadvr.com/elysian-is-the-first-webxr-game-on-quests-horizon-store
   **[read]**: Elysian, "the first WebXR game" on the Store, packaged with "Google's Bubblewrap", "a fully free game".
   UploadVR, 26 Jun 2025, https://www.uploadvr.com/webxr-apps-on-quest-meta-horizon-store-can-now-use-in-app-payments/
