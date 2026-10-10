@@ -66,7 +66,7 @@ const GROUPS = [
   ['room', 'Rooms'],
   ['interlude', 'Interludes (short moments inside or between rooms)'],
   ['reject', 'Rejected (reason on the card)'],
-  ['unread', 'Not read: no legal full text (see docs/papers-needed.md)'],
+  ['unread', 'Not read: no legal full text when the card was written (status now: docs/library.md)'],
   ['other', 'Unclassified verdict (fix the card)']
 ];
 const counts = Object.fromEntries(GROUPS.map(([g]) => [g, cards.filter(c => c.group === g).length]));

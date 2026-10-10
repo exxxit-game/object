@@ -86,7 +86,8 @@ Exit check: numbers collected; decide pricing with data.
 
 ## Room candidates
 Only from passing cards in `docs/cards/` (full text read, quotes checked). Coverage of
-every area: `docs/search-coverage.md`. Papers still to obtain: `docs/papers-needed.md`.
+every area: `docs/library/coverage.md`. Papers still to obtain: `docs/library/wanted.md` (index of the
+whole papers library: `docs/library.md`).
 
 ## Scope guard
 - New ideas go to "Room candidates" or a "Later" note, not into the current phase.
