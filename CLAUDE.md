@@ -12,8 +12,8 @@ Answer the owner in Russian, plain words, short. The repo is English; Russian on
 - His new request goes on the board in his words; the order changes only on his word. A choice a source
   settles is mine (the reason in a line); one no source settles goes to him as real options, in pictures.
 - Do what was asked, with the whole around it seen first; ideas go at the end of the answer, not into code.
-- The process is frozen (his decision): it changes only on a health-check finding (node tools/health.mjs) or
-  his word, and a change replaces something. This file stays under 45 lines (tests/structure.test.mjs).
+- After the rebuild the process is frozen (his decision): a health-check finding (node tools/health.mjs) only
+  repairs the broken thing; anything new needs his word and replaces something. This file stays under 45 lines (tests/structure.test.mjs).
 - Blocked (a login, a captcha, a paywall, a photo only he can take): ask him at once, with the link.
 - He is angry: act on the topic, no promises.
 

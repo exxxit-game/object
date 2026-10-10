@@ -1,7 +1,7 @@
 # Process rebuild: the whole picture, then one change
 
 The owner's request (board, the current step): set up the whole process at once, not part by part. Five read-only
-audits (10.10.2026) are the evidence; their notes stayed in the session scratchpad, their findings are
+audits (10.10.2026) are the evidence; their notes are kept in [rebuild/README.md](rebuild/README.md), their findings are
 here. This plan replaced the older rules review and CLAUDE.md draft (never acted on; removed, kept in git).
 
 ## What the audits found (the causes, not the symptoms)
@@ -32,7 +32,7 @@ here. This plan replaced the older rules review and CLAUDE.md draft (never acted
    twice (about 8 minutes each); hooks run from the main folder's copy, so a fixed guard is not live until it
    reaches the main folder.
 
-## How others do it (sources in the scratchpad notes, Claude Code docs and library practice)
+## How others do it (sources in the audit notes, Claude Code docs and library practice)
 
 - CLAUDE.md holds only what every session needs ("would removing this cause mistakes? If not, cut it"); it is
   re-read after a compaction; files it imports load with it, without the 10,000-character hook limit.
@@ -71,16 +71,20 @@ here. This plan replaced the older rules review and CLAUDE.md draft (never acted
 4. Agents: every research and review agent gets the paper tools, the browser and the library first; limits
    sized to the question; a report cut short says so in its first line.
 5. Guards: keep the ones for what cannot be undone (main, secrets, live database, headset restart) and saving
-   work; rewrite the shell guard to judge the command, not words inside it; mistakes rows must name a test.
+   work; rewrite the shell guard to judge the command, not words inside it; mistakes rows must name a test; the
+   review gate lets my own headset look follow fixes to a review, while showing him still needs a matching review.
 6. Speed: a fast commit check (seconds); the full suite on GitHub only; CI on one branch.
 7. Connectors (the owner switches them on claude.ai and in the app): off - Notion, Jam, Adobe, Figma (both),
    the GitHub connector (gh does it), Claude in Chrome, computer use, Minutes, the privacy-legal plugin; keep -
    Claude Docs, the browser pane, Consensus, PubMed, reference lookup (hosted copy), PDF Tools, Dropbox,
-   Supabase (one copy); meta-vr only for its store skill.
+   Supabase (one copy); meta-vr only for its store skill. Skills used, and when (a short map in docs/state.md):
+   new-room for rooms; research-desk paper skills (research-litnote, paper-compare, citation-check) for papers;
+   meta-vr hz-store-pwa and hz-store-submit for install and store, hz-immersive-designer for comfort; the rest idle.
 8. Health check: tools/health.mjs checks every program the project uses, dead PATH entries, the guards' live
-   copy, the library index, agents' tool lists; the start message shows only what is broken.
-9. After the rebuild the process is frozen: a change to it comes only from a health-check finding or the
-   owner's word, and replaces something.
+   copy, the library index, agents' tool lists; the start message shows only what is broken. It replaces
+   tools/morning.mjs (its checks move in), so nothing is checked twice.
+9. After the rebuild the process is frozen: a health-check finding may only repair the broken thing; anything new
+   needs the owner's word and replaces something.
 
 ## What the research gives the rooms: one recipe
 
@@ -115,10 +119,20 @@ a number, a test run).
 
 ## Step 4, the proof
 
-Run one real piece of work through it: the extinguisher (board item 4) from the 19-photo findings to his
-headset. Measure: time to the first picture, number of process commits (target: none), circles (none).
+Before it, he gets one page in Russian with pictures: how the work runs now, what runs when, the steps of this plan
+with their state, and the health result in green and red; it goes into his showings and needs his "da".
 
-## Decisions only the owner makes
+Then, in a new window, one real piece of work: the extinguisher (board item 4) from the 19-photo findings to his
+headset, plus one "do we have a paper on X?" answered from the library index, plus one resume after a compaction.
+Done when: no process commits during it, the library answer comes from the index, the resume continues the step
+without asking him again, and he says "da" to the result. By 11.10. If any of it fails, the failures go to him as
+a list, and nothing is fixed without his word.
+
+Caps that stay, and why: CLAUDE.md short (the docs: every line must prevent a mistake); the 10,000-character start
+output (Claude Code's own limit; only the board is in it now); research limits as defaults sized to the question.
+The mistakes.md line cap is removed (rows must name a live test instead).
+
+## Decisions only the owner makes (answered "yes" and "agreed" on 10.10; recorded in docs/owner-decisions.md)
 
 1. The connector list above: switch off as listed?
 2. The superpowers plugin (injects "ABSOLUTELY MUST invoke the skill" into every session and competes with

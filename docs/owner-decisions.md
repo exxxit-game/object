@@ -14,7 +14,7 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   replaces something («да», «согласен» 10.10).
 
 ## Order
-- The corridor is the reference every room is built on: finished to the end before anything else
+- The corridor is the reference every room is built on (after the process rebuild, see The process): finished to the end before anything else
   («давай доделывать коридор до конца, а потом уже будем делать дальше» 8.10 21:27; «доделать эталонный
   коридор, на который мы опираемся» 9.10 14:08). Its order: «Подпись, печать, лаборатории, картины…
   указатель… свет» (8.10 21:27); visuals first, its texts after («Сначала… визуальные, а потом и текстовые» 9.10 09:41).
@@ -46,7 +46,9 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   предметы от несуществующего света… Мы починим свет» 9.10 18:22; «проблема решается глобально» 18:23).
 - The model is Guy Ritchie's "Revolver", not Portal: a game played again and again to understand it,
   built detail by detail («вместо портала… смысл фильма Гая Ричи «Револьвер»… надо сделать так, чтобы
-  и нашу игру много раз перепроходили, чтобы разобраться в ней… деталька за деталькой» 9.10).
+  и нашу игру много раз перепроходили, чтобы разобраться в ней… деталька за деталькой» 9.10). Portal's humour
+  is wanted all the same («без юмора ты там просто как лабораторная крыса… если вот играть в портал и убрать
+  весь этот юмор… совсем другом получается» 10.10).
 - Readability beats period look («Читаемость» 8.10); pictures before the game («мне надо его увидеть,
   чтобы потом уже… его в игру добавлять» 8.10); beauty only within the weakest headset's budget
   («максимум красоты, ну не в нагрузку» 9.10 11:43).
