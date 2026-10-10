@@ -138,9 +138,11 @@ Bot checks or clicks (open in a browser):
 - https://online.ucpress.edu/collabra/article/8/1/33267/120491/Sample-Size-Justification (optional).
 Paywalls (need access):
 - https://www.pnas.org/doi/10.1073/pnas.2524991123: Openverse 2026, the list of protocol items.
-- https://www.nature.com/articles/s41586-018-0637-6: Moral Machine Methods: ethics approval, how consent was taken.
+- https://www.nature.com/articles/s41586-018-0637-6: opened by the owner; supplement read (field-labs-2.md 8); its
+  ethics and consent are only in the paid Methods (EUR 39.95), not bought.
 - https://hdl.handle.net/2027.42/92172: Wilson & Nisbett 1978, stocking table by position and shoppers' reasons.
-- https://doi.org/10.1509/jmkr.2005.42.4.383: Shiv et al. 2005, drink, prices, puzzles per condition, N.
+- https://doi.org/10.1509/jmkr.2005.42.4.383: Shiv et al. 2005: opened by the owner, abstract only (three experiments,
+  discounted price, fewer puzzles); the numbers are in the paid full text, needed only if the two-phones room is chosen.
 - https://doi.org/10.1007/978-3-319-21996-7_47: "Virtual Blindness" 2015: the owner opened it; abstract and citation
   agree with part 3b (38 people, 16 pairs, 8 justified, 4 swapped); the full text with detection per condition costs
   EUR 29.95 at Springer, not bought: needed only if a choice-blindness room is chosen.

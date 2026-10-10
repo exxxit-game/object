@@ -28,6 +28,14 @@
   level, can be used beyond replication". Robustness checks used "only first completed (13-scenario) session by
   any user" because those respondents "had not seen their summary of results yet" (repeat-play handling).
   Sample skew: "over-representation of males and younger individuals" vs US census data.
+- Its open Supplementary Information (read in full, objekt-papers/awad-2018-supplement.txt): "A Moral Machine session
+  comprises 13 scenarios, after which the user is presented with a summary of their choices along with how they
+  compare to other users", then "an optional survey"; "Users can go through as many sessions as they wish";
+  ten languages incl. Russian "through a process of forward-translation and back-translation"; country from
+  "approximate geo-location information ... through the IP addresses". The first-session data set exists because
+  repeat sessions bring "adapting respondents, who upon seeing a summary of their results decided to make different
+  decisions". Checks: scenario order, left-right position, device, description seen. No ethics approval or consent
+  wording in the abstract page or the supplement; the Methods are behind the paywall (EUR 39.95, not bought).
 - Awad, Dsouza, Shariff, Rahwan & Bonnefon (2020), PNAS 117(5):2332-2337, full text read and saved
   objekt-papers/awad-2020.txt (Europe PMC PMC7007553):
   - Flow: 3 dilemmas ("Classic" mode, from June 2017), text translated "using a translation and back-translation
