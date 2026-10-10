@@ -162,8 +162,9 @@ function checkPath() {
       { where: 'your user PATH', entries: splitPath(reg('HKCU\\Environment'), 'win32') }]
     : [{ where: 'the PATH', entries: splitPath(process.env.PATH || '') }];
   const dead = deadPathEntries(sources);
-  const fix = 'remove it (Windows: Edit the system environment variables, Environment Variables)';
-  return dead.length ? dead.map((d) => warning(`PATH names a folder that does not exist: ${d.entry} (in ${d.where}): ${fix}`)) : [ok('every PATH folder exists')];
+  // a folder that is gone breaks nothing by itself (a program the project calls has its own line above),
+  // and the owner leaves Windows' settings as they are: listed with --all, not raised at every start
+  return dead.length ? dead.map((d) => info(`PATH names a folder that does not exist (harmless): ${d.entry} (in ${d.where})`)) : [ok('every PATH folder exists')];
 }
 
 // --- The papers and their backup -------------------------------------------------------------
