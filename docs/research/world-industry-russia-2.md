@@ -158,3 +158,26 @@ https://iom.anketolog.ru/2021/03/11/kak-ponyat-iskrenni-li-vashi-respondenty (An
   - which study, which country, the "5 of 91" suspicion check.
 - https://www.alexandria.unisg.ch/handle/20.500.14171/78586 - Herrmann et al. 2008 PDF: Samara and Minsk numbers.
 - https://www.academia.edu/32909519/User_centered_Game_Design - Pagulayan et al. draft (login): methods sections.
+
+## Added: Druzhinin on the participant (the owner opened the page and sent its text)
+
+V. N. Druzhinin, "Experimental Psychology" (textbook), sections 3.3-3.4, "The participant: his activity in the
+experiment", as posted on https://www.psychology-online.net/articles/doc-10.html (region block for our tools; all
+quotes our translation):
+- Understanding the task is checked by "a short preliminary training series": success in it "serves as the
+  criterion of understanding the instruction"; after the series, an interview to find difficulties and whether the
+  participant swapped the experimenter's task for "his own subjective one". (The same practice step and closing
+  question as the room recipe in docs/audit/process-rebuild.md.)
+- "In any experiment there is an element of play, as if of work 'for pretend'", but it is also "a game in
+  earnest": the owner's fun-and-serious, in a Russian textbook.
+- Why volunteers come: in sensory-deprivation studies half came "out of curiosity alone"; often "to learn something
+  about oneself"; money, course credit, friends; "extremely rarely" to serve science. About 7% of those recruited
+  are volunteers (US data he cites); 70-90% of studies used college students.
+- Volunteers differ (Rosenthal, "The Volunteer Subject"): more education, higher status and intelligence, more
+  need for approval, more sociable. A "spoiled participant" who knows the scheme is avoided; naive ones preferred.
+- Anonymous participants are more open, but named ones treat the task more responsibly.
+- The experimenter's style changes results: in his twin study (WISC, teenagers 13-15, Rostov-on-Don) emotional
+  support raised performance; control raised it too but weakened support's effect; twin correlation r = 0.82 in
+  the neutral condition vs 0.36 under support without control. For us: the host's style is a variable to keep the
+  same for every player.
+- He recommends describing the experimental situation and its social factors in the publication.

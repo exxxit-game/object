@@ -169,7 +169,6 @@ Later research passes (optional, none blocks the work):
   https://psyjournals.ru/journals/exppsy/archive/exppsy_2022_n2.pdf (region): Russian VR studies, samples, headsets.
 - https://elementy.ru/novosti_nauki/433205/Prinimaya_reshenie_o_doverii_neznakomomu_cheloveku_my_opiraemsya_na_predydushchiy_opyt
   (region): which trust study, the "5 of 91" suspicion check.
-- https://www.psychology-online.net/articles/doc-10.html (region): Druzhinin on who experiment participants are.
 - https://www.alexandria.unisg.ch/handle/20.500.14171/78586: Herrmann et al. 2008 PDF, Samara and Minsk numbers.
 - https://www.academia.edu/32909519/User_centered_Game_Design (login): Pagulayan, Microsoft playtest methods.
 - https://www.brany.com/?p=7702: BRANY fee request form; only if a US commercial ethics board is chosen.
