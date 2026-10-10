@@ -155,3 +155,21 @@ Paywalls (need access):
 - https://doi.org/10.1007/978-3-319-21996-7_47: "Virtual Blindness" 2015: the owner opened it; abstract and citation
   agree with part 3b (38 people, 16 pairs, 8 justified, 4 swapped); the full text with detection per condition costs
   EUR 29.95 at Springer, not bought: needed only if a choice-blindness room is chosen.
+
+Later research passes (optional, none blocks the work):
+- https://www.annualreviews.org/content/journals/10.1146/annurev-psych-040422-045007 (bot check): Ward & Meade 2023,
+  warnings vs rewards for careless responding.
+- https://web.archive.org/web/20250809104404/https://www.fundacaobial.com/media/4353/2020-open-label-choice-blindness.pdf:
+  Olson's open-label choice blindness: N, conditions, share who noticed, one-week result.
+- https://www.tandfonline.com/doi/full/10.1080/2153599X.2025.2557482 (bot check): McKay 2025 published version.
+- https://alz-journals.onlinelibrary.wiley.com/doi/10.1002/alz.077166 (bot check): the G3 WeChat test abstract.
+- https://academic.oup.com/book/26677: "Games User Research" chapters 22 (play as at home), 30 (VR sickness), 12.
+- https://www.soc4m.ru/index.php/soc4m/article/view/9355 (region): Toloka attention check, the 36% figure.
+- https://psyjournals.ru/journals/exppsy/archive/2019_n1/exppsy_2019_n1_Selivanov.pdf and
+  https://psyjournals.ru/journals/exppsy/archive/exppsy_2022_n2.pdf (region): Russian VR studies, samples, headsets.
+- https://elementy.ru/novosti_nauki/433205/Prinimaya_reshenie_o_doverii_neznakomomu_cheloveku_my_opiraemsya_na_predydushchiy_opyt
+  (region): which trust study, the "5 of 91" suspicion check.
+- https://www.psychology-online.net/articles/doc-10.html (region): Druzhinin on who experiment participants are.
+- https://www.alexandria.unisg.ch/handle/20.500.14171/78586: Herrmann et al. 2008 PDF, Samara and Minsk numbers.
+- https://www.academia.edu/32909519/User_centered_Game_Design (login): Pagulayan, Microsoft playtest methods.
+- https://www.brany.com/?p=7702: BRANY fee request form; only if a US commercial ethics board is chosen.
