@@ -225,8 +225,13 @@ function judge(words, stdin, ps) {
   if (p === 'cmd') { const c = a.findIndex((x) => /^\/[ck]$/i.test(x)); if (c >= 0) return refusal(a.slice(c + 1).join(' '), false); }
   if (p === 'invoke-expression' || p === 'iex') return refusal(a.join(' '), true);
   if (p === 'git') return git(a);
-  // the pull request into main stays open for CodeRabbit's reviews; merging it there would skip the push guard
-  if (p === 'gh' && ((a[0] === 'pr' && a[1] === 'merge') || (a[0] === 'api' && a.some((x) => /(^|\/)(merges|pulls\/\d+\/merge)$/.test(x))))) return WHY.merge;
+  // a merge on GitHub skips the push guard; gh's own options may stand before or between its command
+  // words (gh pr -R owner/repo merge), so they are set aside before the words are read
+  if (p === 'gh') {
+    const g = [];
+    for (let k = 0; k < a.length; k++) { if (/^(-R|--repo)$/.test(a[k])) k++; else if (!a[k].startsWith('-')) g.push(a[k]); }
+    if ((g[0] === 'pr' && g[1] === 'merge') || (g[0] === 'api' && g.some((x) => /(^|\/)(merges|pulls\/\d+\/merge)$/.test(x)))) return WHY.merge;
+  }
   // the smoke test and Playwright: only on GitHub
   if (/^(npm|pnpm|yarn|bun)$/.test(p)) {
     const x = a.findIndex((v) => /^(exec|x|dlx)$/.test(v));

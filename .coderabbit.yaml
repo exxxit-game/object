@@ -10,6 +10,7 @@ reviews:
   high_level_summary: true
   high_level_summary_in_walkthrough: true
   request_changes_workflow: false    # never approves anything by itself
+  commit_status: true                # the commit status "CodeRabbit" is what tools/advance-reviewed.mjs reads
   auto_review:
     enabled: true
     drafts: false

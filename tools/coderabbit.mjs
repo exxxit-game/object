@@ -16,13 +16,14 @@ const [OWNER, NAME] = REPO.split('/');
 const QUERY = `query { repository(owner: "${OWNER}", name: "${NAME}") {
   pullRequests(states: OPEN, baseRefName: "${BASE}", headRefName: "room-polish", first: 1) { nodes { number url headRefOid changedFiles
     commits(last: 1) { nodes { commit { status { contexts { context state description } } } } }
-    reviewThreads(first: 100) { nodes { isResolved isOutdated comments(first: 1) { nodes { author { login } path } } } } } } } }`;
+    reviewThreads(first: 100) { pageInfo { hasNextPage } nodes { isResolved isOutdated comments(first: 1) { nodes { author { login } path } } } } } } } }`;
 
 // what to say at the start of a session
 export function summarize(data) {
   const pr = data?.data?.repository?.pullRequests?.nodes?.[0];
   if (!pr) return { line: `CodeRabbit: no open pull request from room-polish into ${BASE}, so nothing is reviewed: open one (gh pr create --base ${BASE} --head room-polish)` };
   const open = pr.reviewThreads.nodes.filter((t) => !t.isResolved && !t.isOutdated && /^coderabbitai/.test(t.comments.nodes[0]?.author?.login || ''));
+  if (pr.reviewThreads.pageInfo?.hasNextPage) return { line: `CodeRabbit: more than 100 remark threads on ${pr.url}: read them on GitHub (gh pr view ${pr.number} --comments) before other work` };
   const status = (pr.commits.nodes[0]?.commit?.status?.contexts || []).find((c) => /^coderabbit/i.test(c.context));
   const skipped = status && /skipp/i.test(status.description || '');
   const read = status?.state === 'SUCCESS' && !skipped;

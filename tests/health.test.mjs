@@ -138,7 +138,8 @@ assert.equal(newest(['2.1.293', '2.1.295', '2.1.30', 'tmp']), '2.1.295', 'versio
 const thread = (login, isResolved = false, isOutdated = false, p = 'src/a.js') => ({ isResolved, isOutdated, comments: { nodes: [{ author: { login }, path: p }] } });
 const prData = (threads, { state = 'SUCCESS', description = 'Review completed', changedFiles = 12 } = {}) => ({ data: { repository: { pullRequests: { nodes: threads === null ? [] : [{
   number: 10, url: 'https://github.com/x/y/pull/10', headRefOid: 'abcdef1234567', changedFiles,
-  commits: { nodes: [{ commit: { status: { contexts: [{ context: 'CodeRabbit', state, description }] } } }] }, reviewThreads: { nodes: threads } }] } } } });
+  commits: { nodes: [{ commit: { status: { contexts: [{ context: 'CodeRabbit', state, description }] } } }] }, reviewThreads: { pageInfo: { hasNextPage: changedFiles === 999 }, nodes: threads } }] } } } });
+assert.match(summarizeRemarks(prData([], { changedFiles: 999 })).line, /more than 100 remark threads/, 'threads past the first page are not taken for none');
 const said = (...a) => summarizeRemarks(prData(...a));
 assert.match(said([thread('coderabbitai'), thread('coderabbitai', true), thread('coderabbitai', false, true), thread('exxxit-game')]).line, /^CodeRabbit: 1 open remark on .*pull\/10 \(src\/a\.js\)/, 'only its open, current remarks count');
 assert.match(said([], { state: 'PENDING', description: 'Review in progress' }).line, /not read yet/, 'a review still running is said as such');
