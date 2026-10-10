@@ -257,3 +257,10 @@ primary page. Meta pages through `metavr docs` where it had them. Prices are our
 - ElevenLabs plan: Starter ($6 a month, "Current plan" on his subscription page), which lists "Commercial License for
   Speech and Music"; the Free plan has it struck through. Lines made while the account was on Free carry no commercial
   licence. He took Starter from the start, before any line was recorded ("I took it at once, as soon as we started", his words, 10.10, our translation): every shipped line is covered, nothing to re-record.
+- Yandex SpeechKit prices (page text pasted by the owner from https://aistudio.yandex.ru/docs/en/speechkit/pricing ):
+  streaming and synchronous recognition "$0.0013327867" per "15-second segment of a single-channel audio file",
+  "Shorter segments are rounded up (1 second becomes 15 seconds)"; dollar prices apply to customers of "Iron Hive doo
+  Beograd (Serbia) or Direct Cursus Technology L.L.C. (Dubai)", rouble prices to "Yandex.Cloud LLC". By our arithmetic
+  20 short answers a room (each billed as 15 s) cost about $0.027 a player, about $270 for 10,000 players. The page
+  says nothing on whether audio is logged, and whether an owner in Ukraine may contract a Yandex company at all is
+  not checked: both before any choice of Yandex.
