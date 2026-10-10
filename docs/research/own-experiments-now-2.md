@@ -141,7 +141,9 @@ Paywalls (need access):
 - https://www.nature.com/articles/s41586-018-0637-6: Moral Machine Methods: ethics approval, how consent was taken.
 - https://hdl.handle.net/2027.42/92172: Wilson & Nisbett 1978, stocking table by position and shoppers' reasons.
 - https://doi.org/10.1509/jmkr.2005.42.4.383: Shiv et al. 2005, drink, prices, puzzles per condition, N.
-- https://doi.org/10.1007/978-3-319-21996-7_47: "Virtual Blindness" 2015, detection by immersion condition.
+- https://doi.org/10.1007/978-3-319-21996-7_47: "Virtual Blindness" 2015: the owner opened it; abstract and citation
+  agree with part 3b (38 people, 16 pairs, 8 justified, 4 swapped); the full text with detection per condition costs
+  EUR 29.95 at Springer, not bought: needed only if a choice-blindness room is chosen.
 - https://www.campaignlive.co.uk/article/case-study-deutsche-telekom-brought-its-brand-purpose-life-mobile-gaming/1403023
   (bot check): Sea Hero Quest's media plan (TV, film, online), budget if stated, downloads by date, "1 million in 16 days".
 - https://journals.sagepub.com/doi/10.1177/25152459211007467 (SAGE): Scheel 2021, how "positive result" was coded,
