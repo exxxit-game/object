@@ -249,3 +249,18 @@ rooms, every room's sounds re-made and re-heard.
 - Meta's Asset Library licence for a web game; Sony ASWG-R001 numbers (secondary only).
 - Not researched: photogrammetry tools, in-browser baking without Blender, Blender's size on disk,
   the GPU cost of our four point lights (needs the headset), troika's quality against our canvas at 1 m.
+
+## The Flowerbed case study read in full (the owner brought it, 10.10)
+https://developers.meta.com/horizon/blog/project-flowerbed-a-webxr-case-study/ , four points the sections above lack:
+- Text panels: Meta tried canvas textures and copied HTML for its UI and both "suffered from blurry panels due to how
+  pixel sampling in VR works"; it built every panel as 3D objects with three-mesh-ui instead. Our clipboard and signs are
+  canvas textures, so their sharpness in the headset is a check, not an assumption (with the quad layer of part 3).
+- Static objects: "we turn off Three's DefaultMatrixAutoUpdate ... so nothing updates by default", then update by hand
+  what moves: a CPU saving for a scene that is mostly still, as ours is.
+- Transparency: plants authored "fully opaque" rendered faster than fewer polygons with blended alpha ("the cost of
+  additional polygons is generally easier to deal with than the blended overdraw"); our door plaques are transparent.
+- Frame rate and tools: "Project Flowerbed's target framerate is 72 frames per second" via updateTargetFrameRate; the
+  OVR Metrics overlay "almost the entire time", remote Chrome DevTools for CPU, the RenderDoc Meta fork for GPU, and
+  Spector.js with the immersive web emulator to count WebGL calls on a desktop. Multiview came from Meta's own three.js
+  fork (its pull request to three.js, 24048), as part 1 found.
+Flowerbed itself lit with real-time PBR lights and a static shadow map; Meta's later guidance (part 2) is to bake.
