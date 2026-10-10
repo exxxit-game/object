@@ -10,6 +10,8 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
 - Connectors: off - Notion, Jam, Adobe, Figma, the GitHub connector, Claude in Chrome, computer use, Minutes,
   privacy-legal; kept - Claude Docs, the browser pane, Consensus, PubMed, reference lookup, PDF Tools, Dropbox,
   one Supabase. The superpowers plugin off («да» 10.10).
+- Google Drive replaces Dropbox as the cloud copy of the papers («мы выбираем Google Driver. Я его подключил»
+  10.10 08:12); the old Dropbox files stay where they are.
 - After the rebuild the process is frozen: it changes only on a health-check finding or his word, and a change
   replaces something («да», «согласен» 10.10).
 - CodeRabbit on its 14-day trial, kept and paid for only if it proves useful («14 дней нам хватит, чтобы...
