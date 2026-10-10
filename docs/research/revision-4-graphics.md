@@ -3,7 +3,7 @@
 The owner's question (10 Oct 2026): the smartest way, not the simplest, to build the pictures and sounds of
 about 10 floors of 9 rooms, decided now while one corridor and one room exist. Budget: Quest 2, Meta's
 "< 100" draw calls and "< 750K" triangles a frame; in our A-Frame 1.7.1 each eye draws on its own, so a view
-must stay under 50 (`QUEST2_VIEW`, tests/draw-calls.mjs). Measured worst views: corridor 66, room 97.
+must stay under 50 (then a desktop camera; now `QUEST2_FRAME`, both eyes in VR, tests/draw-calls.mjs). Measured worst views: corridor 66, room 97.
 Marks: **[read]** the page was opened and the quote is in it; **[code]** read in source code; **[estimate]** my
 arithmetic or judgement, not measured; **[unverified]** not confirmed. Meta pages read with `metavr docs fetch`
 (metavr 1.8.0.17.10) on 10 Oct unless said otherwise. Engine questions (multiview, IWSDK) are in

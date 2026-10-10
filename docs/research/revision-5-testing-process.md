@@ -28,7 +28,7 @@ Marks: **[read]** the page was opened and the quote is in it; **[code]** read in
   CRLF, then `npm run test:smoke` (Playwright Chromium with `--use-gl=swiftshader`, tests/smoke.mjs:19).
 - Draw calls in CI: `tests/draw-calls.mjs` renders the scene with a plain `THREE.PerspectiveCamera` from 24-ish
   spots ("looking every 45 degrees round") and reads `renderer.info.render.calls`: one desktop view, **not the XR
-  path** (no XR session, no second eye); `VIEW_BUDGET = { corridor: 70, room: 100 }`, `QUEST2_VIEW = 50`.
+  path** (no XR session, no second eye); a budget of 70 and 100 per view, 50 for Quest 2 (now the XR path: `FRAME_BUDGET`, `QUEST2_FRAME`).
 - Headset: `tools/quest-look.mjs perf` = 5 s of `requestAnimationFrame` deltas plus `renderer.info` over the
   DevTools socket (`adb forward tcp:9222 localabstract:chrome_devtools_remote`, tools/headset.mjs:56); it fails
   under 72 fps, at 100 calls or 750,000 triangles. No CPU/GPU split. `tools/quest-check.mjs` plays the corridor

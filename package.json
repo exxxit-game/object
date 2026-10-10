@@ -8,6 +8,7 @@
     "serve": "node tests/static-server.mjs"
   },
   "devDependencies": {
+    "iwer": "2.5.0",
     "playwright": "1.64.0"
   }
 }

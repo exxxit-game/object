@@ -44,7 +44,7 @@ Parts 3-5 (IWSDK, Babylon.js, the options, Meta's tools) and a side effect of th
   The page is engine-generic (its "see" links go to Unity, Unreal and Native performance pages, not to Web), and on those
   engines Quest builds render both eyes in one pass by default [unverified for this page; the native page
   `documentation/native/po-perf-opt-mobile` returned 45 bytes through metavr]. So reading "< 100" as "per frame with
-  both eyes drawn by one call each" is the strict reading our tests already use (QUEST2_VIEW = 50 per view); reading it
+  both eyes drawn by one call each" is the strict reading our tests already use (50 per view then; now `QUEST2_FRAME` = 100 a frame, both eyes counted in VR); reading it
   as one submission per object per frame (multiview) is the native reading. **Unverified which one Meta means.**
 - **Draw calls cost CPU, not GPU** [read] — "WebXR performance optimization workflow", 2026-07-21,
   https://developers.meta.com/horizon/documentation/web/webxr-perf-workflow/ — "draw calls can be CPU intensive";
