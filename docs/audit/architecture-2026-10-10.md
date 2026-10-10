@@ -12,8 +12,8 @@ The three changes it named, in order:
    exports mount(door) and unmount() and stands behind any door; the corridor is hidden once its door shuts; a room's
    light comes from its own lamps (today room 101 draws the corridor behind its shut door: about 66 of its draw calls
    in the board's last breakdown, at 164 before the controllers were merged; 144 now, each eye drawn on its own in the
-   emulator; and the corridor's lamp lights the room through the wall, the look the owner approved:
-   src/app/lobby/lobby.js). This is the board's internal item 3.
+   emulator; and the corridor's lamp lights the room through the wall, src/app/lobby/lobby.js, so the room's look
+   is shown to the owner again after the change). This is the board's internal item 3.
 2. Room 01's flow (say/ask, paging, phases, playtest) into src/app/; playtest and issue reports and the server
    functions for any room (today they accept only '01-control').
 3. One order of work: docs/target-architecture.md mirrors the board; the size rule reaches tools/ and tests/.
