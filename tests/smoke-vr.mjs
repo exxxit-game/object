@@ -60,10 +60,14 @@ export async function playVR(browser, url, { corridor, room }) {
     await page.goto(url);
     await page.waitForFunction(() => document.querySelector('a-scene')?.hasLoaded, null, { timeout: 30000 });
     await page.evaluate(() => document.querySelector('a-scene').enterVR());
+    // a failed start says what the page saw: its errors and how far the session got
     await page.waitForFunction(() => {
       const xr = document.querySelector('a-scene').renderer.xr;
       return xr.isPresenting && xr.getCamera().cameras.length === 2;
-    }, null, { timeout: 10000 });
+    }, null, { timeout: 20000 }).catch(async (e) => {
+      const seen = await page.evaluate(() => { const r = document.querySelector('a-scene').renderer; return { presenting: r.xr.isPresenting, cameras: r.xr.getCamera().cameras.length, frame: r.info.render.frame }; });
+      throw new Error(`VR did not start: ${JSON.stringify(seen)}; page errors: ${errors.join(' | ') || 'none'} (${e.message})`);
+    });
     // the sign starts on entering VR; then the clipboard waits on its hook
     await page.waitForFunction(() => document.querySelector('.sheet[data-take]'), null, { timeout: 60000 });
     const corridorCalls = await page.evaluate(drawCalls, corridor);
