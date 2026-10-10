@@ -1,9 +1,9 @@
 # The owner's own experiment ideas
 
-His words in English (the Russian is on the board, docs/board.md, and in his message log). A room comes
-only from a published experiment read in full (CLAUDE.md, "Rooms and code"), so each idea waits here until
-its closest published experiments are found and read; our own new studies are being researched
-(docs/research/own-experiments-now.md).
+His words in English (the Russian is on the board, docs/board.md, and in his message log). He wants our own
+new experiments run live with players, besides the re-created ones (docs/owner-decisions.md). Each is built on
+the closest published studies, read in full; the research is done (docs/research/own-experiments-now.md: ten
+candidates, this one among them) and the candidates wait for his pick.
 
 ## Two phones, two prices (10.10)
 "Two phones lie on a table with a price sign beside each: one a very expensive phone, ten thousand
