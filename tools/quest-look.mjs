@@ -166,9 +166,14 @@ if (cmd === 'reload') {
   console.log(JSON.stringify(await run(arg), null, 1));
 } else if (cmd === 'say') {
   // The owner's next step, inside the headset, so he does not take it off to read the chat (his
-  // practice, docs/owner-decisions.md): the input probe's panel as it was reviewed (one line on a
-  // panel 1 m ahead of where he looks, a little under eye level, facing him: tools/xr-probe-input.html,
-  // docs/audit/probe-review.md), placed again before him at each step; "say off" takes it away.
+  // practice, docs/owner-decisions.md). The input probe's panel and type as they were reviewed
+  // (tools/xr-probe-input.html, docs/audit/probe-review.md), cut to its two lines, and placed as Meta
+  // places captions: below the view he is looking at, not over it ("at the top or bottom of their
+  // 40-degree field of view", developers.meta.com/horizon/design/accessibility), here 15 degrees under
+  // the horizon; 1 m away, or nearer when a wall is closer, never under 0.5 m (Meta, design/display),
+  // scaled with its distance so the text keeps its size to the eye. Every new step buzzes both
+  // controllers, as the probe does, so he knows one came ("Provide sounds and haptic feedback").
+  // "say off" takes it away.
   const [main, small] = [String(arg || ''), process.argv[4] || ''];
   const v = await run(`new Promise((resolve) => {
     const s = document.querySelector('a-scene'), main = ${JSON.stringify(main)}, small = ${JSON.stringify(small)};
@@ -177,7 +182,7 @@ if (cmd === 'reload') {
     if (!p) {
       p = document.createElement('a-entity');
       p.id = 'ownerNote';
-      p.setAttribute('panel', 'w: 1; h: 0.54; px: 1432; ref: 1024; bg: #1c1c1c');
+      p.setAttribute('panel', 'w: 1; h: 0.34; px: 1432; ref: 1024; bg: #1c1c1c');
       s.appendChild(p);
     }
     const show = () => {
@@ -189,11 +194,20 @@ if (cmd === 'reload') {
       s.camera.getWorldPosition(at); s.camera.getWorldDirection(dir);
       dir.y = 0;
       if (dir.lengthSq() < 1e-4) dir.set(0, 0, -1);
-      dir.normalize();
-      p.object3D.position.set(at.x + dir.x, at.y - 0.1, at.z + dir.z);
-      p.object3D.lookAt(at.x, at.y - 0.1, at.z);
+      dir.normalize().multiplyScalar(Math.cos(Math.PI / 12)).setY(-Math.sin(Math.PI / 12));
+      p.object3D.visible = false;
+      const near = new THREE.Raycaster(at, dir, 0.05, 1.1).intersectObjects(s.object3D.children, true)
+        .find((h) => h.object.isMesh && (() => { for (let o = h.object; o; o = o.parent) if (!o.visible) return false; return true; })());
+      const d = Math.max(0.5, Math.min(1, near ? near.distance - 0.1 : 1));
+      p.object3D.position.copy(at).addScaledVector(dir, d);
+      p.object3D.scale.setScalar(d);
+      p.object3D.lookAt(at);
       p.object3D.visible = true;
-      resolve({ shown: main, vr: s.is('vr-mode') });
+      for (const src of (s.xrSession && s.xrSession.inputSources) || []) {
+        const h = src.gamepad && src.gamepad.hapticActuators && src.gamepad.hapticActuators[0];
+        if (h && h.pulse) h.pulse(0.6, 120);
+      }
+      resolve({ shown: main, vr: s.is('vr-mode'), metres: +d.toFixed(2) });
     };
     // a new entity's panel draws once A-Frame has run its init (its canvas exists), a frame or two later
     const ready = (n) => (p.components.panel && p.components.panel.c ? show() : n > 0 ? setTimeout(() => ready(n - 1), 50) : resolve({ error: 'the panel did not start' }));
