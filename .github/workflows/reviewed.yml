@@ -1,0 +1,37 @@
+name: reviewed
+
+# The branch `reviewed` is CodeRabbit's baseline: the pull request from room-polish into it shows only
+# what CodeRabbit has not read yet. This robot moves it up once CodeRabbit has read a push and none of its
+# remarks is open (tools/advance-reviewed.mjs); the session under review never moves it.
+on:
+  push:
+    branches: [room-polish]
+  pull_request_review:
+    types: [submitted]
+  pull_request_review_thread:
+    types: [resolved]
+  workflow_dispatch:
+
+permissions:
+  contents: write        # moves the branch reviewed (never main: the ruleset guards it)
+  pull-requests: read
+  statuses: read
+
+concurrency:
+  group: reviewed
+  cancel-in-progress: false
+
+jobs:
+  advance:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event.pull_request.base.ref == 'reviewed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: room-polish
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node tools/advance-reviewed.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}

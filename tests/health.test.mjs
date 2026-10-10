@@ -12,6 +12,7 @@ import {
   parseAdbDevices, headsetInfo, format, MIN_WORDS
 } from '../tools/health.mjs';
 import { summarize as summarizeRemarks } from '../tools/coderabbit.mjs';
+import { target as advanceTo } from '../tools/advance-reviewed.mjs';
 import { hooksProblems, memoryIndexProblems, pluginProblems, PLUGINS_ON, atLeast, newest } from '../tools/health-setup.mjs';
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'health-'));
@@ -131,19 +132,23 @@ assert.deepEqual(pluginProblems({ ...Object.fromEntries(PLUGINS_ON.map((p) => [p
   ['pr-review-toolkit@claude-plugins-official is on, though not decided'], 'a plugin he did not decide is caught; one switched off is not');
 assert.ok(atLeast('2.1.295', '2.1.294') && atLeast('2.1.294', '2.1.294') && !atLeast('2.1.293', '2.1.294') && atLeast('2.2.0', '2.1.294'));
 assert.equal(newest(['2.1.293', '2.1.295', '2.1.30', 'tmp']), '2.1.295', 'versions compared as numbers, not as text');
-// CodeRabbit's remarks read at session start (tools/coderabbit.mjs): only its open ones; the baseline it
-// compares against moves up only when the newest push was read and nothing is open
+// CodeRabbit's remarks read at session start (tools/coderabbit.mjs): only its open ones; its baseline is
+// moved by the robot on GitHub (tools/advance-reviewed.mjs) only past commits it read, with nothing open,
+// and never onto the head, which would close the review window as merged
 const thread = (login, isResolved = false, isOutdated = false, p = 'src/a.js') => ({ isResolved, isOutdated, comments: { nodes: [{ author: { login }, path: p }] } });
 const prData = (threads, { state = 'SUCCESS', description = 'Review completed', changedFiles = 12 } = {}) => ({ data: { repository: { pullRequests: { nodes: threads === null ? [] : [{
   number: 10, url: 'https://github.com/x/y/pull/10', headRefOid: 'abcdef1234567', changedFiles,
   commits: { nodes: [{ commit: { status: { contexts: [{ context: 'CodeRabbit', state, description }] } } }] }, reviewThreads: { nodes: threads } }] } } } });
 const said = (...a) => summarizeRemarks(prData(...a));
 assert.match(said([thread('coderabbitai'), thread('coderabbitai', true), thread('coderabbitai', false, true), thread('exxxit-game')]).line, /^CodeRabbit: 1 open remark on .*pull\/10 \(src\/a\.js\)/, 'only its open, current remarks count');
-assert.equal(said([thread('coderabbitai')]).advance, null, 'an open remark keeps the baseline where it is');
-assert.equal(said([]).advance, 'abcdef1234567', 'the newest push read with nothing open moves the baseline up');
-assert.equal(said([], { state: 'PENDING', description: 'Review in progress' }).advance, null, 'a review still running moves nothing');
-const skipped = said([], { description: 'Review skipped: 428 files exceed the limit of 300', changedFiles: 428 });
-assert.ok(skipped.advance === null && /428 files against its limit of 300/.test(skipped.line), 'a skipped review is said with its reason and moves nothing');
+assert.match(said([], { state: 'PENDING', description: 'Review in progress' }).line, /not read yet/, 'a review still running is said as such');
+assert.match(said([], { description: 'Review skipped: 428 files exceed the limit of 300', changedFiles: 428 }).line, /428 files against its limit of 300/, 'a skipped review is said with its reason');
+const read = (s) => s !== 'c4';
+assert.equal(advanceTo(['c1', 'c2', 'c3'], read, 0), 'c2', 'the head read: the baseline stops one short, so the pull request stays open');
+assert.equal(advanceTo(['c1', 'c2', 'c3', 'c4'], read, 0), 'c3', 'the head not read yet: the baseline goes to the newest commit read');
+assert.equal(advanceTo(['c1', 'c2', 'c3'], read, 1), null, 'an open remark keeps the baseline where it is');
+assert.equal(advanceTo(['c4'], read, 0), null, 'nothing read: nothing moves');
+assert.equal(advanceTo(['c1'], read, 0), null, 'the one commit is the head: nothing moves');
 assert.match(summarizeRemarks(prData(null)).line, /no open pull request from room-polish into reviewed/, 'a missing pull request is said, not passed over');
 // the project switches off what loads into every session though the work never uses it
 const projectSettings = JSON.parse(fs.readFileSync('.claude/settings.json', 'utf8'));
