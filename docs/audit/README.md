@@ -8,6 +8,7 @@ when it was written (their file:line may have moved since):
   its buttons; the flow, the engine and the guards), about 90 findings.
 - `inventory.md`: every tool, agent, doc, branch and setting, kept, updated, removed or to start using.
 - `architecture.md`: the code and docs against ARCHITECTURE.md and the target architecture.
+- `architecture-2026-10-10.md`: the same after the large change of 10.10 (A-Frame 1.8, multiview, the VR smoke run): verdict and three changes.
 - `plan-check.md`: the plan doc checked twice by the fact-checker, claim by claim, and the causes.
 - `premortem.md`: the plan assumed failed in October 2027 and asked why, by two analysts on two lenses; each cause names where its guard goes.
 - `process-rebuild.md`: the whole process audited at once (rules, machinery, knowledge, connectors, the owner's pain) and rebuilt by one plan; it replaced the earlier rules review and CLAUDE.md draft.
