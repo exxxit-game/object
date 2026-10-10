@@ -105,3 +105,7 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   17:05); chosen to work even when the trick is known; education licences; university partners.
 - Playtest: 5–10 testers from his Telegram VR community; 5 approved questions; releases only on his word.
 - Payouts go to Ukraine («украина» 10.10).
+- From the tool revision (https://claude.ai/artifact/ShHre3dd8yNXUJcCnXn65D), «нужно всё вносить и исправлять, улучшать»
+  and «да» to each (10.10): Blender and the compression tools on the laptop; the live site published by GitHub Actions
+  (only the game's files public); one migration of the live database now (date only, a random key, the consent
+  version, a schema per room, a rate limit); Meta's headset emulator (IWER) in the GitHub test.
