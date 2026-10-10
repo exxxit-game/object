@@ -22,15 +22,16 @@ export function paintExtinguisherLabel(el) {
   x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = INK;
   x.font = `700 46px ${FONT}`; x.fillText(t.agent, W / 2, 94);
   x.font = `600 24px ${FONT}`; x.fillText(t.name, W / 2, 168);
-  // how to operate, white on the blue band
-  x.fillStyle = BLUE; x.fillRect(12, 196, W - 24, 150);
+  // how to operate, white on the blue band: 14% of the label's height on the 1970 one (photo 4), 18% here,
+  // as tight as its four lines allow at the size they are read at (readability first: docs/owner-decisions.md)
+  x.fillStyle = BLUE; x.fillRect(12, 196, W - 24, 124);
   x.fillStyle = '#ffffff';
-  x.font = `700 22px ${FONT}`; x.fillText(t.operate, W / 2, 222);
-  x.font = `700 25px ${FONT}`;
-  t.steps.forEach((s, i) => x.fillText(s, W / 2, 258 + i * 30));
+  x.font = `700 20px ${FONT}`; x.fillText(t.operate, W / 2, 214);
+  x.font = `700 24px ${FONT}`;
+  t.steps.forEach((s, i) => x.fillText(s, W / 2, 243 + i * 27));
   // the small print
   x.fillStyle = GREY; x.textAlign = 'left'; x.font = `500 17px ${FONT}`;
-  t.small.forEach((s, i) => x.fillText(s, 34, 380 + i * 30));
+  t.small.forEach((s, i) => x.fillText(s, 34, 352 + i * 30));
   const tex = new AFRAME.THREE.CanvasTexture(c);
   tex.colorSpace = AFRAME.THREE.SRGBColorSpace;
   tex.anisotropy = 8;
@@ -40,9 +41,9 @@ export function paintExtinguisherLabel(el) {
   mesh.material.needsUpdate = true;
 }
 
-// The gauge's dial, as on the 1970 WS-900 (the listing's photos 5 and 8): dark blue; a narrow red band
-// round the rim from the top wedge's one side round the bottom to its other, RECHARGE along it on the
-// left and OVERCHARGED on the right, a small cream tab on it at the bottom; at the top a pale cream
+// The gauge's dial, as on the 1970 WS-900 (the listing's photos 5 and 8): dark blue; a red band near
+// the rim from the top wedge's one side round the bottom to its other, a gold ring outside it,
+// RECHARGE along the band on the left and OVERCHARGED on the right, a small cream tab on it at the bottom; at the top a pale cream
 // wedge from the rim to the hub (the right range) with RANGE and 100 in it; 0 on the left and 200 on
 // the right, each with a dot; a small cream pointer at the rim upper left; a brass hub; no needle
 // shows. Drawn on the dial's disc (extinguisher.js, #extGauge).
@@ -50,8 +51,9 @@ const DIAL = 256, NAVY = '#1d2f5c', RED = '#c0242a', CREAM = '#ece3b2', WHITE = 
 // the scale's angle (canvas angles: 0 to the right, clockwise) for a reading: 0 at the left, 100 at the
 // top, 200 at the right
 const reading = (v) => Math.PI + (v / 200) * Math.PI;
-// the band's inner and outer radius, and the wedge's edges as readings
-const BAND = [0.8, 0.93], WEDGE = [80, 120];
+// the band's inner and outer radius (about a fifth of the radius wide, photos 5 and 8), a gold ring
+// round it to the rim, and the wedge's edges as readings
+const BAND = [0.74, 0.92], WEDGE = [80, 120], GOLD = '#a8862c';
 function along(x, text, m, r, from, to) {
   const chars = [...text], step = (to - from) / chars.length;
   chars.forEach((ch, i) => {
@@ -63,7 +65,8 @@ export function paintGauge(el) {
   const t = LOBBY_T.extinguisher.gauge, c = document.createElement('canvas');
   c.width = c.height = DIAL;
   const x = c.getContext('2d'), m = DIAL / 2;
-  x.fillStyle = NAVY; x.beginPath(); x.arc(m, m, m, 0, Math.PI * 2); x.fill();
+  x.fillStyle = GOLD; x.beginPath(); x.arc(m, m, m, 0, Math.PI * 2); x.fill();
+  x.fillStyle = NAVY; x.beginPath(); x.arc(m, m, BAND[1] * m, 0, Math.PI * 2); x.fill();
   const [inner, outer] = BAND.map((k) => k * m), mid = (inner + outer) / 2, at = (a, r) => [m + Math.cos(a) * r, m + Math.sin(a) * r];
   x.lineWidth = outer - inner; x.strokeStyle = RED;
   x.beginPath(); x.arc(m, m, mid, reading(WEDGE[1]), reading(WEDGE[0]) + 2 * Math.PI); x.stroke();

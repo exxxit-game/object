@@ -142,13 +142,18 @@ assert.equal(held.size, parts.length, `extinguisher parts hanging in the air: ${
 // neck or the valve (their boxes meet, overlapping by 1 mm at most; the hose's box is only its
 // path's bounds, so it is left out)
 const hanger = tagsOf.map((t, i) => /class="hanger"/.test(t) ? i : -1).filter((i) => i >= 0);
-// the hex collar rests on the fork's prongs: across x it reaches over both their inner edges by more
-// than the play above, which would pass a collar slipping through the slot
-const collar = parts[tagsOf.findIndex((t) => / segments-radial="6"/.test(t))];
-const [cx, cz] = [(collar[0][0] + collar[0][1]) / 2, (collar[2][0] + collar[2][1]) / 2];
-const prongs = hanger.map((i) => parts[i]).filter((b) => b[2][0] <= cz && cz <= b[2][1] && b[1][1] <= collar[1][0] + 0.001);
-const inner = [Math.max(...prongs.filter((b) => b[0][1] < cx).map((b) => b[0][1])), Math.min(...prongs.filter((b) => b[0][0] > cx).map((b) => b[0][0]))];
-assert.ok(collar[0][0] < inner[0] - 0.002 && collar[0][1] > inner[1] + 0.002, `the collar (${(collar[0][1] - cx).toFixed(4)} m half across) rests on the prongs (inner edges ${(inner[1] - cx).toFixed(4)} m)`);
+// it hangs by the loop on its back (photo 16): the loop's far bar, the one nearest the wall, lies on
+// the hook's bottom, and the hook's lip rises inside the loop, clear of the shell and of the far bar,
+// higher than the bar, so the loop cannot slide off it
+const lug = tagsOf.map((t, i) => (/class="lug"/.test(t) ? parts[i] : null)).filter(Boolean);
+assert.ok(lug.length >= 3, 'the hanging loop is marked class="lug"');
+const farBar = lug.reduce((a, b) => (b[0][1] - b[0][0] > a[0][1] - a[0][0] ? b : a));   // the one across the loop
+const hook = hanger.map((i) => parts[i]);
+const across = (a, b, i) => Math.min(a[i][1], b[i][1]) - Math.max(a[i][0], b[i][0]);
+assert.ok(hook.some((h) => Math.abs(h[1][1] - farBar[1][0]) <= 0.001 && across(h, farBar, 0) > 0.01 && across(h, farBar, 2) > 0.003), 'the loop\'s far bar lies on the hook\'s bottom');
+const shellBack = Math.max(...parts.filter((b) => b[1][1] - b[1][0] > 0.3).map((b) => b[2][1]));
+const lip = hook.reduce((a, b) => (b[2][1] < a[2][1] ? b : a));   // the part farthest from the wall
+assert.ok(lip[2][0] > shellBack + 0.001 && lip[2][1] < farBar[2][0] - 0.001 && lip[1][1] > farBar[1][1] + 0.003, `the hook's lip rises inside the loop (z ${lip[2][0].toFixed(4)}–${lip[2][1].toFixed(4)} between the shell ${shellBack.toFixed(4)} and the far bar ${farBar[2][0].toFixed(4)})`);
 const overlap = (a, b) => [0, 1, 2].map((i) => Math.min(a[i][1], b[i][1]) - Math.max(a[i][0], b[i][0]));
 // a part cut from its side view (an outline) is tested by its outline's height over the other box's
 // width, not by its whole box: a curved handle's box takes in the air under its curve

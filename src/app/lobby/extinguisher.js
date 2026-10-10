@@ -24,19 +24,25 @@ const BRASS = 'material="color: #b08d4a; metalness: 1; roughness: .3"';
 // 14, 18; the black slotted tube of photo 17 is the siphon inside); the label round the front
 // (extinguisher-label.js). How thick the lever and handle are across is not in a photo: our
 // estimate. Every part touches the one it is fixed to.
-// The hanger's fork, in metres from the shell's axis: its top at the neck's top under the collar
-// (y), its prongs from just behind the neck (back) to past the collar's front (front), outer edges at
-// out, each prong wide, inner edges clear of the neck (radius 0.022) by 1 mm; each prong's last tip
-// millimetres bent up by rise, clear of the collar.
+// It hangs as 2.5 gal water units did: a flat J hook on the wall (Amerex's bracket chart gives its
+// 2.5 gal water unit the flat hook 01007; Sylprotec's hook for "2.5 gal water" units, 1.5 x 3 x 3 in,
+// goes up through a slotted lug on the shell's top back) through a rectangular steel loop standing out
+// from the back of the shell at the foot of its dome (photo 16). The loop: w across, d out from the
+// shell, its bars bar wide and t thick, y its middle. The hook: a strap w wide and h tall on the wall,
+// bent out under the loop's far bar and up inside the loop as its lip, t thick; how big the WS-900's
+// own loop and bracket (MB-100, photos 4 and 13) were no source gives: sized to the photo and to
+// Sylprotec's hook.
 const EXT = { r: 0.089, foot: 0.853, footH: 0.018, shell: 0.445, dome: 0.073, neck: 0.012, collar: 0.019, body: 0.043 };
 const EXT_Y = (() => {
   const shellTop = EXT.foot + EXT.footH + EXT.shell, domeTop = shellTop + EXT.dome;
   return { shellTop, domeTop, neckTop: domeTop + EXT.neck, collarTop: domeTop + EXT.neck + EXT.collar, bodyTop: domeTop + EXT.neck + EXT.collar + EXT.body };
 })();
-const FORK = { t: 0.006, y: EXT_Y.neckTop - 0.003, back: 0.024, front: 0.03, out: 0.031, prong: 0.008, tip: 0.004, rise: 0.008 };
-// the nozzle's clip, a square steel box on the shell's left side (+x): sticking out d, h tall, its
-// top 8.5 cm over the bottom (photos 7, 14); the hose's tip runs down its middle, x from the axis
-const CLIP = { d: 0.015, h: 0.025, top: EXT.foot + 0.085, x: EXT.r + 0.0075 };
+const LUG = { w: 0.046, d: 0.022, bar: 0.006, t: 0.004, y: EXT_Y.shellTop + 0.008 };
+const HOOK = { w: 0.032, h: 0.076, t: 0.003, lip: 0.016 };
+// the nozzle's clip, a square steel box on the shell's left side (+x) across the seam 5 cm over the
+// bottom, from 4.5 to 7 cm (photos 3, 7, 18): sticking out d, h tall; the hose's tip runs down its
+// middle, x from the axis, and ends inside it
+const CLIP = { d: 0.02, h: 0.025, top: EXT.foot + 0.07, x: EXT.r + 0.011 };
 // the lever and the handle, side views in metres from the valve's axis and its top, read off photos
 // 6 and 9: the lever pivots on the valve's cast ears behind its top and lies on the top (photo 5),
 // falling to its turned-down thumb end; the handle leaves the valve's side lower and curves down to
@@ -46,42 +52,45 @@ const HANDLE = '-0.014 -0.012, -0.050 -0.016, -0.088 -0.027, -0.111 -0.043, -0.1
 export function extinguisher(x, wall) {
   const z = wall - 0.03 - EXT.r, Y = EXT_Y, f = (v) => v.toFixed(4);
   const gaugeY = Y.bodyTop - 0.021, gaugeZ = z - 0.019;
+  // the loop on the dome's back: where the dome's surface is at its height, its far bar, the hook's lip
+  // in the middle of its opening, and the hook's bottom just under the loop
+  const back = z + EXT.r * Math.sqrt(1 - ((LUG.y - Y.shellTop) / EXT.dome) ** 2), far = back + LUG.d - LUG.bar / 2;
+  const lipZ = back + (LUG.d - LUG.bar) / 2, hookY = LUG.y - LUG.t / 2 - HOOK.t;
   return `
     <a-entity class="extinguisher" data-dynamic merge-static reflect-env>
-      <!-- the wall hanger, as such brackets are made: a steel strap screwed to the wall, its top bent
-           out into a fork that takes the neck between its prongs under the collar; the collar rests
-           on the prongs and their turned-up tips keep it from sliding off, so the extinguisher lifts
-           straight off it -->
-      <a-box class="hanger" decal position="${x} 1.33 ${wall - 0.0015}" width="0.035" height="0.14" depth="0.003" color="#2b2b2b"></a-box>
-      <a-cylinder position="${x} 1.38 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" decal="layer: 2" ${METAL}></a-cylinder>
-      <a-cylinder position="${x} 1.275 ${wall - 0.004}" radius="0.005" height="0.003" rotation="90 0 0" decal="layer: 2" ${METAL}></a-cylinder>
-      <a-box class="hanger" position="${x} ${f(FORK.y)} ${f((wall + z + FORK.back) / 2)}" width="${2 * FORK.out}" height="${FORK.t}" depth="${f(wall - z - FORK.back)}" color="#2b2b2b"></a-box>
-      ${[-1, 1].map((s) => `<a-box class="hanger" position="${f(x + s * (FORK.out - FORK.prong / 2))} ${f(FORK.y)} ${f(z + (FORK.back - FORK.front) / 2)}" width="${FORK.prong}" height="${FORK.t}" depth="${FORK.back + FORK.front}" color="#2b2b2b"></a-box>
-      <a-box class="hanger" position="${f(x + s * (FORK.out - FORK.prong / 2))} ${f(FORK.y + FORK.rise / 2)} ${f(z - FORK.front + FORK.tip / 2)}" width="${FORK.prong}" height="${FORK.t + FORK.rise}" depth="${FORK.tip}" color="#2b2b2b"></a-box>`).join('')}
+      <!-- the wall hook: a steel strap screwed to the wall, bent out under the loop's far bar and up
+           inside the loop as its lip, so the extinguisher lifts off it -->
+      <a-box class="hanger" decal position="${x} ${f(hookY + HOOK.h / 2)} ${f(wall - HOOK.t / 2)}" width="${HOOK.w}" height="${HOOK.h}" depth="${HOOK.t}" color="#2b2b2b"></a-box>
+      ${[0.025, 0.06].map((dy) => `<a-cylinder position="${x} ${f(hookY + dy)} ${f(wall - 0.004)}" radius="0.005" height="0.003" rotation="90 0 0" decal="layer: 2" ${METAL}></a-cylinder>`).join('')}
+      <a-box class="hanger" position="${x} ${f(hookY + HOOK.t / 2)} ${f((lipZ - HOOK.t / 2 + wall - HOOK.t) / 2)}" width="${HOOK.w}" height="${HOOK.t}" depth="${f(wall - HOOK.t - lipZ + HOOK.t / 2)}" color="#2b2b2b"></a-box>
+      <a-box class="hanger" position="${x} ${f(hookY + HOOK.lip / 2)} ${f(lipZ)}" width="${HOOK.w}" height="${HOOK.lip}" depth="${HOOK.t}" color="#2b2b2b"></a-box>
       <!-- the shell: foot ring, straight shell, the seam bands at its foot and its top, the high round top -->
       <a-cylinder position="${x} ${f(EXT.foot + EXT.footH / 2)} ${z}" radius="${EXT.r + 0.0005}" height="${EXT.footH}" ${STEEL}></a-cylinder>
       <a-cylinder position="${x} ${f(EXT.foot + EXT.footH + EXT.shell / 2)} ${z}" radius="${EXT.r}" height="${EXT.shell}" ${STEEL}></a-cylinder>
       <a-cylinder position="${x} ${f(EXT.foot + 0.05)} ${z}" radius="${EXT.r + 0.0008}" height="0.003" ${STEEL}></a-cylinder>
       <a-cylinder position="${x} ${f(Y.shellTop)} ${z}" radius="${EXT.r + 0.0015}" height="0.006" ${STEEL}></a-cylinder>
       <a-sphere position="${x} ${f(Y.shellTop)} ${z}" radius="${EXT.r}" scale="1 ${f(EXT.dome / EXT.r)} 1" ${STEEL}></a-sphere>
+      <!-- the hanging loop on the dome's back (photo 16): two side bars from the shell and the far bar -->
+      ${[-1, 1].map((s) => `<a-box class="lug" position="${f(x + s * (LUG.w - LUG.bar) / 2)} ${f(LUG.y)} ${f(back + (LUG.d - 0.003) / 2)}" width="${LUG.bar}" height="${LUG.t}" depth="${LUG.d + 0.003}" ${STEEL}></a-box>`).join('')}
+      <a-box class="lug" position="${x} ${f(LUG.y)} ${f(far)}" width="${LUG.w}" height="${LUG.t}" depth="${LUG.bar}" ${STEEL}></a-box>
       <!-- the label, as on the 1972 model: about 98 degrees round the front (painted by
            extinguisher-label.js) -->
       <a-cylinder id="extLabel" data-dynamic decal position="${x} 1.121 ${z}" radius="${EXT.r}" height="0.254" open-ended="true" theta-start="131" theta-length="98" material="roughness: 0.6"></a-cylinder>
-      <!-- the neck, the hex collar, the cast valve body; the collar turned so two corners reach out
-           over the fork's prongs (three.js puts a corner at +z, its flats would slip between them) -->
+      <!-- the neck, the hex collar, the cast valve body -->
       <a-cylinder position="${x} ${f(Y.domeTop + EXT.neck / 2 - 0.004)} ${z}" radius="0.022" height="${EXT.neck + 0.008}" ${STEEL}></a-cylinder>
-      <a-cylinder position="${x} ${f(Y.neckTop + EXT.collar / 2)} ${z}" radius="0.026" height="${EXT.collar}" segments-radial="6" rotation="0 30 0" ${STEEL}></a-cylinder>
+      <a-cylinder position="${x} ${f(Y.neckTop + EXT.collar / 2)} ${z}" radius="0.026" height="${EXT.collar}" segments-radial="6" ${STEEL}></a-cylinder>
       <a-entity position="${x} ${f(Y.collarTop)} ${z}" lathe="points: 0 0, 0.019 0, 0.019 0.03, 0.017 0.038, 0.012 0.043, 0 0.043; ${CHROME_SHAPE}"></a-entity>
       <!-- the gauge on the valve's front: a chrome bezel, its raised lip round the dial set back in it
            (photos 5, 8) -->
       <a-cylinder position="${x} ${f(gaugeY)} ${f(gaugeZ - 0.005)}" radius="0.0235" height="0.010" rotation="90 0 0" ${STEEL}></a-cylinder>
-      <a-torus position="${x} ${f(gaugeY)} ${f(gaugeZ - 0.0125)}" radius="0.0215" radius-tubular="0.0011" segments-tubular="48" ${STEEL}></a-torus>
+      <a-torus position="${x} ${f(gaugeY)} ${f(gaugeZ - 0.0121)}" radius="0.0215" radius-tubular="0.0011" segments-tubular="48" ${STEEL}></a-torus>
       <a-circle id="extGauge" data-dynamic decal position="${x} ${f(gaugeY)} ${f(gaugeZ - 0.0101)}" radius="0.0205" rotation="0 180 0" segments="48" material="roughness: 0.5"></a-circle>
-      <!-- the squeeze lever lying on the valve's top, its pin through the valve's two cast ears behind
-           it, a rivet head showing on each (photos 5, 9); the carry handle under it -->
+      <!-- the squeeze lever lying on the valve's top, its head a cap over the top whose side walls come
+           down the valve's sides, the pivot's rivet through them behind (photos 5, 9); the carry handle
+           under it -->
       <a-entity position="${x} ${f(Y.bodyTop)} ${z}" outline="points: ${LEVER}; depth: 0.016; bevel: 0.002; ${CHROME_SHAPE}"></a-entity>
       <a-entity position="${x} ${f(Y.bodyTop)} ${z}" outline="points: ${HANDLE}; depth: 0.014; bevel: 0.002; ${CHROME_SHAPE}"></a-entity>
-      ${[-1, 1].map((s) => `<a-box position="${f(x + 0.0145)} ${f(Y.bodyTop - 0.004)} ${f(z + s * 0.01)}" width="0.013" height="0.016" depth="0.003" ${STEEL}></a-box>`).join('')}
+      ${[-1, 1].map((s) => `<a-box position="${f(x + 0.005)} ${f(Y.bodyTop - 0.001)} ${f(z + s * 0.0095)}" width="0.034" height="0.018" depth="0.003" ${STEEL}></a-box>`).join('')}
       <a-cylinder position="${x + 0.016} ${f(Y.bodyTop + 0.002)} ${z}" radius="0.0035" height="0.026" rotation="90 0 0" ${STEEL}></a-cylinder>
       <!-- on the valve's back: the ring pin through its lugs and the ring hanging from it, the fill
            valve's knurled brass cap on its hex fitting below, the ring's chain to it; the ring's wire
@@ -92,12 +101,13 @@ export function extinguisher(x, wall) {
       <a-cylinder position="${f(x - 0.002)} ${f(Y.collarTop + 0.010)} ${f(z + 0.0285)}" radius="0.0045" height="0.010" rotation="90 0 0" ${BRASS}></a-cylinder>
       <a-entity cable="radius: 0.0007; color: #9a9ca0; points: ${f(x - 0.013)} ${f(Y.collarTop + 0.0132)} ${f(z + 0.021)}, ${f(x - 0.008)} ${f(Y.collarTop + 0.006)} ${f(z + 0.026)}, ${f(x - 0.002)} ${f(Y.collarTop + 0.0055)} ${f(z + 0.03)}"></a-entity>
       <!-- the hose, 12 mm thick: its coupling on the valve's left, a brass ferrule fatter than the hose
-           at each end (photos 5, 9, 14), down the left side to its short brass tip in the steel clip -->
+           at each end (photos 5, 9, 14), down the left side 1.6-1.9 cm off the shell (photos 3, 18)
+           to its short brass tip, ending inside the steel clip -->
       <a-cylinder position="${f(x + 0.025)} ${f(Y.collarTop + 0.022)} ${z}" radius="0.008" height="0.012" rotation="0 0 90" ${STEEL}></a-cylinder>
       <a-cylinder position="${f(x + 0.039)} ${f(Y.collarTop + 0.022)} ${z}" radius="0.0075" height="0.018" rotation="0 0 90" ${BRASS}></a-cylinder>
-      <a-entity cable="radius: 0.006; color: #4f3f31; points: ${f(x + 0.047)} ${f(Y.collarTop + 0.022)} ${z}, ${f(x + 0.075)} ${f(Y.collarTop + 0.010)} ${f(z - 0.002)}, ${f(x + 0.105)} 1.36 ${f(z - 0.004)}, ${f(x + 0.104)} 1.12 ${f(z - 0.003)}, ${f(x + 0.0975)} 1.0 ${f(z - 0.001)}, ${f(x + CLIP.x)} ${f(CLIP.top + 0.014)} ${z}"></a-entity>
+      <a-entity cable="radius: 0.006; color: #4f3f31; points: ${f(x + 0.047)} ${f(Y.collarTop + 0.022)} ${z}, ${f(x + 0.08)} ${f(Y.collarTop + 0.008)} ${f(z - 0.002)}, ${f(x + 0.112)} 1.36 ${f(z - 0.003)}, ${f(x + 0.113)} 1.12 ${f(z - 0.002)}, ${f(x + 0.108)} 1.0 ${f(z - 0.001)}, ${f(x + CLIP.x)} ${f(CLIP.top + 0.014)} ${z}"></a-entity>
       <a-cylinder position="${f(x + CLIP.x)} ${f(CLIP.top + 0.007)} ${z}" radius="0.0075" height="0.014" ${BRASS}></a-cylinder>
-      <a-cylinder position="${f(x + CLIP.x)} ${f(CLIP.top - 0.016)} ${z}" radius="0.0045" height="0.032" ${BRASS}></a-cylinder>
+      <a-cylinder position="${f(x + CLIP.x)} ${f(CLIP.top - 0.01)} ${z}" radius="0.0045" height="0.02" ${BRASS}></a-cylinder>
       <a-box position="${f(x + EXT.r + CLIP.d / 2)} ${f(CLIP.top - CLIP.h / 2)} ${z}" width="${CLIP.d}" height="${CLIP.h}" depth="0.018" ${STEEL}></a-box>
     </a-entity>`;
 }

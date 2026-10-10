@@ -25,7 +25,7 @@
 //                                              voice, measure what reaches the headset's output and
 //                                              check the mix (LEVELS below); exits 1 when it is off
 //   node tools/quest-look.mjs perf             five seconds of frames: rate, slow frames, draw calls,
-//                                              triangles; exits 1 over Meta's Quest 3 budget
+//                                              triangles; exits 1 over Meta's Quest 2 budget
 // Screenshots taken by the headset itself show the room through its cameras while it lies on
 // a table, so "frame" reads the picture the game draws instead. The game draws only while
 // its VR session is visible: a headset that fell asleep or shows its cameras draws nothing,
@@ -188,9 +188,10 @@ if (cmd === 'reload') {
   console.log('saved', arg || 'frame.jpg');
 } else if (cmd === 'perf') {
   // five seconds of the frames the game draws (in VR: the session's own frames): the rate, the
-  // frames slower than 72 Hz, and what one frame costs. Meta: 72 Hz at least (90 recommended) and
-  // fewer than 200 draw calls and 1.5 million triangles a frame on Quest 3 (device optimization
-  // comparison); over them, exit 1.
+  // frames slower than 72 Hz, and what one frame costs. Meta: 72 Hz at least (90 recommended); fewer
+  // than 100 draw calls and 750,000 triangles a frame on Quest 2, 200 and 1.5 million on Quest 3
+  // (device optimization comparison, docs/research/vr/01-meta.md). The bar is Quest 2's, the weakest
+  // headset, since beauty stays within its budget (docs/owner-decisions.md); over it, exit 1.
   const v = await run(`new Promise((resolve) => {
     const s = document.querySelector('a-scene'), vr = s.is('vr-mode') && s.xrSession;
     const raf = (f) => vr ? s.xrSession.requestAnimationFrame(f) : requestAnimationFrame(f);
@@ -206,7 +207,7 @@ if (cmd === 'reload') {
     raf(f);
   })`);
   if (!v || v.error) { console.log(v ? v.error : 'no answer'); process.exit(1); }
-  const ok = v.fps >= 72 && v.calls < 200 && v.triangles < 1.5e6;
+  const ok = v.fps >= 72 && v.calls < 100 && v.triangles < 750000;
   console.log(`${ok ? 'ok  ' : 'OVER'} ${v.vr ? 'VR' : '2D'}: ${v.fps} fps, ${v.slow} frames slower than 72 Hz (worst ${v.worstMs} ms), ${v.calls} draw calls, ${v.triangles} triangles`);
   if (!ok) process.exitCode = 1;
 } else {
