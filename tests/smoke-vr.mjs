@@ -10,6 +10,11 @@ import { createRequire } from 'node:module';
 import { drawCalls, FRAME_BUDGET, QUEST2_FRAME } from './draw-calls.mjs';
 
 const IWER = createRequire(import.meta.url).resolve('iwer/build/iwer.min.js');
+// Each eye sees what a Quest 3 eye sees, 110 degrees across and 96 down (Meta, "Compare headsets":
+// docs/research/vr/01-meta.md): IWER draws an eye 'fovy' high on half the canvas, so the page is as
+// wide as two eyes of that shape (tan 55 / tan 48 = 1.286 an eye) and fovy is 96 degrees. Its own
+// default, 90 degrees on half of any window, saw less than a headset and counted fewer calls.
+const EYES = { width: 1852, height: 720 }, FOVY = 96;
 
 // In the page: turns the right controller until its ray meets the hanging page. The ray leaves the
 // controller at A-Frame's own angle (laser-controls), so it is read back and corrected, as a hand would.
@@ -35,7 +40,7 @@ async function aimRight() {
 }
 
 export async function playVR(browser, url, { corridor, room }) {
-  const page = await browser.newPage();
+  const page = await browser.newPage({ viewport: EYES });
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
@@ -46,11 +51,12 @@ export async function playVR(browser, url, { corridor, room }) {
   };
   try {
     await page.addInitScript({ path: IWER });
-    await page.addInitScript(() => {
+    await page.addInitScript((fovy) => {
       window.__xr = new IWER.XRDevice(IWER.metaQuest3);
       window.__xr.stereoEnabled = true;
+      window.__xr.fovy = (fovy * Math.PI) / 180;
       window.__xr.installRuntime({ forceInstall: true });
-    });
+    }, FOVY);
     await page.goto(url);
     await page.waitForFunction(() => document.querySelector('a-scene')?.hasLoaded, null, { timeout: 30000 });
     await page.evaluate(() => document.querySelector('a-scene').enterVR());
