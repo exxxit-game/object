@@ -130,6 +130,9 @@ quote; "unverified" marks what was not confirmed on a primary page.
 ## Pages only the owner can open (region block, bot check, paywall, clicks), and what to bring back
 
 Bot checks or clicks (open in a browser):
+- https://www.campaignlive.co.uk/article/case-study-deutsche-telekom-brought-its-brand-purpose-life-mobile-gaming/1403023
+  (bot check): Sea Hero Quest's media plan (TV, film, online), budget if stated, downloads by date, "1 million in 16 days".
+- https://research-collection.ethz.ch/handle/20.500.11850/516589: Quest 2 vs SteamVR tracking, accuracy in mm.
 Paywalls (need access):
 - https://www.nature.com/articles/s41586-018-0637-6: opened by the owner; supplement read (field-labs-2.md 8); its
   ethics and consent are only in the paid Methods (EUR 39.95), not bought.
@@ -139,9 +142,6 @@ Paywalls (need access):
 - https://doi.org/10.1007/978-3-319-21996-7_47: "Virtual Blindness" 2015: the owner opened it; abstract and citation
   agree with part 3b (38 people, 16 pairs, 8 justified, 4 swapped); the full text with detection per condition costs
   EUR 29.95 at Springer, not bought: needed only if a choice-blindness room is chosen.
-- https://www.campaignlive.co.uk/article/case-study-deutsche-telekom-brought-its-brand-purpose-life-mobile-gaming/1403023
-  (bot check): Sea Hero Quest's media plan (TV, film, online), budget if stated, downloads by date, "1 million in 16 days".
 - https://journals.sagepub.com/doi/10.1177/25152459211007467 (SAGE): Scheel 2021, how "positive result" was coded,
   the 96% vs 44% table.
 - https://doi.org/10.1109/tvcg.2025.3549182 (IEEE paywall): Quest 3 vs Quest Pro hand tracking, error, jitter, latency.
-- https://research-collection.ethz.ch/handle/20.500.11850/516589: Quest 2 vs SteamVR tracking, accuracy in mm.
