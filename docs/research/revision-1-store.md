@@ -36,7 +36,7 @@ Meta's pages: the age API exists for WebXR PWAs, and the comfort rating judges t
   and a manifest get served correctly (part 4). The domain, not the host, is what the Store app is tied to, so the
   host can still move later by a DNS change **[mine]**.
 - **Cost**: now an hour; after five rooms the same hour, but every week until then the notes stay public.
-  100 GB a month is about 17,000 full first loads of today's 5.6 MB **[mine, arithmetic]**: watch it as floors grow.
+  100 GB a month is about 18,000 full first loads of today's 5.6 MB **[mine, arithmetic]**: watch it as floors grow.
 - **Owner**: changing how main publishes is a change to the live site: his word.
 
 ## 2. Package: Meta's Bubblewrap, immersive TWA
