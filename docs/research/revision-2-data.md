@@ -248,3 +248,13 @@ FOR THE OWNER (pages only he can open):
 - https://rkn.gov.ru/treatments/chasto-zadavaemye-voprosy/zashchita-prav-subektov-personalnykh-dannykh/ : answers on
   foreign operators and sites aimed at Russia (region block).
 - https://itd.rada.gov.ua/billInfo : bill 8153, its stage in 2026 (the card did not load for our tools).
+
+## Checked by the owner (10.10)
+- Supabase's Data Processing Addendum (version 1, August 1, 2026; text pasted by the owner from
+  https://supabase.com/legal/customer-resources/data-processing-addendum): it "supplements and forms part of the
+  Supabase Terms of Service" and "is effective as of the Effective Date of the Agreement"; "acceptance of the
+  Agreement shall have the same effect as signing the SCCs". No separate signature: it binds his organisation. Roles:
+  "Supabase acts as a processor/service provider, and Customer as controller/business". Its biometric data is data
+  "used to identify a natural person"; security incidents are notified "where feasible, within forty-eight (48) hours".
+- The live migration history (his dashboard screenshot): 0002 to 0008 listed with their dates, 0001_runs at the foot
+  of the list: the server's history matches supabase/migrations.

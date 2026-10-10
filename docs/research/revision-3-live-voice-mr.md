@@ -252,3 +252,8 @@ primary page. Meta pages through `metavr docs` where it had them. Prices are our
 - https://aistudio.yandex.ru/docs/en/speechkit/pricing (refused our connection): SpeechKit recognition price per 15 s
   and whether audio is logged or used for training (only if D1 (c) is considered).
 - https://doi.org/10.1016/j.joep.2021.102426 (paywall, optional): March 2021, the 162-study version of 1e.
+
+## Checked by the owner (10.10)
+- ElevenLabs plan: Starter ($6 a month, "Current plan" on his subscription page), which lists "Commercial License for
+  Speech and Music"; the Free plan has it struck through. Lines made while the account was on Free carry no commercial
+  licence: when he moved to Starter decides whether the room 01 and corridor lines need re-recording.
