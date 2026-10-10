@@ -11,4 +11,10 @@ while read local_ref local_sha remote_ref remote_sha; do
   case "$local_sha" in 0000000000000000000000000000000000000000) continue ;; esac
   node tools/secrets.mjs "$local_sha --not --remotes=origin" || exit 1
 done
+# the slow tests the commit check leaves out (tools/hooks/pre-commit SLOW): with them every test of
+# npm test has passed before anything reaches GitHub (a commit with a red test reached it once)
+unset GIT_DIR GIT_INDEX_FILE GIT_WORK_TREE GIT_PREFIX GIT_EDITOR
+for t in structure review-gate; do
+  node "tests/$t.test.mjs" > /dev/null 2>&1 || { echo "STOP  tests/$t.test.mjs fails: fix it before pushing (node tests/$t.test.mjs)"; exit 1; }
+done
 exit 0

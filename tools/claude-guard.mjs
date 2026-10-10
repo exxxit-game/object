@@ -246,7 +246,8 @@ function judge(words, stdin, ps) {
     // an option's separate value would read as a command word, so "pr merge" is looked for anywhere
     for (let k = 0; k < a.length; k++) { if (/^(-R|--repo|--hostname)$/.test(a[k])) k++; else if (!a[k].startsWith('-')) g.push(a[k]); }
     const pr = g.indexOf('pr');
-    if ((pr >= 0 && g[pr + 1] === 'merge') || (g[0] === 'api' && g.some((x) => /(^|\/)(merges|pulls\/\d+\/merge)$/.test(x)))) return WHY.merge;
+    // through the REST paths or the GraphQL mutations (a query given as -f query=...)
+    if ((pr >= 0 && g[pr + 1] === 'merge') || (g[0] === 'api' && g.some((x) => /(^|\/)(merges|pulls\/\d+\/merge)$/.test(x) || /\b(mergePullRequest|enablePullRequestAutoMerge)\b/.test(x)))) return WHY.merge;
   }
   // the smoke test and Playwright: only on GitHub
   if (/^(npm|pnpm|yarn|bun)$/.test(p)) {
@@ -332,8 +333,11 @@ export const readOnlySql = (q) => /^\s*(select|with|explain|show)\b/i.test(q) &&
 // HEALTH_SHOWN problems: so the start's length on the worst day is known (tests/guard.test.mjs)
 export const HEALTH_SHOWN = 5, EXTRA_LINE = 350;
 const clip = (line) => (line.length > EXTRA_LINE ? `${line.slice(0, EXTRA_LINE - 1)}…` : line);
-export const ciLine = (run) => (run?.conclusion === 'failure'
-  ? `GitHub's tests are RED on room-polish (${run.displayTitle}): ${run.url}: read why before other work (gh run view ${run.databaseId} --log-failed)` : null);
+// conclusions that need a look (GitHub's run conclusions): a failure, a run that timed out, never
+// started or waits for an approval; a success, a skip or a cancel is quiet
+const NEEDS_LOOK = new Set(['failure', 'timed_out', 'startup_failure', 'action_required']);
+export const ciLine = (run) => (NEEDS_LOOK.has(run?.conclusion)
+  ? `GitHub's tests are RED on room-polish (${run.conclusion}: ${run.displayTitle}): ${run.url}: read why before other work (gh run view ${run.databaseId} --log-failed)` : null);
 
 if (mode === 'pre') {
   const tool = String(event.tool_name || '');

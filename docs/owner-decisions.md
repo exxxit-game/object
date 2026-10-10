@@ -88,7 +88,9 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
   automatic message («я все-таки решаю полностью, что юмор будет только в экспериментах, в комнатах» 9.10).
   In a room the voice is a laboratory party host («тамада, но лабораторный»): a children's-game rhythm in a
   serious adult experiment («закройте глаза, раз, два, три, хоп… ну давайте тогда еще разок», like calling
-  «Дедушка Мороз, выходи»); the experiment's procedure itself stays as in the paper.
+  «Дедушка Мороз, выходи»); the experiment's procedure itself stays as in the paper. The first room opens with a
+  minute of a funny warm-up, then the tone turns serious («он заходит в первую комнату, и для разминки…»,
+  «давайте теперь… отнесемся серьезно… будем вам очень благодарны» 10.10).
 
 ## Data, science, money
 - The lever stays with us; we are our own lab («Рычаг должен быть всегда у нас» 9.10 06:28; «мы сами были

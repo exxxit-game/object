@@ -204,8 +204,11 @@ assert.equal((await checkDatabase(null)).level, 'broken', 'no address to call is
 let asked;
 assert.equal((await checkDatabase(call, async (url, o) => { asked = [url, o.headers.apikey, o.method]; return { ok: true, status: 200 }; })).level, 'ok');
 assert.deepEqual(asked, [call.url, 'sb_publishable_x', 'POST'], 'it reads compare_room with the game\'s public key');
-const paused = await checkDatabase(call, async () => ({ ok: false, status: 540 }));
+const paused = await checkDatabase(call, async () => ({ ok: false, status: 540, text: async () => '' }));
 assert.equal(paused.level, 'broken');
-assert.match(paused.text, /answered 540: .+https:\/\/supabase\.com\/dashboard\/project\/abcd/);
+assert.match(paused.text, /paused \(540\): .+https:\/\/supabase\.com\/dashboard\/project\/abcd \(Resume project\)/, 'a paused project is said with where to resume it');
+const badKey = await checkDatabase(call, async () => ({ ok: false, status: 401, text: async () => '{"message":"Invalid API key"}' }));
+assert.equal(badKey.level, 'broken');
+assert.ok(/401 \(.*Invalid API key/.test(badKey.text) && !/Resume/.test(badKey.text), 'a wrong key is said as the server said it, with no advice to resume');
 assert.equal((await checkDatabase(call, async () => { throw new TypeError('fetch failed'); })).level, 'warning', 'no network is a warning');
 console.log('health tests: ok');

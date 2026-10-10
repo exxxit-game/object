@@ -280,11 +280,11 @@ export function headsetInfo(devices) {
 }
 
 // --- The results database --------------------------------------------------------------------
-// Supabase pauses a free project after a week with too few database requests ("a few user requests to
-// the database each day over the previous week is enough", supabase.com/docs/guides/platform/
-// free-project-pausing), and the game ignores a failed send, so results would be lost without a sound
-// and only the owner can resume it. So each check makes one read (compare_room, the aggregates every
-// reveal reads with the game's public key, src/engine/results.js) and says when it does not answer.
+// The game ignores a failed send, so a database that stops answering loses results without a sound.
+// Each check makes one read (compare_room, the aggregates every reveal reads with the game's public key,
+// src/engine/results.js) and says when it does not answer. The project is on the paid Pro plan, which
+// Supabase never pauses (supabase.com/docs/guides/platform/free-project-pausing; docs/state.md); a
+// paused or restricted one would still be said, by its own status code.
 export function databaseCall(source = fs.readFileSync(path.join(ROOT, 'src', 'engine', 'results.js'), 'utf8')) {
   const endpoint = source.match(/const ENDPOINT = '([^']+)'/)?.[1], key = source.match(/const PUBLIC_KEY = '([^']+)'/)?.[1];
   if (!endpoint || !key) return null;
@@ -296,8 +296,14 @@ export async function checkDatabase(call = databaseCall(), fetchIt = fetch) {
   try {
     const r = await fetchIt(call.url, { method: 'POST', headers: { apikey: call.key, 'Content-Type': 'application/json' },
       body: JSON.stringify({ p_room: '01-control', p_version: 1 }), signal: AbortSignal.timeout(6000) });
-    return r.ok ? ok('the results database answered (a read a day keeps the free plan from pausing)')
-      : broken(`the results database answered ${r.status}: a free project pauses after a week without requests and the game's results are then lost; the owner resumes it at ${resume} (Resume project)`);
+    if (r.ok) return ok('the results database answered');
+    // Supabase's own codes: 540 "project paused", 402 a service restriction (fair use, overdue bills);
+    // anything else is the request's own trouble, said as the server said it
+    // (supabase.com/docs/guides/troubleshooting/http-status-codes)
+    if (r.status === 540) return broken(`the results database is paused (540): the game's results are lost until the owner resumes it at ${resume} (Resume project)`);
+    const said = (await r.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 160);
+    if (r.status === 402) return broken(`the results database is restricted (402: ${said}): the owner sees why at ${resume}`);
+    return broken(`the results database answered ${r.status} (${said}): the call or its key is wrong, src/engine/results.js`);
   } catch (e) {
     return warning(`the results database was not reached (${e.name === 'TimeoutError' ? 'no answer in 6 s' : 'no network?'}); if it lasts, the owner checks ${resume}`);
   }

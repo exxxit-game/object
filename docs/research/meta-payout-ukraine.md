@@ -12,7 +12,9 @@ Every claim has its link and a short quote. "not confirmed" = no source found fo
    - Schedule: "your payout should be initiated by the middle of the following month".
    - Tax forms: "Meta requests a W-8 or W-9 form"; "Meta does not withhold any developer income tax";
      "Developers need to report their income tax themselves."
-   - Contracting entity outside the US and Canada: "Facebook Technologies Ireland Limited".
+   - Outside the US and Canada: "If you reside outside of the US or Canada, Facebook Technologies
+     Ireland Limited is the business entity" doing the transaction; "If you are an international
+     entity, however, your contract might still be with Facebook Technologies, LLC."
    - This page does NOT list payout countries or methods, and does not mention Ukraine.
 
 2. Meta "Manage your financial account" (last updated 2026-05-13),
@@ -64,9 +66,10 @@ Every claim has its link and a short quote. "not confirmed" = no source found fo
    - Crimea is a separate blocked jurisdiction under E.O. 13685 (OFAC programme page
      https://ofac.treasury.gov/sanctions-programs-and-country-information/ukraine-russia-related-sanctions ;
      seen in a search result, page not opened: unverified wording).
-   - The rest of Ukraine: FAQ 1006 does not restrict it. Combined with Meta's agreement 14.12
-     ("not subject to any applicable UN, US, UK or EU economic sanctions"), a developer living or
-     banking in these regions would likely be blocked; this link is my reading, not a Meta statement.
+   - The rest of Ukraine: FAQ 1006 does not restrict it. Whether Meta blocks a developer for living
+     or banking in a covered region is not confirmed: Meta's agreement 14.12 asks only that the
+     developer is "not subject to any applicable UN, US, UK or EU economic sanctions", and no Meta
+     page found ties payouts to residence or the bank's region.
 
 ## Not confirmed / not found
 - A Meta list of payout-supported countries, or any Meta statement naming Ukraine (in or out).

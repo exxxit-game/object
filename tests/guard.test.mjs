@@ -102,13 +102,16 @@ const refused = cases([
   'gh --repo exxxit-game/youaretheobject pr merge 9',
   ['gh.exe pr merge 9', PS],
   'gh --hostname github.com pr merge 9',
+  "gh api graphql -f query='mutation { mergePullRequest(input: {pullRequestId: \"PR_x\"}) { clientMutationId } }'",
+  "gh api graphql -f query='mutation { enablePullRequestAutoMerge(input: {pullRequestId: \"PR_x\"}) { clientMutationId } }'",
   'gh api -X PUT repos/exxxit-game/youaretheobject/pulls/9/merge',
   'gh api repos/exxxit-game/youaretheobject/merges -f base=main -f head=room-polish',
 ]);
 for (const [c, shell] of refused) assert.ok(refusal(c, shell === PS), `the guard let through: ${c}`);
 // a red last run of GitHub's tests is said at the start; a green one, one still running or none is not
-assert.match(ciLine({ conclusion: 'failure', displayTitle: 'x', url: 'https://github.com/r/actions/runs/7', databaseId: 7 }), /RED on room-polish \(x\): .+gh run view 7 --log-failed/);
-for (const run of [{ conclusion: 'success' }, { conclusion: '' }, undefined]) assert.equal(ciLine(run), null);
+assert.match(ciLine({ conclusion: 'failure', displayTitle: 'x', url: 'https://github.com/r/actions/runs/7', databaseId: 7 }), /RED on room-polish \(failure: x\): .+gh run view 7 --log-failed/);
+assert.match(ciLine({ conclusion: 'timed_out', displayTitle: 'x', url: 'u', databaseId: 8 }), /RED on room-polish \(timed_out: x\)/, 'a run that timed out is said too');
+for (const run of [{ conclusion: 'success' }, { conclusion: 'cancelled' }, { conclusion: '' }, undefined]) assert.equal(ciLine(run), null);
 
 const allowed = cases([
   'grep -n camera tests/smoke.mjs',
