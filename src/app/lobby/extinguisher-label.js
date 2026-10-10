@@ -68,9 +68,8 @@ function along(x, text, m, r, from, to) {
 }
 export function paintGauge(el) {
   const t = LOBBY_T.extinguisher.gauge, c = document.createElement('canvas');
-  c.width = c.height = DIAL * SHARP;
+  c.width = c.height = DIAL;
   const x = c.getContext('2d'), m = DIAL / 2;
-  x.scale(SHARP, SHARP);
   x.fillStyle = GOLD; x.beginPath(); x.arc(m, m, m, 0, Math.PI * 2); x.fill();
   x.fillStyle = NAVY; x.beginPath(); x.arc(m, m, BAND[1] * m, 0, Math.PI * 2); x.fill();
   const [inner, outer] = BAND.map((k) => k * m), mid = (inner + outer) / 2, at = (a, r) => [m + Math.cos(a) * r, m + Math.sin(a) * r];
