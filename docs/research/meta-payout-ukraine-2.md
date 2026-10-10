@@ -201,8 +201,8 @@ before the form: if a FOP is coming, register it first, then type the same name 
 6. Status of the 2027 VAT bill for FOPs.
 
 ## For the owner
-- https://cabinet.tax.gov.ua/registers/ipk : the DPS register of IPKs (a search form): numbers
-  5778/IPK/99-00-24-03-03 and 452/IPK/99-00-24-03-03 (type the Cyrillic letters for IPK), to read the texts.
+- Not for him: the two tax consultations (5778 and 452, the DPS register's search form) go to the accountant;
+  the owner declined them on 10.10.
 - His bank app: the exact Latin account-holder name and SWIFT/IBAN of a USD account (personal now; FOP later).
 - https://developers.meta.com/horizon/manage/ : "Add Payment Information", the business types offered
   for Ukraine (nothing submitted).
