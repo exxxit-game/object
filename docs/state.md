@@ -30,6 +30,7 @@
   when a step needs it): https://claude.ai/code/artifact/71113d16-57ad-42ce-9905-87ff87dfdbd7
   Every critical problem still open on 10.10 (money, law, data, headset, process, records), whose step each is and
   the owner's choices: https://claude.ai/artifact/NGika3MZ8ms7GdFvfiZhvT
+  The road from the corridor to the store, how he and I work, the tools (10.10): https://claude.ai/artifact/3unCQLkqfc36ExW2RtzvX4
 - Headset: Quest 3 over USB; `tools/quest-check.mjs` (11/11 PASS 08.10, old 60 fps bar, no log); `tools/xr-probe.html`.
   Owner plays the test copy https://exxxit-game.github.io/object-preview/ (bookmark in the headset, the
   game from GitHub): `node tools/publish-preview.mjs` before he looks; it never sends data. From 9.10 the
