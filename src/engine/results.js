@@ -1,23 +1,24 @@
 // Sends one anonymous result of a finished room to the shared table (Supabase).
 // The key below is public by design: it can only call public.submit_run(), which
-// accepts a room id, room version, first/repeat flag and a report of numbers,
-// and can only insert. No names, accounts or addresses are sent.
+// accepts a room id, room version, first/repeat flag, the consent text's version and
+// a report of numbers, and can only insert. No names, accounts or addresses are sent.
 // Never blocks or breaks the game: any failure is ignored.
 const ENDPOINT = 'https://rkvdwzlymmewsxjysgma.supabase.co/rest/v1/rpc/submit_run';
 const PUBLIC_KEY = 'sb_publishable_w6g0x6vgIM-AfAx-XDWyEw_Kqpm3nAN';
 
-export function sendResult(room, version, firstRun, report) {
-  return post(ENDPOINT, { p_room: room, p_version: version, p_first: firstRun, p_report: report });
+// consent: the version of the consent text the player agreed to (app/consent.js, CONSENT_VERSION)
+export function sendResult(room, version, firstRun, consent, report) {
+  return post(ENDPOINT, { p_room: room, p_version: version, p_first: firstRun, p_consent: consent, p_report: report });
 }
 
 // Playtest feedback (answers plus run measures), only in playtest mode.
-export function sendPlaytest(room, version, report) {
-  return post(ENDPOINT.replace('submit_run', 'submit_playtest'), { p_room: room, p_version: version, p_report: report });
+export function sendPlaytest(room, version, consent, report) {
+  return post(ENDPOINT.replace('submit_run', 'submit_playtest'), { p_room: room, p_version: version, p_consent: consent, p_report: report });
 }
 
 // A game error from the player's device (only with consent; see app/session.js).
-export function sendIssue(room, version, report) {
-  return post(ENDPOINT.replace('submit_run', 'submit_issue'), { p_room: room, p_version: version, p_report: report });
+export function sendIssue(room, version, consent, report) {
+  return post(ENDPOINT.replace('submit_run', 'submit_issue'), { p_room: room, p_version: version, p_consent: consent, p_report: report });
 }
 
 // Averages of other players' first runs (aggregates only; see 0006_compare_room.sql).

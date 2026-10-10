@@ -1,18 +1,21 @@
-// Room 01's result must be exactly what the server accepts
-// (the newest supabase/migrations/*.sql that defines submit_run): same fields, answer keys
-// and ranges. A mismatch would silently lose every player's result.
+// What the game sends must be exactly what the server accepts (the newest supabase/migrations): room
+// 01's report against its JSON Schema, the call's parameters against each function's, and the consent
+// version against the consent's words. A mismatch would silently lose every player's result.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import { analyse } from '../src/rooms/01-control/report.js';
 import { T } from '../src/rooms/01-control/texts.ru.js';
+import { APP_T } from '../src/app/texts.ru.js';
+import { definition, params, roomSchema, check } from './sql.mjs';
 
-const dir = new URL('../supabase/migrations/', import.meta.url);
-const sql = fs.readdirSync(dir).filter(f => f.endsWith('.sql')).sort()
-  .map(f => fs.readFileSync(new URL(f, dir), 'utf8')).filter(s => s.includes('function public.submit_run')).at(-1);
-const list = (name) => [...sql.match(new RegExp(`${name} constant text\\[\\] := array\\[([^\\]]+)\\]`))[1]
-  .matchAll(/'([^']+)'/g)].map(m => m[1]);
-const allowed = list('allowed');
-const answerMax = JSON.parse(sql.match(/answer_max constant jsonb := '([^']+)'/)[1]);
+const read = (p) => fs.readFileSync(new URL(p, import.meta.url), 'utf8');
+const ROOM_VERSION = Number(read('../src/rooms/01-control/room.js').match(/const ROOM_VERSION = (\d+);/)[1]);
+const CONSENT_VERSION = Number(read('../src/app/consent.js').match(/export const CONSENT_VERSION = (\d+);/)[1]);
+
+// the schema in the repo is the one the server loads (the codebook's machine half: one file per room version)
+const schema = JSON.parse(read(`../supabase/schemas/01-control-${ROOM_VERSION}.json`));
+assert.deepEqual(roomSchema('01-control', ROOM_VERSION).schema, schema, `the server loads another schema for room 01 version ${ROOM_VERSION} than supabase/schemas holds`);
 
 // a full run: every trial kind, every answer at its largest value
 const log = [
@@ -27,13 +30,26 @@ for (const [key, value] of Object.entries(maxAnswer)) log.push({ t: 60, k: 'answ
 
 // exactly what room.js sends: { condition, ...analyse(log), seated, speed }
 const report = { condition: '75-75', ...analyse(log), seated: true, speed: 1 };
-for (const k of Object.keys(report)) assert.ok(allowed.includes(k), `server does not accept field ${k}`);
-for (const [k, v] of Object.entries(report.answers)) {
-  assert.ok(k in answerMax, `server does not accept answer ${k}`);
-  assert.ok(v <= answerMax[k], `answer ${k} = ${v} above server limit ${answerMax[k]}`);
-}
-// every question the room asks has a server limit
-for (const key of Object.keys(maxAnswer)) assert.ok(key in answerMax, `no server limit for question ${key}`);
+assert.deepEqual(check(schema, report), [], 'the server would refuse room 01\'s report');
+// every question the room asks has a server limit, and the limit is the question's last answer
+for (const [key, max] of Object.entries(maxAnswer)) assert.equal(schema.properties.answers.properties[key]?.maximum, max, `the server's limit for ${key}`);
 assert.ok(Buffer.byteLength(JSON.stringify(report)) < 2048, 'report over 2 KB');
+// and it refuses what it must: a test run, an unknown field, an answer past its last choice
+assert.notDeepEqual(check(schema, { ...report, speed: 20 }), [], 'a test run (?speed) would be stored');
+assert.notDeepEqual(check(schema, { ...report, name: 'x' }), [], 'an unknown field would be stored');
+assert.notDeepEqual(check(schema, { ...report, answers: { ...report.answers, age: maxAnswer.age + 1 } }), [], 'an answer out of range would be stored');
+
+// each call sends exactly the parameters its function takes
+const client = read('../src/engine/results.js');
+for (const [fn, send] of [['submit_run', 'sendResult'], ['submit_playtest', 'sendPlaytest'], ['submit_issue', 'sendIssue']]) {
+  const body = client.match(new RegExp(`export function ${send}\\([^)]*\\) \\{[^}]*\\{([^}]*)\\}`))[1];
+  const sent = [...body.matchAll(/\b(p_\w+):/g)].map((m) => m[1]);
+  assert.deepEqual(sent.sort(), params(definition(fn)).sort(), `${send} sends other parameters than public.${fn} takes`);
+}
+
+// the consent version names the words the player agreed to: change the words, raise the version
+const WORDS = { 1: 'e6addd86020ed78894ea848b90f8f399687d43f14db03212b917d786006d5bd1' };
+const words = crypto.createHash('sha256').update(JSON.stringify([APP_T.consent, APP_T.playtest.consent])).digest('hex');
+assert.equal(words, WORDS[CONSENT_VERSION], `the consent's words changed (${words}): raise CONSENT_VERSION in src/app/consent.js and add its words here`);
 
 console.log('results tests: ok');

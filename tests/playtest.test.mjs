@@ -1,13 +1,12 @@
-// The playtest report the game sends must be exactly what the server accepts
-// (supabase/migrations/0004_playtests.sql): same field names, devices and ranges.
+// The playtest report the game sends must be exactly what the server accepts (the newest
+// public.submit_playtest in supabase/migrations): same field names, devices and ranges.
 // A mismatch would silently lose testers' answers, so this test reads the SQL.
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
 import { playtestReport, deviceOf, PLAYTEST_KEYS } from '../src/app/playtest-report.js';
+import { definition, list as listIn } from './sql.mjs';
 
-const sql = fs.readFileSync(new URL('../supabase/migrations/0004_playtests.sql', import.meta.url), 'utf8');
-const list = (name) => [...sql.match(new RegExp(`${name} constant text\\[\\] := array\\[([^\\]]+)\\]`))[1]
-  .matchAll(/'([^']+)'/g)].map(m => m[1]);
+const def = definition('submit_playtest'), sql = def.text;
+const list = (name) => listIn(def, name);
 const allowed = list('allowed');
 const phases = list('phases');
 const devices = list('devices');

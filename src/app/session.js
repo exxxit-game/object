@@ -1,5 +1,6 @@
 import { sendResult, sendPlaytest, sendIssue, markPlayed } from '../engine/results.js';
 import { issueReport } from './issue-report.js';
+import { CONSENT_VERSION } from './consent.js';
 
 // One play of a room, from consent to result. Every room uses this, so consent,
 // first/repeat runs and sending work the same everywhere.
@@ -32,7 +33,7 @@ export function createSession(roomId, roomVersion) {
   let sent = 0;
   const canSend = () => SENDING_ENABLED && record && SPEED === 1;
   const flush = () => {
-    while (canSend() && queued.length && sent < MAX_ISSUES) { sent++; sendIssue(roomId, roomVersion, queued.shift()); }
+    while (canSend() && queued.length && sent < MAX_ISSUES) { sent++; sendIssue(roomId, roomVersion, CONSENT_VERSION, queued.shift()); }
   };
   return {
     // record: the player chose "start with recording" on the consent screen. A room calls this
@@ -61,12 +62,12 @@ export function createSession(roomId, roomVersion) {
     // Sends the report when the player agreed and this is a real-speed run.
     finish(report) {
       if (!SENDING_ENABLED || !record || SPEED !== 1) return Promise.resolve(false);
-      return sendResult(roomId, roomVersion, first, report);
+      return sendResult(roomId, roomVersion, first, CONSENT_VERSION, report);
     },
     // Playtest feedback: the same conditions, plus playtest mode.
     finishPlaytest(report) {
       if (!SENDING_ENABLED || !PLAYTEST || !record || SPEED !== 1) return Promise.resolve(false);
-      return sendPlaytest(roomId, roomVersion, report);
+      return sendPlaytest(roomId, roomVersion, CONSENT_VERSION, report);
     }
   };
 }

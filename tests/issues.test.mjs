@@ -1,12 +1,11 @@
-// Error reports must be exactly what the server accepts
-// (supabase/migrations/0007_issues.sql): fields, kinds, devices, states, lengths.
+// Error reports must be exactly what the server accepts (the newest public.submit_issue in
+// supabase/migrations): fields, kinds, devices, states, lengths.
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
 import { issueReport } from '../src/app/issue-report.js';
+import { definition, list as listIn } from './sql.mjs';
 
-const sql = fs.readFileSync(new URL('../supabase/migrations/0007_issues.sql', import.meta.url), 'utf8');
-const list = (name) => [...sql.match(new RegExp(`${name} constant text\\[\\] := array\\[([^\\]]+)\\]`))[1]
-  .matchAll(/'([^']+)'/g)].map(m => m[1]);
+const def = definition('submit_issue'), sql = def.text;
+const list = (name) => listIn(def, name);
 const ua = 'Mozilla/5.0 (X11; Linux x86_64; Quest 3) AppleWebKit/537.36 OculusBrowser/152.1.0 Chrome/152.0 VR Safari/537.36';
 
 const r = issueReport({ kind: 'error', message: 'x'.repeat(500), file: 'https://youaretheobject.com/src/rooms/01-control/trials.js?v=2', line: 57.4 },

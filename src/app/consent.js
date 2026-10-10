@@ -14,6 +14,11 @@ import { MIN_LETTER } from '../engine/ui/sheet-math.js';
 // mouse, stay in this browser only (privacy.html) and are never sent or logged. Once signed, the lab
 // presses its seal by the signature; the seal is as large as its ring's letters need to be read
 // (large print, docs/decisions.md), so the date, the signature and the seal take a page of their own.
+// Which consent text a result was given under, sent with every result: the controller "shall be able to
+// demonstrate that the data subject has consented" (GDPR Art 7(1)), and with anonymous rows the text is
+// the only proof (docs/research/revision-2-data.md, D1). Raised whenever the consent's words change
+// (APP_T.consent, APP_T.playtest.consent): tests/results.test.mjs holds each version's words.
+export const CONSENT_VERSION = 1;
 // the signed form, on this device: { name, sign: strokes ([[u, v], ...]), on: the date }
 const FORM_KEY = 'object.form';
 // the day as the form shows it, in the player's own time
