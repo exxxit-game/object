@@ -16,7 +16,7 @@
 // mesh (by): where the next cut is (Meta's order: measure first, then merge:
 // docs/research/revision-4-graphics.md).
 export const QUEST2_FRAME = 100;
-export const FRAME_BUDGET = { corridor: 120, room: 175 };
+export const FRAME_BUDGET = { corridor: 120, room: 170 };
 export async function drawCalls({ eyes: boxes } = {}) {
   if (!boxes || !boxes.length) throw new Error('drawCalls: where an eye can be is not given');
   const sceneEl = document.querySelector('a-scene'), renderer = sceneEl.renderer, xr = window.__xr;
