@@ -30,7 +30,12 @@ Meta's pages: the age API exists for WebXR PWAs, and the comfort rating judges t
   (https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll) **[read]**.
   Limits (https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) **[read]**: site "no
   larger than 1 GB"; "a *soft* bandwidth limit of 100 GB per month"; not for a site "primarily directed at either
-  facilitating commercial transactions" (our payments run inside Meta's store, not on the site **[mine]**).
+  facilitating commercial transactions" (our payments run inside Meta's store, not on the site **[mine]**). The terms
+  also say Pages is not "a free web hosting service to run your online business" and is meant "primarily as a showcase
+  for personal and organizational projects" (https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features,
+  read 10.10) **[read]**: the site that runs a paid game is that business, so Meta's checkout alone does not make Pages
+  allowed **[not verified]**. Pages holds while every floor is free (testers, floor 1); before the first paid floor,
+  GitHub's written yes or a host whose terms allow commercial use (the domain moves by a DNS change).
 - **Verdict: keep the host, change how it publishes**: an Actions workflow that uploads only the game files (the same
   PUBLIC list as the test copy). Why: Meta names exactly this; it stops publishing notes; it is where `.well-known`
   and a manifest get served correctly (part 4). The domain, not the host, is what the Store app is tied to, so the
