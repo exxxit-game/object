@@ -71,8 +71,14 @@ Every claim has its link and a short quote. "not confirmed" = no source found fo
      developer is "not subject to any applicable UN, US, UK or EU economic sanctions", and no Meta
      page found ties payouts to residence or the bank's region.
 
+6. The dashboard itself, 2026-10-10 16:55 UTC (the owner's phone screenshot, kept as
+   objekt-files\notes\meta-payout-countries-2026-10-10.jpg): "Add Payment Information", step 1 of 5,
+   "Country" list: Ukraine is in it. Nothing was filled in or submitted. The organisation selected at the
+   top was not the one this file names; which organisation the game belongs to is asked of the owner.
+   Next to see (still without submitting): the business types offered for Ukraine.
+
 ## Not confirmed / not found
-- A Meta list of payout-supported countries, or any Meta statement naming Ukraine (in or out).
+- A Meta page naming Ukraine (the dashboard list does, item 6); whether a payout actually arrives (first payout).
 - Payout methods other than bank transfer (PayPal, Payoneer): no Meta page found mentions them.
 - ID document verification step: not on Meta's setup page.
 - Rules for the temporarily occupied territories: not in Meta's agreement text; only the general
