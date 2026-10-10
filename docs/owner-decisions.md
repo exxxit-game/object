@@ -116,6 +116,9 @@ quoted; the time is when he said it (UTC). A risk list or a general method is no
 - Where something is left to imagination (he did not ask, the task does not need it, no source decides it),
   I do not decide it: I bring him several real options and he picks («если есть момент, где можно
   додумать, ты что-то сам додумываешь… у меня не спрашиваешь… Есть несколько вариантов, и я выбираю» 9.10).
+- In the headset he reads each step inside it, one at a time, never the chat (tools/quest-look.mjs say): «чтоб я
+  просто одевал очки, а ты мне говорил в очках, что надо сделать, как сделать… делать это постоянной практикой,
+  чтобы я не напоминал тебе об этом каждый раз» 11.10.
 - I check all a tool can measure; he judges what he sees, one action at a time («Ты должен… проверять сам
   все, что можешь»; «Мне надо делать что-то конкретно одно» 9.10 09:14); blocked: ask him at once.
 - Space tiers: seated, standing, roomscale 1.8×1.8 m (base; his area), large (offered only, never shrunk).

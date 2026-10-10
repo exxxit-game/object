@@ -24,6 +24,8 @@
 //   node tools/quest-look.mjs levels           play each corridor sound at its game volume and the
 //                                              voice, measure what reaches the headset's output and
 //                                              check the mix (LEVELS below); exits 1 when it is off
+//   node tools/quest-look.mjs say "<step>" ["<small line>"]   show the owner his next step inside the
+//                                              headset ("say off" takes it away)
 //   node tools/quest-look.mjs perf             five seconds of frames: rate, slow frames, draw calls,
 //                                              triangles; exits 1 over Meta's Quest 2 budget
 // Screenshots taken by the headset itself show the room through its cameras while it lies on
@@ -162,6 +164,42 @@ if (cmd === 'reload') {
   if (!ok) process.exitCode = 1;
 } else if (cmd === 'eval') {
   console.log(JSON.stringify(await run(arg), null, 1));
+} else if (cmd === 'say') {
+  // The owner's next step, inside the headset, so he does not take it off to read the chat (his
+  // practice, docs/owner-decisions.md): the input probe's panel as it was reviewed (one line on a
+  // panel 1 m ahead of where he looks, a little under eye level, facing him: tools/xr-probe-input.html,
+  // docs/audit/probe-review.md), placed again before him at each step; "say off" takes it away.
+  const [main, small] = [String(arg || ''), process.argv[4] || ''];
+  const v = await run(`new Promise((resolve) => {
+    const s = document.querySelector('a-scene'), main = ${JSON.stringify(main)}, small = ${JSON.stringify(small)};
+    let p = document.getElementById('ownerNote');
+    if (main === 'off') { if (p) p.object3D.visible = false; resolve({ hidden: true }); return; }
+    if (!p) {
+      p = document.createElement('a-entity');
+      p.id = 'ownerNote';
+      p.setAttribute('panel', 'w: 1; h: 0.54; px: 1432; ref: 1024; bg: #1c1c1c');
+      s.appendChild(p);
+    }
+    const show = () => {
+      p.components.panel.write([
+        { t: main, size: 54, weight: 500, color: '#dadada' },
+        ...(small ? [{ t: small, size: 34, color: '#9a9a9a', gap: 30 }] : [])
+      ]);
+      const at = new THREE.Vector3(), dir = new THREE.Vector3();
+      s.camera.getWorldPosition(at); s.camera.getWorldDirection(dir);
+      dir.y = 0;
+      if (dir.lengthSq() < 1e-4) dir.set(0, 0, -1);
+      dir.normalize();
+      p.object3D.position.set(at.x + dir.x, at.y - 0.1, at.z + dir.z);
+      p.object3D.lookAt(at.x, at.y - 0.1, at.z);
+      p.object3D.visible = true;
+      resolve({ shown: main, vr: s.is('vr-mode') });
+    };
+    // a new entity's panel draws once A-Frame has run its init (its canvas exists), a frame or two later
+    const ready = (n) => (p.components.panel && p.components.panel.c ? show() : n > 0 ? setTimeout(() => ready(n - 1), 50) : resolve({ error: 'the panel did not start' }));
+    ready(60);
+  })`);
+  console.log(JSON.stringify(v));
 } else if (cmd === 'frame') {
   // read the left half of the frame the game has just drawn for both eyes
   const v = await run(`new Promise((resolve) => {
@@ -212,6 +250,6 @@ if (cmd === 'reload') {
   console.log(`${ok ? 'ok  ' : 'OVER'} ${v.vr ? 'VR' : '2D'}: ${v.fps} fps, ${v.slow} frames slower than 72 Hz (worst ${v.worstMs} ms), ${v.calls} draw calls, ${v.triangles} triangles${v.vr ? `, multiview ${v.multiview ? 'on' : 'off'}` : ''}`);
   if (!ok) process.exitCode = 1;
 } else {
-  console.log('usage: node tools/quest-look.mjs open [local port] | sleep | reload | vr | frame out.jpg | eval "<js>" | worn on|off | restart-browser | reboot | levels | perf');
+  console.log('usage: node tools/quest-look.mjs open [local port] | sleep | reload | vr | frame out.jpg | eval "<js>" | say "<step>" | worn on|off | restart-browser | reboot | levels | perf');
 }
 game.close();

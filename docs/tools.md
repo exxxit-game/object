@@ -19,7 +19,8 @@ forgotten (two reviewers here never ran once). One line per situation; the first
 - The owner's requests since the last check, once at the end of a step: the request-auditor agent.
 - Code and docs against the finished picture, after a large change: the architecture-auditor agent.
 - The outside review: CodeRabbit's open remarks, shown at every session start, read before other work.
-- The headset: node tools/quest-look.mjs (look, measure; sleep after). Meta's own checks and traces:
+- The headset: node tools/quest-look.mjs (look, measure; sleep after); while he wears it, every step he
+  is to do goes inside it with `quest-look.mjs say`, never only in the chat. Meta's own checks and traces:
   metavr, the Meta VR CLI (device, perf, vrc-local); install and store: the meta-vr skills hz-store-pwa
   and hz-store-submit; comfort: hz-immersive-designer.
 - The laptop: node tools/health.mjs (it also runs at every session start).
