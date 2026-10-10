@@ -8,8 +8,6 @@ on:
     branches: [room-polish]
   pull_request_review:
     types: [submitted]
-  pull_request_review_thread:
-    types: [resolved]
   workflow_dispatch:
 
 permissions:
