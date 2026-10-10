@@ -167,7 +167,12 @@ if (mode === 'prompt') {
   try {
     const log = path.join(os.homedir(), 'Documents', 'objekt-notes', 'owner-messages.md');
     fs.mkdirSync(path.dirname(log), { recursive: true });
-    fs.appendFileSync(log, `\n## ${new Date().toISOString()} ${event.session_id || ''}\n${String(event.prompt || '')}\n`);
+    // turns the app delivers that he did not type (helpers' reports, background notices, reminders,
+    // the artifact view): logged as his, they read as his words and their "da" as his yes (board.mjs)
+    const said = String(event.prompt || '');
+    if (!/^\s*<(task-notification|system-reminder|agent-message|artifact-view-context)\b/.test(said)) {
+      fs.appendFileSync(log, `\n## ${new Date().toISOString()} ${event.session_id || ''}\n${said}\n`);
+    }
   } catch { /* a failed log must not stop his message */ }
   process.exit(0);
 }
