@@ -16,6 +16,11 @@ minutes, 10.10.2026). Marks as in `07-corridor-1979.md`: **opened**, **search**,
   These are modern pages: that the 1979 board looked the same is **unverified** until a period
   catalog or photo is found.
 
+- **A period photo, 1970 (found 10.10, opened)**: George Skip Gandy IV, "Display Board with Company Names",
+  1 Oct 1970, Tampa (USF Digital Commons, Gandy 29_0750, CC BY-NC 3.0),
+  https://digitalcommons.usf.edu/gandy_commercial/10844 : a weathered wooden board on a white wall, the names
+  on dark embossed label-tape strips (Dymo-style) with numbers. A commercial building, not a university one.
+
 ## 2. Sizes, colours, mounting
 
 - Frame and grooves: see 1 (1-3/8 in aluminum face, 2 in deep; grooves on 1/4 in centres;
