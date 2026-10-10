@@ -25,7 +25,7 @@ export const plannedToday = (rows, key = dayKey()) => rows.some((r) => r.when ==
 
 // whether his own messages of that day hold a «да»: the assistant writes the board, so a yes there
 // counts only when his log (written by the prompt hook, word for word) has one that day
-export const LOG = 'Documents/objekt-notes/owner-messages.md';
+export const LOG = 'Documents/objekt-files/notes/owner-messages.md';
 // «да» as a word in any case and inside any quotes: the board writes his answers quoted («да», «Да»),
 // and an exact match on the bare word called every session stalled
 export const isYes = (text) => new RegExp(`(^|[^\\p{L}])${YES}([^\\p{L}]|$)`, 'iu').test(text);

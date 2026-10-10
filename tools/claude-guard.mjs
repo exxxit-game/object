@@ -392,7 +392,7 @@ if (mode === 'subagent-start' || mode === 'subagent-stop') {
 // reads it). It never blocks the message.
 if (mode === 'prompt') {
   try {
-    const log = path.join(os.homedir(), 'Documents', 'objekt-notes', 'owner-messages.md');
+    const log = path.join(os.homedir(), 'Documents', 'objekt-files', 'notes', 'owner-messages.md');
     fs.mkdirSync(path.dirname(log), { recursive: true });
     // turns the app delivers that he did not type (helpers' reports, background notices, reminders,
     // the artifact view): logged as his, they read as his words and their "da" as his yes (board.mjs)

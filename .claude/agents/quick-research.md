@@ -11,7 +11,7 @@ Limits (hard):
   "not searched".
 - At most 8 searches and 8 page reads in total, about 10 minutes. When you reach either limit,
   stop and report what you have.
-- First grep the project's library, `C:\Users\admin\Documents\objekt-papers\*.txt` and
+- First grep the project's library, `C:\Users\admin\Documents\objekt-files\papers\*.txt` and
   `docs/cards/`: the fact may already be on disk.
 - A fact in a paper: find it with the paper tools (Consensus, OpenAlex lookup) and read the full
   text (PMC full text, PDF_Tools for an open PDF); a page WebFetch returns blank or refused: open it

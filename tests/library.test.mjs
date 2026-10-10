@@ -52,11 +52,12 @@ const named = new Set(papers.map((p) => p.card).filter(Boolean));
 const missing = cards.filter((f) => !named.has(`docs/cards/${f}`));
 assert.deepEqual(missing, [], `cards with no record in ${'docs/library/papers.json'}: ${missing.join(', ')}`);
 
-// 4. The folder and the records agree (only where the folder exists).
+// 4. The folder and the records agree (only where the folder exists). A paper lives in papers\ under its id;
+// a data set in datasets\ under its dir; imports\ (exports as downloaded) and notes\ hold no records.
 const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]));
 if (fs.existsSync(lib.root)) {
-  // .bib and .ris are the evacuation library's own catalogue, not papers
-  const files = walk(lib.root).map((f) => path.relative(lib.root, f).replaceAll('\\', '/')).filter((f) => !/\.(bib|ris)$/i.test(f));
+  const under = (dir, base) => (fs.existsSync(dir) ? walk(dir).map((f) => path.relative(base, f).replaceAll('\\', '/')) : []);
+  const files = [...under(path.join(lib.root, 'papers'), path.join(lib.root, 'papers')), ...under(path.join(lib.root, 'datasets'), lib.root)];
   const byStem = new Map();
   for (const f of files) {
     const stem = f.replace(/\.[^./]+$/, '');

@@ -2,7 +2,7 @@
 
 Generated from `docs/library/papers.json` by `node tools/build-library.mjs`. Do not edit by hand.
 77 papers. Each line: id, authors and year, title, tags, then the card or the status. The text is
-in the library folder as `<id>.txt` (`<dir>/<id>.txt` for a file in a subfolder); "text: ocr" marks a scan's
+in the library folder's papers\ as `<id>.txt` (a data set: `<dir>/<id>.txt` from the library folder); "text: ocr" marks a scan's
 text, "placeholder" an excerpt. Index of all sections: [library](../library.md).
 
 - **abdlkarim-2024** Abdlkarim et al. 2024. A methodological framework to assess the accuracy of virtual reality hand-tracking systems: A case study with the Meta Quest 2 · hand tracking accuracy, Meta Quest 2, measurement method · no card

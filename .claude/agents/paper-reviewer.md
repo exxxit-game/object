@@ -11,7 +11,7 @@ have checked it against the paper.
 
 Inputs (the caller names the room, e.g. `01-control`):
 - Papers: find them in the index docs/library.md (then its section file and the card), then the text
-  `C:\Users\admin\Documents\objekt-papers\<id>.txt` (pdftotext output;
+  `C:\Users\admin\Documents\objekt-files\papers\<id>.txt` (pdftotext output;
   journal page numbers appear as bare lines). Never quote more than a sentence.
 - Room: `src/rooms/<room>/`, shared code `src/app/`, `src/engine/ui/`.
 - Spec: `docs/rooms/<room>.md` (procedure with pages, deviations, our choices).

@@ -9,7 +9,7 @@ requests at once, often by voice from the phone, in Russian, with swearing. The 
 put each one on the board (docs/board.md) in his words, or his settled decisions
 (docs/owner-decisions.md). You did not do that work; find where it failed. Read only.
 
-Inputs: his every message, word for word, in C:\Users\admin\Documents\objekt-notes\owner-messages.md
+Inputs: his every message, word for word, in C:\Users\admin\Documents\objekt-files\notes\owner-messages.md
 (lines "## <time> <session>" separate messages; skip <artifact-view-context> blocks); docs/board.md;
 docs/owner-decisions.md; CLAUDE.md. The big plan doc is archive: look there only if the caller exports it.
 

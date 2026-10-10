@@ -1,5 +1,5 @@
 // Checks every experiment card in docs/cards/: each fact must carry a quote that
-// really occurs in the paper's full text (C:\Users\admin\Documents\objekt-papers\
+// really occurs in the paper's full text (C:\Users\admin\Documents\objekt-files\papers\
 // <paper>.txt). A summary cannot invent a number this way: a card whose quote is
 // not in the paper fails. Local tool: the papers are not in the repo (copyright).
 // Usage: node tools/check-cards.mjs [card-id ...]
@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CARDS = path.join(ROOT, 'docs', 'cards');
-const PAPERS = 'C:\\Users\\admin\\Documents\\objekt-papers';
+const PAPERS = 'C:\\Users\\admin\\Documents\\objekt-files\\papers';
 const REQUIRED = ['Participants', 'Procedure', 'Duration', 'Main result'];
 const MAX_QUOTE_WORDS = 25; // short quotes only: the papers are copyrighted
 

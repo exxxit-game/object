@@ -105,11 +105,11 @@ assert.match(papers.at(-1).text, /is not plugged in/);
 assert.match(checkPapers(path.join(tmp, 'none'), backup)[0].text, /^the papers library .+ is gone/);
 
 // the research agents: the paper tools, the browser and the library named
-const AGENT = '---\nname: quick-research\ntools: WebSearch, mcp__Claude_Browser__navigate, mcp__4ff8cb31-8eb4-4720-944b-24fa9d492ec5__search, mcp__plugin_research-desk_reference-lookup-hosted__search_works, mcp__PDF_Tools__read_pdf_content\n---\nPapers first: C:\\Users\\admin\\Documents\\objekt-papers\n';
+const AGENT = '---\nname: quick-research\ntools: WebSearch, mcp__Claude_Browser__navigate, mcp__4ff8cb31-8eb4-4720-944b-24fa9d492ec5__search, mcp__plugin_research-desk_reference-lookup-hosted__search_works, mcp__PDF_Tools__read_pdf_content\n---\nPapers first: C:\\Users\\admin\\Documents\\objekt-files\\papers\n';
 assert.deepEqual(agentLacks(AGENT), []);
-assert.deepEqual(agentLacks(AGENT.replace(/, mcp__PDF_Tools__\w+/, '').replace(/objekt-papers/, 'library')), ['PDF Tools', 'the papers library (objekt-papers) named in its instructions']);
+assert.deepEqual(agentLacks(AGENT.replace(/, mcp__PDF_Tools__\w+/, '').replace(/objekt-files\\papers/, 'library')), ['PDF Tools', 'the papers library (objekt-files\\papers) named in its instructions']);
 assert.deepEqual(agentLacks(AGENT.replace('mcp__4ff8cb31-8eb4-4720-944b-24fa9d492ec5__search', 'mcp__4ff8cb31-8eb4-4720-944b-24fa9d492ec5__get_thread')), ['the papers search (4ff8cb31 search)']);
-assert.deepEqual(agentLacks('---\nname: x\n---\nobjekt-papers\n'), [], 'no tools line: the agent inherits every tool');
+assert.deepEqual(agentLacks('---\nname: x\n---\nobjekt-files\\papers\n'), [], 'no tools line: the agent inherits every tool');
 assert.deepEqual(agentLacks(AGENT.replace('reference-lookup-hosted__', 'reference-lookup__')), ['the reference lookup (its hosted copy)'], 'the local copy of the lookup is denied: naming it is having none');
 // an agent's header must parse as YAML, or Claude Code drops the agent from every session
 assert.deepEqual(agentHeaderProblems('---\nname: x\ndescription: one fact, fast\n---\n'), []);

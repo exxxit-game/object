@@ -2,7 +2,7 @@
 
 Generated from `docs/library/papers.json` by `node tools/build-library.mjs`. Do not edit by hand.
 97 papers. Each line: id, authors and year, title, tags, then the card or the status. The text is
-in the library folder as `<id>.txt` (`<dir>/<id>.txt` for a file in a subfolder); "text: ocr" marks a scan's
+in the library folder's papers\ as `<id>.txt` (a data set: `<dir>/<id>.txt` from the library folder); "text: ocr" marks a scan's
 text, "placeholder" an excerpt. Index of all sections: [library](../library.md).
 
 - **abdlkarim-2024** Abdlkarim et al. 2024. A methodological framework to assess the accuracy of virtual reality hand-tracking systems: A case study with the Meta Quest 2 · hand tracking accuracy, Meta Quest 2, measurement method · no card
@@ -10,8 +10,6 @@ text, "placeholder" an excerpt. Index of all sections: [library](../library.md).
 - **alger-2015** Alger 2015. Visual Design Methods for Virtual Reality · VR interface design, volumetric interfaces, design methods · no card
 - **ang-2023** Ang & Quarles 2023. Reduction of cybersickness in head mounted displays use: A systematic review and taxonomy of current strategies · cybersickness, mitigation strategies, systematic review · no card
 - **ansi-hfes-100-2007** Human Factors and Ergonomics Society 2007. ANSI/HFES 100-2007 Human Factors Engineering of Computer Workstations · workstation ergonomics, display height, viewing distance · no card
-- **ansur2/ANSURII-TR15-007** Gordon et al. 2014. 2012 Anthropometric Survey of U.S. Army Personnel: Methods and Summary Statistics (NATICK/TR-15/007) · anthropometry, ANSUR II, body measurements, eye height · no card · text: ocr
-- **ansur2/ansur2-percentiles** computed for this project 2026. ANSUR II unweighted percentiles computed from the public CSVs · anthropometry, percentiles, eye height, interpupillary distance · no card · derived from ANSUR_II_FEMALE_Public and ANSUR_II_MALE_Public
 - **bailenson-2024** Bailenson et al. 2024. Seeing the World Through Digital Prisms: Psychological Implications of Passthrough Video Usage in Mixed Reality · video passthrough, mixed reality, perception, psychological effects · no card
 - **banaszczyk-2024** Banaszczyk et al. 2024. How Accurate is the Positioning in VR? Using Motion Capture and Robotics to Compare Positioning Capabilities of Popular VR Headsets · positioning accuracy, headset tracking, motion capture · no card
 - **bonato-2008** Bonato et al. 2008. Vection change exacerbates simulator sickness in virtual environments · vection, simulator sickness · no card
@@ -29,6 +27,8 @@ text, "placeholder" an excerpt. Index of all sections: [library](../library.md).
 - **chu-2014-slide-spheres** Chu 2014. Slide: spheres (SDC 2014) · VR interface layout, depth, comfort zone · no card · text: none · supplement of chu-2014-voicesofvr
 - **chu-2014-voicesofvr** Bye (interview with Alex Chu) 2015. Voices of VR #117: Alex Chu on Designing Milk VR for the Samsung Gear VR · VR interface design, Milk VR, depth, layout · no card
 - **clifton-2020** Clifton & Palmisano 2020. Effects of steering locomotion and teleporting on cybersickness and presence in HMD-based virtual reality · locomotion, teleporting, steering, cybersickness, presence · no card · repository cover dated 2019
+- **datasets/ansur2/ANSURII-TR15-007** Gordon et al. 2014. 2012 Anthropometric Survey of U.S. Army Personnel: Methods and Summary Statistics (NATICK/TR-15/007) · anthropometry, ANSUR II, body measurements, eye height · no card · text: ocr
+- **datasets/ansur2/ansur2-percentiles** computed for this project 2026. ANSUR II unweighted percentiles computed from the public CSVs · anthropometry, percentiles, eye height, interpupillary distance · no card · derived from ANSUR_II_FEMALE_Public and ANSUR_II_MALE_Public
 - **dilanchian-2021** Dilanchian et al. 2021. A Pilot Study Exploring Age Differences in Presence, Workload, and Cybersickness in the Experience of Immersive Virtual Reality Environments · age differences, presence, cybersickness, older adults · no card
 - **dingler-2018** Dingler et al. 2018. VR Reading UIs: Assessing Text Parameters for Reading in VR · reading in VR, text parameters, font size · no card
 - **dodgson-2004** Dodgson 2004. Variation and extrema of human interpupillary distance · interpupillary distance, anthropometry · no card

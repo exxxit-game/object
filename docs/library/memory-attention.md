@@ -2,7 +2,7 @@
 
 Generated from `docs/library/papers.json` by `node tools/build-library.mjs`. Do not edit by hand.
 37 papers. Each line: id, authors and year, title, tags, then the card or the status. The text is
-in the library folder as `<id>.txt` (`<dir>/<id>.txt` for a file in a subfolder); "text: ocr" marks a scan's
+in the library folder's papers\ as `<id>.txt` (a data set: `<dir>/<id>.txt` from the library folder); "text: ocr" marks a scan's
 text, "placeholder" an excerpt. Index of all sections: [library](../library.md).
 
 - **alogna-2014** Alogna et al. 2014. Registered replication report: Schooler & Engstler-Schooler (1990) · verbal overshadowing, eyewitness memory, face recognition, registered replication · [card](../cards/alogna-2014.md) · replication of Schooler & Engstler-Schooler 1990 (not in the library)

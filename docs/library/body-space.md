@@ -1,8 +1,8 @@
 # body and space
 
 Generated from `docs/library/papers.json` by `node tools/build-library.mjs`. Do not edit by hand.
-61 papers. Each line: id, authors and year, title, tags, then the card or the status. The text is
-in the library folder as `<id>.txt` (`<dir>/<id>.txt` for a file in a subfolder); "text: ocr" marks a scan's
+60 papers. Each line: id, authors and year, title, tags, then the card or the status. The text is
+in the library folder's papers\ as `<id>.txt` (a data set: `<dir>/<id>.txt` from the library folder); "text: ocr" marks a scan's
 text, "placeholder" an excerpt. Index of all sections: [library](../library.md).
 
 - **aglioti-1995** Aglioti et al. 1995. Size-contrast illusions deceive the eye but not the hand · Ebbinghaus illusion, size-contrast illusion, grasping, perception and action · no card · text: ocr
@@ -13,7 +13,6 @@ text, "placeholder" an excerpt. Index of all sections: [library](../library.md).
 - **chevreul-biorxiv** Cantergi et al. 2019. Moving by thoughts alone? Amount of finger movement and pendulum length determine success in the Chevreul Pendulum Illusion · Chevreul pendulum, ideomotor action, suggestion · [card](../cards/chevreul-biorxiv.md)
 - **easton-1974-thesis** Easton 1974. An information processing interpretation of ideomotor behavior in the Chevreul pendulum illusion · Chevreul pendulum, ideomotor action, feedback · no card · text: ocr · chapter V = experiments VI-VII on feedback of the swing, the topic of Easton & Shor 1977; same data not confirmed
 - **easton-shor-1975** Easton & Shor 1975. Information processing analysis of the Chevreul pendulum illusion · Chevreul pendulum, ideomotor action, visual feedback · [card](../cards/easton-shor-1975.md) · text: ocr
-- **evacuation-library/files/13/13875868.2021** Snopková et al. 2021. Retracing evacuation strategy: A virtual reality game-based investigation into the influence of building’s spatial configuration in an... · evacuation, wayfinding, route retracing, signage · no card · duplicate of snopkova-2021 (byte-identical PDF)
 - **fernandez-ruiz-1999** Fernández-Ruiz & Díaz 1999. Prism adaptation and aftereffect: specifying the properties of a procedural memory system · prism adaptation, aftereffect, procedural memory, throwing · [card](../cards/fernandez-ruiz-1999.md)
 - **fitts-1954** Fitts 1954. The information capacity of the human motor system in controlling the amplitude of movement · Fitts law, movement time, motor control · no card · text: ocr · no room: a measuring tool with no reveal (search coverage, motor control)
 - **glennerster-2006** Glennerster et al. 2006. Humans ignore motion and stereo cues in favor of a fictional stable world · expanding room, stable world assumption, stereo cues, motion parallax · [card](../cards/glennerster-2006.md)

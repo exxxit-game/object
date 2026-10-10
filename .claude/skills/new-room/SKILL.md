@@ -10,7 +10,7 @@ check. Do not tell the owner "done" before step 9.
 
 1. **Card, then the paper in full.** Start from the experiment's card (`docs/catalog.md`, `docs/cards/`): its
    quotes are already checked against the paper text. Download the original (and the main replication) into
-   `C:\Users\admin\Documents\objekt-papers\` as PDF and `pdftotext` .txt. Read the
+   `C:\Users\admin\Documents\objekt-files\papers\` as PDF and `pdftotext` .txt. Read the
    method and results completely (CLAUDE.md: the paper read in full). If the participant's time is
    over about 10 min or there is no task/tension, stop and tell the owner.
    Write a 3-line entry in `docs/decisions.md` first.

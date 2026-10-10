@@ -89,7 +89,7 @@ for (const args of [['tools/quest-look.mjs', 'vr'], ['tools/quest-look.mjs', 'ev
 
 // the assistant cannot write the record or point the tools at another one; reading and the tools pass
 const pre = (tool_name, tool_input) => spawnSync(process.execPath, ['tools/claude-guard.mjs', 'pre'], { cwd: ROOT, encoding: 'utf8', input: JSON.stringify({ tool_name, tool_input, cwd: ROOT }) }).status === 2;
-const at = 'C:\\Users\\x\\Documents\\objekt-notes\\practice-reviews.jsonl';
+const at = 'C:\\Users\\x\\Documents\\objekt-files\\notes\\practice-reviews.jsonl';
 assert.ok(pre('Write', { file_path: at, content: '{}' }), 'Write to the record refused');
 assert.ok(pre('Edit', { file_path: at, old_string: 'a', new_string: 'b' }), 'Edit of the record refused');
 for (const c of [`echo '{"kind":"review"}' >> ${at}`, `Add-Content -Path "${at}" -Value x`, `node -e "require('fs').appendFileSync('${at.replace(/\\/g, '/')}', 'x')"`,

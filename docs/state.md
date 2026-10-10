@@ -12,9 +12,9 @@
   `runs` via `submit_run` (room 01 whitelist), `playtests` via `submit_playtest`; both
   insert-only for anon, verified. Sending is ON in code with consent; privacy page `privacy.html`
   (contact t.me/exxxit). Tests pin client fields to the SQL (`tests/results.test.mjs`, `tests/playtest.test.mjs`).
-- Papers (PDF + text, not in repo): `C:\Users\admin\Documents\objekt-papers\`, copied to `F:\objekt-papers-backup`
-  and Dropbox `/objekt-papers` (a new paper goes into both; `node tools/health.mjs` checks the F: copy; the Dropbox
-  connector writes text only, so a PDF needs the owner's drag on dropbox.com); the card index of
+- Files outside the repo, one folder `C:\Users\admin\Documents\objekt-files\`: `papers\` (every paper as `<id>.pdf`
+  and `<id>.txt`), `datasets\`, `imports\` (exports as downloaded), `notes\` (his messages, the review record); copied
+  whole to `F:\objekt-files` (`node tools/health.mjs` checks it) and to Google Drive by its program; the card index of
   the whole library: `docs/library.md` (sections, then one line per paper, then card, then text; wanted and
   dropped papers in `docs/library/wanted.md`; a new paper needs a record in `docs/library/papers.json`). 145 cards from full texts: `docs/cards/`, checked by
   `node tools/check-cards.mjs`; catalog generated: `docs/catalog.md` (`node tools/build-catalog.mjs`);

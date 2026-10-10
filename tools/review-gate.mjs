@@ -14,7 +14,7 @@ import path from 'node:path';
 import { PUBLIC, isPublic } from '../tests/static-server.mjs';
 
 export const RECORD = process.env.OBJECT_REVIEW_RECORD
-  || path.join(os.homedir(), 'Documents', 'objekt-notes', 'practice-reviews.jsonl');
+  || path.join(os.homedir(), 'Documents', 'objekt-files', 'notes', 'practice-reviews.jsonl');
 export const REVIEWER = 'practice-reviewer';
 // the last block every reviewer report ends with: a run cut short has not reported
 export const REPORT_END = 'FOR THE OWNER:';

@@ -19,7 +19,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PS = 'PowerShell';
 // [command, shell]: Bash unless named
 const cases = (list) => list.map((c) => (Array.isArray(c) ? c : [c, 'Bash']));
-const record = '~/Documents/objekt-notes/practice-reviews.jsonl';
+const record = '~/Documents/objekt-files/notes/practice-reviews.jsonl';
 
 const refused = cases([
   // the smoke test (Playwright and Chromium) started on the laptop
@@ -84,7 +84,7 @@ const refused = cases([
   `rm ${record}`,
   `sed -i 1d ${record}`,
   `cat <<'EOF' > ${record}\n{}\nEOF`,
-  ['Get-Content x | Out-File $HOME\\Documents\\objekt-notes\\practice-reviews.jsonl', PS],
+  ['Get-Content x | Out-File $HOME\\Documents\\objekt-files\\notes\\practice-reviews.jsonl', PS],
   "node -e \"import('./tools/review-gate.mjs').then((m) => m.write({ kind: 'review' }))\"",
   'env OBJECT_REVIEW_RECORD=/tmp/x.jsonl node tools/quest-look.mjs vr',
   'export OBJECT_REVIEW_RECORD=/tmp/x.jsonl',
@@ -140,7 +140,7 @@ const allowed = cases([
   `tail -5 ${record} 2>/dev/null`,
   `cat ${record} > /tmp/copy.jsonl`,
   `cp ${record} /tmp/copy.jsonl`,
-  "node -e \"const fs = require('fs'); const rows = fs.readFileSync(require('os').homedir() + '/Documents/objekt-notes/practice-reviews.jsonl', 'utf8').split('\\n').filter(Boolean).map((l) => JSON.parse(l)); process.stdout.write(rows.length + '\\n')\"",
+  "node -e \"const fs = require('fs'); const rows = fs.readFileSync(require('os').homedir() + '/Documents/objekt-files/notes/practice-reviews.jsonl', 'utf8').split('\\n').filter(Boolean).map((l) => JSON.parse(l)); process.stdout.write(rows.length + '\\n')\"",
   'grep -n OBJECT_REVIEW_RECORD tools/review-gate.mjs',
 ]);
 for (const [c, shell] of allowed) {

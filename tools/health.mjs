@@ -14,8 +14,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { runSetup } from './health-setup.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-export const PAPERS = path.join(os.homedir(), 'Documents', 'objekt-papers');
-export const BACKUP = 'F:\\objekt-papers-backup';
+// one folder for every file the project keeps outside the repository: papers\, datasets\, imports\,
+// notes\; the backup on F: is its copy, and the cloud copy comes from the Google Drive program
+export const PAPERS = path.join(os.homedir(), 'Documents', 'objekt-files');
+export const BACKUP = 'F:\\objekt-files';
 export const MIN_WORDS = 100;
 const result = (level, text, extra = {}) => ({ level, text, ...extra });
 const ok = (text, extra) => result('ok', text, extra);
@@ -196,7 +198,7 @@ export function agentLacks(text) {
   const front = text.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] || '';
   const tools = front.match(/^tools:\s*(.*)$/m)?.[1];
   const lacks = tools === undefined ? [] : NEEDS.filter(([, has]) => !has(tools)).map(([what]) => what);
-  if (!text.includes('objekt-papers')) lacks.push('the papers library (objekt-papers) named in its instructions');
+  if (!text.includes('objekt-files\\papers')) lacks.push('the papers library (objekt-files\\papers) named in its instructions');
   return lacks;
 }
 // Claude Code reads an agent's header as YAML and drops an agent whose header does not parse,

@@ -22,7 +22,7 @@ Answer the owner in Russian, plain words, short. The repo is English; Russian on
   research, shipped games; for how code draws or lays out a thing: a spec, library or published method),
   named in a WHY comment or docs/decisions.md; our own only where nothing exists or it fails in the headset.
 - Names, numbers, quotes and pages come from the file (papers: the index docs/library.md, then the texts in
-  C:\Users\admin\Documents\objekt-papers\; the code), never from memory. A fact the player sees has its source in docs/sources.md, or is not shown.
+  C:\Users\admin\Documents\objekt-files\papers\; the code), never from memory. A fact the player sees has its source in docs/sources.md, or is not shown.
 - A test or reviewer disagrees: re-read the source and fix the cause; never bend the test. Two or three
   failed tries at one problem: measure first.
 

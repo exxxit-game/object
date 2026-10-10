@@ -5,7 +5,7 @@ every recommendation are built from cards that pass `node tools/check-cards.mjs`
 
 Rules:
 - Get a legal full text (author copy, university repository, PMC, publisher open
-  access; never pirate sites). Save it in `C:\Users\admin\Documents\objekt-papers\`
+  access; never pirate sites). Save it in `C:\Users\admin\Documents\objekt-files\papers\`
   as `<id>.pdf` and `<id>.txt` (`pdftotext <id>.pdf <id>.txt`), and give it a record in
   `docs/library/papers.json` (then `node tools/build-library.mjs`; `npm test` fails on a file without one).
 - No legal full text: write the card with `- status: no-full-text` and no Facts;
