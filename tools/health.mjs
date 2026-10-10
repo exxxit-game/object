@@ -37,7 +37,7 @@ export function run(file, args = []) {
 
 const reinstall = (pkg) => `reinstall: choco install ${pkg} -y --force (as administrator)`;
 // how each was installed on this laptop decides its fix: poppler and tesseract by Chocolatey,
-// scrcpy and ffmpeg by Scoop, Python by its install manager
+// scrcpy, ffmpeg and Blender by Scoop, Python by its install manager
 export const PROGRAMS = [
   { name: 'node', args: ['--version'], expect: /^v\d+\.\d+\S*/m, fix: 'reinstall Node.js LTS from nodejs.org' },
   { name: 'npm', args: ['--version'], expect: /^\d+\.\d+\.\d+/m, fix: 'it comes with Node.js: reinstall Node.js LTS from nodejs.org' },
@@ -54,6 +54,8 @@ export const PROGRAMS = [
   { name: 'adb', args: ['version'], expect: /^Android Debug Bridge version \S+/m, fix: 'unpack Android platform-tools (developer.android.com/tools/releases/platform-tools) into C:\\adb\\platform-tools' },
   { name: 'scrcpy', args: ['--version'], expect: /^scrcpy \d\S*/m, fix: 'scoop install scrcpy' },
   { name: 'ffmpeg', args: ['-version'], expect: /^ffmpeg version \S+/m, fix: 'scoop install ffmpeg' },
+  // the light baked into textures and the period props as models (the owner's yes to the tool revision, 10.10)
+  { name: 'blender', args: ['--version'], expect: /^Blender \d\S*/m, fix: 'scoop install extras/blender' },
   // Meta's own CLI: performance traces and store checks of the headset build (its MCP server gave no tools)
   { name: 'metavr', args: ['--version'], expect: /^metavr \d\S*/m, fix: 'npm install -g metavr (Meta\'s package, github.com/meta-quest/agentic-tools)' }
 ];
