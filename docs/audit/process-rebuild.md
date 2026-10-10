@@ -87,6 +87,25 @@ here. This plan replaced the older rules review and CLAUDE.md draft (never acted
 Kept in one place, the new-room skill (.claude/skills/new-room/SKILL.md, "The room recipe"): eight steps, each
 already tested somewhere, from the what-stands-for-what table to preregistration and ethics approval.
 
+## The whole road first: what the process must carry at each stage
+
+The owner's rule: from where we stand, look at the end first, then step by step (his words: "look straight into the future").
+The board's road and what each stage needs from the process; the rebuild is done only when every row is covered:
+
+| Stage (the board's road) | What the process must give | Where it comes from |
+|---|---|---|
+| 1 Corridor finished | one visible item per session, pictures, then his headset | board, quest-look, practice review |
+| 2 First room | trial rooms by the room recipe, the paper read in full, his pick | new-room skill, library index, paper-reviewer |
+| 3 Testers (5-10, Meta test channel) | an installable build, consent, data that is lawful and anonymous | hz-store-pwa skill, data-before-testers item, ethics-law.md |
+| 4 Gate 0 (7 of 10 finish, mean 7+) | the playtest questions, results read the same way each time | playtest tests, docs/playtests |
+| 5 Store | store submission steps, privacy policy, delete path | hz-store-submit skill, Meta Data Use Policy |
+| Science (beside the game) | preregistration, an ethics approval (SPbU IRB or a university partner), a science consent | room recipe step 8, ethics-law.md |
+| Every day | nothing broken silently; progress he can see without reading code | health check, the board's current step, his yes |
+
+How "done" is shown to him, so he never has to check: every step states its done-test before it starts, a
+reviewer that did not do the work checks it, and he gets the result in one plain line with its proof (a picture,
+a number, a test run).
+
 ## Risks of the rebuild itself, and their answers
 
 - It becomes another circle: it has a fixed list (the changes above), a done test (step 4) and then a freeze.
