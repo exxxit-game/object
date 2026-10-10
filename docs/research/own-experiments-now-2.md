@@ -129,11 +129,6 @@ quote; "unverified" marks what was not confirmed on a primary page.
 
 ## Pages only the owner can open (region block, bot check, paywall, clicks), and what to bring back
 
-Region-blocked for our tools (open from Russia):
-- https://mgppu.ru/project/459 and https://spbu.ru/openuniversity/documents/ob-eticheskom-komitete-spbgu: do these
-  ethics committees review projects from outside the university (or commercial ones); documents, time, fee, contact.
-- https://vrmsu.ru/departments/psihfak/ and https://mgppu.ru/news/13972: the MSU and MSUPE VR labs (PsyTechVR):
-  do they run studies with participants; labs and contacts.
 Bot checks or clicks (open in a browser):
 - https://www.vrprotocols.org/: tick all four badges, export the checklist PDF (the VR reporting standard).
 - https://journals.sagepub.com/doi/10.1177/2515245918810225: Many Labs 2, the exact rule for "replicated".

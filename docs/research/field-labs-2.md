@@ -104,16 +104,16 @@
   or ethics details on that page (not found). Research lines from search snippets (unverified): decoding neural
   processes in cognitive and neuroeconomic tasks, persuasion, cognitive dissonance, trust, neuromarketing; a MEG
   lab with MSUPE's MEG centre. No VR or at-home study found for this centre.
-- MSU Faculty of Psychology: "VR centre of MSU" page (https://vrmsu.ru/departments/psihfak/) could not be opened
-  (curl got no response; the browser navigation failed: region lock or down) - goes to the owner. From search
-  snippets only (unverified): a programme on psychological aspects of VR run with the "Perception" laboratory and
-  the Department of Psychophysiology; an online course "Psychology of virtual reality and cyberpsychology"
+- MSU Faculty of Psychology, "VR centre of MSU" page (https://vrmsu.ru/departments/psihfak/; region block, text sent
+  by the owner, our translation): founded 1966, "13 departments and 5 research laboratories"; a programme on the
+  psychological aspects of VR run by the Department of Methodology of Psychology, the "Perception" laboratory and
+  the Department of Psychophysiology; coordinator G. Ya. Menshikova (DSc), lead executive A. I. Kovalev (PhD); an online course "Psychology of virtual reality and cyberpsychology"
   (lk.msu.ru/course/view?id=2079). No home-VR or online-at-scale study found.
-- MSUPE (Moscow State University of Psychology and Education, MGPPU): mgppu.ru refused connections from our tools
-  ("ECONNREFUSED"; region lock likely) - goes to the owner. From search snippets only (unverified): a "laboratory of
-  virtual reality technologies and reserve capacities of the personality" at the Faculty of Extreme Psychology;
-  a system "PsyTechVR" with "more than 50 VR scenarios of a phobic nature" for EMDR-style PTSD training
-  (mgppu.ru/news/13972); Institute of Experimental Psychology studies of VR and anxiety (Beck scale) and VR and
+- MSUPE (Moscow State University of Psychology and Education, MGPPU; region block, news page sent by the owner, our
+  translation): the "laboratory of virtual technologies and reserve capacities of the personality" of the Faculty of
+  Extreme Psychology hosted on 11 March 2024 a presentation of "PsyTechVR" by the company Kore Partners Soft, for
+  training psychologists in managing stress and phobias, "more than 50 VR scenes of a phobic nature", EMDR for PTSD;
+  organised by Prof. T. N. Berezina (mgppu.ru/news/13972). A company working with the lab: the partner model exists. Snippets (unverified): Institute of Experimental Psychology studies of VR and anxiety (Beck scale) and VR and
   creativity with first- and second-year students (mgppu.ru/news/11095; naked-science.ru); a master's course
   "Practicum on studying cognitive processes with a VR headset". All lab-based or clinical; no home-VR study found.
 - Institute of Psychology RAS: no VR or online-at-scale project found in two searches (not found).
@@ -225,7 +225,7 @@ Where they differ:
   PSA membership and current projects (home page has no numbers); Project Implicit founders, test counts, OSF
   archive; TestMyBrain consent and IRB; EventLab and Steed group home-VR studies 2023-2026 (none found in one search
   each); Ouvrai's consent screen wording (in its GitHub code, not read); LabintheWild /donate page.
-- Russia: MSU VR centre and MSUPE sites refused our tools; Institute of Psychology RAS: nothing found.
+- Russia: MSU VR centre and MSUPE pages opened by the owner (part 12); Institute of Psychology RAS: nothing found.
 
 ## Pages only a person can open
 - https://academic.oup.com/jcmc/article/28/2/zmac031/6965183 - bot check: where headsets were worn, consent, IRB, pay.

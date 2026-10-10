@@ -19,8 +19,8 @@ until its answer is read and sourced:
 - "How did those projects get millions of users?": science-reach.md parts 1-2.
 - "Take all they solved, check how far it solves the problem; how precise can our data be, how do they measure
   precision?": precision study (running).
-- "Who approves our ethics?": ethics-law.md 1; open: MGPPU and SPbU committees (owner's pages, [own-experiments-now-2.md](own-experiments-now-2.md)).
-- "Which labs work now, and in Russia?": field-labs-1/2; open: MSU and MSUPE VR labs (owner's pages).
+- "Who approves our ethics?": ethics-law.md 1; SPbU IRB#1 takes outside organisations for a fee; MGPPU reviews joint studies (ethics-law.md 1d) (owner's pages, [own-experiments-now-2.md](own-experiments-now-2.md)).
+- "Which labs work now, and in Russia?": field-labs-1/2; Russia: MSU and MGPPU VR labs (field-labs-2.md).
 - Two phones: part 3 here; open: Shiv 2005, Wilson & Nisbett 1978 (owner's pages).
 
 1. What psychology runs now (2023-2026) that a home VR game could join or run: 1a multi-site studies and registered

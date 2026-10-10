@@ -136,9 +136,25 @@ https://developers.meta.com/horizon/policy/data-use/
   application ("Zayavlenie") and a study-description table ("Prilozhenie A"); review "within 14 days"; signed
   conclusion "in Russian and English" e-mailed "within seven working days" (our translation). => Open to us only
   through an HSE psychology co-investigator (our reading; asking the secretary is the only way to confirm).
-- MGPPU (Moscow State University of Psychology and Education) ethics committee, https://mgppu.ru/project/459 :
-  refused our tools and the browser (region block likely). Snippet only (unverified): decision "not later than 15
-  calendar days after receipt of materials" (our translation). -> FOR THE OWNER.
+- MGPPU (Moscow State University of Psychology and Education) ethics committee, https://mgppu.ru/project/459 (region
+  block for our tools; the owner opened it and sent its text). Set up by the Academic Council on 31 March 2021 to
+  review research by the university's staff and students, "and also (when needed) carried out by them jointly with
+  other organisations, and other research using the University's infrastructure" (our translation). Members serve
+  "on a voluntary basis" (no fee is named). Among those who may submit: "an employee of the University acting as
+  representative of a research lead who is not an employee of the University" (our translation). Documents: an
+  application, a list of appendices, information about the study (Appendix 1 to its Regulation), the study
+  protocol, the lead's training and research experience. Decision "not later than 15 calendar days" after the
+  materials arrive. => Open to us as a joint study with an MGPPU employee as our representative (e.g. its VR lab).
+- SPbU ethics committee for social, humanitarian and natural sciences, Regulation of 15.08.2013
+  (https://spbu.ru/openuniversity/documents/ob-eticheskom-komitete-spbgu; region block, text sent by the owner; all
+  quotes our translation). Registered with US HHS as "IRB00003875 St.Petersburg State University IRB#1 - Behavioral"
+  (1.2). Applicants may be individual researchers and "representatives of commercial and non-commercial organisations"
+  (1.6); free for SPbU staff, outside organisations pay "administrative costs" set by the first vice-rector for
+  economics, whatever the decision (1.7; amount not on the page); it signs agreements to review, "including remotely",
+  with individuals and legal entities (1.9). Documents (5.6): request, study protocol (international projects in
+  Russian and English), methods, consent form, the applicant's consent to processing his personal data; electronic and
+  printed. Review "within 1 month" (4.1.5); yearly review of running studies (4.1.2). => The one route found that takes
+  a team like ours directly, with an IRB number US-registered; fee to ask the secretary.
 - Institute of Psychology RAS (ipras.ru): no page on its own ethics committee found; its draft code points to the RPO
   ethics committee (snippet only, http://www.ipras.ru/cntnt/rus/novosti/rus_psy/n3353.html). Not found.
 - Snippet (unverified): one Russian institute's regulation says no fee is charged to study organisers
@@ -267,7 +283,8 @@ Phase B, a publishable study (the owner's "science only after approval, preregis
        only, so via a co-PI), DGPs (free, 4-6 weeks; university/public researchers only); the co-PI's committee holds
        the approval, we build and run the game, like Vuorre 2022 (Oxford approval, publishers recruited and passed
        hashed IDs, no editorial control);
-    b) pay an IRB alone: USM $500 exempt / $750 expedited; Solutions IRB $1,200 exempt, $2,570 international expedited
+    b) SPbU IRB#1 (1d): takes outside organisations directly, remote, fee on request, 1 month;
+    c) pay an IRB alone: USM $500 exempt / $750 expedited; Solutions IRB $1,200 exempt, $2,570 international expedited
        + $1,300/yr; HML IRB $1,500. Total time for IRBs: not published (unverified).
  6. Preregister before data collection (OSF or AsPredicted; cost and rules not read: unverified).
  7. Separate in-game consent screen for science use (what is recorded, for how long, quit any time with no loss,
@@ -277,8 +294,6 @@ Phase B, a publishable study (the owner's "science only after approval, preregis
 
 ## Not reached / unverified
 - Advarra, WCG, BRANY, Pearl prices and whether they take an unaffiliated game team; IRB total turnaround times.
-- Russia: IP RAS committee (not found), MGPPU and SPbU committee pages (region-blocked: for the owner); whether any
-  Russian committee reviews outside projects for a fee: not found.
-- EU national bodies beyond DGPs; UK independent RECs: not found.
+- Russia: IP RAS committee (not found); the SPbU fee (ask its secretary). EU bodies beyond DGPs, UK RECs: not found.
 - Whether 152-FZ applies to a team with no Russian entity; whether Ireland is on Roskomnadzor's adequate list.
 - OSF/AsPredicted rules; formal data-sharing agreement texts; Meta policy clause wording (read via summariser).
