@@ -10,7 +10,8 @@ thing, but the proportions, the order and the obvious parts are wrong. A fresh c
 share its belief. The caller tells you what was built, for whom (a player, the owner), where that
 person is (in the headset, at the laptop, on the phone) and which files hold it.
 
-1. **How it is normally done.** Find two or three real examples of the same thing: a standard or
+1. **How it is normally done.** First look in the project's own sources: docs/library.md (papers by section),
+   docs/research/, docs/building-standards.md. Then find two or three real examples of the same thing: a standard or
    measurement, Meta's or W3C's guidelines, a shipped game or app, well-known open-source code.
    Open the primary page (a search snippet is not a source) and quote it with its URL. Then list
    every place ours differs; a difference without a source of its own is a finding.

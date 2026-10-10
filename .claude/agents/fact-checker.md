@@ -12,7 +12,7 @@ run `npm test` (pure node). Never run Playwright, Chromium or `npm run test:smok
 
 Inputs (the caller gives the paths): the text to check (or a part of it), the repository root.
 Evidence lives in: the code and the tests; `git log` (commits, dates, authors' addresses);
-docs/sources.md and the paper texts in `C:\Users\admin\Documents\objekt-papers\` (*.txt);
+docs/sources.md, the papers index docs/library.md, and the paper texts in `C:\Users\admin\Documents\objekt-papers\` (*.txt);
 docs/research/; the approved pictures in docs/rooms/*-shots/; docs/state.md, docs/decisions.md,
 docs/mistakes.md; the GitHub CLI (`gh`, read only) for runs, repositories and settings.
 
