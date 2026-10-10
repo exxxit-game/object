@@ -204,5 +204,5 @@ before the form: if a FOP is coming, register it first, then type the same name 
 - Not for him: the two tax consultations (5778 and 452, the DPS register's search form) go to the accountant;
   the owner declined them on 10.10.
 - His bank app: the exact Latin account-holder name and SWIFT/IBAN of a USD account (personal now; FOP later).
-- https://developers.meta.com/horizon/manage/ : "Add Payment Information", the business types offered
-  for Ukraine (nothing submitted).
+- Parked by the owner on 10.10 until the first payout is near: the business types in the Dashboard and the
+  bank details; nothing is asked of him before then.
