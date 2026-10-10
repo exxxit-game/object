@@ -179,6 +179,13 @@ if (mode === 'stop') {
   const ahead = git('rev-list', '--count', '@{u}..HEAD');
   if (ahead === null) problems.push('this branch has no copy on GitHub: push it');
   else if (Number(ahead)) problems.push(`${ahead} commits not on GitHub: push the working branch`);
+  // the next window's checkout is made from the main folder's HEAD, room-polish (.claude/settings.json
+  // worktree.baseRef head): work pushed on this branch alone is missing from the next session, and a
+  // written rule to bring it over at the end of a step does not hold when a session ends mid-step
+  if (git('rev-parse', '--verify', '-q', 'room-polish') && git('merge-base', '--is-ancestor', 'HEAD', 'room-polish') === null) {
+    const branch = git('rev-parse', '--abbrev-ref', 'HEAD');
+    problems.push(`the main folder (room-polish, where the next window starts) lacks ${git('rev-list', '--count', 'room-polish..HEAD')} commits of this branch: in it run git merge --ff-only ${branch}, then git push origin room-polish`);
+  }
   // npm test is not run here: the commit hook runs it before every commit, and work left uncommitted
   // is refused above, so failing tests cannot outlast a turn; running it again cost 12-56 s a turn
   // pages only the owner can open, left by a research agent: they reach him in this turn

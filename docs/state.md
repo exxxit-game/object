@@ -4,8 +4,8 @@
 - Repo `exxxit-game/youaretheobject` (folder `C:\Users\admin\Documents\GitHub\objekt`). Site:
   https://youaretheobject.com (GitHub Pages from `main`; `main` is an OLD package). Work: `room-polish`.
   One board item per session. Each session works in its own worktree, made from the main
-  folder's HEAD (`.claude/settings.json` worktree.baseRef head; the default was old main); at the end of a step
-  fast-forward the main folder (room-polish) to the session branch. Push: his "Делай"; main: his word only.
+  folder's HEAD (`.claude/settings.json` worktree.baseRef head; the default was old main); no turn ends until
+  the main folder (room-polish) holds the session branch (stop hook, tools/claude-guard.mjs). Push: his "Делай"; main: his word only.
 - Room 01 = illusion of control (Alloy & Abramson 1979), `src/rooms/01-control/`: SET ASIDE 08.10 as a lab
   room (16–20 min of waiting, owner found it unbearably boring). Playtest `?playtest=1`, speed `?speed=N`.
 - Supabase `objekt` (`rkvdwzlymmewsxjysgma`, eu-west-1 Ireland), private schema `app`:
